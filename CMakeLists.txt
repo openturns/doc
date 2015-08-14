@@ -18,7 +18,7 @@ if (USE_TRALICS)
 endif ()
 
 set (CMAKE_BINARY_DIR "${CMAKE_CURRENT_BINARY_DIR}")
-set (CPACK_SOURCE_IGNORE_FILES "/.svn;/build;.*~;${CPACK_SOURCE_IGNORE_FILES};/_CPack_Packages;.*bz2;.*gz")
+set (CPACK_SOURCE_IGNORE_FILES "/.git;/build;.*~;${CPACK_SOURCE_IGNORE_FILES};/_CPack_Packages;.*bz2;.*gz")
 set (CPACK_PACKAGE_NAME openturns-doc)
 set (OPENTURNS_VERSION 1.6) # default ot version
 set (CPACK_PACKAGE_VERSION_MAJOR 2015) # YY
