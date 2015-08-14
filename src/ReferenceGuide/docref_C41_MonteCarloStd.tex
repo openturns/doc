@@ -1,0 +1,154 @@
+% Copyright (C) 2005-2015 Airbus - EDF - IMACS - Phimeca
+% Permission is granted to copy, distribute and/or modify this document
+% under the terms of the GNU Free Documentation License, Version 1.2
+% or any later version published by the Free Software Foundation;
+% with no Invariant Sections, no Front-Cover Texts, and no Back-Cover
+% Texts.  A copy of the license is included in the section entitled "GNU
+% Free Documentation License".
+\renewcommand{\etapemethodo}{C}
+\renewcommand{\nomfichier}{docref_C41_MonteCarloStd}
+\renewcommand{\titrefiche}{Estimating a quantile by Sampling / Wilks' Method}
+
+\Header
+
+\MathematicalDescription{
+
+  \underline{\textbf{Goal}} \vspace{2mm}
+
+  Let us denote $\underline{Y} = h\left( \vect{X},\vect{d} \right) = \left( Y^1,\ldots,Y^{n_Y} \right)$, where $\vect{X}= \left( X^1,\ldots,X^{n_X} \right)$ is a random vector, and $\vect{d}$ a  deterministic vector. We seek here to evaluate, using the probability distribution of the random vector $\vect{X}$, the $\alpha$-quantile $q_{Y^i}(\alpha)$ of $Y^i$, where $\alpha \in (0, 1)$:
+  \begin{align*}
+    \Prob{ Y^i \leq q_{Y^i}(\alpha)} = \alpha
+  \end{align*}
+  \vspace{2mm}
+
+  \underline{\textbf{Principle}} \vspace{2mm}
+
+  If we have a sample $\left\{ \vect{x}_1,\ldots,\vect{x}_N \right\}$ of $N$ independent samples of the random vector $\vect{X}$, $q_{Y^i}(\alpha)$ can be estimated as follows:
+
+  \begin{itemize}
+  \item the sample $\left\{ \vect{x}_1,\ldots,\vect{x}_N \right\}$ of vector $\vect{X}$ is  first transformed to a sample $\left\{ y^i_1,\ldots,y^i_N \right\}$ of the variable $Y^i$, using $\underline{y} = h(\vect{x}_i,\vect{d})$,
+  \item the sample $\left\{ y^i_1,\ldots,y^i_N \right\}$ is then placed in ascending order, which gives the sample $\left\{ y^{(1)},\ldots,y^{(N)} \right\}$,
+  \item this empirical estimation of the quantile is then calculated by the formula:
+    \begin{align*}
+      \widehat{q}_{y^i}(\alpha) = y^{([N\alpha]+1)}
+    \end{align*}
+    where $[N\alpha]$ denotes the integral part of $N\alpha$.
+  \end{itemize}
+
+  For example, if  $N=100$ and  $\alpha = 0.95$, $\widehat{q}_Z(0.95)$  is equal to  $y^{(96)}$, which is the $5^\textrm{th}$ largest value of the sample $\left\{ y^i_1,\ldots,y^i_N \right\}$. We note that this estimation has no meaning unless $1/N \leq \alpha \leq 1-1/N$. For example, if $N=100$, one can only consider values of a to be between 1\% and 99\%. \vspace{2mm}
+
+  It is also possible to calculate an upper limit for the quantile with a confidence level $\beta$ chosen by the user; one can then  be sure with a $\beta$ level of confidence that the real value of $q_{Y^i}(\alpha))$ is less than or equal to $\widehat{q}_{Y^i}(\alpha)_{\sup}$:
+  \begin{align*}
+    \Prob{q_{Y^i}(\alpha) \leq \widehat{q}_{Y^i}(\alpha)_{\sup}} = \beta
+  \end{align*}
+
+  The most robust method for calculating this upper limit consists of taking $\widehat{q}_{Y^i}(\alpha)_{\sup} = y^{(j(\alpha,\beta,N))}$  where $j(\alpha,\beta,N)$ is an integer between 2 and $N$ found by solving the equation:
+  \begin{align*}
+    \sum_{k=1}^{j(\alpha,\beta,N) - 1} C^k_N \alpha^k \left( 1-\alpha \right)^{N-k} = \beta
+  \end{align*}
+
+  A solution to this does not necessarily exist, i.e. there may be no integer value for $j(\alpha,\beta,N)$ satisfying this equality; one can in this case choose the smallest integer $j$ such that:
+  \begin{align*}
+    \sum_{k=1}^{j(\alpha,\beta,N) - 1} C^k_N \alpha^k \left( 1-\alpha \right)^{N-k} > \beta
+  \end{align*}
+  which ensures that  $\Prob{q_{Y^i}(\alpha) \leq \widehat{q}_{Y^i}(\alpha)_{\sup}} > \beta$; in other words,  the level of confidence of the quantile estimation is greater than that initially required.
+
+  This formula of the confidence interval can be used in two ways:
+  \begin{itemize}
+  \item either directly to determine $j(\alpha,\beta,N)$ for the values $\alpha,\beta,N$ chosen by the user,
+  \item or in reverse to determine the number $N$ of simulations to be carried out for the values $\alpha,\beta$ and $j(\alpha,\beta,N)$ chosen by the user; this is known as Wilks' formula.
+  \end{itemize}
+
+  For example for  $\alpha = \beta = 95\%$, we take $j=59$ with  $N = 59$ simulations (that is the maximum value out of  59 samples) or else  $j = 92$ with $N = 93$ simulations (that is the second largest result out of the 93 selections). For values of $N$ between $59$ and $92$, the upper limit is the maximum value of the sample. The following tabular presents the whole results for $N \leq 1000$, still for $\alpha = \beta = 95\%$. \vspace{2mm}
+
+
+
+  \begin{center}
+    \footnotesize
+    \begin{tabular}{|c|c|c|}
+      \hline
+      $N$ & Rank of the uper bound of the quantile & Rank of the empirical the quantile \\
+      \hline
+      59 & 59 & 57\\
+      93 & 92 & 89\\
+      124 & 122 & 118\\
+      153 & 150 & 146 \\
+      181 & 177 & 172 \\
+      208 & 203 & 198 \\
+      234 & 228 & 223 \\
+      260 & 253 & 248 \\
+      286 & 278 & 272 \\
+      311 & 302 & 296 \\
+      336 & 326 & 320 \\
+      361 & 350 & 343 \\
+      386 & 374 & 367 \\
+      410 & 397 & 390 \\
+      434 & 420 & 413 \\
+      458 & 443 & 436 \\
+      482 & 466 & 458 \\
+      506 & 489 & 481 \\
+      530 & 512 & 504 \\
+      554 & 535 & 527 \\
+      577 & 557 & 549 \\
+      601 & 580 & 571 \\
+      624 & 602 & 593 \\
+      647 & 624 & 615 \\
+      671 & 647 & 638 \\
+      694 & 669 & 660 \\
+      717 & 691 & 682 \\
+      740 & 713 & 704 \\
+      763 & 735 & 725 \\
+      786 & 757 & 747 \\
+      809 & 779 & 769 \\
+      832 & 801 & 791 \\
+      855 & 823 & 813 \\
+      877 & 844 & 834 \\
+      900 & 866 & 856 \\
+      923 & 888 & 877 \\
+      945 & 909 & 898 \\
+      968 & 931 & 920 \\
+      991 & 953 & 942 \\
+      \hline
+    \end{tabular}
+  \end{center}
+
+}
+{
+  $\widehat{q}_{Y^i}(\alpha)$ is often called the "empirical $\alpha$-quantile" for the variable ${Y^i}$.
+}
+
+
+\Methodology{
+  In the overall process, the Monte Carlo simulation method for estimating the variance appears in step C "Propagation of Uncertainty" when the study of uncertainty deals with the dispersion of the variable of interest ${Y^i}$ defined in step A "Specifying Criteria and the Case Study".
+
+  Input data:
+  \begin{itemize}
+  \item $\vect{X}$: random vector modelling the unknown variables defined in step A and for which the joint probability density function has been defined in step B,
+  \item $\vect{d}$: vector of deterministic calculation parameters,
+  \item $\underline{Y} = h(\vect{X},\vect{d})$: output variable / variable of  interest specified in step A
+  \end{itemize}
+
+  Parameters:
+  \begin{itemize}
+  \item $\alpha$: quantile level ($\alpha$-quantile),
+  \item $\beta$: confidence level for the quantile's upper bound,
+  \item $N$: number of simulations to be carried out (which can be computed by OpenTURNS using Wilk's formula)
+  \end{itemize}
+
+  Outputs:
+  \begin{itemize}
+  \item $\widehat{q}_Z(\alpha)$: quantile estimate,
+  \item $\widehat{q}_Z(\alpha)_{\sup}$: quantile upper bound with confidence $\beta$
+  \end{itemize}
+}
+{
+  The Monte-Carlo standard method does not require the function $h$ to have any special property  (it can be non-linear, non-monotonic, non-differentiable, discontinuous, etc.) and the number of necessary simulations does not depend on the number of components of vector $\vect{X}$. On the other hand, this method is not suitable (for the estimation of the quantile) or is very conservative (for the estimation of the upper limit) if $N$ is small and if $\alpha$ and $\beta$ are very close to 1.
+
+  The following references provide an interesting bibliographical starting point for further study of the method described here:
+  \begin{itemize}
+  \item Wilks, S.S. (1962). "Mathematical Statistics", New
+    York, John Wiley.
+  \item Robert C.P., Casella G. (2004). Monte-Carlo Statistical Methods, Springer, ISBN 0-387-21239-6, 2nd ed.
+  \item Rubinstein R.Y. (1981). Simulation and The Monte-Carlo methods, John Wiley \& Sons
+  \end{itemize}
+}

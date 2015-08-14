@@ -1,0 +1,131 @@
+% Copyright (C) 2005-2015 Airbus - EDF - IMACS - Phimeca
+% Permission is granted to copy, distribute and/or modify this document
+% under the terms of the GNU Free Documentation License, Version 1.2
+% or any later version published by the Free Software Foundation;
+% with no Invariant Sections, no Front-Cover Texts, and no Back-Cover
+% Texts.  A copy of the license is included in the section entitled "GNU
+% Free Documentation License".
+\renewcommand{\filename}{docUC_ThresholdExceedance_SimulationAlgoParametrization.tex}
+\renewcommand{\filetitle}{UC : Parametrization of a simulation algorithm}
+
+% \HeaderNNIILevel
+% \HeaderIILevel
+\HeaderIIILevel
+
+\label{simuParam}
+
+
+\index{Threshold Probability!History storage strategy}
+
+The objective of this Use Case is to parameterize a simulation algorithm : parameters linked to the number of points generated, the precision of the probability estimator and the numerical sample storage strategy.\\
+
+Details on thesimulation algorithm method may be found in the Reference Guide (\extref{ReferenceGuide}{see files Reference Guide - Step C --Estimating the probability of an event using Sampling}{stepC}).\\
+
+The probability $P$ is evaluated with a simulation methods by the estimator $P_n$ as defined :
+\begin{eqnarray}
+  P_n & = & \displaystyle \frac{1}{n} \sum_{i=1}^{n} X_i\\
+  X_i & = & \displaystyle \frac{1}{p} \sum_{k=1}^{p} Y_k^i.
+\end{eqnarray}
+
+The random variable $Y_k^i$ is adapted to the simulation used :
+\begin{itemize}
+\item with the Monte Carlo method, $Y_k^i = 1_{event}$,
+\item with the Importance sampling method, where the importance distribution pdf is denoted  $f$ and the distribution pdf of the input vector is denoted $p$, $Y_k^i = 1_{event}\frac{p}{f}$,
+\item with the LHS method, $Y_k^i$ is the Monte Carlo estimator when the sampling is restricted to one cell,
+\item with the Directional Simulation, $Y_k^i$ is the sum on one set of directions given by the Sampling strategy of the contribution of each direction to the event probability, this contribution being evaluated by the Root Strategy. With the RandomDirection Sampling Strategy, one set of directions is made of $2$ directions. With the OrthogonalDirection Sampling Strategy parameterized by the integer q, one set of directions is made of $C_n^q 2^q$ directions.
+\end{itemize}
+\vspace*{0.5cm}
+
+
+The parameter $n$ is called the {\itshape OuterSampling} and the parameter $p$ the {\itshape BlockSize}.\\
+
+In the Monte Carlo method, the limit state function is evaluated $n*p$ times. In the Directional Simulation method, the limit state function is evaluated in average $n*p* \mbox{(mean number of evaluations of the limit state function on one set of directions)}$.\\
+
+For the Directional Simulation method, it is recommended to fix $BlockSize = 1$.\\
+
+The simulation algorithm runs the simulations until its stopping criteria is verified, which is the case as soon as one of the following crieria is fulfilled :
+\begin{itemize}
+\item the number $n$ of external iterations has reached its maximum value, specified by the method {\em setMaximumOuterSampling},
+\item the coefficient of variation of $P_n$ has gone under its maximum value, specified by the method {\em setMaximumCoefficientOfVariation},
+\item the standard deviation of  $P_n$ has gone under its maximum value, specified by the method {\em setMaximumStandardDeviation}.
+\end{itemize}
+
+To erase one of the criteria, you have to set the specific value that will never be reached : for $N$, a great value, for the  coefficient of variation  and the standard deviation the $0$ value.\\
+
+If not specified, OpenTURNS implements some default values :
+\begin{itemize}
+\item \textit{MaximumOuterSampling} = 1000,
+\item \textit{BlockSize} = 1,
+\item \textit{MaximumCoefficientOfVariation} = 0.1,
+\item \textit{MaximumStandardDeviation} = 0.0.
+\end{itemize}
+
+
+
+
+
+OpenTURNS enables to :
+\begin{itemize}
+\item store the numerical sample of the input random  vector and the associated one of the output random  vector which have been used to evaluate the Monte Carlo probability estimator.
+\item draw the convergence graph of the probability estimator with the confidence curves associated to a specified level. Values of $P_n$ and $\sigma_n^2$ (empirical variance of the estimator $P_n$) are stored according to a particular {\itshape HistoryStrategy} that we specify thanks to the method {\itshape setConvergenceStrategy} proposed by the simulation algorithm.
+\end{itemize}
+In order to prevent a memory problem, the User has the possibility to choose the storage strategy used to save the numerical samples. Four strategies are proposed :
+\begin{itemize}
+\item the {\itshape Null strategy} where nothing is stored. This strategy is proposed by the {\itshape Null} class which requires to specify no argument.
+\item the{\itshape  Full strategy} where every point is stored. Be careful! The memory will be exhausted for huge samples. This strategy is proposed by the {\itshape Full} class which requires to specify no argument.
+\item the {\itshape Last strategy} where only the $N$ last points are stored, where $N$ is specified by the User. This strategy is proposed by the {\itshape Last} class which requires to specify the number of points to store.
+\item the {\itshape Compact strategy} where a regularly spaced sub-sample is stored. The minimum size $N$ of the stored numerical sample is specified by the User.  OpenTURNS proceeds as follows :
+  \begin{enumerate}
+  \item it stores the first $2N$ simulations : the size of the stored sample is $2N$,
+  \item it selects only 1 out of 2 of the stored simulations : then the size of the stored sample decreases to $N$ (this is the {\itshape compact} step),
+  \item it stores the next $N$ simulations when selecting 1 out of 2 of the next simulations : the size of the stored sample is $2N$,
+  \item it selects only 1 out of 2 of the stored simulations : then the size of the stored sample decreases to $N$,
+  \item it stores the next $N$ simulations when selecting 1 out of 4 of the next simulations : the size of the stored sample is $2N$,
+  \item then it keeps on until  reaching the stop criteria.
+  \end{enumerate}
+  The stored numerical sample will have a size within $N$ and $2N$. This strategy is proposed by the {\itshape Compact} class which requires to specify the number of points to store.
+\end{itemize}
+
+The following example illustrates the different storage strategies :
+
+\begin{verbatim}
+  Initial Sample =
+  1 2 3 4 5 6 7 8 9 10 11 12
+
+  Null strategy sample =
+
+
+  Full strategy sample =
+  1 2 3 4 5 6 7 8 9 10 11 12
+
+  Last strategy sample (large storage :  36  last points) =
+  1 2 3 4 5 6 7 8 9 10 11 12
+
+  Last strategy sample (small storage :  4  last points) =
+  9 10 11 12
+
+  Compact strategy sample (large storage :  36  points) =
+  1 2 3 4 5 6 7 8 9 10 11 12
+
+  Compact strategy sample (small storage :  4  points) =
+  2 4 6 8 10 12
+\end{verbatim}
+
+The following Use Case illustrates the implementation of the whole storage strategies.\\
+
+\requirements{
+  \begin{description}
+  \item[$\bullet$] a simulation algorithm : {\itshape myAlgo}
+  \item[type:] Simulation
+  \end{description}
+}
+             {
+               \begin{description}
+               \item[$\bullet$]  none
+               \end{description}
+             }
+
+             \textspace\\
+             Python  script for this UseCase :
+
+             \inputscript{script_docUC_ThresholdExceedance_SimulationAlgoParametrization}

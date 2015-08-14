@@ -1,0 +1,124 @@
+% Copyright (C) 2005-2015 Airbus - EDF - IMACS - Phimeca
+% Permission is granted to copy, distribute and/or modify this document
+% under the terms of the GNU Free Documentation License, Version 1.2
+% or any later version published by the Free Software Foundation;
+% with no Invariant Sections, no Front-Cover Texts, and no Back-Cover
+% Texts.  A copy of the license is included in the section entitled "GNU
+% Free Documentation License".
+\renewcommand{\etapemethodo}{Resp. Surf.}
+\renewcommand{\nomfichier}{docref_SurfRep_Kriging}
+\renewcommand{\titrefiche}{Kriging}
+
+\Header
+
+\MathematicalDescription{
+
+  \underline{\textbf{Goal}} \vspace{2mm}
+
+  Kriging (also known as Gaussian process regression) is a Bayesian technique that aim at approximating functions (most often in order to surrogate it because it is expensive to evaluate). In the following it is assumed we aim at surrogating a scalar-valued model $\cM: \vect{x} \mapsto y$. Note the OpenTURNS implementation of Kriging can deal with vector-valued functions ($\cM: \vect{x} \mapsto \vect{y}$), but it simply loops over each output. It is also assumed the model was runned over a design of experiments in order to produce a set of observations gathered in the following dataset: $\left(\left(\vect{x}^{(i)}, y^{(i)}\right), i = 1, \ldots, m\right)$. Ultimately Kriging aims at producing a predictor (also known as a response surface or metamodel) denoted as $\tilde{\cM}$.
+
+  \vspace{2mm}
+
+  \underline{\textbf{Mathematical framework}} \vspace{2mm}
+
+  We put the following Gaussian process prior on the model $\cM$:
+  \begin{equation}
+    Y(\vect{x}) = \Tr{\vect{f}(\vect{x})} \vect{\beta} + Z(\vect{x})
+  \end{equation}
+  where:
+  \begin{itemize}
+    \item $\Tr{\vect{f}(\vect{x})} \vect{\beta}$ is a generalized linear model based upon a functional basis $\vect{f} = \left(f_j, j = 1, \ldots, p\right)$ and a vector of coefficients $\vect{\beta} = \left(\beta_j, j = 1, \ldots, p\right)$,
+    \item $Z$ is a zero-mean stationary Gaussian process whose covariance function reads:
+    \begin{equation}
+        \mathbb{E}[Z(\vect{x})\,Z(\vect{x'})] = \sigma^2 R(\vect{x} - \vect{x'}, \vect{\theta})
+    \end{equation}
+    where $\sigma^2 > 0$ is the variance and $R$ is the correlation function that solely depends on the Manhattan distance between input points $\vect{x} - \vect{x'}$ and a vector of parameters $\vect{\theta} \in \Rset^{n_\theta}$.
+  \end{itemize}
+
+  Under the Gaussian process prior assumption, the observations $\vect{Y} = \left(Y_i, i = 1, \ldots, m\right)$ and a prediction $Y(\vect{x})$ at some unobserved input $\vect{x}$ are jointly normally distributed:
+  \begin{equation}
+    \begin{pmatrix}
+      \vect{Y} \\
+      Y(\vect{x})
+    \end{pmatrix}
+    \thicksim
+    \cN_{m + 1}\left(
+      \begin{pmatrix}
+        \mat{F} \vect{\beta} \\
+        \Tr{\vect{f}(\vect{x})} \vect{\beta}
+      \end{pmatrix}
+      ,\,\sigma^2
+      \begin{pmatrix}
+        \mat{R} & \vect{r}(\vect{x}) \\
+        \vect{r}(\vect{x})^t & 1
+      \end{pmatrix}
+    \right)
+  \end{equation}
+  where:
+  \begin{equation}
+    \mat{F} = \left[f_j\left(\vect{x}^{(i)}\right), i = 1, \ldots, m, j = 1, \ldots, p\right]
+  \end{equation}
+  is the regression matrix,
+  \begin{equation}
+    \mat{R} = \left[R\left(\vect{x}^{(i)} - \vect{x}^{(j)}, \vect{\theta}\right), i,\,j = 1, \ldots, m\right]
+  \end{equation}
+  is the observations' correlation matrix, and:
+  \begin{equation}
+    \vect{r}(\vect{x}) = \Tr{\left(R\left(\vect{x} - \vect{x}^{(i)}, \vect{\theta}\right), i = 1, \ldots, m\right)}
+  \end{equation}
+  is the vector of cross-correlations between the prediction and the observations.
+
+  As such, the Kriging predictor is defined as the following conditional distribution:
+  \begin{equation}
+    \tilde{Y}(\vect{x}) = \left[Y(\vect{x}) \mid \vect{Y} = \vect{y}, \vect{\theta}=\vect{\theta}^*, \sigma^2=(\sigma^2)^*\right]
+  \end{equation}
+  where $\vect{\theta}^*$ and $(\sigma^2)^*$ are the maximum likelihood estimates of the correlation parameters $\vect{\theta}$ and variance $\sigma^2$ (see references).
+
+  It can be shown (see references) that the predictor $\tilde{Y}(\vect{x})$ is also Gaussian:
+  \begin{equation}
+    \tilde{Y}(\vect{x}) = \cN_1\left(\mu_{\tilde{Y}}(\vect{x}), \sigma^2_{\tilde{Y}}(\vect{x})\right)
+  \end{equation}
+
+  \begin{itemize}
+    \item with mean:
+    \begin{equation}
+      \mu_{\tilde{Y}}(\vect{x}) = \Tr{\vect{f}(\vect{x})} \tilde{\vect{\beta}} + \Tr{\vect{r}(\vect{x})} \vect{\gamma}
+    \end{equation}
+    where $\underline{\tilde{\beta}}$ is the generalized least squares solution of the underlying linear regression problem:
+    \begin{equation}
+      \tilde{\vect{\beta}} = \left(\Tr{\mat{F}} \mat{R}^{-1} \mat{F}\right)^{-1} \Tr{\mat{F}} \mat{R}^{-1} \vect{y}
+    \end{equation}
+    and
+    \begin{equation}
+      \vect{\gamma} = \mat{R}^{-1} \left(\vect{y} - \mat{F} \tilde{\vect{\beta}}\right)
+    \end{equation}
+    \item and variance:
+    \begin{equation}
+      \sigma^2_{\tilde{Y}}(\vect{x}) =
+        \sigma^2 \left[1 -
+            \Tr{\vect{r}(\vect{x})} \mat{R}^{-1} \vect{r}(\vect{x})
+            + \Tr{\vect{u}(\vect{x})} \left(\Tr{\mat{F}} \mat{R}^{-1} \mat{F}\right)^{-1} \vect{u}(\vect{x})
+            \right]
+    \end{equation}
+    where:
+    \begin{equation}
+      \vect{u}(\vect{x}) = \Tr{\mat{F}} \mat{R}^{-1} \vect{r}(\vect{x}) - \vect{f}(\vect{x})
+    \end{equation}
+  \end{itemize}
+
+  For now only the Kriging mean is returned as the metamodel $\tilde{\cM} \equiv \mu_{\tilde{Y}}$.
+
+}
+{
+  Kriging may also be referred to as \emph{Gaussian process regression}.
+}
+
+\Methodology{}
+            {
+              More resources in Kriging may be found in:
+              \begin{itemize}
+                \item V. Dubourg, 2011, ``Adaptative surrogate models for reliability and reliability-based design optimization'', University Blaise Pascal - Clermont II. http://bruno.sudret.free.fr/dubourg.html
+                \item S. Lophaven, H. Nielsen and J. Sondergaard, 2002, ``DACE, A Matlab kriging toolbox'', Technichal University of Denmark. http://www2.imm.dtu.dk/~hbni/dace/              \item T. Santner, B. Williams and W. Notz, 2003. ``The design and analysis of computer experiments'', Springer, New York.
+                \item C. Rasmussen and C. Williams, 2006, T. Dietterich (Ed.), ``Gaussian processes for machine learning'', MIT Press.
+              \end{itemize}
+            }

@@ -1,0 +1,72 @@
+% Copyright (C) 2005-2015 Airbus - EDF - IMACS - Phimeca
+% Permission is granted to copy, distribute and/or modify this document
+% under the terms of the GNU Free Documentation License, Version 1.2
+% or any later version published by the Free Software Foundation;
+% with no Invariant Sections, no Front-Cover Texts, and no Back-Cover
+% Texts.  A copy of the license is included in the section entitled "GNU
+% Free Documentation License".
+\renewcommand{\nomfichier}{docref_Cprime212_PCC}
+\renewcommand{\titrefiche}{Uncertainty Ranking using Pearson's Partial Correlation Coefficients}
+
+\Header
+
+\MathematicalDescription{
+  \underline{\textbf{Goal}} \vspace{2mm}
+
+  This method deals with analyzing the influence the random vector $\vect{X} = \left( X^1,\ldots,X^{n_X} \right)$ has on a random variable $Y^j$ which is being studied for uncertainty. Here we attempt to measure linear relationships that exist between $Y^j$ and the different components $X^i$. \vspace{2mm}
+
+  \underline{\textbf{Principle}} \vspace{2mm}
+
+  The basic method of hierarchical ordering using Pearson's coefficients (see \otref{docref_Cprime212_Pearson}{Uncertainty Ranking using Pearson}) deals with the case where the variable $Y^j$ linearly depends on $n_X$ variables $\left\{ X^1,\ldots,X^{n_X} \right\}$ but this can be misleading when statistical dependencies or interactions between the variables $X^i$ (e.g. a crossed term $X^i \times X^j$) exist. In such a situation, the partial correlation coefficients can be more useful in ordering the uncertainty hierarchically: the partial correlation coefficients $\textrm{PCC}_{X^i,Y^j}$  between the variables $Y^j$ and $X^i$ attempts to measure the residual influence of $X^i$ on $Y^j$ once influences from all other variables $X^j$ have been eliminated.
+
+  The estimation for each partial correlation coefficient $\textrm{PCC}_{X^i,Y^j}$  uses a set made up of $N$ values $\left\{ (y^j_1,x_1^1,\ldots,x_1^{n_X}),\ldots,(y^j_N,x_N^1,\ldots,x_N^{n_X}) \right\}$   of the vector $(Y^j,X^1,\ldots,X^{n_X})$. This requires the following three steps to be carried out:
+
+  \begin{enumerate}
+  \item Determine the effect of other variables $\left\{ X^j,\ j\neq i \right\}$ on $Y^j$ by linear regression (see \otref{docref_B234_LinearRegression}{Linear Regression}); when the values of variable $\left\{ X^j,\ j\neq i \right\}$ are known, the average forecast for the value of $Y^j$ is then available in the form of the equation:
+    \begin{align*}
+      \widehat{Y^j} = \sum_{k \neq i,\ 1 \leq k \leq n_X} \widehat{a}_k X^k
+    \end{align*}
+
+  \item Determine the effect of other variables $\left\{ X^j,\ j\neq i \right\}$ on $X^i$ by linear regression; when the values of variable $\left\{ X^j,\ j\neq i \right\}$ are known, the average forecast for the value of $Y^j$ is then available in the form of the equation:
+    \begin{align*}
+      \widehat{X}^i = \sum_{k \neq i,\ 1 \leq k \leq n_X} \widehat{b}_k X^k
+    \end{align*}
+
+  \item $\textrm{PCC}_{X^i,Y^j}$ is then equal to the Pearson's correlation coefficient $\widehat{\rho}_{Y^j-\widehat{Y^j},X^i-\widehat{X}^i}$  estimated for the variables  $Y^j-\widehat{Y^j}$ and $X^i-\widehat{X}^i$ on the $N$-sample of simulations (see \otref{docref_B231_Pearson}{Pearson's Coefficient}).
+  \end{enumerate}
+
+  One can then class the $n_X$ variables $X^1,\ldots, X^{n_X}$ according to the absolute value of the partial correlation coefficients: the higher the value of $\left| \textrm{PCC}_{X^i,Y^j} \right|$, the greater the impact the variable $X^i$ has on $Y^j$.
+
+}
+{
+  -
+}
+
+\Methodology{
+  After a propagation of uncertainty (step C) using \otref{docref_C221_MonteCarloStd}{Standard Monte Carlo} simulation, a hierarchy of sources of uncertainty can be obtained Partial Pearson's Correlation Coefficients. In fact, the $N$ simulations enable the pairs  $(y^j_1, x^i_1)$, $(y^j_2, x^i_2)$,\ldots, $(y^j_N, x^i_N)$ to be generated, where:
+  \begin{itemize}
+  \item $\underline{X} = \left\{ X^1,\ldots,X^n \right\}$ describes the input vector specified in  step A "Specifying Criteria and the Case Study",
+  \item $Y^j$ describes the final variable of interest or output variable defined in the same step.
+  \end{itemize}
+
+  The results produced as output of this method are Pearson's partial correlation coefficients $ \textrm{PCC}_{X^i,Y^j}$, that the user may use, taking absolute values, to order the variables $X^i$ hierarchically.
+}
+{
+  This method of hierarchical ordering is particularly useful:
+  \begin{itemize}
+  \item when the study of uncertainty deals with the central dispersion of the variable of interest $Y^j$ and not with its extreme values,
+  \item when the relationships between $Y^j$ and each of the components of $\underline{X}$ are close to linear relationships (so that Pearson's correlation coefficient can be interpreted),
+  \item when the number $N$ of Monte-Carlo simulations is significantly higher than the number $n_X$ of input random variables (it is preferable to have $N/n_X$ at least greater than a factor of 10 so that the estimation of the $n_X$ partial correlation coefficients provides a reasonable picture of reality).
+  \end{itemize}
+
+  Readers interested in the assumptions made for multiple linear regression models and in the tests needed to validate these assumptions are referred to \otref{docref_B234_LinearRegression}{Linear Regression}.
+
+  Other methods of uncertainty ranking can be applied after Monte-Carlo simulation, requiring a lesser number $N$ of simulations or that can treat non-linear cases, are described in \otref{docref_Cprime212_Pearson}{Uncertainty Ranking using Pearson}, \otref{docref_Cprime212_Spearman}{Uncertainty ranking using Spearman}, and \otref{docref_Cprime212_PRCC}{Uncertainty Ranking using Spearman's Partial Correlation Coefficients}.
+
+  The following references provide an interesting bibliographic starting point to further study of the method described here:
+  \begin{itemize}
+  \item Saltelli, A., Chan, K., Scott, M. (2000). "Sensitivity Analysis", John Wiley \& Sons publishers, Probability and Statistics series
+  \item J.C. Helton, F.J. Davis (2003). "Latin Hypercube sampling and the propagation of uncertainty analyses of complex systems". Reliability Engineering and System Safety 81, p.23-69
+  \item J.P.C. Kleijnen, J.C. Helton (1999). "Statistical analyses of scatterplots to identify factors in large-scale simulations, part 1 : review and comparison of techniques". Reliability Engineering and System Safety 65, p.147-185
+  \end{itemize}
+}

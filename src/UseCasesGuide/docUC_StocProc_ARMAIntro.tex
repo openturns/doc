@@ -1,0 +1,75 @@
+% Copyright (C) 2005-2015 Airbus - EDF - IMACS - Phimeca
+% Permission is granted to copy, distribute and/or modify this document
+% under the terms of the GNU Free Documentation License, Version 1.2
+% or any later version published by the Free Software Foundation;
+% with no Invariant Sections, no Front-Cover Texts, and no Back-Cover
+% Texts.  A copy of the license is included in the section entitled "GNU
+% Free Documentation License".
+\renewcommand{\filename}{docUC_StocProc_NormalIntro.tex}
+\renewcommand{\filetitle}{Intro}
+
+% \HeaderNNIILevel
+% \HeaderIILevel
+%\HeaderIIILevel
+
+
+\index{Stochastic Process!ARMA}
+
+
+
+
+Consider a stationary multivariate stochastic process $X: \Omega \times[0,T] \rightarrow \Rset^d$  of dimension $d$, where $X_t : \Omega \rightarrow \Rset^d$ is the random variable at time $t$.
+Under some general conditions,$X$ can be modeled by an  $ARMA(p,q)$ model defined at the time stamp $t$ by :
+\begin{equation}\label{dimn}
+  X_t + \mat{A}_{\, 1}   \, X_{t-1} + \hdots +  \mat{A}_{\, p} \,   X_{t-p} =
+  \varepsilon_{t}+  \mat{B}_ {\, 1} \,  \varepsilon_{t-1}+   \hdots + \mat{B}_{\, q}  \, \varepsilon_{t-q}
+\end{equation}
+where the coefficients of the recurrence are  matrix in $\Rset^d$ and $(\varepsilon_t)_t$is white noise discretized on the same time grid as the process $X$.\\
+The coefficients $(\mat{A}_{\, 1} , \hdots, \mat{A}_{\, p} )$ form the Auto Regressive (AR) part of the model, while the coefficients $(\mat{B}_{\, 1} \, \hdots, \mat{B}_{\, q}  )$ the Moving Average (MA) part. \\
+
+We introduce the homogeneous system associated to (\ref{dimn}) :
+\begin{equation}\label{dimnHom}
+  X_t + \mat{A}_{\, 1}   \,  X_{t-1} + \hdots +  \mat{A}_{\, p} \,  X_{t-p} = 0
+\end{equation}
+
+
+To get stationary solutions of (\ref{dimn}), it is necessary to get its characteristic polynomial defined in (\ref{PolPhi}) :
+\begin{equation}\label{PolPhi}
+  \Phi(\vect{r}) = \vect{r}^p + \sum_{i=1}^p a_i\vect{r}^{p-i}
+\end{equation}
+
+
+Thus the solutions of (\ref{dimnHom}) are of the form $P(t)\vect{r}_i^t$ where the $\vect{r}_i$ are the roots of the polynomials $\Phi(\vect{r})$ defined in (\ref{PolPhi}) and $P$ is a polynomials of degree the order of the root $\vect{r}_i$ :
+
+
+The processes  $P(t)\vect{r}_i^t$ decrease with time if and only if the modulus of all the components of the roots $\vect{r}_i$ are less than 1 :
+\begin{equation}\label{Modul}
+  \forall i,j \in [1,d], \,  |r_{ij}| <1
+\end{equation}
+
+Once given the coefficients of the model $ARMA(p,q)$, OpenTURNS evaluates  the roots of the polynomials $\Phi(\vect{r})$  and checks the previous  condition (\ref{Modul}). The roots $\vect{r}_i$, are the eigen values of the matrix $\mat{M}$ which writes in dimension $d$ as :
+\begin{equation}\label{MatrixMdimn}
+  \mat{M} = \left(
+  \begin{array}{cccccc}
+    \mat{0}_{\, d} & \mat{1}_{\, d} & \mat{0}_{\, d} & \hdots & \mat{0}_{\, d} & \mat{0}_{\, d} \\
+    \mat{0}_{\, d} & \mat{0}_{\, d} & \mat{1}_{\, d} & \hdots & \mat{0}_{\, d} & \mat{0}_{\, d}\\
+    \hdots \\
+    \mat{0}_{\, d} & \mat{0}_{\, d} & \mat{0}_{\, d} & \hdots & \mat{0}_{\, d} & \mat{1}_{\, d}\\
+    - \mat{A}_{\, 1} & -\mat{A}_{\, 2} & - \mat{A}_{\, 3}& \hdots  & -\mat{A}_{\, p-1}& -\mat{A}_{\, p}
+  \end{array}
+  \right )
+\end{equation}
+and  in dimension 1 :
+\begin{equation}\label{MatrixMdim1}
+  \mat{M} = \left(
+  \begin{array}{cccccc}
+    0 & 1 & 0 & \hdots & 0 & 0\\
+    0 & 0 & 1 & \hdots & 0 & 0\\
+    \hdots \\
+    0 & 0 & 0 & \hdots & 0 & 1\\
+    -\alpha_1 & -\alpha_2 & -\alpha_3 & \hdots  & -\alpha_{p-1} & -\alpha_p
+  \end{array}
+  \right )
+\end{equation}
+
+The matrix $\mat{M}$ is known to be the companion matrix.

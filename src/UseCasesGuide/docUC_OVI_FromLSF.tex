@@ -1,0 +1,42 @@
+% Copyright (C) 2005-2015 Airbus - EDF - IMACS - Phimeca
+% Permission is granted to copy, distribute and/or modify this document
+% under the terms of the GNU Free Documentation License, Version 1.2
+% or any later version published by the Free Software Foundation;
+% with no Invariant Sections, no Front-Cover Texts, and no Back-Cover
+% Texts.  A copy of the license is included in the section entitled "GNU
+% Free Documentation License".
+\renewcommand{\filename}{docUC_OVI_FromLSF.tex}
+\renewcommand{\filetitle}{UC : Creation of the ouput random vector}
+
+% \HeaderNNIILevel
+% \HeaderIILevel
+\HeaderIIILevel
+
+\label{CompositeRandomVector}
+
+
+\index{Random Vector!Output random vector}
+
+The objective of this Use Case is to create the ouput random variable of interest defined as the image through the limit state function of the input random vector.\\
+
+Details on the definition of random mixture variables may be found in the Reference Guide (\extref{ReferenceGuide}{see files Reference Guide - Step B -- Random Mixture : affine combination of independent univariate distributions}{stepB}).\\
+
+\requirements{
+  \begin{description}
+  \item[$\bullet$] the limit state function : {\itshape myFunction}
+  \item[type:]  NumericalMathFunction
+  \item[$\bullet$] the random input vector : {\itshape inputRV}
+  \item[type:] RandomVector which implementation is a UsualRandomVector
+  \end{description}
+}
+             {
+               \begin{description}
+               \item[$\bullet$] the output variable of interest {\itshape outputRV = myFunction(inputRV)}
+               \item[type:] RandomVector which implementation is a CompositeRandomVector
+               \end{description}
+             }
+
+             \textspace\\
+             Python script for this UseCase :
+
+             \inputscript{script_docUC_OVI_FromLSF}

@@ -1,0 +1,62 @@
+% Copyright (C) 2005-2015 Airbus - EDF - IMACS - Phimeca
+% Permission is granted to copy, distribute and/or modify this document
+% under the terms of the GNU Free Documentation License, Version 1.2
+% or any later version published by the Free Software Foundation;
+% with no Invariant Sections, no Front-Cover Texts, and no Back-Cover
+% Texts.  A copy of the license is included in the section entitled "GNU
+% Free Documentation License".
+\renewcommand{\filename}{docUCLSF_PythonScript.tex}
+\renewcommand{\filetitle}{UC : From a fonction defined in the script python}
+
+% \HeaderNNIILevel
+% \HeaderIILevel
+\HeaderIIILevel
+
+\label{OpenTURNSPythonFunction}
+
+\index{Limit State Function!Function declarde in the script python}
+
+
+The objective of this Use Case is to create the limit state function, from a function defined in the script python. OpenTURNS automatically gives to the analytical formula an implementation for the gradient and the hessian : by default,
+\begin{itemize}
+\item the gradient evaluation method is the  centered finite difference method, with the differential increment $h=1e-5$ for each direction,
+\item the hessian evaluation method is the  centered finite difference method, with the differential increment $h=1e-4$ for each direction.
+\end{itemize}
+It is possible to change the evaluation method for the gradient or the hessian. The following Use Case shows how to proceed.\\
+
+
+
+
+In order to be able to use the function with the {\itshape openturns} library, it is necessary to define a class which derives from {\itshape OpenTURNSPythonFunction} as indicated belows. The example here is the functions {\itshape modelePYTHON} and {\itshape modelePYTHON2}:
+\begin{equation}
+  \begin{array}{l|lcl}
+    modelePYTHON : & \Rset^4 & \rightarrow & \Rset \\
+    & (E,F,L,I)    & \mapsto     & \displaystyle \frac{FL^3}{3EI}
+  \end{array}
+\end{equation}
+
+\begin{equation}
+  \begin{array}{l|lcl}
+    modelePYTHON2 : & \Rset^4 & \rightarrow & \Rset^2 \\
+    & (a,b,c)    & \mapsto     & \displaystyle (a^2, abc)
+  \end{array}
+\end{equation}
+
+
+\requirements{
+  \begin{description}
+  \item[$\bullet$] none
+  \end{description}
+}
+             {
+               \begin{description}
+               \item[$\bullet$] the python function assoiated to the model: {\itshape modelePYTHON}
+               \item[type:] a OpenTURNSPythonFunction
+               \item[$\bullet$] the limit state function : {\itshape modeleOpenTURNS}
+               \item[type:] a NumericalMathFunction
+               \end{description}
+             }
+
+             \textspace\\
+             Python script for this Use Case :
+             \inputscript{script_docUC_LSF_PythonScript}

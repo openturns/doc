@@ -1,0 +1,75 @@
+% Copyright (C) 2005-2015 Airbus - EDF - IMACS - Phimeca
+% Permission is granted to copy, distribute and/or modify this document
+% under the terms of the GNU Free Documentation License, Version 1.2
+% or any later version published by the Free Software Foundation;
+% with no Invariant Sections, no Front-Cover Texts, and no Back-Cover
+% Texts.  A copy of the license is included in the section entitled "GNU
+% Free Documentation License".
+\renewcommand{\etapemethodo}{C}
+\renewcommand{\nomfichier}{docref_C322_QuasiMonteCarlo}
+\renewcommand{\titrefiche}{Quasi Monte Carlo}
+
+\Header
+
+\MathematicalDescription{
+
+  \underline{\textbf{Goal}}\\
+  Let us note $\cD_f = \{\ux \in \Rset^{n} \: | \:  g(\ux,\underline{d}) \leq 0\}$.
+  The goal is to estimate the following probability:
+  \begin{eqnarray*}\label{integ}
+    P_f &=& \int_{\cD_f} f_{\uX}(\ux)d\ux\\
+    &=& \int_{\Rset^{n}} \mathbf{1}_{\{g(\ux,\underline{d}) \leq 0 \}}f_{\uX}(\ux)d\ux\\
+    &=& \Prob {\{\:g(\uX,\underline{d}) \leq 0 \}}
+  \end{eqnarray*}
+  Quasi-Monte Carlo is a technique which approximates the integral (\ref{integ})   using low discrepancy sequences  $\{\vect{x}^1, ..., \vect{x}^N\}$ instead of randomly generated sequences, as follows :
+  \begin{align*}
+    P_f \approx \frac{1}{N}\,\sum_{i=1}^N  \mathbf{1}_{\cD_f}(\ux_i) f(\ux_i).
+  \end{align*}
+  To have information on low discrepancy sequences, refer to \otref{docref_C_LowDiscrepancySequence}{Low Discrepancy Sequence} -- see page \pageref{docref_C_LowDiscrepancySequence}. \\
+
+
+  \underline{\textbf{Principles}}\\
+
+  In general, the integral of a function $f$  on $\Delta = [0,1]^s$ can be approximated by using some low discrepancy sequence $\{\vect{x}_1, \hdots, \vect{x}_N\}$  as follows :
+  \begin{align*}
+    \int_{\Delta} f(\vect{u})\,d\vect{u} \approx \frac{1}{N}\,\sum_{i=1}^N f(\vect{x}_i).
+  \end{align*}
+
+  The low discrepancy sequence is generated on $\Delta$ according to the Lebesgue measure then may be transformed to any measure $\mu$ thanks to the inverse CDF technique in order to approximate the integral :
+  \begin{align*}
+    \int_{\Rset^s} f(\vect{u})\,d\vect{u} \approx \frac{1}{N}\,\sum_{i=1}^N f(\vect{x}_i).
+  \end{align*}
+
+
+  As the sequence is not randomly generated, we can not use the Central Limit Theorem in order to control the quality of the approximation. This quality is given by the  Koksma-Hlawka inequality that we recall here :
+  \begin{align*}
+    \left\lvert \frac{1}{N}\sum_{i=1}^Nf(\vect{x}_i) - \int_If(\vect{x})d\vect{x} \right\rvert \le Var(f)D^N(\vect{x}_1, ..., \vect{x}_N)
+  \end{align*}
+
+  where $D^N(\vect{x}_1, ..., \vect{x}_N)$ is the discrepancy of the sequence $\{\vect{x}_1, \hdots, \vect{x}_N\}$.\\
+
+  For Halton, Inverse Halton and Sobol sequences, we have :
+  \begin{align*}
+    D^N = O\biggl(\frac{\log^s{N}}{N}\biggr)
+  \end{align*}
+  Thus, asymptotically the error converges in $O\biggl(\frac{\log^s{N}}{N}\biggr)$, instead of $O\biggl(\frac{1}{\sqrt{N}}\biggr)$ for traditional Monte Carlo. The convergence rate depends on the dimension $s$ so one must have $N >> e^s$.
+}
+{
+  % other notations
+  --
+}
+
+\Methodology{
+  This method is part of the step C of the global methodology. It requires the specification of the joined probability density function of the input variables and the definition of the threshold. The PDF must have an independent copula.
+}
+            {This method \textit{a priori} provides an asymptotically higher convergence rate than traditional Monte Carlobut no general rule can guarantee a better efficiency of the Quasi-Monte Carlo sampling than the classical Monte Carlo sampling.\\
+              The advantages of Quasi-Monte Carlo sampling tend to disappear with the increase of the number of dimensions of the input variables. \\
+              It is recommended to use the Quasi-Monte Carlo technique with high sampling sizes or with very low dimensionality.\\
+              This method is valid only if the input random variables are independent.\\
+              A fruitful link towards the global approach can be established with the files :
+              \begin{itemize}
+              \item \otref{docref_C321_MonteCarloStd}{Monte Carlo method to evaluate a probability to exceed a threshold},
+              \item   \otref{docref_C322_LHS}{Latin Hypercube Sampling to evaluate a probability to exceed a threshold},
+              \item  \otref{docref_C322_TI}{Importance Sampling to evaluate a probability to exceed a threshold} coming from the methodology.
+              \end{itemize}
+            }

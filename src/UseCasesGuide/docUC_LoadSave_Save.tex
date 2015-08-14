@@ -1,0 +1,69 @@
+% Copyright (C) 2005-2015 Airbus - EDF - IMACS - Phimeca
+% Permission is granted to copy, distribute and/or modify this document
+% under the terms of the GNU Free Documentation License, Version 1.2
+% or any later version published by the Free Software Foundation;
+% with no Invariant Sections, no Front-Cover Texts, and no Back-Cover
+% Texts.  A copy of the license is included in the section entitled "GNU
+% Free Documentation License".
+\renewcommand{\filename}{docUC_LoadSave_Save.tex}
+\renewcommand{\filetitle}{UC : How to save a study ?}
+
+% \HeaderNNIILevel
+\HeaderIILevel
+% \HeaderIIILevel
+
+The objective of this Use Case is to explicitate how to save the structures created within a study in order to be able to load them in a future study.\\
+
+
+\index{Study!Save}
+\requirements{
+  \begin{description}
+  \item[$\bullet$] none
+  \end{description}
+}
+             {
+               \begin{description}
+               \item[$\bullet$] an object containing all the objects saved : {\itshape myStudy}
+               \item[type:] Study
+               \item[$\bullet$]  a file .XML containing all the objects saved : {\itshape myXMLFile.XML}
+               \item[type:] file .XML
+               \end{description}
+             }
+
+             \textspace\\
+             Python  script for this UseCase :
+
+             \begin{lstlisting}
+               # Create the name of the file .XML which will be created at the adress /tmp
+               # if the adress is not precised, the file .XML is created in the current repertory
+               fileName = "/tmp/myXMLFile"
+
+               # Create a Study Object which will contain all the objects saved
+               myStudy = Study()
+
+               # Associate it to the file .XML just created
+               myStudy.setStorageManager(XMLStorageManager(fileName))
+
+               # Perform here the study
+               # for example, a NumericalPoint is created we want to save
+               p1 = NumericalPointWithDescription( ( ("x",10.), ("y",11.), ("z",12.) ) )
+
+               # Add the NumericalPoint to the list of the objects saved
+               myStudy.add("point", p1)
+
+               # Create an analytical NumericalMathFunction
+               analytical = NumericalMathFunction( ("a", "b"), ("sum", "prod", "mean"), ("a+b", "a*b", "(a+b)/2") )
+
+               # Add the NumericalMathFunction to the list of the objects saved
+               myStudy.add("analytical", analytical)
+
+               # Check the list of objects that will be saved
+               print "Study = " , myStudy
+
+               # Remove the NumericalMathFunction to the list of the objects saved
+               myStudy.remove("analytical")
+
+               # CARE!! At this point, no object has been saved : only the list have been written!
+               # SAVE NOW the objects listed
+               myStudy.save()
+             \end{lstlisting}

@@ -1,0 +1,83 @@
+% Copyright (C) 2005-2015 Airbus - EDF - IMACS - Phimeca
+% Permission is granted to copy, distribute and/or modify this document
+% under the terms of the GNU Free Documentation License, Version 1.2
+% or any later version published by the Free Software Foundation;
+% with no Invariant Sections, no Front-Cover Texts, and no Back-Cover
+% Texts.  A copy of the license is included in the section entitled "GNU
+% Free Documentation License".
+\renewcommand{\filename}{docUC_InputNoData_TruncatedDist.tex}
+\renewcommand{\filetitle}{UC : Creation of a truncated distribution}
+
+% \HeaderNNIILevel
+% \HeaderIILevel
+\HeaderIIILevel
+\label{truncatedistribution}
+
+
+
+
+\index{Usual Distribution!Truncated distribution}
+
+The objective of the Use Case is to truncate a 1D distribution already defined. OpenTURNS enables to truncate the distribution in its lower area, or its upper area or in both lower and upper areas. After having  truncated a distribution, it is possible to recuperate the initial distribution thanks to the method {\itshape getDistribution()}.\\
+
+Let's consider $X$ a random variable with respectively $F_X$ and $p_X$ its cumulative and probability density functions, and $(a,b)\in \Rset \cup {\pm \infty}$. The random variable $Y=X/[a,b]$ which is the random variable $X$ given that $X\in[a,b]$ is defined by the following cumulative and probability density functions $F_Y$ and $p_Y$ :
+\begin{align*}
+  \forall y \in \Rset, F_Y(y) = \Prob{X<y\, / \, X\in[a,b]} =
+  \begin{array}{|ll}
+    1 & \mbox{for } y \geq b, \\
+    0 & \mbox{for } y \leq a, \\
+    \displaystyle \frac{F_X(y) - F_X(a)}{F_X(b) - F_X(a)} & \mbox{for } y\in[a,b]
+  \end{array}
+\end{align*}
+\begin{align*}
+  \forall y \in \Rset, p_Y(y) =
+  \begin{array}{|ll}
+    0 &  \mbox{for } y \geq b  \mbox{ or }  y \leq a\\
+    \displaystyle \frac{1}{F_X(b) - F_X(a)}\, p_X(y) & \mbox{for } y\in[a,b]
+  \end{array}
+\end{align*}
+
+
+
+
+
+\noindent%
+\requirements{
+  \begin{description}
+  \item[$\bullet$] some lower and upper bounds : {\itshape myLowerBound, myUpperBound}
+  \item[type:] reals
+  \item[$\bullet$] a scalar distribution : {\itshape myEntireDist}
+  \item[type:] a Distribution which implementation is UsualDistribution or ComposedDistribution or Mixture
+  \end{description}
+}
+{
+  \begin{description}
+  \item[$\bullet$] a distribution : {\itshape myTruncatedDistribution}
+  \item[type:]  a TruncatedDistribution
+  \end{description}
+}
+
+\textspace\\
+Python script for this UseCase :
+
+\inputscript{script_docUC_InputNoData_TruncatedDist}
+
+\textspace\\
+
+Figures \ref{truncatedDistribution_pdf} and \ref{truncatedDistribution_cdf} show the PDF and CDF of the truncated distributions of a Logistic($\alpha = 1.0$, $\beta  =2.0$) respectively within the ranges $[4.0, \infty[$,  $[-2.0, 5.0]$ and $[-\infty, 3.0]$.
+
+\begin{figure}[H]
+  \begin{center}
+    \includegraphics[width=10cm]{Figures/truncatedDistribution_pdf.png}
+  \end{center}
+  \caption{PDF of several truncated Logistic distributions}
+  \label{truncatedDistribution_pdf}
+\end{figure}
+
+\begin{figure}[H]
+  \begin{center}
+    \includegraphics[width=10cm]{Figures/truncatedDistribution_cdf.png}
+  \end{center}
+  \caption{CDF of several truncated Logistic distributions}
+  \label{truncatedDistribution_cdf}
+\end{figure}

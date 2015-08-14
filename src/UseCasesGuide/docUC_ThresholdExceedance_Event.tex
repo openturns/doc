@@ -1,0 +1,49 @@
+% Copyright (C) 2005-2015 Airbus - EDF - IMACS - Phimeca
+% Permission is granted to copy, distribute and/or modify this document
+% under the terms of the GNU Free Documentation License, Version 1.2
+% or any later version published by the Free Software Foundation;
+% with no Invariant Sections, no Front-Cover Texts, and no Back-Cover
+% Texts.  A copy of the license is included in the section entitled "GNU
+% Free Documentation License".
+\renewcommand{\filename}{docUC_ThresholdExceedance_Event.tex}
+\renewcommand{\filetitle}{UC : Creation of an event in the physical and the standard spaces}
+
+% \HeaderNNIILevel
+% \HeaderIILevel
+\HeaderIIILevel
+
+\label{StandardPhysicalEvent}
+
+\index{Event!Physical space}
+\index{Event!Standard space}
+
+
+This section gives elements to create events in the physical space {\itshape Event} and in the standard space {\itshape StandardEvent}.\\
+
+
+
+Details on isoproabilitic transformations  may be found in the Reference Guide (\extref{ReferenceGuide}{see files Reference Guide - Step C -- Isoprobabilistic transformation preliminary to FORM-SORM methods}{stepC}).\\
+
+
+The below script creates the event based on the scalar ouput variable  {\itshape output} and defined by :
+\begin{align*}
+  myEvent = \{ output > 4\}.
+\end{align*}
+
+\requirements{
+  \begin{description}
+  \item[$\bullet$] the scalar  output variable of interest : {\itshape output}
+  \item[type:] RandomVector which implementation is a CompositeRandomVector
+  \end{description}
+}
+             {
+               \begin{description}
+               \item[$\bullet$] the events in the physical and standard spaces : {\itshape myEvent}, {\itshape myStandardEvent}
+               \item[type:] Event and StandardEvent
+               \end{description}
+             }
+
+             \textspace\\
+             Python script for this UseCase :
+
+             \inputscript{script_docUC_ThresholdExceedance_Event}

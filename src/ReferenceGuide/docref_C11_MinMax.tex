@@ -1,0 +1,49 @@
+% Copyright (C) 2005-2015 Airbus - EDF - IMACS - Phimeca
+% Permission is granted to copy, distribute and/or modify this document
+% under the terms of the GNU Free Documentation License, Version 1.2
+% or any later version published by the Free Software Foundation;
+% with no Invariant Sections, no Front-Cover Texts, and no Back-Cover
+% Texts.  A copy of the license is included in the section entitled "GNU
+% Free Documentation License".
+\renewcommand{\etapemethodo}{C}
+\renewcommand{\nomfichier}{docref_C11_MinMax}
+\renewcommand{\titrefiche}{Min-Max Approach}
+
+\Header
+
+\MathematicalDescription{
+  \underline{\textbf{Goal}} \vspace{2mm}
+
+  The method is used in the following context: $\vect{x}= \left( x^1,\ldots,x^{n_X} \right)$ is a vector of  unknown variables, $\vect{d}$ a vector considered to be well known or where uncertainty is negligible, and $\vect{y}=h(\vect{x},\vect{d})= \left( y^1,\ldots,y^{n_Y} \right)$ describes the variables of interest. The objective here is to determine the extreme (minimum and maximum) values of the components of $\underline{y}$ for all possible values of $\vect{x}$.
+  \vspace*{2mm}
+
+  \underline{\textbf{Principle}} \vspace{2mm}
+
+  Several techniques enable to determine the extreme (minimum and maximum) values of the variables $\vect{y}$ for the set of all possible values of $\vect{x}$ :
+  \begin{itemize}
+  \item techniques based on design of experiments  : the extreme values of $\vect{y}$ are sought for only a finite set of combinations $\left\{ \vect{x}_1 , \ldots , \vect{x}_N \right\}$,
+  \item techniques using optimization algorithms.
+  \end{itemize}
+
+
+  {\bf Techniques based on design of experiments }\\
+
+  In that case, the min-max approach consists in three steps:
+  \begin{itemize}
+  \item choice of experiment design used  to determine the combinations  $\left\{ \vect{x}_1 , \ldots , \vect{x}_N \right\}$ of the input random variables,
+  \item calculation of  $\vect{y}_i = h(\vect{x}_i,\vect{d})$ for $i=1,\ldots,N$,
+  \item calculation of  $\min_{1 \leq i \leq N} y^k_i$  and of  $\max_{1 \leq i \leq N} y^k_i$, together with the combinations related to these extreme values: $\vect{x}_{k,\min} = \textrm{argmin}_{1 \leq i \leq N} y^k_i$  and $\vect{x}_{k,\max} = \textrm{argmax}_{1 \leq i \leq N} y^k_i$.
+  \end{itemize} \vspace{2mm}
+
+  The type of design of experiments  is influent on the quality of the response surface and then on the evaluation of its extreme values. OpenTURNS proposes different kinds of design of experiments  : \otref{docref_C11_ExperimentPlanes}{Design of Experimentss } -- see page \pageref{docref_C11_ExperimentPlanes}.
+
+
+
+  {\bf Techniques based on optimization algorithm}\\
+
+  The min or max value of the output variable of interest is searched thanks to a optimization algorithm : \otref{docref_C11_OptimizationAlgo}{Optimization Algorithms} -- see page \pageref{docref_C11_OptimizationAlgo}.
+
+}
+{
+  --
+}

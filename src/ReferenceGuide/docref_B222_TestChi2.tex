@@ -1,0 +1,74 @@
+% Copyright (C) 2005-2015 Airbus - EDF - IMACS - Phimeca
+% Permission is granted to copy, distribute and/or modify this document
+% under the terms of the GNU Free Documentation License, Version 1.2
+% or any later version published by the Free Software Foundation;
+% with no Invariant Sections, no Front-Cover Texts, and no Back-Cover
+% Texts.  A copy of the license is included in the section entitled "GNU
+% Free Documentation License".
+\renewcommand{\etapemethodo}{B}
+\renewcommand{\nomfichier}{docref_B222_TestChi2}
+\renewcommand{\titrefiche}{Chi-squared goodness of fit test}
+
+\Header
+
+\MathematicalDescription{
+
+  \underline{\textbf{Goal}} \vspace{2mm}
+
+  This method deals with the modelling of a probability distribution of a random vector $\vect{X} = \left( X^1,\ldots,X^{n_X} \right)$. It seeks to verify the compatibility between a sample of data $\left\{ \vect{x}_1,\vect{x}_2,\ldots,\vect{x}_N \right\}$ and a candidate probability distribution previous chosen. OpenTURNS enables the use of the $\chi^2$  Goodness-of-Fit test to answer this question in the one dimensional case $n_X =1$, and with a discrete distribution.
+  \vspace{2mm}
+
+  \underline{\textbf{Principle}} \vspace{2mm}
+
+  Let us limit the case to $n_X = 1$. Thus we denote $\vect{X} = X^1 = X$. We also note that as we are considering discrete distributions i.e. those for which the possible values of $X$ belong to a discrete set $\cE$, the candidate distribution is characterised by the probabilities $\left\{ p(x;\vect{\theta}) \right\}_{x \in \cE}$.
+
+  The chi squared test is based on the fact that if the candidate distribution is appropriate, the number of values in the sample {x1, x2, ..., xN} that are equal to $x$ should be on average equal to $N p(x;\vect{\theta})$. The idea is therefore to compare the "theoretical values" with the actual observed values. This comparison is performed with the aid of the following "distance".
+  \begin{align*}
+    \widehat{D}_N^2 = \sum_{x \in \cE_N} \frac{\left(Np(x)-n(x)\right)^2}{n(x)}
+  \end{align*}
+  where $\cE_N$ denotes the elements of $\cE$ which have been observed at least once in the data sample and where $n(x)$ denotes the number of data values in the sample that are equal to $x$.\\
+
+  The probability distribution of the distance $\widehat{D}_N^2$ is asymptotically known (i.e. as the size of the sample tends to infinity), and this asymptotic distribution does not depend on the candidate distribution being tested. If $N$ is sufficiently large, this means that for a probability $\alpha$, one can calculate the threshold / critical value) $d_\alpha$ such that:
+  \begin{itemize}
+  \item if  $\widehat{D}_N>d_{\alpha}$, we reject the candidate distribution with a risk of error $\alpha$,
+  \item if  $\widehat{D}_N \leq d_{\alpha}$, the candidate distribution is considered acceptable.
+  \end{itemize}
+
+  An important notion is the so-called "$p$-value" of the test. This quantity is equal to the limit error probability $\alpha_\textrm{lim}$ under which the candidate distribution is rejected. Thus, the candidate distribution will be accepted if and only if $\alpha_\textrm{lim}$ is greater than the value $\alpha$ desired by the user. Note that the higher $\alpha_\textrm{lim} - \alpha$, the more robust the decision.
+}
+{
+}
+
+
+\Methodology{
+  This method is used in step B "Quantifying Sources of Uncertainty", to verify if the probability distribution is appropriate to describe the uncertainty of a component $X^i$ of the vector of unknown variables defined in step A "Specifying Criteria and the Case Study".\\
+
+  \textbf{Input data:}\\
+  $\left\{x_1,\ldots,x_N\right\}$ : data sample\\
+  \textit{Distribution}: probability distribution that we are testing for goodness-of-fit \\
+
+  \textbf{Parameters:}\\
+  $\alpha$ : Level of significance for the test \\
+
+  \textbf{Outputs:}\\
+  \textit{Result}: Binary variable specifying whether the candidate distribution is rejected (0) or not (1) \\
+  $\alpha_\textrm{lim}$ : $p$-value of the test
+
+}
+{
+  The test is suitable for discrete distributions. It cannot be used for continuous distributions except by means of an arbitrary discretisation of possible values of $X$, an important source of potential error. Readers interested in Goodness of Fit tests for continuous variables are referred to \otref{docref_B222_TestKS}{Kolmogorov-Smirnov test}, \otref{docref_B222_TestCVM}{Cramer-Von Mises test}, \otref{docref_B222_TestAD}{Anderson-Darling test} in the reference documentation.\\
+
+  Even for discrete distributions, certain precautions must be taken when using this test. Firstly, the critical value $d_\alpha$ is only valid for a sufficiently large sample size. No rule exists to determine the minimum number of data values necessary in order to use this test; it is often thought, however, that the approximation is reasonable when $N$ is of the order of a few dozen. But whatever the value of $N$, the distance -- and similarly the $p$-value -- remains a useful tool for comparing different probability distributions to a sample. The distribution which minimizes $\widehat{D}_N$ -- or maximizes the $p$-value -- will be of interest to the analyst.
+
+  On the other hand, the calculation of $d_\alpha$ and of the $p$-value should in theory be modified if we are testing the goodness of fit of a parametric model and if the parameters of the candidate distribution have been estimated from the same sample. The current version of OpenTURNS, however, does not permit such a modification, and so the results must be used with care when the $p$-value $\alpha_\textrm{lim}$ and the desired error risk $\alpha$ are very close.\\
+
+  The following bibliographical references provide main starting points for further study of this method:
+  \begin{itemize}
+  \item Saporta, G. (1990). "Probabilités, Analyse de données et Statistique", Technip
+  \item Dixon, W.J. \& Massey, F.J. (1983) "Introduction to statistical analysis (4th ed.)", McGraw-Hill
+    % \item NIST/SEMATECH e-Handbook of Statistical Methods, http://www.itl.nist.gov/div898/handbook/
+  \item D'Agostino, R.B. and Stephens, M.A. (1986). "Goodness-of-Fit Techniques", Marcel Dekker, Inc., New York.
+  \item Bhattacharyya, G.K., and R.A. Johnson, (1997). "Statistical Concepts and Methods", John Wiley and Sons, New York.
+  \item Sprent, P., and Smeeton, N.C. (2001). "Applied Nonparametric Statistical Methods -- Third edition", Chapman \& Hall
+    % \item Burnham, K.P., and Anderson, D.R (2002). "Model Selection and Multimodel Inference: A Practical Information Theoretic Approach", Springer
+\end{itemize}}

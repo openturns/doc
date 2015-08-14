@@ -1,0 +1,48 @@
+% Copyright (C) 2005-2015 Airbus - EDF - IMACS - Phimeca
+% Permission is granted to copy, distribute and/or modify this document
+% under the terms of the GNU Free Documentation License, Version 1.2
+% or any later version published by the Free Software Foundation;
+% with no Invariant Sections, no Front-Cover Texts, and no Back-Cover
+% Texts.  A copy of the license is included in the section entitled "GNU
+% Free Documentation License".
+\renewcommand{\filename}{docUC_OVI_PolyChaosExp.tex}
+\renewcommand{\filetitle}{UC : Creation of the output variable of interest from the result of a polynomial chaos expansion}
+
+% \HeaderNNIILevel
+% \HeaderIILevel
+\HeaderIIILevel
+
+
+\label{RandomVectorPolynomialChaos}
+
+
+
+\index{Random Vector!Output random vector}
+
+The objective of this Use Case is to define the output variable of interest as the result of a polynomial chaos algorithm which defined a particular response surface (refer to \ref{polynomialchaosexpansion}).\\
+
+Details on the polynomial chaos expansion may be found in the Reference Guide (\extref{ReferenceGuide}{see files Reference Guide - Step Resp. Surf. -- Polynomial Chaos Expansion}{responseSurface}).\\
+
+
+\requirements{
+  \begin{description}
+  \item[$\bullet$] the result structure of a polynomial chaos algorithm : {\itshape polynomialChaosResult}
+  \item[type:] a FunctionalChaosResult
+  \end{description}
+}
+             {
+               \begin{description}
+               \item[$\bullet$] the new output variable of interest : {\itshape newOuputVariableOfInterest}
+               \item[type:] a RandomVector
+               \end{description}
+             }
+
+             \textspace\\
+             Python script for this UseCase :
+
+             \begin{lstlisting}
+               # Create the new ouput variable of interest
+               # based on the meta model
+               # evaluated from the polynomial chaos algorithm
+               newOuputVariableOfInterest = RandomVector(polynomialChaosResult)
+             \end{lstlisting}

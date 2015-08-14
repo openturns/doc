@@ -1,0 +1,391 @@
+% Copyright (C) 2005-2015 Airbus - EDF - IMACS - Phimeca
+% Permission is granted to copy, distribute and/or modify this document
+% under the terms of the GNU Free Documentation License, Version 1.2
+% or any later version published by the Free Software Foundation;
+% with no Invariant Sections, no Front-Cover Texts, and no Back-Cover
+% Texts.  A copy of the license is included in the section entitled "GNU
+% Free Documentation License".
+\renewcommand{\etapemethodo}{B}
+\renewcommand{\nomfichier}{docref_B21_ParametricEstimation}
+\renewcommand{\titrefiche}{Parametric Estimation}
+
+\Header
+
+\MathematicalDescription{
+
+  \underline{\textbf{Goal}} \vspace{2mm}
+
+  The objective is to estimate the value of the parameters based on a sample of an unknown distribution, supposed to be a member of a parametric family of distributions. We describes here the estimators implemented in OpenTURNS for the estimation of the several parametric models. They are all derived from either the Maximum Likelihood method or from the method of moments, excepted for the bound parameters that are systematically modified to strictly include the extrem realizations of the underlying sample $(x_1,\dots,x_n)$.
+
+  We suppose that we have a realization $(\vect{x}_1,\dots,\vect{x}_n)$ of a sample $(\vect{X}_1,\dots,\vect{X}_n)$ of size $n$, with the $X_i$ being iid, with common distribution $\cD(\vect{\theta})$. The objective is to build an estimator $\Hat{\theta}_n$ of $\vect{\theta}$, based on the realization $(\vect{x}_1,\dots,\vect{x}_n)$. We adopt the following notations:
+  \begin{itemize}
+  \item $\bar{\vect{x}}_n=\frac{1}{n}\sum_{i=1}^n\vect{x}_i$ the sample mean ($\bar{x}_n$ in the 1D case);
+  \item $\sigma_n=\sqrt{\frac{1}{n-1}\sum_{i=1}^n(x_i-\bar{x})^2}$ the sample standard deviation in the 1D case;
+  \item $x_{(1,n)}=\min_{i=1,\dots,n}x_i$ the minimum of the realization in the 1D case;
+  \item $x_{(n,n)}=\max_{i=1,\dots,n}x_i$ the maximum of the realization in the 1D case;
+  \item $x_{1/2}$ the median of the sample in the 1D case;
+  \end{itemize}
+
+  \underline{\textbf{Continuous univariate distributions:}}\\
+
+  \begin{tabular}{|l|p{12cm}|}
+    \hline
+    Arcsine & $\begin{array}{l}
+      \displaystyle\Hat{\mu} = \Hat{\mu}_x\\
+      \displaystyle\Hat{\sigma} = \Hat{\sigma}_x\\
+    \end{array}$\\
+    \hline
+    Beta & $\begin{array}{l}
+      \displaystyle\Hat{a}_n=(1-\mathrm{sign}(x_{(1,n)})/(2+n))x_{(1,n)}\\
+      \displaystyle\Hat{b}_n=(1+\mathrm{sign}(x_{(n,n)})/(2+n))x_{(n,n)}\\
+      \displaystyle\Hat{t}_n=\frac{(\Hat{b}_n-\bar{x}_n)(\bar{x}_n-\Hat{a}_n)}{(\sigma_n^X)^2-1}\\
+      \displaystyle\Hat{r}_n=\frac{t(\bar{x}_n-\Hat{a}_n)}{\Hat{b}_n-\Hat{a}_n}
+    \end{array}$\\
+    \hline
+    Burr & $\Hat{c}_n$ is the solution of the non linear equation :
+    $
+    \displaystyle 1+\frac{c}{n}\left[ SR - \frac{n}{\sum_{i=1}^n \log(1+x_i^c)}SSR\right] = 0
+    $
+    where $ \displaystyle SR = \displaystyle \sum_{i=1}^n \frac{ \log(x_i)}{1+x_i^c}$ and $ \displaystyle SSR = \displaystyle \sum_{i=1}^n \frac{ x_i^c\log(x_i)}{1+x_i^c}$.
+    Then
+    $
+    \Hat{k}_n =  \frac{n}{\sum_{i=1}^n \log(1+x_i^c)}.
+    $
+    \\
+    \hline
+  \end{tabular}\rule{0pt}{1em}\\
+
+  \begin{tabular}{|l|p{12cm}|}
+    \hline
+    Chi & $\displaystyle\Hat{\nu}_n=\bar{x^2}_n$\\
+    \hline
+    ChiSquare & $\displaystyle\Hat{\nu}_n=\bar{x}_n$\\
+    \hline
+    Dirichlet &  Maximum likelihood estimators, according to the reference J. Huang\\
+    \hline
+    Epanechnikov  & no parameter to estimate\\
+    \hline
+    Exponential & $\begin{array}{l}
+      \displaystyle\Hat{\gamma}_n = (1-\mathrm{sign}(x_{(1,n)})/(2+n))x_{(1,n)}\\
+      \displaystyle\Hat{\lambda}_n= 1/\bar{x}_n-\Hat{\gamma}_n
+    \end{array}$\\
+    \hline
+    Fisher-Snedecor   & No factory method implemented so far\\
+    \hline
+    Gamma & $\begin{array}{l}
+      \displaystyle\Hat{\gamma}_n = (1-\mathrm{sign}(x_{(1,n)})/(2+n))x_{(1,n)}\\
+      \displaystyle\Hat{\lambda}_n= \frac{\bar{x}_n-\Hat{\gamma}_n}{(\sigma_n^X)^2}\\
+      \displaystyle\Hat{k}_n= \frac{(\bar{x}_n-\Hat{\gamma}_n)^2}{(\sigma_n^X)^2}
+    \end{array}$\\
+    \hline
+    Generalized Pareto & see text below  \\
+    \hline
+    Gumbel &  $\begin{array}{l}
+      \displaystyle\Hat{\alpha}_n=\frac{\pi}{\sigma_n^X\sqrt{6}}\\
+      \displaystyle\Hat{\beta}_n=\bar{x}_n-\frac{\gamma\sqrt{6}}{\pi}\sigma_n^X\\
+      \gamma\simeq 0.57721\mbox{ is Euler's constant.}
+    \end{array}$\\
+    \hline
+    Histogram & The bandwidth is the AMISE-optimal one : $h = \displaystyle \frac{(24\sqrt{\pi})^{1/3} \sigma_n}{n^{1/3}}$ where $\sigma_n^2$ is the non biaised variance of the data. The range is $[min(data), max(data)]$.\\
+    \hline
+    Inverse ChiSquare   & No factory method implemented so far\\
+    \hline
+    Inverse Gamma   & No factory method implemented so far\\
+    \hline
+    Inverse Normal   & $\begin{array}{l}
+      \displaystyle\Hat{\mu}_n =  \bar{x}_n\\
+      \displaystyle\Hat{\lambda}_n = \left(  \frac{1}{n} \sum_{i=1}^n \frac{1}{x_i} - \frac{1}{\bar{x}_n} \right)^{-1}
+    \end{array}$\\
+    \hline
+    Laplace & $\begin{array}{l}
+      \displaystyle\Hat{\mu}_n = x_{1/2}\\
+      \displaystyle\Hat{\lambda}_n = \frac{1}{n}\sum_{i=1}^n|x_i-\Hat{\mu}_n|
+    \end{array}$\\
+    \hline
+    Logistic & $\begin{array}{l}
+      \displaystyle\Hat{\alpha} = \bar{x}_n\\
+      \displaystyle\Hat{\beta}_n = \sigma_n^X
+    \end{array}$\\
+    \hline
+    LogNormal & see text below\\
+    \hline
+    LogUniform & $\begin{array}{l}
+      \displaystyle\Hat{a}_n=(1-1/(2+n))x_{(1,n)}\\
+      \displaystyle\Hat{b}_n=(1+1/(2+n))x_{(n,n)}
+    \end{array}$\\
+    \hline
+    Meixner   & Moments method. See details below.\\
+    \hline
+    Non Central Chi Square   & No factory method implemented so far\\
+    \hline
+    Non Central Student   & No factory method implemented so far\\
+    \hline
+    Normal & Maximum likelihood estimators\\
+    \hline
+    Normal Gamma   & No factory method implemented so far\\
+    \hline
+    Rayleigh & $\begin{array}{l}
+      \displaystyle\Hat{\gamma}_n = (1-\mathrm{sign}(x_{(1,n)})/(2+n))x_{(1,n)}\\
+      \displaystyle\Hat{\sigma}_n=\sqrt{\frac{2}{n}\sum_{i=1}^n(x_i-\Hat{\gamma}_n)^2}
+    \end{array}$\\
+    \hline
+  \end{tabular}\rule{0pt}{1em}\\
+
+
+
+
+  \begin{tabular}{|l|p{12cm}|}
+    \hline
+    Rice   & Moments estimators, according to the reference C.G. Koay\\
+    \hline
+    Student (1d) & Moments estimators\\
+    \hline
+    Trapezoidal   & Numerical resolution of maximum likelihood estimators\\
+    \hline
+    Triangular & $\begin{array}{l}
+      \displaystyle\Hat{a}_n=(1-\mathrm{sign}(x_{(1,n)})/(2+n))x_{(1,n)}\\
+      \displaystyle\Hat{b}_n=(1+\mathrm{sign}(x_{(n,n)})/(2+n))x_{(n,n)}\\
+      \displaystyle\Hat{m}_n=3\bar{x}_n-\Hat{a}_n-\Hat{b}_n
+    \end{array}$\\
+    \hline
+    TruncatedNormal & Numerical maximum likelihood estimation. \\
+    \hline
+    Uniform & $\begin{array}{l}
+      \displaystyle\Hat{a}_n=(1-\mathrm{sign}(x_{(1,n)})/(2+n))x_{(1,n)}\\
+      \displaystyle\Hat{b}_n=(1+\mathrm{sign}(x_{(n,n)})/(2+n))x_{(n,n)}
+    \end{array}$\\
+    \hline
+    Weibull & $\begin{array}{l}
+      \displaystyle\Hat{\gamma}_n = (1-\mathrm{sign}(x_{(1,n)})/(2+n))x_{(1,n)}\\
+      (\Hat{\alpha}_n,\Hat{\beta}_n)\mbox{ solution of }\left\{\begin{array}{l}
+      \bar{x}_n=\Hat{\gamma}_n+\Hat{\alpha}_n+\Gamma(1+1/\Hat{\beta}_n)\\
+      (\sigma_n^X)^2=\Hat{\alpha}_n\left(\Gamma(1+2/\Hat{\beta}_n)-\Gamma(1+1/\Hat{\beta}_n)^2\right)
+      \end{array}\right.
+    \end{array}$\\
+    \hline
+  \end{tabular}\rule{0pt}{1em}\\
+
+
+
+  {\bf Details for the Generalized Pareto distribution :} \\
+
+  OpenTURNS implements three parametric estimation  methods: the classical moments method,
+  the exponential regression method and the probability weighted moments method, according to the
+  reference G. Matthys \& J. Beirlant. The default strategy is to
+  use the probability weighted moments method when the sample size
+  is smaller than the threshold defined in    the RessourceMap
+  object ($GeneralizedParetoFactory-SmallSize$). In case of failure,
+  it uses the  exponential regression method. If the sample
+  size is to high, it uses the   exponential regression method. The
+  classical moments method is proposed but not used by default.\\
+
+
+
+
+  {\bf Details for the LogNormal distribution :} \\
+
+  We note :
+  \begin{eqnarray}
+    \displaystyle S_0 & = & \sum_{i=1}^n \frac{1}{x_i - \gamma} \nonumber \\
+    \displaystyle S_1 & = & \sum_{i=1}^n log(x_i - \gamma)  \nonumber \\
+    \displaystyle S_2 &  = & \sum_{i=1}^n log^2(x_i - \gamma)  \nonumber \\
+    \displaystyle S_3 & = & \sum_{i=1}^n \frac{log(x_i - \gamma)}{x_i - \gamma} \nonumber
+  \end{eqnarray}
+
+  OpenTURNS tries to evaluate the parameters first using  the {\bf Local Maximum Likelihood based estimators} of  $(\mu_\ell, \sigma_\ell, \gamma)$ defined by :
+  \begin{eqnarray}
+    \displaystyle\Hat{\mu}_{\ell,n} & = & \frac{S_1(\Hat{\gamma})}{n}  \label{MLEMu3} \\
+    \displaystyle\Hat{\sigma}_{\ell,n}^2 & = & \frac{S_2(\Hat{\gamma})}{n} - \Hat{\mu}_{l,n}^2 \label{MLESigma3}
+  \end{eqnarray}
+
+  Thus, $\Hat{\gamma}_n$ verifies the relation :
+  \begin{equation} \label{relaGamma}
+    S_0(\gamma)\left(S_2(\gamma)-S_1(\gamma)\left(1+\frac{S_1(\gamma)}{n}\right)\right) + nS_4(\gamma) = 0
+  \end{equation}
+  under the constraint  $\gamma \leq \min x_i$.
+
+  OpenTURNS tries to solve (\ref{relaGamma})  by the step doubling bracheting method followed by the bisection method. Once $\Hat{\gamma}_n$ is evaluated, $(\Hat{\mu}_{\ell, n}, \Hat{\sigma}_{\ell, n})$ are evaluated as defined in (\ref{MLEMu3}) and (\ref{MLESigma3}).\\
+
+  If the resolution of (\ref{relaGamma}) is not possible, OpenTURNS sends a message to the User and evaluates the parameters from the {\bf Modified Moments based estimators} unsing $ \bar{x}_n$, $\sigma_n^2$ and the additional modified moment equation :
+  \begin{equation}\label{momentmod}
+    \mathbb{E}[ \log(X_{(1)}-\gamma)] = \log (x_{(1)}-\gamma)
+  \end{equation}
+  The quantity $\displaystyle EZ_{1}(n) = \frac{\mathbb{E}[ \log(X_{(1)}-\gamma)]-\mu_\ell}{\sigma_\ell}$ is the mean of the first order statistics of a standard normal sample of size $n$. We have the following relation :
+  \begin{equation}
+    EZ_{1}(n) = \int_\mathbb{R} nz\varphi(z)(1-\Phi(z))^{n-1}\, \mathrm{d}z
+  \end{equation}
+  where $\varphi$ et $\Phi$ are the pdf and cdf of the standard normal distribution. \\
+
+  The estimator $\Hat{\omega}_n$ of $\omega=e^{\sigma_\ell^2}$ is obtained as solution of :
+  \begin{equation}\label{relModMom}
+    \omega(\omega-1)-\kappa_n\left[\sqrt{\omega}-e^{EZ_{1}(n)\sqrt{\log \omega}}\right]^2 = 0
+  \end{equation}
+  where $\kappa_n = \frac{s_n^2}{( \bar{x}_n-x_{(1)})^2}$.\\
+
+  Then $(\Hat{\mu_\ell}_n, \Hat{\sigma_\ell}_n, \Hat{\gamma}_n)$ are evaluated from :
+  \begin{align}\label{estMom}
+    \Hat{\mu_\ell}_n = & \log \Hat{\beta}_n \nonumber \\
+    \Hat{\sigma_\ell}_n = & \sqrt{\log \Hat{\omega}_n}\nonumber \\
+    \Hat{\gamma}_n = & \bar{x}_n-\Hat{\beta}_n\sqrt{\Hat{\omega}_n}
+  \end{align}
+  where $\displaystyle \Hat{\beta}_n = \frac{s_n}{\sqrt{\Hat{\omega}_n(\Hat{\omega}_n-1)}}$.\\
+
+  If the resolution of (\ref{relModMom}) is not possible, OpenTURNS sends a message to the User and evaluates the parameters from the {\bf Moments  based estimators} which are always defined. \\
+  The estimator $\Hat{\omega}_n$ of $\omega=e^{\sigma_\ell^2}$ is the positive root of :
+  \begin{equation}
+    \omega^3+3\omega^2-(4+a_{3,n}^2)=0
+  \end{equation}
+  which is always defined. Then we have $(\Hat{\mu_\ell}_n, \Hat{\sigma_\ell}_n, \Hat{\gamma}_n)$ using the relations (\ref{estMom}).\\
+
+
+  {\bf Details for the Meixner distribution :} \\
+
+  We use the following estimators:
+  \begin{align}
+    \Hat{\gamma_1}_n =     &  \frac{\frac{1}{n}\sum_{i=1}^{n} (x_i-\Hat{x}_n)^3}{\Hat{\sigma}_n^3}\\
+    \Hat{\gamma_2}_n =     &  \frac{\frac{1}{n}\sum_{i=1}^{n} (x_i-\Hat{x}_n)^4}{\Hat{\sigma}_n^4} \\ \label{gamma2}
+    \Hat{\delta}_n =     & \frac{1}{\Hat{\gamma_2}_n-\Hat{\gamma_1}_n^2-3}\\
+    \Hat{\beta}_n =     & sign(\Hat{\gamma_1}_n)arcos( 2-\Hat{\delta}_n (\Hat{\gamma_2}_n-3))\\
+    \Hat{\alpha}_n =     & (\Hat{\sigma}_n^2(\cos\Hat{\beta}_n+1) )^{1/3}
+  \end{align}
+  where (\ref{gamma2}) is defined if $\Hat{\gamma_2}_n \geq 2\Hat{\gamma_1}_n +3$.
+
+  %\arcos( )
+
+
+
+
+  \underline{\textbf{Continuous multivariate distributions:}}\\
+
+  \begin{tabular}{|l|p{12cm}|}
+    \hline
+    Dirichlet  &   Maximum likelihood estimators\\
+    \hline
+    Normal & $\begin{array}{l}
+      \displaystyle\Hat{\vect{\mu}}_n^{\strut} = \bar{\vect{x}}_n\\
+      \displaystyle\Hat{\mathrm{Cov}}_n = \frac{1}{n-1}\sum_{i=1}^n\left(\vect{X}_i-\Hat{\vect{\mu}}_n\right)\left(\vect{X}_i-\Hat{\vect{\mu}}_n\right)^t
+    \end{array}$\\
+    \hline
+    Student  & not yet implmented \\
+    \hline
+  \end{tabular}\rule{0pt}{1em}\\
+
+
+
+  \underline{\textbf{Discrete univariate distributions :}}\\
+
+  \begin{tabular}{|l|p{12cm}|}
+    \hline
+    Bernoulli & $\Hat{p}_n = \bar{x}_n$\\
+    \hline
+    Binomial & See details below.\\
+    \hline
+    Dirac & $\Hat{point}_n = x_1$\\
+    \hline
+    Geometric & $\Hat{p}_n = \frac{1}{\bar{x}_n}$\\
+    \hline
+    Multinomial &
+    $
+    \begin{array}{l}
+      data : (\vect{x}^1, \hdots,\vect{x}^n)\\
+      \displaystyle  N = max_{i,k} \, x_i^k \\
+      \displaystyle  p_i = \frac{1}{nN} \sum_{k=1}^{n} x_i^k
+    \end{array}
+    $\\
+    \hline
+    Negative Binomial &
+    $
+    \begin{array}{l}
+      data : (\vect{x}^1, \hdots,\vect{x}^n)\\
+      \displaystyle  \hat{p}_n = \frac{\bar{x}_n}{\hat{r}_n+\bar{x}_n} \\
+      \displaystyle  \hat{r}_n\mbox{ solution of } n\left(\log\left(\frac{\hat{r}_n}{\hat{r}_n+\bar{x}_n}\right)-\psi(\hat{r}_n)\right)+\sum_{i=1}^n\psi(x^i+\hat{r}_n)=0\\
+      \mbox{The resolution is done using Brent's method.}
+    \end{array}
+    $\\
+    \hline
+    Poisson & $\displaystyle\Hat{\lambda}_n = \bar{x}_n$\\
+    \hline
+    Skellam   & Moments estimators: see details below.\\
+    \hline
+    UserDefined & Uniform distribution over the sample.\\
+    \hline
+  \end{tabular}\rule{0pt}{1em}\\
+
+
+  {\bf Details for the Binomial distribution :} \\
+
+  We initialize the value of $(n,p_n)$ to $\displaystyle\left(\left\lceil\frac{\Hat{x}_n^2}{\Hat{x}_n-\Hat{\sigma}_n^2}\right\rceil, \frac{\Hat{x}_n}{n}\right)$ where $\Hat{x}_n$ is the empirical mean of the sample $(x_1, \hdots, x_n)$, and $\Hat{\sigma}_n^2$ its unbiaised empirical variance.\\
+  Then, we evaluate the likelihood of the sample with respect to the Binomial distribution parameterized with $\displaystyle\left(\left\lceil\frac{\Hat{x}_n^2}{\Hat{x}_n-\Hat{\sigma}_n^2}\right\rceil, \frac{\Hat{x}_n}{n}\right)$. By testing successively $n+1$ and $n-1$ instead of $n$, we determine the variation of the likelihood of the sample with respect to the Binomial distribution parameterized with $(n+1,p_{n+1})$ and $(n-1,p_{n-1})$. We then iterate in the direction that makes the likelihood decrease, until the likelihood stops decreasing. The last couple is the one selected.\\
+
+  {\bf Details for the Skellam distribution :} \\
+
+  The estimators of $(\lambda_1, \lambda_2)$ write:
+  \begin{align*}
+    \begin{array}{lcl}
+      \Hat{\lambda_1}_n & = & \frac{1}{2}(\Hat{\sigma}_n + \Hat{x}_n) \\
+      \Hat{\lambda_2}_n & = & \frac{1}{2}(\Hat{\sigma}_n - \Hat{x}_n)
+    \end{array}
+  \end{align*}
+  \rule{0pt}{1em}\\
+
+  \underline{\textbf{Discrete multivariate distributions:}}\\
+
+  \begin{tabular}{|l|p{12cm}|}
+    \hline
+    Dirac & $\Hat{point}_n = \vect{x}_1$\\
+    \hline
+    Multinomial  &  Maximum likelihood estimators\\
+    \hline
+    UserDefined & Uniform distribution over the sample.\\
+    \hline
+  \end{tabular}\rule{0pt}{1em}\\
+
+  \underline{\textbf{Copula distributions :}}\\
+  We note $\Hat{\tau}_n$ the Kendall-$\tau$ of the sample and $\Hat{\rho}_n$ its Spearman correlation coefficient. AMH is the Ali-Mikhail-Haq copula and FGM the  Farlie-Gumbel-Morgenstern one.
+
+  \begin{tabular}{|l|p{12cm}|}
+    \hline
+    AMH & $\Hat{\theta}_n$ solution of $\displaystyle \Hat{\tau}_n = \displaystyle \frac{3\theta-2}{3\theta} - \frac{2(1-\theta)^2\ln(1-\theta)}{3\theta^2}$.\\
+    \hline
+    Clayton & $\displaystyle\Hat{\theta}_n=\frac{2\Hat{\tau}_n^{\strut}}{1_{\strut} - \Hat{\tau}_n}$.\\
+    \hline
+    FGM &  $\Hat{\theta}_n = \displaystyle \frac{9}{2}\Hat{\tau}_n^{\strut}$ if $|\Hat{\theta}_n|<1$. Otherwise,  $\Hat{\theta}_n = \displaystyle 3\Hat{\rho}_n^{\strut}$ if $|\Hat{\theta}_n|<1$. Otherwise, the estimation is not possible. \\
+    \hline
+    Frank & $\Hat{\theta}_n$ solution of $\displaystyle \Hat{\tau}_n = 1-4\left( \frac{1-D(\Hat{\theta}_n, 1)^{\strut}}{\theta} \right)$ where $D$ is the Debye function defined as $\displaystyle D(x, n)=\frac{n}{x^n}\int_0^x \frac{t^n}{e^t-1_{\strut}} dt$.\\
+    \hline
+    Gumbel & $\displaystyle \Hat{\theta}_n=\frac{1^{\strut}}{1 - \Hat{\tau}_{n_{\strut}}}$.\\
+    \hline
+    Normal &  The correlation matrix $\mat{R}$ is such that $R_{ij} = sin(\frac{\pi}{2}\Hat{\tau}_{n,ij})_{\strut}$.\\
+    \hline
+  \end{tabular}
+
+}
+
+{
+  --
+}
+
+
+\Methodology{
+  When the amount of data is sufficient, parametric estimation may be used within Step B ; Quantification of Uncertainties to model the uncertainty of some input random vectors or the output random vector.
+}
+            {
+              The following bibliographical references provide main starting points for further study of  this method:
+              \begin{itemize}
+              \item Huang J., "Maximum Likelihood Estimation of Dirichlet Distribution Parameters".
+              \item  Koay C.G., Basser P.J., "Analytically exact correction scheme
+                for signal extraction from noisy magnitude MR signals", Journal of
+                magnetics Resonance 179, 317-322, 2006.
+              \item  G. Matthys \& J. Beirlant "Estimating the
+                extreme value index abd high quantiles with exponential regression
+                models", Statistica Sinica, 13, 850-880, 2003.
+              \item Saporta G. (1990). "Probabilités, Analyse de données et Statistique", Technip.
+              \item Dixon W.J. \& Massey F.J. (1983) "Introduction to statistical analysis (4th ed.)", McGraw-Hill.
+              \end{itemize}
+            }
+
+
+            \Example{
+
+              -
+            }

@@ -1,0 +1,86 @@
+% Copyright (C) 2005-2015 Airbus - EDF - IMACS - Phimeca
+% Permission is granted to copy, distribute and/or modify this document
+% under the terms of the GNU Free Documentation License, Version 1.2
+% or any later version published by the Free Software Foundation;
+% with no Invariant Sections, no Front-Cover Texts, and no Back-Cover
+% Texts.  A copy of the license is included in the section entitled "GNU
+% Free Documentation License".
+\renewcommand{\filename}{docUC_MinMax_MixedDetRandExperimentPlane.tex}
+\renewcommand{\filetitle}{UC : Creation of a mixed deterministic / random design of experiments }
+
+% \HeaderNNIILevel
+% \HeaderIILevel
+\HeaderIIILevel
+
+\label{determRandomExpPlane}
+
+\index{Design of Experiments !Axial scheme}
+\index{Design of Experiments !Mixed deterministic / random design of experiments }
+\index{Design of Experiments !Scaling scheme}
+\index{Design of Experiments !Translation scheme}
+
+The objective of this Use Case is to  create a deterministic design of experiments  which levels are defined from the probabilistic distribution of the input random vector.\\
+
+
+Details on design of experiments   may be found in the Reference Guide (\extref{ReferenceGuide}{see files Reference Guide - Step C -- Min-Max approach using Design of Experimentss }{stepC}).\\
+
+The example here is an axial design of experiments  where levels are proportionnal to the standard deviation of each component of the random input vector, and centered on the mean vector of the random input vector. Be carefull to remain within the range of the distribution if the latter is bounded!\\
+There are three levels  : +/-1, +/-2, +/-3 around a center fixed equal to the center point ($\vect{0}$).\\
+The dilatation vector is composed of the standard deviation of each component of the random input vector.\\
+
+\requirements{
+  \begin{description}
+  \item[$\bullet$] the input vector : {\itshape input}
+  \item[type:] RandomVector
+  \end{description}
+}
+             {
+               \begin{description}
+               \item[$\bullet$] an design of experiments  : {\itshape myPlane}
+               \item[type:] Axial
+               \item[$\bullet$] a sample of {\itshape input} according to {\itshape myPlane}: {\itshape inputSample}
+               \item[type:] NumericalSample
+               \end{description}
+             }
+
+             \textspace\\
+             Python script for this UseCase :
+
+             \begin{lstlisting}
+               # In order to use the 'sqrt' function
+               from math import *
+
+               # Dimension of the use case : 4
+               dim = 4
+
+               # Give the levels of the design of experiments
+               # here,  3 levels : +/-1, +/-2, +/-3
+               levelsNumber = 3
+               levels = NumericalPoint( (1., 2. 3.) )
+               levels.setName( "Levels" )
+
+               # Create the axial plane centered on the vector (0)
+               # and with the levels 'levels'
+               myPlane = Axial(dim, levels)
+
+               # Generate the points according to the structure
+               # of the design of experiments  (in a reduced centered space)
+               inputSample = myPlane.generate()
+
+               # Scale the structure of the design of experiments
+               # proportionnally to the standard deviation of each component
+               # of 'input' in case of a RandomVector
+               # Scaling vector for each dimension of the levels of the structure
+               # to take into account the dimension of each component
+               scaling = NumericalPoint(dim, 0)
+               scaling[0] = sqrt(input.getCovariance()[0,0])
+               scaling[1] = sqrt(input.getCovariance()[1,1])
+               scaling[2] = sqrt(input.getCovariance()[2,2])
+               scaling[3] = sqrt(input.getCovariance()[3,3])
+               inputSample.scale(scaling)
+
+               # Translate the nonReducedSample onto the center of the design of experiments
+               # Translation vector for each dimension
+               center = input.getMean()
+               inputSample.translate(center)
+             \end{lstlisting}

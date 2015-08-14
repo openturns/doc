@@ -1,0 +1,48 @@
+% Copyright (C) 2005-2015 Airbus - EDF - IMACS - Phimeca
+% Permission is granted to copy, distribute and/or modify this document
+% under the terms of the GNU Free Documentation License, Version 1.2
+% or any later version published by the Free Software Foundation;
+% with no Invariant Sections, no Front-Cover Texts, and no Back-Cover
+% Texts.  A copy of the license is included in the section entitled "GNU
+% Free Documentation License".
+\renewcommand{\filename}{docUC_CentralUncertainty_MomentsEvaluation.tex}
+\renewcommand{\filetitle}{UC : Moments evaluation of a random sample of the output variable of interest}
+
+% \HeaderNNIILevel
+% \HeaderIILevel
+\HeaderIIILevel
+
+
+
+
+\index{Sample Statistics!Moments evaluation}
+\index{Graph!Taylor variance decomposition importance factors}
+\index{Graph Manipulation!View}
+\index{Graph Manipulation!Show}
+
+The objective of this Use Case  is to evaluate the mean and standard deviation of the output variable of interest by generating a random sample of the output variable of interest and evaluate the empirical indicators from that sample.\\
+
+Details on empirical moments evaluation  may be found in the Reference Guide (\extref{ReferenceGuide}{see files Reference Guide - Step C -- Estimating the mean and variance using the Monte Carlo Method}{stepC}).\\
+
+\requirements{
+  \begin{description}
+  \item[$\bullet$] the output variable of interest : {\itshape output}, of dimension $\geq 1$
+  \item[type:] RandomVector which implementation is a CompositeRandomVector
+  \end{description}
+}
+             {
+               \begin{description}
+               \item[$\bullet$] Mean and covariance of the variable of interest
+               \item[type:] NumericalPoint, CovarianceMatrix
+               \end{description}
+
+               \begin{description}
+               \item[$\bullet$] Covariance matrix and its Cholesky factor of the variable of interest
+               \item[type:] CovarianceMatrix, SquareMatrix
+               \end{description}
+             }
+
+             \textspace\\
+             Python script for this UseCase :
+
+             \inputscript{script_docUC_CentralUncertainty_MomentsEvaluation}

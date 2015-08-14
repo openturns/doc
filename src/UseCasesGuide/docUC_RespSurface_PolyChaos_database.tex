@@ -1,0 +1,46 @@
+% Copyright (C) 2005-2013 EDF-EADS-Phimeca
+% Permission is granted to copy, distribute and/or modify this document
+% under the terms of the GNU Free Documentation License, Version 1.2
+% or any later version published by the Free Software Foundation;
+% with no Invariant Sections, no Front-Cover Texts, and no Back-Cover
+% Texts.  A copy of the license is included in the section entitled "GNU
+% Free Documentation License".
+\renewcommand{\filename}{docUC_RespSurface_Polynomial_database.tex}
+\renewcommand{\filetitle}{UC : Polynomial chaos approximation from a design experiment}
+
+% \HeaderNNIILevel
+% \HeaderIILevel
+\HeaderIIILevel
+
+\label{krigingApprox}
+
+\index{Response Surface!Polynomial chaos}
+
+This Use Case details the method to construct a response surface from a design experiment by polynomial chaos.\\
+You will need the distribution of the input parameters. If not known, statistical inference can be used to select a possible candidate,
+and fitting tests can validate such an hypothesis.
+
+\requirements{
+  \begin{description}
+  \item[$\bullet$] a sample of the input vector: {\itshape X}
+  \item[type:] NumericalSample
+  \item[$\bullet$] a sample of the output vector: {\itshape Y}
+  \item[type:] NumericalSample
+  \item[$\bullet$] the distribution of input parameters: {\itshape distribution}
+  \item[type:] Distribution
+  \end{description}
+}
+{
+  \begin{description}
+  \item[$\bullet$] the polynomial chaos algorithm: {\itshape algo}
+  \item[type:] a FunctionalChaosAlgorithm
+  \item[$\bullet$] the meta-model function: {\itshape metamodel}
+  \item[type:] a NumericalMathFunction
+  \end{description}
+}
+
+\textspace\\
+Python script for this Use Case :
+
+\inputscript{script_docUC_RespSurface_PolyChaos_database}
+

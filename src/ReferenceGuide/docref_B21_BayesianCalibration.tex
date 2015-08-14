@@ -1,0 +1,112 @@
+% Copyright (C) 2005-2015 Airbus - EDF - IMACS - Phimeca
+% Permission is granted to copy, distribute and/or modify this document
+% under the terms of the GNU Free Documentation License, Version 1.2
+% or any later version published by the Free Software Foundation;
+% with no Invariant Sections, no Front-Cover Texts, and no Back-Cover
+% Texts.  A copy of the license is included in the section entitled "GNU
+% Free Documentation License".
+\renewcommand{\etapemethodo}{B}
+\renewcommand{\nomfichier}{docref_B21_BayesianCalibration}
+\renewcommand{\titrefiche}{Bayesian Calibration}
+
+\Header
+
+\MathematicalDescription{
+
+  \underline{\textbf{Goal}} \vspace{2mm}
+
+  We consider a computer model $h$ ({\em i.e.} a deterministic function) to calibrate:
+  \begin{align*}
+    \vect{z} = h(\vect{x}, \vect{\theta}_h),
+  \end{align*}
+  where
+  \begin{itemize}
+  \item $\vect{x} \in \Rset^{d_x}$ is the input vector;
+  \item $\vect{z} \in \Rset^{d_z}$ is the output vector;
+  \item $\vect{\theta}_h \in \Rset^{d_h}$ are the unknown parameters of $h$ to calibrate.
+  \end{itemize}
+  Our goal here is to estimate $\vect{\theta}_h$, based on a certain set of $n$ inputs $(\vect{x}^1, \ldots, \vect{x}^n)$
+  (an experimental design) and some associated observations $(\vect{y}^1, \ldots, \vect{y}^n)$ which are regarded
+  as the realizations of some random vectors $(\vect{Y}^1, \ldots, \vect{Y}^n)$, such that, for all $i$,
+  the distribution of $\vect{Y}^i$ depends on $\vect{z}^i = h(\vect{x}^i, \vect{\theta}_h)$.
+  Typically, $\vect{Y}^i = \vect{z}^i + \vect{\varepsilon}^i$ where $\vect{\varepsilon}^i$ is a random measurement error.
+
+  For the sake of clarity, lower case letters are used for both random variables and realizations in the following (the notation does not
+  distinguish the two anymore), as usual in the bayesian literature.
+
+  In fact, the bayesian procedure which is implemented allows to infer some unknown parameters $\vect{\theta}\in\Rset^{d_\theta}$
+  from some data $\mat{y} = (\vect{y}^1, \ldots, \vect{y}^n)$ as soon as the conditional distribution
+  of each $\vect{y}^i$ given $\vect{\theta}$ is specified. Therefore $\vect{\theta}$ can be made up
+  with some computer model parameters $\vect{\theta}_h$ together with some others $\vect{\theta}_\varepsilon$:
+  $\vect{\theta} = \Tr{(\Tr{\vect{\theta}_h}, \Tr{\vect{\theta}_\varepsilon})}$. For example, $\vect{\theta}_\varepsilon$ may
+  represent the unknown standard deviation $\sigma$ of
+  an additive centered gaussian measurement error affecting the data (see the example hereafter).
+  Besides the procedure can be used to estimate the parameters of a distribution from direct observations (no computer
+  model to calibrate: $\vect{\theta} = \vect{\theta}_\varepsilon$).
+
+  More formally, the likelihood $L(\mat{y} | \vect{\theta})$
+  is defined by, firstly, a family $\{\cP_{\vect{w}}, \vect{w} \in \Rset^{d_w}\}$ of probability distributions
+  parametrized by $\vect{w}$, which is specified in practice by a conditional distribution $f(.|\vect{w})$ given $\vect{w}$ ($f$ is a PDF
+  or a probability mass function), and, secondly, a function $g:\Rset^{d_\theta} \longrightarrow \Rset^{n\,d_w}$ such that
+  $g(\theta) = \Tr{(\Tr{g^1(\vect{\theta})}, \ldots, \Tr{g^n(\vect{\theta})})}$ which enables to express
+  the parameter $\vect{w}^i$ of the ith observation $\vect{y}^i \sim f(.|\vect{w}^i)$ in function of
+  $\vect{\theta}$: $g^i(\vect{\theta}) = \vect{w}^i$ thus $\vect{y}^i \sim f(.|g^i(\vect{\theta}))$ and
+  \begin{align*}
+    L(\mat{y} | \vect{\theta}) = \prod_{i=1}^n f(\vect{y}^i|g^i(\vect{\theta})).
+  \end{align*}
+
+  Considering the issue of the calibration of some computer model parameters $\vect{\theta}_h$,
+  the full statistical model can be seen as a two-level hierarchical model, with a single level of latent variables $\vect{z}$.
+  A classical example is given by the nonlinear Gaussian regression model:
+  \begin{align*}
+    y_i &=& h(\vect{x}_i|\vect{\theta}_h) + \varepsilon_i,
+    \mbox{ where } \varepsilon_i \stackrel{i.i.d.}{\sim} \cN(0, \sigma^2),
+    \quad i = 1,\ldots, n.
+  \end{align*}
+  It can be implemented with $f(.|\Tr{(\mu, \sigma)})$ the PDF of the gaussian distribution $\cN(\mu, \sigma^2)$,
+  with $g^i(\vect{\theta}) = \Tr{(h(\vect{x}^i, \vect{\theta}_h), \:\sigma)}$, and with
+  $\vect{\theta} = \vect{\theta}_h$, respectively $\vect{\theta} = \Tr{(\Tr{\vect{\theta}_h}, \sigma)}$,
+  if $\sigma$ is considered known, respectively unknown.
+
+  Given a distribution modelling the uncertainty on $\vect{\theta}$ prior to the data,
+  Bayesian inference is used to perform the inference of $\vect{\theta}$, hence the name Bayesian calibration.
+
+  \vspace{2mm}
+
+  \underline{\textbf{Principle}} \vspace{2mm}
+
+  Contrary to the maximum likelihood approach described in \otref{docref_B21_MaximumLikelihood}{Maximum Likelihood Principle},
+  which provides a single `best estimate' value $\hat{\vect{\theta}}$, together with confidence bounds accounting for the uncertainty
+  remaining on the true value $\vect{\theta}$, the Bayesian approach derives a full distribution of possible values for $\vect{\theta}$
+  given the available data $\mat{y}$. Known as the {\em posterior distribution} of $\vect{\theta}$ given the data $\mat{y}$,
+  its density can be expressed according
+  to Bayes' theorem:
+  \begin{align}\label{eq:post_distribution}
+    \pi(\vect{\theta} | \mat{y}) &=& \frac{L(\mat{y} | \vect{\theta}) \times \pi(\vect{\theta})}{m(\mat{y})},
+  \end{align}
+  where
+  \begin{itemize}
+  \item $L(\mat{y} | \vect{\theta})$ is the (data) likelihood;
+  \item $\pi(\vect{\theta})$ is the so-called {\em prior distribution} of $\vect{\theta}$ (with support $\Theta$),
+    which encodes all possible $\vect{\theta}$ values weighted by their prior probabilities, before consideration of any experimental data
+    (this allows for instance to incorporate expert information or known physical constraints on the calibration parameter)
+  \item $m(\mat{y})$ is the marginal likelihood:
+    \begin{align*}
+      m(\mat{y}) &=& \displaystyle\int_{\vect{\theta}\in\Theta} L(\mat{y} | \vect{\theta}) \pi(\vect{\theta}) d\vect{\theta},
+    \end{align*}
+    which is the necessary normalizing constant ensuring that the posterior density integrates to $1$.
+  \end{itemize}
+
+  Except in very simple cases, (\ref{eq:post_distribution}) has, in general, no closed form. Thus, it must be approximated, either using numerical integration when the parameter space dimension $d_\theta$ is low,
+  or more generally through stochastic sampling techniques known as Monte-Carlo Markov-Chain (MCMC) methods.
+  See \otrefext{OpenTURNS_UserManual_TUI}{the TUI User Manual} and \otref{docref_B21_MetropolisHastings}{The Metropolis-Hastings Algorithm}.
+
+  The following bibliographical references provide main starting points for further study of  this method:
+  \begin{itemize}
+  \item Berger, J.O. (1985). "Statistical Decision Theory and Bayesian Analysis", Springer.
+  \item Marin J.M. \& Robert C.P. (2007) "Bayesian Core: A Practical Approach to Computational Bayesian Statistics", Springer.
+  \end{itemize}
+}
+{
+-
+}

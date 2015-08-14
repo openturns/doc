@@ -1,0 +1,251 @@
+
+@media Screen    
+{
+HTML {
+	PADDING-RIGHT: 0px; PADDING-LEFT: 0px; PADDING-BOTTOM: 0px; MARGIN: 0px; PADDING-TOP: 0px
+}
+BODY {
+	PADDING-RIGHT: 0px; PADDING-LEFT: 0px; PADDING-BOTTOM: 0px; MARGIN: 0px; PADDING-TOP: 0px
+}
+BODY {
+	PADDING-RIGHT: 1em; PADDING-LEFT: 1em; PADDING-BOTTOM: 1em; MARGIN: 0px; COLOR: #333; PADDING-TOP: 1em; FONT-FAMILY: "Bitstream Vera Sans", sans-serif; BACKGROUND-COLOR: #fff
+}
+H1 {
+	BORDER-TOP-WIDTH: 0px; FONT-WEIGHT: bold; BORDER-LEFT-WIDTH: 0px; BORDER-BOTTOM-WIDTH: 0px; COLOR: #000; FONT-FAMILY: "Bitstream Vera Sans", sans-serif; BACKGROUND-COLOR: transparent; BORDER-RIGHT-WIDTH: 0px
+}
+H2 {
+	BORDER-TOP-WIDTH: 0px; FONT-WEIGHT: bold; BORDER-LEFT-WIDTH: 0px; BORDER-BOTTOM-WIDTH: 0px; COLOR: #000; FONT-FAMILY: "Bitstream Vera Sans", sans-serif; BACKGROUND-COLOR: transparent; BORDER-RIGHT-WIDTH: 0px
+}
+H3 {
+	BORDER-TOP-WIDTH: 0px; FONT-WEIGHT: bold; BORDER-LEFT-WIDTH: 0px; BORDER-BOTTOM-WIDTH: 0px; COLOR: #000; FONT-FAMILY: "Bitstream Vera Sans", sans-serif; BACKGROUND-COLOR: transparent; BORDER-RIGHT-WIDTH: 0px
+}
+H4 {
+	BORDER-TOP-WIDTH: 0px; FONT-WEIGHT: bold; BORDER-LEFT-WIDTH: 0px; BORDER-BOTTOM-WIDTH: 0px; COLOR: #000; FONT-FAMILY: "Bitstream Vera Sans", sans-serif; BACKGROUND-COLOR: transparent; BORDER-RIGHT-WIDTH: 0px
+}
+H5 {
+	BORDER-TOP-WIDTH: 0px; FONT-WEIGHT: bold; BORDER-LEFT-WIDTH: 0px; BORDER-BOTTOM-WIDTH: 0px; COLOR: #000; FONT-FAMILY: "Bitstream Vera Sans", sans-serif; BACKGROUND-COLOR: transparent; BORDER-RIGHT-WIDTH: 0px
+}
+H6 {
+	BORDER-TOP-WIDTH: 0px; FONT-WEIGHT: bold; BORDER-LEFT-WIDTH: 0px; BORDER-BOTTOM-WIDTH: 0px; COLOR: #000; FONT-FAMILY: "Bitstream Vera Sans", sans-serif; BACKGROUND-COLOR: transparent; BORDER-RIGHT-WIDTH: 0px
+}
+H1 {
+	FONT-SIZE: 1.7em
+}
+A:link {
+	COLOR: #1f00ff; BACKGROUND-COLOR: transparent; TEXT-DECORATION: underline
+}
+A:visited {
+	COLOR: #9900dd; BACKGROUND-COLOR: transparent; TEXT-DECORATION: underline
+}
+A:hover {
+	COLOR: red; BACKGROUND-COLOR: transparent; TEXT-DECORATION: underline
+}
+.center {
+	TEXT-ALIGN: center
+}
+.italic {
+	FONT-STYLE: italic
+}
+.bold {
+	FONT-WEIGHT: bold
+}
+.quote {
+	MARGIN-LEFT: 40px; MARGIN-RIGHT: 40px
+}
+.hrsmall {
+	MARGIN-LEFT: 20px; WIDTH: 80px; HEIGHT: 1px
+}
+.td_title {
+	BORDER-RIGHT: #3366cc thin solid; BORDER-TOP: #3366cc thin solid; FONT-WEIGHT: bold; BORDER-LEFT: #3366cc thin solid; COLOR: #3366cc; BORDER-BOTTOM: #3366cc thin solid; BACKGROUND-COLOR: #f2f2f9
+}
+.td_con {
+	PADDING-LEFT: 8px; PADDING-BOTTOM: 3px; COLOR: #303030; PADDING-TOP: 3px; BACKGROUND-COLOR: #fefefe
+}
+.translations {
+	BACKGROUND-COLOR: transparent
+}
+.fsflink {
+	BORDER-BOTTOM: #3366cc thin solid
+}
+.fsflink_rtl {
+	PADDING-RIGHT: 0.2em; PADDING-BOTTOM: 0.2em; BORDER-BOTTOM: #3366cc thin solid
+}
+.trans {
+	PADDING-LEFT: 1em
+}
+.trans_rtl {
+	PADDING-RIGHT: 1em
+}
+IMG {
+	BORDER-TOP-WIDTH: 0px! important; BORDER-LEFT-WIDTH: 0px! important; BORDER-BOTTOM-WIDTH: 0px! important; BORDER-RIGHT-WIDTH: 0px! important
+}
+P {
+	FONT-SIZE: 1em
+}
+TD.side {
+	BORDER-LEFT-COLOR: white; BORDER-BOTTOM-COLOR: white; VERTICAL-ALIGN: top; WIDTH: 150px; COLOR: #3366cc; BORDER-TOP-STYLE: none; BORDER-TOP-COLOR: white; BORDER-RIGHT-STYLE: none; BORDER-LEFT-STYLE: none; BORDER-RIGHT-COLOR: white; BORDER-BOTTOM-STYLE: none
+}
+DIV.copyright {
+	PADDING-RIGHT: 0.4em; BORDER-TOP: #06c 2px solid; PADDING-LEFT: 0.4em; BORDER-LEFT-WIDTH: 0px; BORDER-BOTTOM-WIDTH: 0px; PADDING-BOTTOM: 0.4em; PADDING-TOP: 0.4em; BORDER-RIGHT-WIDTH: 0px
+}
+#footer {
+	PADDING-RIGHT: 0.4em; BORDER-TOP: #06c 2px solid; PADDING-LEFT: 0.4em; BORDER-LEFT-WIDTH: 0px; BORDER-BOTTOM-WIDTH: 0px; PADDING-BOTTOM: 0.4em; PADDING-TOP: 0.4em; BORDER-RIGHT-WIDTH: 0px
+}
+.translations-list {
+	PADDING-RIGHT: 0px; DISPLAY: inline; PADDING-LEFT: 0px; PADDING-BOTTOM: 0px; MARGIN: 0px; PADDING-TOP: 0px; LIST-STYLE-TYPE: none
+}
+.translations-list LI {
+	PADDING-RIGHT: 0px; DISPLAY: inline; PADDING-LEFT: 0px; PADDING-BOTTOM: 0px; MARGIN: 0px; PADDING-TOP: 0px; LIST-STYLE-TYPE: none
+}
+#validation {
+	PADDING-RIGHT: 0px; DISPLAY: inline; PADDING-LEFT: 0px; PADDING-BOTTOM: 0px; MARGIN: 0px; PADDING-TOP: 0px; LIST-STYLE-TYPE: none
+}
+#validation LI {
+	PADDING-RIGHT: 0px; DISPLAY: inline; PADDING-LEFT: 0px; PADDING-BOTTOM: 0px; MARGIN: 0px; PADDING-TOP: 0px; LIST-STYLE-TYPE: none
+}
+#translations UL {
+	PADDING-RIGHT: 0px; DISPLAY: inline; PADDING-LEFT: 0px; PADDING-BOTTOM: 0px; MARGIN: 0px; PADDING-TOP: 0px; LIST-STYLE-TYPE: none
+}
+#translations UL LI {
+	PADDING-RIGHT: 0px; DISPLAY: inline; PADDING-LEFT: 0px; PADDING-BOTTOM: 0px; MARGIN: 0px; PADDING-TOP: 0px; LIST-STYLE-TYPE: none
+}
+.translations-list LI {
+	PADDING-RIGHT: 0.3em; PADDING-LEFT: 0.3em; MARGIN: 0px; BORDER-LEFT: #aaa 1px solid
+}
+#translations UL LI {
+	PADDING-RIGHT: 0.3em; PADDING-LEFT: 0.3em; MARGIN: 0px; BORDER-LEFT: #aaa 1px solid
+}
+.translations-list LI:unknown {
+	PADDING-LEFT: 0px; BORDER-LEFT-WIDTH: 0px
+}
+.footnoteref {
+	VERTICAL-ALIGN: text-top
+}
+UNKNOWN {
+	MARGIN-TOP: 1em; MARGIN-BOTTOM: 0.2em
+}
+UNKNOWN {
+	MARGIN-TOP: 0.4em; MARGIN-BOTTOM: 0px
+}
+UL {
+	PADDING-RIGHT: 0px; PADDING-LEFT: 0px; LIST-STYLE-IMAGE: url(http://www.fsf.org/bullet.gif); PADDING-BOTTOM: 0px; MARGIN: 0.5em 0px 0px 1.5em; LINE-HEIGHT: 1.5em; PADDING-TOP: 0px; LIST-STYLE-TYPE: square
+}
+OL {
+	PADDING-RIGHT: 0px; PADDING-LEFT: 0px; PADDING-BOTTOM: 0px; MARGIN: 0.5em 0px 0px 1.5em; LINE-HEIGHT: 1.5em; PADDING-TOP: 0px
+}
+UL A {
+	TEXT-DECORATION: underline
+}
+OL A {
+	TEXT-DECORATION: underline
+}
+DT {
+	FONT-WEIGHT: bold
+}
+DT A {
+	TEXT-DECORATION: underline
+}
+DD {
+	MARGIN-BOTTOM: 1em; LINE-HEIGHT: 1.5em
+}
+DD A {
+	TEXT-DECORATION: underline
+}
+DD.link A {
+	COLOR: black; TEXT-DECORATION: none
+}
+FIELDSET {
+	BORDER-RIGHT: #666666 1px solid; PADDING-RIGHT: 1em; BORDER-TOP: #666666 1px solid; PADDING-LEFT: 1em; PADDING-BOTTOM: 1em; MARGIN: 1em 0em; BORDER-LEFT: #666666 1px solid; WIDTH: auto; LINE-HEIGHT: 1.5em; PADDING-TOP: 0em; BORDER-BOTTOM: #666666 1px solid
+}
+LEGEND {
+	PADDING-RIGHT: 0.5em; PADDING-LEFT: 0.5em; FONT-SIZE: 90%; BACKGROUND: white; PADDING-BOTTOM: 0.5em; PADDING-TOP: 0.5em
+}
+FORM {
+	MARGIN: 0px; BORDER-TOP-STYLE: none; BORDER-RIGHT-STYLE: none; BORDER-LEFT-STYLE: none; BORDER-BOTTOM-STYLE: none
+}
+TEXTAREA {
+	BORDER-RIGHT: #666666 1px solid; BORDER-TOP: #666666 1px solid; FONT: 110% "Courier New", Courier, monospace; BORDER-LEFT: #666666 1px solid; WIDTH: 100%; COLOR: black; BORDER-BOTTOM: #666666 1px solid; BACKGROUND-COLOR: white
+}
+INPUT {
+	BORDER-RIGHT: #666666 1px solid; BORDER-TOP: #666666 1px solid; VISIBILITY: visible; VERTICAL-ALIGN: middle; BORDER-LEFT: #666666 1px solid; COLOR: black; BORDER-BOTTOM: #666666 1px solid; FONT-FAMILY: sans-serif; BACKGROUND-COLOR: white
+}
+SELECT {
+	BORDER-RIGHT: #666666 1px solid; BORDER-TOP: #666666 1px solid; VERTICAL-ALIGN: top; BORDER-LEFT: #666666 1px solid; COLOR: black; BORDER-BOTTOM: #666666 1px solid
+}
+abbr {
+	CURSOR: help; COLOR: black; BORDER-BOTTOM: black 1px dotted; BACKGROUND-COLOR: transparent
+}
+ACRONYM {
+	CURSOR: help; COLOR: black; BORDER-BOTTOM: black 1px dotted; BACKGROUND-COLOR: transparent
+}
+.explain {
+	CURSOR: help; COLOR: black; BORDER-BOTTOM: black 1px dotted; BACKGROUND-COLOR: transparent
+}
+Q {
+	FONT-STYLE: italic; FONT-FAMILY: serif
+}
+BLOCKQUOTE {
+	FONT-STYLE: italic; FONT-FAMILY: serif
+}
+INS {
+	COLOR: green; TEXT-DECORATION: none
+}
+DEL {
+	COLOR: red; TEXT-DECORATION: line-through
+}
+.netscape4 {
+	DISPLAY: none
+}
+.field {
+	LEFT: 0px; MARGIN: 0px 1em 1em 0px; TOP: 0px
+}
+A:link ACRONYM {
+	BORDER-TOP-WIDTH: 0px; BORDER-LEFT-WIDTH: 0px; BORDER-BOTTOM-WIDTH: 0px; COLOR: blue; BORDER-RIGHT-WIDTH: 0px
+}
+A:visited ACRONYM {
+	BORDER-TOP-WIDTH: 0px; BORDER-LEFT-WIDTH: 0px; BORDER-BOTTOM-WIDTH: 0px; COLOR: purple; BORDER-RIGHT-WIDTH: 0px
+}
+A:hover ACRONYM {
+	BORDER-TOP-WIDTH: 0px; BORDER-LEFT-WIDTH: 0px; BORDER-BOTTOM-WIDTH: 0px; COLOR: red; BORDER-RIGHT-WIDTH: 0px
+}
+.field .field {
+	MARGIN: 1em 0px 0px
+}
+.field LABEL {
+	FONT-WEIGHT: bold
+}
+.fieldRequired {
+	PADDING-RIGHT: 0px; PADDING-LEFT: 8px; BACKGROUND: url(http://www.fsf.org/required.gif) no-repeat left center; PADDING-BOTTOM: 0px; COLOR: white; PADDING-TOP: 0px
+}
+.formHelp {
+	FONT-SIZE: 90%; MARGIN: 0px 0px 0.2em; COLOR: #76797c
+}
+.formHelp A {
+	TEXT-DECORATION: underline
+}
+.formHelp:hover {
+	CURSOR: default; COLOR: black
+}
+.formControls {
+	MARGIN: 1em 0px 0px
+}
+.highlight {
+	BACKGROUND-COLOR: #ffc
+}
+#top {
+	PADDING-RIGHT: 0px; PADDING-LEFT: 0px; PADDING-BOTTOM: 0px; MARGIN: 0px; WIDTH: 800px; PADDING-TOP: 0px
+}
+#top IMG {
+	BORDER-TOP-WIDTH: 0px; BORDER-LEFT-WIDTH: 0px; FLOAT: left; BORDER-BOTTOM-WIDTH: 0px; BORDER-RIGHT-WIDTH: 0px
+}
+#top-stack {
+	MARGIN-TOP: 65px; FLOAT: left; MARGIN-LEFT: 7px
+}
+#top-stack IMG {
+	FLOAT: left
+}
+.clear {
+	CLEAR: both
+}
+
+}

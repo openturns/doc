@@ -1,0 +1,36 @@
+BODY {
+	FONT-SIZE: 12pt; COLOR: black; LINE-HEIGHT: 1.5em; FONT-FAMILY: "Bitstream Vera Serif", serif; BACKGROUND-COLOR: white
+}
+.netscape4 {
+	DISPLAY: none! important
+}
+#sidebar {
+	DISPLAY: none! important
+}
+#navigation-bar {
+	DISPLAY: none! important
+}
+#fsflinks {
+	DISPLAY: none! important
+}
+#gnulogo {
+	DISPLAY: none! important
+}
+#dbdlogo {
+	DISPLAY: none! important
+}
+#links {
+	DISPLAY: none! important
+}
+#translations {
+	DISPLAY: none! important
+}
+#searcher {
+	DISPLAY: none! important
+}
+A {
+	COLOR: black; BACKGROUND-COLOR: transparent; TEXT-DECORATION: none
+}
+UNKNOWN {
+	content: "<" attr(href) ">"
+}

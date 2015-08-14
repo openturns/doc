@@ -1,0 +1,79 @@
+% Copyright (C) 2005-2015 Airbus - EDF - IMACS - Phimeca
+% Permission is granted to copy, distribute and/or modify this document
+% under the terms of the GNU Free Documentation License, Version 1.2
+% or any later version published by the Free Software Foundation;
+% with no Invariant Sections, no Front-Cover Texts, and no Back-Cover
+% Texts.  A copy of the license is included in the section entitled "GNU
+% Free Documentation License".
+\renewcommand{\filename}{docUC_RespSurface_TaylorApprox.tex}
+\renewcommand{\filetitle}{UC : Linear and Quadratic Taylor approximations}
+
+% \HeaderNNIILevel
+% \HeaderIILevel
+\HeaderIIILevel
+
+\label{taylorApprox}
+
+\index{Response Surface!Linear Taylor approximation}
+\index{Response Surface!Quadratic Taylor approximation}
+\index{Response Surface!Linear least squares approximation}
+
+This section details the first method to construct a response surface : from the linear or quadratic Taylor approximations of the function at a particular point.\\
+
+Details on response surface approximations may be found in the Reference Guide (\extref{ReferenceGuide}{see files Reference Guide - Step Res. Surf. -- Polynomial Response Surfaces : principles and -- Taylor Expansion}{responseSurface}).\\
+
+
+\requirements{
+  \begin{description}
+  \item[$\bullet$] a function : {\itshape myFunc}
+  \item[type:]  NumericalMathFunction
+  \end{description}
+}
+             {
+               \begin{description}
+               \item[$\bullet$] the linear Taylor approximation {\itshape myLinearTaylor}
+               \item[type:]  LinearTaylor
+               \item[$\bullet$] the quadratic Taylor approximation {\itshape myQuadraticTaylor}
+               \item[type:]  QuadraticTaylor
+               \end{description}
+             }
+
+             \textspace\\
+             Python  script for this UseCase :
+
+             \begin{lstlisting}
+               # Taylor approximations at point 'center'
+               center = NumericalPoint(myFunc.getInputNumericalPointDimension())
+               for i in range(center.getDimension()) :
+               center[i] = 1.0+i
+
+               # Create the linear Taylor approximation
+               myLinearTaylor = LinearTaylor(center, myFunc)
+
+               # Create the quadratic Taylor approximation
+               myQuadraticTaylor = QuadraticTaylor(center, myFunc)
+
+               # Perform the approximations
+               # linear Taylor approximation
+               myLinearTaylor.run()
+               print "my linear Taylor =" , myLinearTaylor
+
+               # quadratic Taylor approximation
+               myQuadraticTaylor.run()
+               print "my quadratic Taylor =" , myQuadraticTaylor
+
+               # Stream out the result
+               # linear Taylor approximation
+               linearResponseSurface = myLinearTaylor.getResponseSurface()
+               print "responseSurface =" , linearResponseSurface
+
+               # quadratic Taylor approximation
+               quadraticResponseSurface = myQuadraticTaylor.getResponseSurface()
+               print "quadraticResponseSurface =" , quadraticResponseSurface
+
+               # Compare the approximations and the function at a particluar point
+               # point 'center'
+               print "myFunc(" , center , ")=" , myFunc(center)
+               print "linearResponseSurface(" , center , ")=" , linearResponseSurface(center)
+               print "quadraticResponseSurface(" , center , ")=" , quadraticResponseSurface(center)
+             \end{lstlisting}

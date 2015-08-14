@@ -1,0 +1,72 @@
+% Copyright (C) 2005-2015 Airbus - EDF - IMACS - Phimeca
+% Permission is granted to copy, distribute and/or modify this document
+% under the terms of the GNU Free Documentation License, Version 1.2
+% or any later version published by the Free Software Foundation;
+% with no Invariant Sections, no Front-Cover Texts, and no Back-Cover
+% Texts.  A copy of the license is included in the section entitled "GNU
+% Free Documentation License".
+\renewcommand{\etapemethodo}{Resp. Surf.}
+\renewcommand{\nomfichier}{docref_SurfRep_Taylor}
+\renewcommand{\titrefiche}{Linear and Quadratic Taylor Expansions}
+
+\Header
+
+\MathematicalDescription{
+
+  \underline{\textbf{Goal}}\\
+
+  The approximation of the model response $\underline{y} = h(\underline{x})$ around a specific set $\underline{x}_0 = (x_{0,1},\dots,x_{0,n_{X}})$ of input parameters may be of interest. One may then substitute $h$ for its Taylor expansion at point $\underline{x}_0$. Hence $h$ is replaced with a first or second-order polynomial $\widehat{h}$ whose evaluation is inexpensive, allowing the analyst to apply the uncertainty anaysis methods (Step~C). \\
+
+  \underline{\textbf{Principles}}\\
+
+  We consider the first and second order Taylor expansions around $\ux=\underline{x}_0$. \\
+
+  \underline{\textit{First order Taylor expansion}}\\
+  \begin{align*}
+    \underline{y} \, \, \approx \, \, \widehat{h}(\underline{x}) \, \, = \, \, h(\underline{x}_0) \, + \,  \sum_{i=1}^{n_{X}} \; \frac{\partial h}{\partial x_i}(\underline{x}_0).\left(x_i - x_{0,i} \right)
+  \end{align*}
+
+  Introducing a vector notation, the previous equation rewrites:
+
+  \begin{align*}
+    \underline{y} \, \, \approx \, \,  \underline{y}_0 \, + \, \underline{\underline{L}} \: \left(\underline{x}-\underline{x}_0\right)
+  \end{align*}
+
+  where:
+  \begin{itemize}
+  \item $\underline{y_0} = (y_{0,1} , \dots, y_{0,n_Y})^{\textsf{T}}=  h(\underline{x}_0)$ is the vector model response evaluated at $\underline{x}_0$;
+  \item $\underline{x}$ is the current set of input parameters;
+  \item $\underline{\underline{L}} = \left( \frac{\partial y_{0,j}}{\partial x_i} \, \, , \, \, i=1,\ldots, n_X \, \, , \, \, j=1, \ldots, n_Y \right)$ is the transposed Jacobian matrix evaluated at $\underline{x}_0$.
+    % \item     $\underline{\underline{\underline{Q}}} = \left( \frac{\partial^2 y^j}{\partial x^i \partial x^k} \right)_{i=1, \ldots, n_Y,\ \ j,k = 1 \cdots n_X}$ is the transposed Hessian matrix.
+  \end{itemize}
+
+  \underline{\textit{Second order Taylor expansion}}\\
+  \begin{eqnarray*}
+    \underline{y} \, \, \approx \, \, \widehat{h}(\underline{x}) \, \, = \, \,
+    h(\underline{x}_0) \, +  \, \sum_{i=1}^{n_{X}} \;  \frac{\partial h}{\partial x_i}(\underline{x}_0).\left(x_i - x_{0,i} \right) \, + \, \frac{1}{2} \; \sum_{i,j=1}^{n_X} \;  \frac{\partial^2 h}{\partial x_i \partial x_j}(\underline{x}_0).\left(x_i - x_{0,i} \right).\left(x_j - x_{0,j} \right)
+  \end{eqnarray*}
+
+  Introducing a vector notation, the previous equation rewrites:
+
+  \begin{align*}
+    \underline{y} \, \, \approx  \, \,  \underline{y}_0 \, + \,  \underline{\underline{L}} \: \left(\underline{x}-\underline{x}_0\right) \, + \,  \frac{1}{2} \; \left\langle \left\langle\underline{\underline{\underline{Q}}}\:,\underline{x}-\underline{x}_0 \right\rangle,\:\underline{x}-\underline{x}_0 \right\rangle
+  \end{align*}
+
+  where $\underline{\underline{Q}} = \left\{ \frac{\partial^2 y_{0,k}}{\partial x_i \partial x_j} \, \, , \, \, i,j=1,\ldots, n_X \, \, , \, \, k=1, \ldots, n_Y \right\}$ is the transposed Hessian matrix.
+
+}
+{The described method is similar to the \textit{perturbation method} presented in: \\
+  \otref{docref_C211_QuadraticCumul}{Taylor variance decomposition -- Perturbation Method}.
+}
+
+\Methodology{
+  This method is aimed at building a response surface prior to tackling Step~C ``Uncertainty Propagation''. Then the various uncertainty propagation techniques may be applied at a negligible computational cost. The Taylor expansion allows the analytical derivation of:
+  \begin{itemize}
+  \item statistical moments of the response (Step C), see: \\
+    \otref{docref_C211_QuadraticCumul}{Taylor variance decomposition -- Perturbation Method};
+  \item local sensitivity indices named \emph{importance factors} (Step C'), see: \\
+    \otref{docref_Cprime31_ImportanceFactor}{Importance Factors from FORM-SORM methods}.
+  \end{itemize}
+}
+            {A Taylor expansion-based response surface is well suited when a \emph{local} approximation of the model under consideration is sufficient. It has to be noticed that this may be a strong assumption though for a large class of models, possibly inducing erratic results. In particular, when the estimation of the probability of exceeding a threshold is of interest, the quality of the Taylor response surface has to be strongly justified. However, this method often allows the analyst to fairly study the central trend of the model response at a low computational cost.
+            }

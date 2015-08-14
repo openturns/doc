@@ -1,0 +1,137 @@
+% Copyright (C) 2005-2015 Airbus - EDF - IMACS - Phimeca
+% Permission is granted to copy, distribute and/or modify this document
+% under the terms of the GNU Free Documentation License, Version 1.2
+% or any later version published by the Free Software Foundation;
+% with no Invariant Sections, no Front-Cover Texts, and no Back-Cover
+% Texts.  A copy of the license is included in the section entitled "GNU
+% Free Documentation License".
+\renewcommand{\filename}{docUC_StocProc_ARMA_Estimation_Whittle.tex}
+\renewcommand{\filetitle}{UC : Estimation of a scalar ARMA process}
+
+% \HeaderNNIILevel
+% \HeaderIILevel
+\HeaderIIILevel
+
+\label{ARMAEstimationWhittle}
+
+
+\index{Stochastic Process!ARMA}
+
+
+The objective of the Use Case is to estimate an ARMA model from a scalar stationary time series using the Whittle estimator and a centered normal white noise.\\
+
+The data can be a unique time series or several time series collected in a process sample. \\
+
+If the User specifies the order $(p,q)$, OpenTURNS fits a model $ARMA(p,q)$ to the data by estimating the coefficients $(a_1, \dots, a_p), (b_1, \dots, b_q)$ and the variance $\sigma$ of the white noise.\\
+If the User specifies a range of orders $(p,q) \in Ind_p \times Ind_q$, where $Ind_p = [p_1, p_2]$ and $Ind_q = [q_1, q_2]$, OpenTURNS finds the \emph{best} model $ARMA(p,q)$ that fits to the data and estimates the corresponding coefficients. The \emph{best} model is considered with respect to  the $AIC_c$ criteria (corrected Akaike Information Criterion), defined by :
+\begin{align*}
+  AICc = -2\log L_w + 2(p + q + 1)\frac{m}{m - p - q - 2}
+\end{align*}
+where $m$ is half the number of points of the time grid of the process sample (if the data are a process sample) or in a block of the time series (if the data are a time series).
+
+Two other criteria are  computed for each order $(p,q)$ :
+\begin{itemize}
+\item  the AIC criterion :
+  \begin{align*}
+    AIC = -2\log L_w + 2(p + q + 1)
+  \end{align*}
+\item and the BIC criterion:
+  \begin{align*}
+    BIC = -2\log L_w + 2(p + q + 1)\log(p + q + 1)
+  \end{align*}
+\end{itemize}
+
+The \textit{BIC} criterion leads to a model that gives a better prediction; the \textit{AIC} criterion selects the best model that fits the given data; the $AIC_c$ criterion improves the previous one by penalizing a too high order that would artificially fit to the data.\\
+
+For each order $(p,q)$, the estimation of the coefficients $(a_k)_{1\leq k\leq p}$, $(b_k)_{1\leq k\leq q}$ and the variance $\sigma^2$ is done using the Whittle estimator which is based on the maximization of the likelihood function in the frequency domain.  \\
+The principle is detailed hereafter for the case of a time series : in the case of a process sample, the estimator is similar except for the periodogram which is computed differently. \\
+
+We consider a time series associated to the time grid $(t_0, \hdots, t_{n-1})$ and a particular order $(p,q)$. Using the notation (\ref{dim1}), the spectral density function of the $ARMA(p,q)$ process writes :
+
+\begin{equation}{\label{arma_spectrum}}
+  f(\lambda, \vect{\theta}, \sigma^2) = \frac{\sigma^2}{2 \pi} \frac{|1 + b_1 \exp(-i \lambda) + \ldots + b_q \exp(-i q \lambda)|^2}{|1 + a_1 \exp(-i \lambda) + \ldots + a_p \exp(-i p \lambda)|^2} = \frac{\sigma^2}{2 \pi} g(\lambda, \vect{\theta})
+\end{equation}
+where $\vect{\theta} = (a_1, a_2,...,a_p,b_1,...,b_q)$ and $\lambda$ is the frequency value.
+
+
+The Whittle log-likelihood writes :
+\begin{equation}{\label{arma_likelihood}}
+  \log L_w(\vect{\theta}, \sigma^2) = - \sum_{j=1}^{m} \log f(\lambda_j,  \vect{\theta}, \sigma^2) - \frac{1}{2 \pi} \sum_{j=1}^{m} \frac{I(\lambda_j)}{f(\lambda_j,  \vect{\theta}, \sigma^2)}
+\end{equation}
+where :
+\begin{itemize}
+\item $I$ is the non parametric estimate of the spectral density, expressed in the Fourier space (frequencies in $[0,2\pi]$ instead of $[-f_{max}, f_{max}]$). OpenTURNS uses by default the Welch estimator.
+\item $\lambda_j$ is the $j-th$ Fourier frequency, $\lambda_j = \frac{2 \pi j}{n}$, $j=1 \ldots m$ with $m$ the largest integer  $\leq \frac{n-1}{2}$.
+\end{itemize}
+
+We estimate the $(p+q+1)$ scalar coefficients by maximizing the log-likelihood function. The corresponding equations lead to the following relation :
+\begin{equation}\label{optSigma}
+  \sigma^{2*} = \frac{1}{m} \sum_{j=1}^{m} \frac{I(\lambda_j)}{g(\lambda_j, \vect{\theta}^{*})}
+\end{equation}
+where $ \vect{\theta}^{*}$ maximizes :
+\begin{equation}\label{lik2}
+  \log L_w(\vect{\theta}) = m (\log(2 \pi) - 1) - m \log\left( \frac{1}{m} \sum_{j=1}^{m} \frac{I(\lambda_j)}{g(\lambda_j, \vect{\theta})}\right) - \sum_{j=1}^{m} g(\lambda_j, \vect{\theta})
+\end{equation}
+
+
+The Whitle estimation requires that :
+\begin{itemize}
+\item the determinant of the eigen values of the companion matrix associated to the polynomial  $1 + a_1X + \dots + a_pX^p$ are  outside the unit disc,, which garantees the stationarity of the process;
+\item the determinant of the eigen values of thez companion matrix associated to the polynomial  $1 + ba_1X + \dots + b_qX^q$ are outside the unit disc, which garantees the invertibility of the process.
+\end{itemize}
+
+OpenTURNS proceeds as follows :
+\begin{itemize}
+\item the object \emph{WhittleFactory} is created  with  either a specified order $(p,q)$  or a range $Ind_p \times Ind_q$. By default, the Welch estimator (object \textit{Welch}) is used with its default parameters.
+\item for each order $(p,q)$, the estimation of the parameters is done by maximizing the reduced equation of the Whittle likelihood function (\ref{lik2}), thanks to the method \emph{build} of the object  \emph{WhittleFactory}. This method applies to a time series or a process sample. \\
+  If the User wants to get the quantified criteria $AIC_c, AIC$ and \textit{BIC} of the model $ARMA(p,q)$, he has to specify it by giving a \textit{NumericalPoint} of size 0 (\textit{NumericalPoint()}) as input parameter of the method \emph{build}.
+\item the output of the estimation is, in all the cases, one unique ARMA : the ARMA with the specified order or the optimal one with respect to the  $AIC_c$ criterion.
+\item in the case of a range $Ind_p \times Ind_q$, the User can get all the estimated models thanks to the method \emph{getHistory} of the object \emph{WhittleFactory}. If the \emph{build} has been parameterized by a \textit{NumericalPoint} of size 0, the User also has access to all the quantified criteria.
+\end{itemize}
+
+
+
+\requirements{
+
+  \begin{description}
+  \item[$\bullet$] a time series or collection of time series : {\itshape myTimeSeries}, {\itshape myProcessSample}
+  \item[type:]  TimeSeries or ProcessSample
+  \end{description}
+
+}
+{
+  \begin{description}
+  \item[$\bullet$] the Whittle factory : {\itshape myFactory}
+  \item[type:]  WhittleFactory
+  \end{description}
+
+  \begin{description}
+  \item[type:]  SpectralFactory
+  \end{description}
+
+  \begin{description}
+  \item[$\bullet$] the white noise : {\itshape myWhiteNoise}
+  \item[type:]  WhiteNoise
+  \end{description}
+
+  \begin{description}
+  \item[$\bullet$] an ARMA process {\itshape myARMA, arma}
+  \item[type:]  ARMA
+  \end{description}
+
+  \begin{description}
+  \item[$\bullet$] a set of information criteria {\itshape myCriterion}
+  \item[type:]  NumericalPoint
+  \end{description}
+
+  \begin{description}
+  \item[$\bullet$] a collection of Whittle estimates {\itshape myWhittleHistory}
+  \item[type:]  WhittleFactoryStateCollection
+  \end{description}
+
+}
+
+\textspace\\
+Python script for this UseCase :
+
+\inputscript{script_docUC_StocProc_ARMA_Estimation_Whittle}

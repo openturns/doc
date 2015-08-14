@@ -1,0 +1,63 @@
+% Copyright (C) 2005-2015 Airbus - EDF - IMACS - Phimeca
+% Permission is granted to copy, distribute and/or modify this document
+% under the terms of the GNU Free Documentation License, Version 1.2
+% or any later version published by the Free Software Foundation;
+% with no Invariant Sections, no Front-Cover Texts, and no Back-Cover
+% Texts.  A copy of the license is included in the section entitled "GNU
+% Free Documentation License".
+\renewcommand{\filename}{docUC_StocProc_FunctionalBasisProcess.tex}
+\renewcommand{\filetitle}{UC : Creation of a Functional Basis Process}
+
+% \HeaderNNIILevel
+% \HeaderIILevel
+\HeaderIIILevel
+
+\label{UCprocess}
+
+
+\index{Stochastic Process!Functional Basis Process}
+
+
+The objective of this Use Case is to define $X: \Omega \times \cD \rightarrow \Rset^d$  a multivariate stochastic process of dimension $d$ where $\cD \in \Rset^n$, as a linear combination of $K$ deterministic functions $(\phi_i)_{i=1,\dots,K}: \Rset^n \rightarrow \Rset^d$:
+\begin{align*}
+  X(\omega,\vect{t})=\sum_{i=1}^KA_i(\omega)\phi_i(\vect{t})
+\end{align*}
+where $\vect{A}=(A_1,\dots, A_K)$ is a random vector of dimension $K$.\\
+
+We suppose that $\cM$ is discretized on the mesh $\cM$ wich has $N$ vertices.\\
+A realization of $X$ on $\cM$ consists in generating a realization $\vect{\alpha}$ of the random vector $\vect{A}$ and in evaluating the functions  $(\phi_i)_{i=1,\dots,K}$  on the mesh $\cM$. If we note $(\vect{x}_0, \dots, \vect{x}_{N-1})$ the realization of $X$, where $X(\omega, \vect{t}_k) = \vect{x}_k$, we have:
+\begin{align*}
+  \forall k \in [0, N-1], \quad \vect{x}_k = \sum_{i=1}^K\alpha_i\phi_i(\vect{t}_k)
+\end{align*}
+
+
+
+\requirements{
+  \begin{description}
+  \item[$\bullet$] the distribution of $\vect{A}$: {\itshape coefDist}
+  \item[type:]  Distribution
+  \end{description}
+
+  \begin{description}
+  \item[$\bullet$] the mesh $\cM$ : {\itshape myMesh}
+  \item[type:]  Mesh
+  \end{description}
+
+  \begin{description}
+  \item[$\bullet$] the functional basis  $(\phi_i)_{i=1,\dots,K}$: {\itshape myBasis}
+  \item[type:] Basis
+  \end{description}
+}
+{
+
+  \begin{description}
+  \item[$\bullet$] the functional process {\itshape myOutputProcess}
+  \item[type:]  FunctionalBasisProcess
+  \end{description}
+}
+
+\textspace\\
+
+Python script for this UseCase :
+
+\inputscript{script_docUC_StocProc_FunctionalBasisProcess}

@@ -1,0 +1,1214 @@
+% Copyright (C) 2005-2015 Airbus - EDF - IMACS - Phimeca
+% Permission is granted to copy, distribute and/or modify this document
+% under the terms of the GNU Free Documentation License, Version 1.2
+% or any later version published by the Free Software Foundation;
+% with no Invariant Sections, no Front-Cover Texts, and no Back-Cover
+% Texts.  A copy of the license is included in the section entitled "GNU
+% Free Documentation License".
+% =============================================================
+\newpage
+\extanchor{thresholdprobabilitySimu}
+\section{Threshold  probability :  Simulation algorithms}
+
+% =============================================================
+
+%\index{Threshold  probability :  Simulation algorithms!Wilks}
+\index{Wilks}
+\subsection{Wilks}
+
+This class is a static class which enables the evaluation of the Wilks number : the minimal sample size $N_{\alpha, \beta, i}$ to perform in order to garantee that the empirical quantile $\alpha$, noted $\tilde{q}_{\alpha}(N_{\alpha, \beta, i})$ evaluated with the $(n-i)th$ maximum of the sample, noted $X_{N-i}$ be greater than the theoretical quantile $q_{\alpha}$ with a probability at least $\beta$ :
+\begin{align*}
+\Prob{\tilde{q}_{\alpha}(N_{\alpha, \beta, i}) > q_{\alpha}} > \beta
+\end{align*}
+where $\tilde{q}_{\alpha}(N_{\alpha, \beta, i}) = X_{n-i}$
+
+This class proposes the methods :
+
+\begin{description}
+
+\item \textit{ComputeSampleSize}
+\begin{description}
+\item[Usage:] \textit{ComputeSampleSize(alpha, beta, i)}
+\item[Arguments:] \rule{0pt}{1em}
+\begin{description}
+\item \textit{alpha}: a real value, order of the quantile we want the evaluate, must be in $(0,1)$.
+\item \textit{beta}: confidence on the evaluation of the empirical quantile, must be in $(0, 1)$.
+\item $i$ : rank of the maximum which will evaluate the empirical quantile, by default $i=0$ (maximum of the sample)
+\end{description}
+\item[Value:] an integer, the Wilks number.
+\end{description}
+\item \textit{computeQuantileBound}
+\begin{description}
+\item[Usage:] \textit{computeQuantileBound(alpha, beta, i)}
+\item[Arguments:] \rule{0pt}{1em}
+\begin{description}
+\item \textit{alpha}: a real value, order of the quantile we want the evaluate, must be in $(0, 1)$.
+\item \textit{beta}: confidence on the evaluation of the empirical quantile, must be in $(0, 1)$.
+\item $i$ : rank of the maximum which will evaluate the empirical quantile, by default $i=0$ (maximum of the sample)
+\end{description}
+\item[Value:] a real value, the estimate of the quantile upper bound for the given quantile level, at the given confidence level and using the given upper statistics.
+\end{description}
+\end{description}
+
+
+
+% =============================================================
+\newpage
+%\index{Threshold  probability :  Simulation algorithms!Simulation}
+\index{Simulation}
+\subsection{Simulation}
+
+
+\begin{description}
+\item[Usage:] A \textit{Simulation} object can be created only through its derived classes:  DirectionalSampling, ImportanceSampling, LHS, MonteCarlo, PostAnalyticalControlledImportanceSampling, PostAnalyticalImportanceSampling, QuasiMonteCarlo, RandomizedLHS, RandomizedQuasiMonteCarlo.
+
+\item[Some methods :]  \rule{0pt}{1em}
+
+\begin{description}
+
+\item \textit{setBlockSize}
+\begin{description}
+\item[Usage:] \textit{setBlockSize(k)}
+\item[Arguments:] $k$ an integer, the number of terms in the probability simulation estimator grouped together
+\item[Value:] none
+\item[Details:] for Monte Carlo, LHS and Importance Sampling methods, this allows to save space while allowing multithreading, when available (wrapper function) we recommend to use the number of available CPUs; for the Directional Sampling, we recommend to set to 1, set by default to 1
+\end{description}
+\bigskip
+
+\item \textit{getBlockSize}
+\begin{description}
+\item[Usage:] \textit{getBlockSize()}
+\item[Arguments:] none
+\item[Value:]  an integer, the number of terms in the probability simulation estimator grouped together
+\end{description}
+\bigskip
+
+\item \textit{getConvergenceStrategy}
+\begin{description}
+\item[Usage:] \textit{getConvergenceStrategy()}
+\item[Arguments:] none
+\item[Value:]  a HistoryStrategy, the storage strategy used to store the values of the probability estimator and its variance
+during the simulation algorithm
+\end{description}
+\bigskip
+
+\item \textit{getEvent}
+\begin{description}
+\item[Usage:] \textit{getEvent()}
+\item[Arguments:] none
+\item[Value:]  an Event, which we want to evaluate the probability
+\end{description}
+\bigskip
+
+
+\item \textit{getMaximumCoefficientOfVariation}
+\begin{description}
+\item[Usage:] \textit{getMaximumCoefficientOfVariation()}
+\item[Arguments:] none
+\item[Value:]  a real value, the maximum coefficient of variation of the simulated sample
+\end{description}
+\bigskip
+
+\item \textit{getMaximumOuterSampling}
+\begin{description}
+\item[Usage:] \textit{getMaximumOuterSampling()}
+\item[Arguments:] none
+\item[Value:]  an integer, the maximum number of groups of terms in the probability simulation estimator
+\item[Details:] for all the methods excepted the DirectionalSampling one, the maximum number of evaluations of the limit state function defining the event is : \textit{MaximumOuterSampling$\times$ BlockSize}
+\end{description}
+\bigskip
+
+\item \textit{getMaximumStandardDeviation}
+\begin{description}
+\item[Usage:] \textit{getMaximumStandardDeviation()}
+\item[Arguments:] none
+\item[Value:]  a positive real value , the standard deviation maximum of the estimator
+\end{description}
+\bigskip
+
+
+\item \textit{getResult}
+\begin{description}
+\item[Usage:] \textit{getResult()}
+\item[Arguments:] none
+\item[Value:]  a SimulationResult, the structure containing all the results obtained after simulation and created by the method run()
+\end{description}
+\bigskip
+
+\item \textit{run}
+\begin{description}
+\item[Usage:] \textit{run()}
+\item[Arguments:] none
+\item[Value:]  it launches the simulation and creates a SimulationResult, structure containing all the results obtained after simulation
+\end{description}
+\bigskip
+
+\item \textit{setConvergenceStrategy}
+\begin{description}
+\item[Usage:] \textit{setConvergenceStrategy(myHistoryStrategy)}
+\item[Arguments:] \textit{myHistoryStrategy}: a HistoryStrategy, the storage strategy used to store the values of the probability estimator and its variance during the simulation algorithm.
+\item[Value:]  none
+\end{description}
+\bigskip
+
+\item \textit{setInputOutputStrategy} (removed starting from the 0.16 release, see NumericalMathFunction.enableHistory())
+\begin{description}
+\item[Usage:] \textit{setInputOutputStrategy(myInputOutputStrategy)}
+\item[Arguments:] \textit{myInputOutputStrategy}: a HistoryStrategy, the storage strategy used to store the input and output random vector samples used during the simulation. The two strategies (the one for the input vectors and the one for the output vectors) have to be of the same kind with the same parameters, which is enforced by this method.
+\item[Value:]  none
+\end{description}
+\bigskip
+
+Only the \textit{getBlockSize}, \textit{getMaximumCoefficientOfVariation},\\
+\textit{getMaximumOuterSampling} methods have an associated \textit{setMethod}.
+
+\item[Derivative Classes :] \rule{0pt}{1em}
+\begin{description}
+\item DirectionalSampling
+\item ImportanceSampling
+\item LHS
+\item MonteCarlo
+\item PostAnalyticalControlledImportanceSampling
+\item PostAnalyticalImportanceSampling
+\item QuasiMonteCarlo
+\item RandomizedLHS
+\item RandomizedQuasiMonteCarlo
+\end{description}
+
+\end{description}
+\end{description}
+
+% =============================================================
+\newpage
+%\index{Threshold  probability :  Simulation algorithms!MonteCarlo}
+\index{MonteCarlo}
+\subsection{MonteCarlo}
+
+This class inherits from Simulation.
+
+\begin{description}
+\item[Usage:] \textit{MonteCarlo(event)}
+
+\item[Arguments:]  \textit{event}: an Event, the event we want to evaluate the probability
+
+\end{description}
+% =============================================================
+\newpage
+%\index{Threshold  probability :  Simulation algorithms!LHS}
+\index{LHS}
+\subsection{LHS}
+
+This class inherits from Simulation.
+\begin{description}
+\item[Usage:] \textit{LHS(event)}
+
+\item[Arguments:] \textit{event}: an Event, the event we want to evaluate the probability
+\item[Details:] Be carefull, to be valid, the LHS sampling method requires that the multi-variate distribution have an independent copula. All events can be reduced to this case using the Rosemblatt transformation.
+\end{description}
+
+% =============================================================
+\newpage
+%\index{Threshold  probability :  Simulation algorithms!RandomizedLHS}
+\index{RandomizedLHS}
+\subsection{RandomizedLHS}
+
+This class inherits from Simulation.
+\begin{description}
+\item[Usage:] \textit{RandomizedLHS(event)}
+
+\item[Arguments:] \textit{event}: an Event, the event we want to evaluate the probability
+\item[Details:] Be carefull, to be valid, the RandomizedLHS sampling method requires that the multi-variate distribution have an independent copula. All events can be reduced to this case using the Rosemblatt transformation.
+\end{description}
+
+% =============================================================
+\newpage
+%\index{Threshold  probability :  Simulation algorithms!Directional sampling}
+\subsection{Directional sampling}
+
+%\index{Threshold  probability :  Simulation algorithms!Directional sampling!DirectionalSampling}
+\index{DirectionalSampling}
+\subsubsection{DirectionalSampling}
+
+This class inherits from Simulation.\\
+
+The Directional Sampling simulation operates in the standard space.
+
+\begin{description}
+\item[Usage:]  \rule{0pt}{1em}
+\begin{description}
+\item \textit{DirectionalSampling(event)}
+\item \textit{DirectionalSampling(event, rootStrategy, samplingStrategy)}
+\end{description}
+
+\item[Arguments:]  \rule{0pt}{1em}
+\begin{description}
+\item \textit{event}: an Event, the event we want to evaluate the probability
+\item \textit{rootStrategy}: a RootStrategy, the strategy adopted to evaluate the intersections of each direction with the limit state function and take into account the contribution of the direction to the event probability. By default, \textit{rootStrategy = RootStrategy(SafeAndSlow)}
+\item \textit{samplingStrategy}: a SamplingStrategy, the strategy adopted to sample directions. By default,
+\begin{align*}
+samplingStrategy = SamplingStrategy(RandomDirection)
+\end{align*}
+\end{description}
+
+\item[Some methods :]  \rule{0pt}{1em}
+
+\begin{description}
+
+\item \textit{getRootStrategy}
+\begin{description}
+\item[Usage:] \textit{getRootStrategy()}
+\item[Arguments:] none
+\item[Value:] a RootStrategy, the root strategy adopted
+\end{description}
+\bigskip
+
+\item \textit{getSamplingStrategy}
+\begin{description}
+\item[Usage:] \textit{getSamplingStrategy()}
+\item[Arguments:] none
+\item[Value:] a SamplingStrategy, the direction sampling strategy adopted
+\end{description}
+\bigskip
+\end{description}
+
+Each \textit{getMethod}  is associated to a \textit{setMethod}.
+
+\end{description}
+
+% =============================================================
+\newpage
+%\index{Threshold  probability :  Simulation algorithms!Directional sampling!RootStrategy}
+\index{RootStrategy}
+\subsubsection{RootStrategy}
+
+\begin{description}
+\item[Usage:] \rule{0pt}{1em}
+\begin{description}
+\item \textit{RootStrategy()}
+\item \textit{RootStrategy(rootStrategyImplementation)}
+\end{description}
+
+\item[Arguments:] \rule{0pt}{1em}
+\begin{description}
+\item \textit{rootStrategyImplementation}: a RootStrategyImplementation, the implementation of the root strategy adopted, which is \textit{RiskyAndFast}, \textit{MediumSafe} or \textit{SafeAndSlow}
+\item When not given, by default, \textit{rootStrategyImplementation = SafeAndSlow}.
+\end{description}
+
+\item[Some methods :]  \rule{0pt}{1em}
+
+\begin{description}
+
+\item \textit{getMaximumDistance}
+\begin{description}
+\item[Usage:] \textit{getMaximumDistance()}
+\item[Arguments:] none
+\item[Value:] a positive real value, the distance from the center of the standard space until which we research an intersection with the limit state function along each direction. By default, the maximum distance is equal to 8
+
+\end{description}
+
+\item \textit{getOriginValue}
+\begin{description}
+\item[Usage:] \textit{getOriginValue()}
+\item[Arguments:] none
+\item[Value:] a real value, the value of the limit state functino at the center of the standard space
+
+\end{description}
+\bigskip
+\item \textit{getStepSize}
+\begin{description}
+\item[Usage:] \textit{getStepSize()}
+\item[Arguments:] none
+\item[Value:] a real value, the length of each segment inside which the root research is performed.
+\end{description}
+\end{description}
+
+Each \textit{getMethod}  is associated to a \textit{setMethod}.
+\end{description}
+
+
+% =============================================================
+\newpage
+%\index{Threshold  probability :  Simulation algorithms!Directional sampling!RiskyAndFast}
+\index{RiskyAndFast}
+\subsubsection{RiskyAndFast}
+
+The RiskyAndFast strategy is the following : for each direction, we check whether there is a sign changement of the standard limit state function between the maximum distant point (at distance {\itshape MaximumDistance} from the center of the standard space) and the center of the standard space. \\
+In case of sign changement, we search one root in the segment [origin, maximum distant point] with the selected non linear solver.\\
+As soon as founded, the segment [root, infinity point] is considered within the failure space.\\
+
+It inherits from the methods of the RootStrategy class.
+
+\begin{description}
+\item[Usage:] \rule{0pt}{1em}
+\begin{description}
+\item \textit{RiskyAndFast()}
+\item \textit{RiskyAndFast(solver)}
+\item \textit{RiskyAndFast(solver, maximumDistance, stepSize)}
+\end{description}
+
+\item[Arguments:]  \rule{0pt}{1em}
+\begin{description}
+\item \textit{solver}: a Solver, the non linear solver used to research the intersection of the limit state function with the direction, on each segment of length \textit{stepSize}, between the center of the space and \textit{maximumDistance} (root research)
+\item \textit{maximumDistance}: a real strictly positive value, the maximum distance within which the root research is perfomed along each direction
+\item \textit{stepSize}: a real value, the length of each segment along a direction inside which the root research is performed
+\item By default, \textit{solver = Brent}, \textit{maximumDistance = 8}, \textit{stepSize = 1}
+\end{description}
+
+\item[Some methods :]  \rule{0pt}{1em}
+
+\begin{description}
+
+\item \textit{getSolver}
+\begin{description}
+\item[Usage:] \textit{getSolver()}
+\item[Arguments:] none
+\item[Value:] a Solver, the non linear solver which will research the root in a segment
+\end{description}
+\bigskip
+
+\item \textit{solve}
+\begin{description}
+\item[Usage:] \textit{solve(function,  value)}
+\item[Arguments:] \rule{0pt}{1em}
+\begin{description}
+\item \textit{function}: a NumericalMathFunction, from $\Rset$ into $\Rset$
+\item \textit{value}: a real value
+\end{description}
+\item[Value:] a ScalarCollection of dimension 1, the real value $x$  such as \textit{function(x) = value} researched within \textit{[origin, maximumDistance]}
+\end{description}
+\end{description}
+
+Each \textit{getMethod}  is associated to a \textit{setMethod}.
+
+\end{description}
+
+% =============================================================
+\newpage
+%\index{Threshold  probability :  Simulation algorithms!Directional sampling!MediumSafe}
+\index{MediumSafe}
+\subsubsection{MediumSafe}
+
+The MediumSafe strategy is the following : for each direction, we go along the direction by step of length {\itshape stepSize} from the origin to the maximum distant point (at distance {\itshape MaximumDistance} from the center of the standard space) and we check whether there is a sign changement on each segment so formed.\\
+At the first sign changement, we research one root in the concerned segment with the selected non linear solver. Then, the segment [root, maximum distant point] is considered within the failure space. \\
+If {\itshape stepSize} is small enough, this strategy garantees us to find the root which is the nearest from the origin.\\
+
+It inherits from the methods of the RootStrategy class.
+
+\begin{description}
+\item[Usage:] \rule{0pt}{1em}
+\begin{description}
+\item \textit{MediumSafe()}
+\item \textit{MediumSafe(solver)}
+\item \textit{MediumSafe(solver, maximumDistance, stepSize)}
+\end{description}
+
+\item[Arguments:]  \rule{0pt}{1em}
+\begin{description}
+\item \textit{solver}: a Solver, the non linear solver used to research the intersection of the limit state function with the direction, on each segment of length \textit{stepSize}, between the center of the space and \textit{maximumDistance} (root research),
+\item \textit{maximumDistance}: a real strictly positive value, the maximum distance within which the root research is perfomed along each direction
+\item \textit{stepSize}: a real value. CARE : this value is not takjen into account in the root research : \textit{stepSize = maximumDistance} authomatically on the algorithm according to this root strategy
+\item By default, \textit{solver = Brent}, \textit{maximumDistance = 8}
+\end{description}
+
+\item[Some methods :]  \rule{0pt}{1em}
+\begin{description}
+\item \textit{getSolver}
+\begin{description}
+\item[Usage:] \textit{getSolver()}
+\item[Arguments:] none
+\item[Value:] a Solver, the non linear solver which will research the root in a segment
+\end{description}
+\bigskip
+
+\item \textit{solve}
+\begin{description}
+\item[Usage:] \textit{solve(function,  value)}
+\item[Arguments:] \rule{0pt}{1em}
+\begin{description}
+\item \textit{function}: a NumericalMathFunction, from $\Rset$ into $\Rset$
+\item \textit{value}: a real value
+\end{description}
+\item[Value:] a ScalarCollection of dimension 1 (one root) : the real value $x$  such as \textit{function(x) = value} researched the first segment of length \textit{stepsize}, within \textit{[origin, maximumDistance]} where a sign changement of \textit{function} has been detected
+\end{description}
+\end{description}
+
+Each \textit{getMethod}  is associated to a \textit{setMethod}.
+
+\end{description}
+% =============================================================
+\newpage
+%\index{Threshold  probability :  Simulation algorithms!Directional sampling!SafeAndSlow}
+\index{SafeAndSlow}
+\subsubsection{SafeAndSlow}
+
+The SafeAndSlow strategy is the following : for each direction, we go along the direction by step of length {\itshape stepSize} from the origin to the maximum distant point(at distance {\itshape MaximumDistance} from the center of the standard space) and we check whether there is a sign changement on each segment so formed.\\
+We go until the maximum distant point.  Then, for all the segments where we detected a the presence of a root, we research the root with the selected non linear solver. We evaluate the contribution to the failure probability of each segment. \\
+If {\itshape stepSize} is small enough, this strategy garantees us to find all the roots in the direction and the contribution of this direction to the failure probability is precisely evaluated.\\
+
+It inherits from the methods of the RootStrategy class.
+
+\begin{description}
+\item[Usage:] \rule{0pt}{1em}
+\begin{description}
+\item \textit{SafeAndSlow()}
+\item \textit{SafeAndSlow(solver)}
+\item \textit{SafeAndSlow(solver, maximumDistance, stepSize)}
+\end{description}
+
+\item[Arguments:]  \rule{0pt}{1em}
+\begin{description}
+\item \textit{solver}: a Solver, the non linear solver used to research the intersection of the limit state function with the direction, on each segment of length \textit{stepSize}, between the center of the space and \textit{maximumDistance} (root research),
+\item \textit{maximumDistance}: a real strictly positive value, the maximum distance within which the root research is perfomed along each direction
+\item \textit{stepSize}: a real value, the length of each segment along a direction inside which the root research is performed.
+\item By default, \textit{solver = Brent}, \textit{maximumDistance = 8}, \textit{stepSize = 1}
+\end{description}
+\item[Some methods :]  \rule{0pt}{1em}
+
+\begin{description}
+
+\item \textit{getSolver}
+\begin{description}
+\item[Usage:] \textit{getSolver()}
+\item[Arguments:] none
+\item[Value:] a Solver, the non linear solver which will research the root in a segment
+\end{description}
+\bigskip
+
+\item \textit{solve}
+\begin{description}
+\item[Usage:] \textit{solve(function,  value)}
+\item[Arguments:] \rule{0pt}{1em}
+\begin{description}
+\item \textit{function}: a NumericalMathFunction, from $\Rset$ into $\Rset$
+\item \textit{value}: a real value
+\end{description}
+\item[Value:] a ScalarCollection, all the real values $x$  such as \textit{function(x) = value} researched in each segment of length \textit{stepsize}, within \textit{[origin, maximumDistance]}
+\end{description}
+\end{description}
+
+Each \textit{getMethod}  is associated to a \textit{setMethod}.
+\end{description}
+
+% =============================================================
+\newpage
+%\index{Threshold  probability :  Simulation algorithms!Directional sampling!SamplingStrategy}
+\index{SamplingStrategy}
+\subsubsection{SamplingStrategy}
+
+
+\begin{description}
+\item[Usage:] \rule{0pt}{1em}
+\begin{description}
+\item \textit{SamplingStrategy()}
+\item \textit{SamplingStrategy(samplingStrategyImplementation)}
+\item \textit{SamplingStrategy(dimension)}
+\end{description}
+
+\item[Arguments:] \rule{0pt}{1em}
+\begin{description}
+\item \textit{samplingStrategyImplementation}: a SamplingStrategyImplementation, the implementation of the sampling strategy adopted, which is \textit{RandomDirection}, or \textit{OrthogonalDirection}
+\item \textit{dimension}: an integer, the dimension of the standard space
+\item By default, \textit{ samplingStrategyImplementation = RandomDirection} and \textit{dimension = 0}  but the dimension automatically updated by the calling class
+\end{description}
+
+\item[Some methods :]  \rule{0pt}{1em}
+
+\begin{description}
+
+\item \textit{getDimension}
+\begin{description}
+\item[Usage:] \textit{getDimension()}
+\item[Arguments:] none
+\item[Value:] an integer, the dimension of the standard space
+\end{description}
+\end{description}
+
+Each \textit{getMethod}  is associated to a \textit{setMethod}.
+
+\end{description}
+
+
+% =============================================================
+\newpage
+%\index{Threshold  probability :  Simulation algorithms!Directional sampling!RandomDirection}
+\index{RandomDirection}
+\subsubsection{RandomDirection}
+
+The RandomDirection strategy is the following : we generate some points on the sphere unity in the standard space according to the uniform distribution and we consider both opposite directions so built.\\
+
+
+It inherits from the methods of the SamplingStrategy class.
+
+\begin{description}
+\item[Usage:] \rule{0pt}{1em}
+\begin{description}
+\item \textit{RandomDirection()}
+\item \textit{RandomDirection(dimension)}
+\end{description}
+
+\item[Arguments:]  \rule{0pt}{1em}
+\begin{description}
+\item \textit{dimension}: an integer, the dimension of the standard space
+\item By default, \textit{dimension = 0} but automatically updated by the calling class
+\end{description}
+\item[Some methods :]  \rule{0pt}{1em}
+
+\begin{description}
+\item \textit{generate}
+\begin{description}
+\item[Usage:] \textit{generate()}
+\item[Arguments:] none
+\item[Value:] a NumericalSample of size 2, two opposite random directions generated
+\end{description}
+\bigskip
+\item \textit{getUniformUnitVectorRealization}
+\begin{description}
+\item[Usage:] \textit{getUniformUnitVectorRealization(dimension)}
+\item[Arguments:] \textit{dimension}: an interger, the dimension of the sphere unity (which is the dimension of the standard space)
+\item[Value:] a NumericalPoint, a realization of a vector on the sphere unity, according to the uniform distribution
+\end{description}
+\end{description}
+
+Each \textit{getMethod}  is associated to a \textit{setMethod}.
+
+\end{description}
+
+% =============================================================
+\newpage
+%\index{Threshold  probability :  Simulation algorithms!Directional sampling!OrthogonalDirection}
+\index{OrthogonalDirection}
+\subsubsection{OrthogonalDirection}
+
+The OrthogonalDirection strategy is the following : this strategy is parameterized by $k\in \Nset$. We generate one direct orthonormalized base $(e_1, \dots, e_n)$ within the set of orthonormalized bases. We consider all the renormalized linear combinations of $k$ vectors within the $n$ vectors of the base, where the coefficients of the linear combinations are equal to $\{+1, -1\}$. There are $C_n^k 2^k$ new vectors $v_i$. We consider each direction defined by each vector $v_i$.\\
+If $k=1$, we consider all the axes of the standard space.\\
+
+
+It inherits from the methods of the SamplingStrategy class.
+
+
+\begin{description}
+\item[Usage:] \rule{0pt}{1em}
+\begin{description}
+\item \textit{OrthogonalDirection()}
+\item \textit{OrthogonalDirection(dimension, size)}
+\end{description}
+
+\item[Arguments:]  \rule{0pt}{1em}
+\begin{description}
+\item \textit{dimension}: an integer, dimension of the standard space
+\item \textit{size}: an integer, the number of elements in the linear combinations described here above
+\item By default, \textit{size = 1} and \textit{dimension = 0} but automatically updated by the calling class.
+\end{description}
+\item[Some methods :]  \rule{0pt}{1em}
+
+\begin{description}
+
+
+\item \textit{generate}
+\begin{description}
+\item[Usage:] \textit{generate()}
+\item[Arguments:] none
+\item[Value:] a NumericalSample, a realization of a random direction according to the algorithm described here above.
+\end{description}
+\bigskip
+\item \textit{getUniformUnitVectorRealization}
+\begin{description}
+\item[Usage:] \textit{getUniformUnitVectorRealization(dimension)}
+\item[Arguments:] \textit{dimension}: an integer, the dimension of the sphere unity (dimension of the standard space)
+\item[Value:] a NumericalPoint, a realization of a vector on the sphere unity, according to the uniform distribution
+\end{description}
+\end{description}
+
+Each \textit{getMethod}  is associated to a \textit{setMethod}.
+
+\end{description}
+
+% =============================================================
+\newpage
+%\index{Threshold  probability :  Simulation algorithms!Directional sampling!Solver}
+\index{Solver}
+\subsubsection{Solver}
+
+This class enables to solve 1D non linear equations :
+\begin{equation*}
+f(x) = value, \, for \, \, x \in (infPoint, supPoint)
+\end{equation*}
+if $f$ is a continuous function from $\Rset$ in $\Rset$, $infPoint, supPoint \in \Rset$ and if $f$ is such that $f(infPoint)f(supPoint) < 0$, then $f$ has at least a zero in the interval $(infPoint, supPoint)$. In particular, it is used in the root research of a directional sampling simulation.
+\begin{description}
+\item[Usage:] \rule{0pt}{1em}
+\begin{description}
+\item \textit{Solver(solverImplementation)}
+\item \textit{Solver(absoluteError, relativeError, maximumFunctionEvaluation)}
+\end{description}
+
+\item[Arguments:]  \rule{0pt}{1em}
+\begin{description}
+\item \textit{solverImplementation}: a SolverImplementation, the implementation of particular solver which is \textit{Bisection}, \textit{Brent} or \textit{Secant},
+\item \textit{absoluteError}: a real positive value, absolute error : distance between two successive iterates at the end point
+\item \textit{relativeError}: a real positive value, relative distance between the two last successive iterates (with regards the last iterate)
+\item \textit{maximumFunctionEvaluation}: an integer, the maximum number of evaluations of the function
+\end{description}
+
+\item[Some methods :]  \rule{0pt}{1em}
+
+\begin{description}
+
+\item \textit{getAbsoluteError}
+\begin{description}
+\item[Usage:] \textit{getAbsoluteError()}
+\item[Arguments:] none
+\item[Value:] a real positive value, the absolute error : distance between two successive iterates at the end point
+\end{description}
+\bigskip
+\item \textit{getMaximumFunctionEvaluation}
+\begin{description}
+\item[Usage:] \textit{getMaximumFunctionEvaluation()}
+\item[Arguments:] none
+\item[Value:]  an integer, the maximum number of evaluations of the function
+\end{description}
+\bigskip
+\item \textit{getRelativeError}
+\begin{description}
+\item[Usage:] \textit{getRelativeError()}
+\item[Arguments:] none
+\item[Value:] a real positive value, the relative distance between the two last successive iterates (with regards the last iterate)
+\end{description}
+\end{description}
+
+\end{description}
+
+% =============================================================
+\newpage
+%\index{Threshold  probability :  Simulation algorithms!Directional sampling!Bisection}
+\index{Bisection}
+\subsubsection{Bisection}
+
+The Bisection solver is a bisection algorithm.
+
+\begin{description}
+\item[Usage:] \rule{0pt}{1em}
+\begin{description}
+\item \textit{Bisection()}
+\item \textit{Bisection(absoluteError, relativeError, maximumFunctionEvaluation)}
+\end{description}
+
+\item[Arguments:]  \rule{0pt}{1em}
+\begin{description}
+\item \textit{absoluteError}: a real positive value, absolute error : distance between two successive iterates at the end point
+\item \textit{relativeError}: a real positive value, relative distance between the two last successive iterates (with regards the last iterate)
+\item \textit{maximumFunctionEvaluation}: an integer, the maximum number of evaluations of the function
+\item By default, \textit{absoluteError = $10^{-5}$}, \textit{relativeError = $10^{-5}$}, \textit{maximumFunctionEvaluation = 100}
+\end{description}
+
+\item[Some methods :]  \rule{0pt}{1em}
+
+\begin{description}
+
+\item \textit{solve}
+\begin{description}
+\item[Usage:] \rule{0pt}{1em}
+\begin{description}
+\item \textit{solve(function, value, infPoint, supPoint)}
+\item \textit{solve(function, value, infPoint, supPoint, infValue, supValue)}
+\end{description}
+\item[Arguments:] \rule{0pt}{1em}
+\begin{description}
+\item \textit{function}: a NumericalMathFunction, the function of the equation \textit{function(x) = value} we want to solve on \textit{(infPoint, supPoint)}
+\item \textit{value}: a real value, the value of the equation \textit{function(x) = value} we want to solve on \textit{(infPoint, supPoint)}
+\item \textit{infPoint}: a real value, the lower bound of the interval where we want to solve the equation
+\item \textit{supPoint}: a real value, the upper bound of the interval where we want to solve the equation
+\item \textit{infValue}: a real value, the value of \textit{function} on the point \textit{infPoint}: \textit{function(infPoint)}, must be of opposite sign of \textit{supValue}
+\item \textit{supValue}: a real value, a real value, the value of \textit{function} on the point \textit{supPoint}: \textit{function(supPoint)}, must be of opposite sign of \textit{infValue}
+\end{description}
+\item[Value:] a real value, the result of the root research, in \textit{(infPoint, supPoint)}
+\item[Details:] If the function $f$ is continuous, the Bisection solver will converge towards a root of the equation \textit{function(x) = value} on \textit{(infPoint, supPoint)}. If not, it will converge towards either a root or a discontinuity point of $f$ on \textit{(infPoint, supPoint)}. Bisection garantees a convergence.
+\end{description}
+\end{description}
+
+
+\end{description}
+Bisection may fail.
+
+% =============================================================
+\newpage
+%\index{Threshold  probability :  Simulation algorithms!Directional sampling!Brent}
+\index{Brent}
+\subsubsection{Brent}
+
+
+The Brent solver is a mix of Bisection, Secant and inverse quadratic interpolation.\\
+
+\begin{description}
+\item[Usage:] \rule{0pt}{1em}
+\begin{description}
+\item \textit{Brent()}
+\item \textit{Brent(absoluteError, relativeError, maximumFunctionEvaluation)}
+\end{description}
+
+\item[Arguments:]  \rule{0pt}{1em}
+\begin{description}
+\item \textit{absoluteError}: a real positive value, the absolute error : distance between two successive iterates at the end point
+\item \textit{relativeError}: a real positive value,the  relative distance between the two last successive iterates (with regards the last iterate)
+\item \textit{maximumFunctionEvaluation}: an integer, the maximum number of evaluations of the function
+\item By default, \textit{absoluteError = $10^{-5}$}, \textit{relativeError = $10^{-5}$}, \textit{maximumFunctionEvaluation = 100}
+\end{description}
+
+\item[Some methods :]  \rule{0pt}{1em}
+
+\begin{description}
+
+\item \textit{solve}
+\begin{description}
+\item[Usage:] \rule{0pt}{1em}
+\begin{description}
+\item \textit{solve(function, value, infPoint, supPoint)}
+\item \textit{solve(function, value, infPoint, supPoint, infValue, supValue)}
+\end{description}
+\item[Arguments:] \rule{0pt}{1em}
+\begin{description}
+\item \textit{function}: a NumericalMathFunction, the function of the equation \textit{function(x) = value} we want to solve on \textit{(infPoint, supPoint)}
+\item \textit{value}: a real value, the value of the equation \textit{f(x) = value} we want to solve on \textit{(infPoint, supPoint)}
+\item \textit{infPoint}: a real value, the lower bound of the interval where we want to solve the equation
+\item \textit{supPoint}: a real value, the upper bound of the interval where we want to solve the equation
+\item \textit{infValue}: a real value, the value of \textit{function} on the point \textit{infPoint}: \textit{function(infPoint)}, must be of opposite sign of \textit{supValue}
+\item \textit{supValue}: a real value, a real value, the value of \textit{function} on the point \textit{supPoint}: \textit{function(supPoint)}, must be of opposite sign of \textit{infValue}
+\end{description}
+\item[Value:] the result of the root research, in \textit{(infPoint, supPoint)}
+\item[Details:] If the function $f$ is continuous, the Brent solver will converge towards a root of the equation \textit{function(x) = value} on \textit{(infPoint, supPoint)}. If not, it will converge towards either a root or a discontinuity point of $f$ on \textit{(infPoint, supPoint)}. Brent garantees a convergence.
+\end{description}
+\end{description}
+
+
+\end{description}
+
+
+% =============================================================
+\newpage
+%\index{Threshold  probability :  Simulation algorithms!Directional sampling!Secant}
+\index{Secant}
+\subsubsection{Secant}
+
+The Secant solver is based on the evaluation of a segment between the two last iterated points.\\
+
+\begin{description}
+\item[Usage:] \rule{0pt}{1em}
+\begin{description}
+\item \textit{Secant()}
+\item \textit{Secant(absoluteError, relativeError, maximumFunctionEvaluation)}
+\end{description}
+
+\item[Arguments:]  \rule{0pt}{1em}
+\begin{description}
+\item \textit{absoluteError}: a real positive value, absolute error : distance between two successive iterates at the end point
+\item \textit{relativeError}: a real positive value, relative distance between the two last successive iterates (with regards the last iterate)
+\item \textit{maximumFunctionEvaluation}: an integer, the maximum number of evaluations of the function
+\item By default, \textit{absoluteError = $10^{-5}$}, \textit{relativeError = $10^{-5}$}, \textit{maximumFunctionEvaluation = 100}
+\end{description}
+
+\item[Some methods :]  \rule{0pt}{1em}
+
+\begin{description}
+
+\item \textit{solve}
+\begin{description}
+\item[Usage:] \rule{0pt}{1em}
+\begin{description}
+\item \textit{solve(function, value, infPoint, supPoint)}
+\item \textit{solve(function, value, infPoint, supPoint, infValue, supValue)}
+\end{description}
+\item[Arguments:] \rule{0pt}{1em}
+\begin{description}
+\item \textit{function}: a NumericalMathFunction, the function of the equation \textit{function(x) = value} we want to solve on \textit{(infPoint, supPoint)}
+\item \textit{value}: a real value, the value of the equation \textit{function(x) = value} we want to solve on \textit{(infPoint, supPoint)}
+\item \textit{infPoint}: a real value, the lower bound of the interval where we want to solve the equation
+\item \textit{supPoint}: a real value, the upper bound of the interval where we want to solve the equation
+\item \textit{infValue}: a real value, the value of \textit{function} on the point \textit{infPoint}: \textit{function(infPoint)}, must be of opposite sign of \textit{supValue}
+\item \textit{supValue}: a real value, a real value, the value of \textit{function} on the point \textit{supPoint}: \textit{function(supPoint)}, must be of opposite sign of \textit{infValue}
+\end{description}
+\item[Value:] the result of the root research, in \textit{(infPoint, supPoint)}
+\item[Details:] Secant might fail and not converge.
+\end{description}
+\bigskip
+\end{description}
+
+
+\end{description}
+
+
+% =============================================================
+\newpage
+%\index{Threshold  probability :  Simulation algorithms!ImportanceSampling}
+\index{ImportanceSampling}
+\subsection{ImportanceSampling}
+
+This class inherits from Simulation.
+
+\begin{description}
+\item[Usage:] \textit{ImportanceSampling(event, importanceDistribution)}
+
+\item[Arguments:]  \rule{0pt}{1em}
+\begin{description}
+\item \textit{event}: a Event, the event we want to evaluate the probability
+\item \textit{importanceDistribution}: a Distribution, the importance distribution of the Importance Sampling simulation method.
+\end{description}
+
+\item[Some methods :]  \rule{0pt}{1em}
+
+\begin{description}
+
+\item \textit{getImportanceDistribution}
+\begin{description}
+\item[Usage:] \textit{getImportanceDistribution()}
+\item[Arguments:] none
+\item[Value:] a Distribution, the importance distribution of the Importance Sampling simulation method
+\end{description}
+\bigskip
+\end{description}
+
+\end{description}
+
+% =============================================================
+\newpage
+%\index{Threshold  probability :  Simulation algorithms!PostAnalyticalSimulation}
+\index{PostAnalyticalSimulation}
+\subsection{PostAnalyticalSimulation}
+
+This class inherits from Simulation.\\
+The principle is to perform a simulation study to evaluate the threshold exceedance probability according to an importance density centered around the design point, in the standard space. The importance distribution is the standard distribution of the standard space
+
+\begin{description}
+\item[Usage:] A \textit{PostAnalyticalSimulation} object can be created only through its derivative classes :  PostAnalyticalImportanceSampling or PostAnalyticalControlledImportanceSampling.
+
+
+\item[Some methods :]  \rule{0pt}{1em}
+\begin{description}
+
+\item \textit{getAnalyticalResult()}:
+\begin{description}
+\item[Usage:] \textit{getAnalyticalResult()}
+\item[Arguments:] none
+\item[Value:] a AnalyticalResult, which contains the results of the analytical study which has been performed just before the simulation study centered around the importance factor.
+\end{description}
+
+
+\end{description}
+
+
+\end{description}
+
+
+
+% =============================================================
+\newpage
+%\index{Threshold  probability :  Simulation algorithms!PostAnalyticalImportanceSampling}
+\index{PostAnalyticalImportanceSampling}
+\subsection{PostAnalyticalImportanceSampling}
+
+
+This class inherits from PostAnalyticalSimulation.\\
+
+
+\begin{description}
+\item[Usage:] \textit{PostAnalyticalImportanceSampling(analyticalResult)}
+
+
+\item[Arguments:]  \textit{analyticalResult}: an AnalyticalResult which contains the whole information on the analytical study performed before the simulation study : in particular, the standard distribution of the standard space and the standard space design point.
+
+
+\item[Some methods :]  \rule{0pt}{1em}
+\begin{description}
+
+\item \textit{run}:
+\begin{description}
+\item[Usage:] \textit{run()}
+\item[Arguments:] none
+\item[Value:] it launches the simulation and creates a SimulationResult, structure containing all the results obtained after simulation
+\end{description}
+
+
+
+\end{description}
+
+
+\end{description}
+
+
+
+% =============================================================
+\newpage
+%\index{Threshold  probability :  Simulation algorithms!PostAnalyticalControlledImportanceSampling}
+\index{PostAnalyticalControlledImportanceSampling}
+\subsection{PostAnalyticalControlledImportanceSampling}
+
+
+
+
+
+This class inherits from PostAnalyticalSimulation.\\
+
+
+\begin{description}
+\item[Usage:] \textit{PostAnalyticalControlledImportanceSampling(analyticalResult)}
+
+
+\item[Arguments:]  \textit{analyticalResult}: an AnalyticalResult which contains the whole information on the analytical study performed before the simulation study : in particular, the standard distribution of the standard space and the standard space design point.
+
+
+\item[Some methods :]  \rule{0pt}{1em}
+\begin{description}
+
+\item \textit{run}:
+\begin{description}
+\item[Usage:] \textit{run()}
+\item[Arguments:] none
+\item[Value:] it launches the controlled simulation and creates a SimulationResult, structure containing all the results obtained after simulation
+\end{description}
+
+\end{description}
+
+
+\end{description}
+
+
+
+
+
+% =============================================================
+\newpage
+%\index{Threshold  probability :  Simulation algorithms!QuasiMonteCarlo}
+\index{QuasiMonteCarlo}
+\subsection{QuasiMonteCarlo}
+
+This class inherits from Simulation.
+
+\begin{description}
+\item[Usage:] \rule{0pt}{1em}
+\begin{description}
+\item \textit{QuasiMonteCarlo(event)}
+\item \textit{QuasiMonteCarlo(event, sequence)}
+\end{description}
+
+\item[Arguments:] \rule{0pt}{1em}
+\begin{description}
+\item \textit{event}: an Event, the event we want to evaluate the probability
+\item \textit{sequence}: a LowDiscrepancySequence, which is the low-discrepancy sequence used to generate the samples (by default the Sobol sequence is used (SobolSequence))
+\end{description}
+\item[Details:] Be carefull, to be valid, the QuasiMonteCarlo sampling method requires that the multi-variate distribution have an independent copula. All events can be reduced to this case using the Rosemblatt transformation.
+\bigskip
+\end{description}
+
+% =============================================================
+\newpage
+%\index{Threshold  probability :  Simulation algorithms!RandomizedQuasiMonteCarlo}
+\index{RandomizedQuasiMonteCarlo}
+\subsection{RandomizedQuasiMonteCarlo}
+
+This class inherits from Simulation.
+
+\begin{description}
+\item[Usage:] \rule{0pt}{1em}
+\begin{description}
+\item \textit{RandomizedQuasiMonteCarlo(event)}
+\item \textit{RandomizedQuasiMonteCarlo(event, sequence)}
+\end{description}
+
+\item[Arguments:] \rule{0pt}{1em}
+\begin{description}
+\item \textit{event}: an Event, the event we want to evaluate the probability
+\item \textit{sequence}: a LowDiscrepancySequence, which is the low-discrepancy sequence used to generate the samples (by default the Sobol sequence is used (SobolSequence))
+\end{description}
+\item[Details:] Be carefull, to be valid, the RandomizedQuasiMonteCarlo sampling method requires that the multi-variate distribution have an independent copula. All events can be reduced to this case using the Rosemblatt transformation.
+\bigskip
+\end{description}
+
+% =============================================================
+\newpage
+%\index{Threshold  probability :  Simulation algorithms!SimulationResult}
+\index{SimulationResult}
+\subsection{SimulationResult}
+
+
+\begin{description}
+\item[Usage:] structure created by the method run() of a Simulation, and obtained thanks to the method \textit{getResult()}
+
+\item[Some methods :]  \rule{0pt}{1em}
+
+\begin{description}
+
+\item \textit{getImportanceFactors}
+\begin{description}
+\item[Usage:] \textit{getImportanceFactors}
+\item[Arguments:] none
+\item[Value:]  a NumericalPointWithDescription, the importance factors (\ref{impFctSimu})  evaluated from the coordinates of the mean point (\ref{meanPtSimu}) of event domain, mapped into the standard space as follows:
+\begin{equation}\label{meanPtSimu}
+\vect{X}^*_{event} = \displaystyle \frac{1}{n} \sum_{i=1}^{n} \vect{X_i}1_{event}(\vect{X}_i)
+\end{equation}
+\begin{equation}\label{impFctSimu}
+\alpha_i = \displaystyle \frac{\left(U_{i}^*\right)^2}{||\vect{U}^*||^2}
+\end{equation}
+where
+\begin{equation}\label{meanPtSimuStdSpace}
+\vect{U}^* = T(\vect{X}^*_{event})
+\end{equation}
+Be carefull : this notion is only valuable for Monte Carlo or LHS sampling as the mean is evaluated from the (\ref{meanPtSimu}) relation (ony uniform weights over the realizations $\vect{X_i}$).
+\end{description}
+\bigskip
+
+
+\item \textit{getMeanPointInEventDomain}
+\begin{description}
+\item[Usage:] \textit{getMeanPointInEventDomain()}
+\item[Arguments:] none
+\item[Value:]  a NumericalPoint which is the mean point in the physical space of all the simulations generated by the Simulation algorithm that failed into the event domain.
+Be carefull : this notion is only valuable for Monte Carlo or LHS sampling as the mean is evaluated from the (\ref{meanPtSimu}) relation (only uniform weights over the realizations $\vect{X_i}$.
+\end{description}
+\bigskip
+
+\item \textit{getBlockSize}
+\begin{description}
+\item[Usage:] \textit{getBlockSize()}
+\item[Arguments:] none
+\item[Value:]  an integer, the number of terms in the probability simulation estimator grouped together
+\end{description}
+\bigskip
+
+\item \textit{getCoefficientOfVariation}
+\begin{description}
+\item[Usage:] \textit{getCoefficientOfVariation()}
+\item[Arguments:] none
+\item[Value:]  a real value,  the coefficient of variation of the simulated sample
+\end{description}
+\bigskip
+
+\item \textit{getConfidenceLength}
+\begin{description}
+\item[Usage:] \textit{getConfidenceLength()}
+\item[Arguments:] none
+\item[Value:]  a positive real value, the length of any confidence interval equal to the double of the variance of the Monte Carlo estimator
+\end{description}
+\bigskip
+
+\item \textit{getOuterSampling}
+\begin{description}
+\item[Usage:] \textit{getOuterSampling()}
+\item[Arguments:] none
+\item[Value:]  an integer,  the number of groups of terms in the probability simulation estimator
+\item[Details:]  for Monte Carlo,  LHS and Importance Sampling methods, the  number of evaluations of the limit state function defining the event is : OuterSampling * BlockSize
+\end{description}
+\bigskip
+
+\item \textit{getProbabilityEstimate}
+\begin{description}
+\item[Usage:] \textit{getProbabilityEstimate()}
+\item[Arguments:] none
+\item[Value:]  a positive real value, the Monte Carlo estimate of the event probability
+\end{description}
+\bigskip
+
+\item \textit{getStandardDeviation}
+\begin{description}
+\item[Usage:] \textit{getStandardDeviation()}
+\item[Arguments:] none
+\item[Value:]  a positive real value , the standard deviation  of the estimator at the end of the simulation
+\end{description}
+\bigskip
+
+\item \textit{getVarianceEstimate}
+\begin{description}
+\item[Usage:] \textit{getVarianceEstimate()}
+\item[Arguments:] none
+\item[Value:]  a positive real value, the variance of the Monte Carlo estimator, equal to the $M_n(1-M_n) / n$ if $M_n$ is the Monte Carlo probability estimator and $n$ the size of the simulated sample
+\end{description}
+\bigskip
+\end{description}
+
+\end{description}
+
+
+% =============================================================
+\newpage
+%\index{Threshold  probability :  Simulation algorithms!SimulationSensitivityAnalysis}
+\index{SimulationSensitivityAnalysis}
+\subsection{SimulationSensitivityAnalysis}
+
+
+\begin{description}
+\item[Usage:] \rule{0pt}{1em}
+\begin{description}
+\item  \textit{SimulationSensitivityAnalysis(inputSample, outputSample, transformation)}
+\item  \textit{SimulationSensitivityAnalysis(event)}
+\item  \textit{SimulationSensitivityAnalysis(simulationRes)}
+\end{description}
+\item[Arguments:] \rule{0pt}{1em}
+\begin{description}
+\item \textit{inputSample, outputSample}: associated
+NumericalSample which are such that
+\textit{outputSample=transformation(inputSample)}.
+\item \textit{transformation}: a NumericalMathFunction
+\item \textit{event}: an Event which is composite (test it with the
+method isComposite()).
+\item \textit{simulationRes}: a SimulationResult.
+\end{description}
+\item[Value:] a SimulationSensitivityAnalysis based on:
+\begin{description}
+\item  in the first usage, the \textit{inputSample} and
+\textit{outputSample} given
+\item in the second usage, the samples which have been
+stored by the function defining the \textit{event}. Care if the
+sample is not a statistical sample: post treatment
+proposed by the object might not be right.
+\item in the third usage, the samples generated by the
+SimulationAlgorithm that produced \textit{simulationRes}.
+\end{description}
+
+
+\item[Some methods :]  \rule{0pt}{1em}
+
+\begin{description}
+
+
+\item \textit{computeImportanceFactors}
+\begin{description}
+\item[Usage:] \textit{computeImportanceFactors}
+\item[Arguments:] none
+\item[Value:]  a NumericalPointWithDescription, the importance
+factors (\ref{impFctSimu})  evaluated from the coordinates of
+the mean point (\ref{meanPtSimu}) of event domain, mapped into
+the standard space as relations (\ref{meanPtSimu}),
+(\ref{impFctSimu}) and (\ref{meanPtSimuStdSpace}).\\
+Be carefull : this notion is only valuable for Monte Carlo or LHS sampling as the mean is evaluated from the (\ref{meanPtSimu}) relation (only uniform weights over the realizations $\vect{X_i}$).
+\end{description}
+\bigskip
+
+\item \textit{computeMeanPointInEventDomain}
+\begin{description}
+\item[Usage:] \textit{computeMeanPointInEventDomain()}
+\item[Arguments:] none
+\item[Value:]  a NumericalPoint which is the mean point in the physical space of all the simulations generated by the Simulation algorithm that failed into the event domain.
+Be carefull : this notion is only valuable for Monte Carlo or LHS sampling as the mean is evaluated from the (\ref{meanPtSimu}) relation (only uniform weights over the realizations $\vect{X_i}$).
+\end{description}
+\bigskip
+
+\item \textit{drawImportanceFactorsRange}
+\begin{description}
+\item[Usage:]  $drawImportanceFactorsRange(probabilityScale, lower,
+upper)$
+
+\item[Arguments:] \rule{0pt}{1em}
+\begin{description}
+\item \textit{probabilityScale}: a boolean. is True if the limits are
+probabilitiy levels; false if they are thresholds defining the event.
+\item \textit{lower}, \textit{upper}: scalars which define $p_{min}$ and $p_{max}$
+or $s_{min}$ and $s_{max}$.
+\end{description}
+
+\item[Value:]  a Graph that draws the evolution of the importance
+factors of each direction  with respect to $p\in [p_{min},
+p_{max}]$ or $s\in [s_{min},s_{max}]$. The importance factors are
+evaluated from the definition (\ref{impFctSimu}) for each
+threshold $s$ or probability $p$.
+\end{description}
+
+\end{description}
+
+\end{description}

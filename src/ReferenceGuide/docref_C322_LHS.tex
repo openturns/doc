@@ -1,0 +1,112 @@
+% Copyright (C) 2005-2015 Airbus - EDF - IMACS - Phimeca
+% Permission is granted to copy, distribute and/or modify this document
+% under the terms of the GNU Free Documentation License, Version 1.2
+% or any later version published by the Free Software Foundation;
+% with no Invariant Sections, no Front-Cover Texts, and no Back-Cover
+% Texts.  A copy of the license is included in the section entitled "GNU
+% Free Documentation License".
+\renewcommand{\etapemethodo}{C}
+\renewcommand{\nomfichier}{docref_C322_LHS}
+\renewcommand{\titrefiche}{Latin Hypercube Simulation}
+
+\Header
+
+\MathematicalDescription{
+
+  \underline{\textbf{Goal}}\\
+  Let us note $\cD_f = \{\ux \in \Rset^{n} \space | \space  g(\ux,\underline{d}) \leq 0\}$.
+  The goal is to estimate the following probability:
+  \begin{eqnarray*}
+    P_f  &=& \int_{\cD_f} f_{\uX}(\ux)d\ux\\
+    &=& \int_{\Rset^{n}} \mathbf{1}_{\{g(\ux,\underline{d}) \leq 0 \}}f_{\uX}(\ux)d\ux\\
+    &=& \Prob {\{\space g(\uX,\underline{d}) \leq 0 \}}
+  \end{eqnarray*}
+
+  \underline{\textbf{Principles}}\\
+
+  LHS or \space Latin Hypercube Sampling is a sampling method enabling to better cover the domain of variations of the input variables, thanks to a stratified sampling strategy. This method is applicable in the case of independent input variables.  The sampling procedure is based on dividing the range of each variable into several intervals of equal probability. The sampling is undertaken as follows:
+
+  \begin{itemize}
+  \item \textbf{Step 1}\ \ The range of each input variable is stratified into isoprobabilistic cells,
+  \item \textbf{Step 2}\ \ A cell is uniformly chosen among all the available cells,
+  \item \textbf{Step 3}\ \ The random number is obtained by inverting the Cumulative Density Function locally in the chosen cell,
+  \item \textbf{Step 4}\ \ All the cells having a common strate with the previous cell are put apart from the list of available cells.
+  \end{itemize}
+
+  The estimator of the probability of failure with LHS is given by:
+  \begin{align*}
+    \hat{P}_{f,LHS}^N = \frac{1}{N}\sum_{i=1}^N \mathbf{1}_{\{g(\uX^i,\underline{d}) \leq 0 \}}
+  \end{align*}
+  where the sample of $ \{ \uX^i,i=1 \hdots N \}$ is obtained as described previously.\\
+  One can show that:
+  \begin{align*}
+    \Var{\hat{P}_{f,LHS}^N} \leq \frac{N}{N-1} . \Var{    \hat{P}_{f,MC}^N}
+  \end{align*}
+  where:
+  \begin{itemize}
+  \item $\Var {\hat{P}_{f,LHS}^N}$ is the variance of the estimator of the probability of exceeding a threshold computed by the LHS technique,
+  \item $\Var {\hat{P}_{f,MC}^N}$ is the variance of the estimator of the probability of exceeding a threshold computed by a crude Monte Carlo method.
+  \end{itemize}
+
+
+  \underline{\textbf{Confidence Interval}}\\
+  With the notations,
+  \begin{eqnarray*}
+    \mu_N &=& \frac{1}{N}\sum_{i=1}^N \mathbf{1}_{\{g(\underline{x}_i),\underline{d}) \leq 0 \}}\\
+    \sigma_N^2 &=& \frac{1}{N}\sum_{i=1}^N (\mathbf{1}_{\{g(\underline{x}^i),\underline{d}) \leq 0 \}} - \mu_N)^2
+  \end{eqnarray*}
+
+  the asymptotic confidence interval of order $1-\alpha$ associated to the estimator $P_{f,LHS}^N$ is
+  \begin{align*}
+    [ \mu_N - \frac{q_{1-\alpha / 2} . \sigma_N}{\sqrt{N}} \space ; \space \mu_N + \frac{q_{1-\alpha / 2} . \sigma_N}{\sqrt{N}} ]
+  \end{align*}
+  where $q_{1-\alpha /2}$ is the $1-\alpha / 2$ quantile from the reduced standard gaussian law $\cN(0,1)$.
+
+  It gives an unbiased estimate for $P_f$ (reminding that all input variables must be independent).
+
+}
+{
+
+  This method is derived from a more general method called 'Stratified Sampling'.
+}
+
+\Methodology{
+  This method is part of the step C of the global methodology. It requires the specification of the joined probability density function of the input variables and the definition of the threshold. The PDF must have an independent copula.
+}
+            {
+
+              \begin{itemize}
+              \item This method \textit{a priori} enables a better exploration of the domain of variations of the input variables. No general rule can guarantee a better efficiency of the LHS sampling than the classical Monte Carlo sampling. Nevertheless, one can show that the LHS strategy leads to a variance reduction if the model is motoneous over each variable.
+              \item Be careful, this method is valid only if the input random variables are independent!
+              \item Moreover, for reliability problems, when the failure probability is low, the tails of the distributions usually contain the most influent domains in terms of reliability.
+              \item A fruitful link towards the global approach can be established with the files
+              \end{itemize}
+
+
+              \otref{docref_C321_MonteCarloStd}{Monte Carlo Method to evaluate a probability to exceed a threshold}, \\
+              \otref{docref_C322_TI}{Importance Sampling to evaluate a probability to exceed a threshold} coming from the methodology.\\
+
+              The following provide an interesting bibliographical starting point to further study of this method:
+              \begin{itemize}
+              \item Mc Kay, Conover, Beckman, A comparison of three methods for selecting values of input variables in the analysis of output from a computer code, Technometrics, 21 (2), 1979
+              \item Latin Hypercube Sampling and the Propagation of Uncertainty in Analyses of Complex Systems, J. Helton, F.J. Davis, 2002, SAND 2001-0417
+              \item The Design and Analysis of Computer Experiments by Thomas J. Santner, Brian J. Williams, and William I. Notz, Springer Verlag, New York 2003
+              \item A Central Limit Theorem for Latin Hypercube Sampling, Art B. Owen, 1992, Journal of the Royal Statistical Society. Series B (Methodological), Vol. 54, No. 2, pp. 541-551
+              \item Large Sample Properties of Simulations Using Latin Hypercube Sampling, Michael Stein, Technometrics, Vol. 29, No. 2 (May, 1987), pp. 143-151
+              \end{itemize}
+
+            }
+
+            \Example{
+              To illustrate this method, we consider the sampling strategy of an input vector of dimension 2. Both components follow a uniform law $\cU(0,1)$.
+              The unit square $(0,1)^2$ is divided into $10 \times 10 = 100$ cells of equal probability.
+              The figure compares the population of 10 points obtained by a Latin Hypercube Sampling and by a Monte Carlo Sampling.
+
+              \begin{center}
+                \includegraphics[width=0.80\textwidth]{Figures/LHS_vs_MC.pdf}
+              \end{center}
+
+              For the LHS sampling, each column and each row contains exactly one blue point. For the Monte Carlo sampling, there are some columns which contain no red point (e.g. the $(0.7,0.8)$ column), while some others contain two red points (e.g. the $(0.4,0.5)$ column). The same is true for the rows of the Monte Carlo sampling. Hence, the LHS sampling fills the sample space more evenly.
+
+
+            }

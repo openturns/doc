@@ -1,0 +1,688 @@
+% Copyright (C) 2005-2015 Airbus - EDF - IMACS - Phimeca
+% Permission is granted to copy, distribute and/or modify this document
+% under the terms of the GNU Free Documentation License, Version 1.2
+% or any later version published by the Free Software Foundation;
+% with no Invariant Sections, no Front-Cover Texts, and no Back-Cover
+% Texts.  A copy of the license is included in the section entitled "GNU
+% Free Documentation License".
+
+The rest of this document presents extensions to the mechanism described in the previous section, as well as the progressive externalization of the computation into an external code. Through these enhancements, we will see in detail the structure of the \index{wrapper}wrapper and the range of possibilities offered to the developer. If the example of the minimal wrapper allows to very quickly and easily test the interfacing of a formula with \OT , the techniques described in this section will guide the reader towards features of progressive difficulty. It is important to consider that these features are mostly optional and are mainly improvements to the interfacing of the computational code with \OT . Therefore, the developer can intentionally forget about them at first and start with a simple wrapper. The complexity will come later according to needs and developments of the computational code.
+
+In short, the interfacing mechanism of a code with \OT\ is scalable and the developer only needs to produce the functions necessary for their code.
+
+This touches one of the basic criteria that have guided the development of the tool: genericity. \OT\ has been designed as a tool that can interface with almost any computational code. But they can be very diverse and the wrapper for one code can be very different from the wrapper for another. Therefore, we had to invent a mechanism that satisfies both without excessively penalizing either one. This section will therefore lead us into considerations that the reader may, at first, see as complex or unnecessary. However, they are the result of specific requests for given codes. They are thus useful. Their complexity has been reduced as much as possible but it cannot always be hidden. The keyword for the reader here is to ignore what does not primarily concern them, in order keep the wrapper simple and suited to their needs.
+
+\paragraph{Naming conventions}
+
+When the \OT\ platform loads the wrapper's \index{dynamic library}dynamic library ({\bf wrapper.so}), it is confronted to an object that it must identify as a code \index{wrapper}wrapper and, moreover, as the wrapper for the right computational code. It may happen that another software also uses a library called {\bf wrapper.so} and that this library be placed in an \OT\ search path, in which case the loading succeeds but the library is unusable. It is also possible that the {\bf wrapper.so} library is the wrapper for another code interfaced with \OT . This happens when developers do not change the name of the library to match the name of their code: everyone uses the same name.
+
+In order to detect some of these cases and avoid unnecessary computations run on unwanted codes, it is necessary to allow \OT\ to check that the library being loaded is the expected one. This is done by requiring the wrapper to use names whose structure ensures (to some extent) an unambiguous identification.
+
+\subparagraph{In the wrapper's source file}
+
+The names of the proposed C functions are built on three elements:
+\begin{itemize}
+\item a \index{prefix}prefix ({\bf func\_}, {\bf grad\_} or {\bf hess\_}) that indicates whether the \index{function}function relates to the \index{Function}Function, the \index{Gradient}Gradient or the \index{Hessian}Hessian of the \index{NumericalMathFunction}NumericalMathFunction;
+\item a \index{central term}central term which provides information on the treatment carried out by the C function; this will be detailed in Section 4.3;
+\item a suffix that specifies what Function, Gradient or Hessian is actually implemented by the C function.
+\end{itemize}
+
+An example is more eloquent. Consider again what has been shown in section 3.2.5 on the \index{wrapper source code}wrapper's source code. We used two C functions named {\bf func\_getInfo\_P} and \index{execution}{\bf func\_exec\_P}. The name of the {\bf func\_getInfo\_P} function indicates that it informs \OT\ about the parameters ({\bf getInfo\_}) of the Function ({\bf func\_}) which implements the P Function ({\bf P}), while the {\bf func\_exec\_P} function name indicates that it carries out the computation ({\bf exec\_}) of the function ({\bf func\_}) which implements the P Function ({\bf P}).
+
+We will see later that the \index{wrapper}wrapper is divided into three main parts, the \index{Function}Function, the \index{Gradient}Gradient and the \index{Hessian}Hessian, which are very similar. Each of these parts is further divided into C functions, whose number may vary. These functions are distinguished from each other by the \index{central term}central term, which describes their role within the section.
+
+The introduction of the name of the Function, Gradient or Hessian as a suffix results from a dual intent. First of all, it allows to clearly identify the computation carried out by the \index{function}function and, therefore, to check that the loaded wrapper is the right one. It also allows to build a wrapper having multiple Functions, Gradients and Hessians in the same source code, in order to simultaneously have several implementations:
+\begin{itemize}
+\item of the same code, as is the case when an implementation is better than another, but both are useful, or that each implementation is used in different contexts; for example, each of them executes the code on a different machine or in a different version;
+\item of different codes; one might want to put in the same wrapper implementations related to different codes but most often executed together, as is the case when one sets up couplings.
+\end{itemize}
+
+\subparagraph{In the \index{wrapper}wrapper's \index{description file}description file}
+
+The name of the \index{Function}Function is introduced by the string given between the opening tag {\bf <function>} and the closing tag {\bf </function>} of the wrapper's description file. It is important to not insert any whitespace, blank or other separator in the name because it would prevent \OT\ from building a correct name and jeopardize the loading of the \index{dynamic library}dynamic library wrapper.
+
+Symmetrically, the name of the \index{Gradient}Gradient or \index{Hessian}Hessian is respectively introduced by the {\bf <gradient>} and {\bf </gradient>} tags or by the {\bf <hessian>} and {\bf </hessian>} tags, and it follows the same rules.
+
+\paragraph{Sequence of steps}
+
+Section 3.1.3 has shown the procedure for loading a \index{wrapper}wrapper from the \OT\ library. This initial stage is essential to any future use of the wrapper and, thus, of the code linked to it. The explanation given in this section therefore assume that this first stage is reached and that the \index{NumericalMathFunction}NumericalMathFunction associated with the wrapper is operational. We will therefore examine the various activities undertaken during the use of the NumericalMathFunction.
+
+Experience shows that the \index{execution}execution of a computation, even when it is simple, can be decomposed into a sequence of steps. This is more obvious when calling a computational code than an analytical formula, so we will use this first example as a guideline.
+
+Assuming that the computational code to call in order to perform an \OT\ computation is called {\bf Code\_X}, that it takes as input one (or more) data file(s) and produces as output one (or more) result file(s), which we will arbitrarily call {\bf fich.dat} and {\bf fich.res}, we can segment the following code call\footnote{The use of stream redirections, which is specific to Unix, is used here only to show the direction of the exchanges. Any other syntax would have been appropriate, since the idea remains the same.}:
+
+\lstset{language=Bash, basicstyle=\normalsize}
+\begin{lstlisting}[frame=TBRL]
+> code_X < fich.dat > fich.res
+\end{lstlisting}
+
+as follows:
+\begin{enumerate}
+\item {\bf code\_X} reads its input file {\bf fich.dat};
+\item {\bf code\_X} runs using the data read and produces a result;
+\item {\bf code\_X} writes its result in the output file {\bf fich.res}.
+\end{enumerate}
+
+Although not universal, this pattern is representative of a vast majority of computational codes.
+
+When several computations based on {\bf code\_X} must be chained, as is almost always the case in uncertainty studies, we can see that these three steps will be repeated a number of times, up to several thousands. Yet it may be that certain steps are exactly repeated from one \index{execution}execution to the next. For example, a mechanics code may very well read several input files, a physical data file and a geometry file. If the probabilistic study covers only the physical data, reading the geometry file will be identical for each computation, but this reading can be highly time consuming. It is therefore interesting to isolate the processing in order to only chain the reading of the physical data and the computation itself.
+
+\OT\ enables a computational code to isolate one processing relative to another and to call it only as many times as is necessary. This, of course, assumes that the computational code has that option. In other cases, the processing will be carried out as a block, without the ability to segment stages.
+
+This ability of \OT\ to exploit the phasing of a code will maximize performance and achieve better uncertainty studies. However, it does not imply that \OT\ only works with such segmented codes. This segmentation is only an optimization and traditional codes interface well with the techniques described in this document. They just consume more time to carry out the same studies.
+
+\paragraph{The processing/step combination}
+
+This section will show that the segmentation of the computational code call can be broken down into seven separate steps. Only two of these steps are really necessary, the other being compensated when absent.
+
+As shown in the previous section, the natural phasing exhibits three stages:
+
+\begin{enumerate}
+\item reading the input data, which can be likened to the preparation of a computation to come and that we will call \index{initialization}\emph{initialization};
+\item the actual computation, which we will call \index{execution}\emph{execution};
+\item collecting the results and outputting them with the right format and at the right place, as well as freeing the resources consumed, which we will call \index{finalization}\emph{finalization}.
+\end{enumerate}
+
+These three stages---initialization, execution and finalization---are the heart of any computation. They do not, however, play the same role. Users wishing to carry out many computations want to chain the executions but also want to benefit from the optimizations of \OT, that is to say they do not want to run as many initializations and finalizations as executions. Therefore, the initialization and finalization are performed only once during the life of a \index{NumericalMathFunction}NumericalMathFunction: initialization is carried out before performing the first run, while the finalization takes place after the last execution.
+
+Thus, in the example below, three successive calls to the NumericalMathFunction {\bf f}:
+\lstset{language=C++, basicstyle=\normalsize}
+\begin{lstlisting}[frame=TBRL]
+>>> f = NumericalMathFunction ( "Code_X" )
+>>> # (We create three NumericalPoints i1, i2, i3, correctly initialized)
+>>> f(i1)
+>>> f(i2)
+>>> f(i3)
+>>> # (End of script)
+\end{lstlisting}
+
+lead to the following calls:
+\begin{description}
+\item[f(i1)] \index{initialization}initialization of {\bf f} and execution of {\bf f} at \index{data structure}point {\bf i1};
+\item[f(i2)] \index{execution}execution of {\bf f} at point {\bf i2};
+\item[f(i3)] execution of {\bf f} at point {\bf i3} and \index{finalization}finalization of {\bf f}.
+\end{description}
+
+From a practical standpoint, these three steps are performed within the \index{wrapper}wrapper, each by a specific C \index{function}function.
+
+Initialization relies on a C function whose \index{central term}central term is \index{init\_}{\bf init\_}; execution relies on a C function whose central term is \index{exec\_}{\bf exec\_}; finalization relies on a C function whose central term is \index{finalize\_}{\bf finalize\_}.
+
+In the source code of a wrapper implementing the \index{Function}Function of a code named {\bf code\_X}, we therefore find the following functions: \index{prefix}\index{central term}{\bf func\_init\_code\_X}, {\bf func\_exec\_code\_X} and {\bf func\_finalize\_code\_X}.
+
+But since only the execution part of the Function is essential for the wrapper, the other two functions can be removed from the file. The functions {\bf func\_init\_code\_X} and {\bf func\_finalize\_code\_X} may not appear in the source code. In this case, the three phases---initialization, execution and finalization---are to be either gathered within the sole function {\bf func\_exec\_code\_X} or grouped within the computational code that does not distinguish them.
+
+There is a variation in the pattern we just described. When the \index{NumericalMathFunction}NumericalMathFunction is called with a \index{sample}sample (a collection of NumericalPoint), if the wrapper provides a C \index{function}function whose central term is {\bf exec\_sample\_}, then this term is called instead of the {\bf exec\_} function. If the \index{exec\_sample\_}{\bf exec\_sample\_} function is absent, the {\bf exec\_} function is then called as many times as necessary to perform the same task. The initialization and finalization are still called once, respectively at the beginning and at the end of the processing.
+
+Section 3.2.5 presented a function whose central term is \index{getInfo\_}{\bf getInfo\_}. This query function allows the \index{wrapper}wrapper to provide additional information to the \OT\ library, information which would be available only when loading the wrapper. In particular, nothing prevents the wrapper from reading a file or connecting to a network service in order to obtain information necessary to its \index{execution}execution.
+
+As it stands, the only piece of information required by the \OT\ library is the size of the Function's input point and output point. Both values must be written in a pre-allocated structure of {\bf WrapperInformation} type, which is passed as an argument to the {\bf getInfo\_} function. These sizes can either be hardcoded into the \index{wrapper source code}source code of the wrapper, which we do not recommend, or computed on the fly based on the content of the wrapper's \index{description file}description file. This is performed by the \index{getNumberOfVariables}{\bf getNumberOfVariables} function of the wrapper's library, described in Appendix A.1.
+
+Five of the seven functions have been presented. The two remaining ones rely on more advanced programming concepts whose use is required by the performance and genericity constraints of the \OT\ platform. Both goals pushed towards the use of parallelism and dynamic wrapper loading. However, the rules of parallel code development tend to ban the use of static variables, more commonly called global variables. These variables are often useful for storing information from one function call to the next and thus avoid computing again a value that was already generated. However, the use of static variables causes access conflicts when multiple simultaneous executions---concurrent executions---attempt to access these variables. Without any appropriate safeguards\footnote{Access to the static variable happens in a critical section.}, the code is operating incorrectly.
+
+On the other hand, the dynamic library loading mechanism implies that the wrapper, once loaded, can not be loaded a second time. Therefore, there is only one wrapper for the code in question installed in memory for a study, although it is quite possible to create multiple NumericalMathFunction instances based on the same wrapper. Indeed, the wrapper's library is an object shared between the different \index{NumericalMathFunction}NumericalMathFunction objects of the study.
+
+Thus, when we execute the following code:
+
+\lstset{language=C++, basicstyle=\normalsize}
+\begin{lstlisting}[frame=TBRL]
+>>> f = NumericalMathFunction ( "Code_X" )
+>>> g = NumericalMathFunction ( "Code_X" )
+\end{lstlisting}
+
+the {\bf f} NumericalMathFunction loads the {\bf Code\_X} \index{wrapper}wrapper, then the {\bf g} NumericalMathFunction reuses the same wrapper without reloading it. All stages of \index{initialization}initialization, \index{execution}execution, \index{finalization}finalization will take place as expected even if the loading takes place only once.
+
+This causes the wrapper code, and thus the allocated memory space, to be shared by all \index{NumericalMathFunction}NumericalMathFunctions of this wrapper. Indeed, the use of static variables in the wrapper will be the subject of access conflicts. The rule is as follows:
+
+\ \\
+\ \\
+\fbox{
+\begin{minipage}{1\textwidth}
+\begin{center}
+{\bf The use of static or global variables is forbidden within the \index{wrapper}wrapper.}
+\end{center}
+\end{minipage}
+}
+\ \\
+
+How then can we retain information from one wrapper call to the next?
+
+\OT\ offers to solve this problem by asking the wrapper to allocate itself a memory space, called \index{internal state}\emph{internal state}, that will be associated to a \index{NumericalMathFunction}NumericalMathFunction. The wrapper's developer is thus responsible for allocating the space, freeing it, initializing it and using it correctly. However, the developer cannot use any internal variable of the wrapper in order to retain the link---the pointer---with this memory space without falling into the trap of the static variable. Therefore, the \OT\ library will be the one preserving the link for the developer, ensuring that the link to the memory space corresponds to the right NumericalMathFunction, i.e. the one that created it.
+
+The creation of the \index{internal state}internal state and its destruction are requested by \OT\ from the \index{wrapper}wrapper at the right time, i.e. respectively when the NumericalMathFunction is created or deleted.
+
+The wrapper can thus provide two C functions whose central terms are \index{central term}\index{createState\_}{\bf createState\_} and \index{deleteState\_}{\bf deleteState\_} to manage the internal state's lifecycle. These functions are optional. If they are absent, \OT\ considers that there is no internal state. It then uses a null pointer.
+
+Note that these functions are always provided together or not at all: there cannot be only one of them without the other.
+
+The \index{internal state}internal state being successively transmitted to all the C functions of the \index{wrapper}wrapper, it can also transmit information from the \index{initialization}initialization stage to the \index{execution}execution and then the \index{finalization}finalization. By default, the internal state is specific to each \index{Function}Function, \index{Gradient}Gradient and \index{Hessian}Hessian part. We will see in Section 5.7 how to ensure that the internal state is shared by all three blocks.
+
+In summary, each part of the wrapper can provide the following C functions, listed in order of calling by the \index{NumericalMathFunction}NumericalMathFunction:
+\begin{enumerate}
+\item {\bf createState\_}: creation of the internal state;
+\item {\bf getInfo\_}: transmission of information from the wrapper to \OT ;
+\item {\bf init\_}: preparation of the computation before the first execution;
+\item {\bf exec\_} (or \index{exec\_sample\_}{\bf exec\_sample\_}): computation execution; \emph{this function is mandatory};
+\item {\bf finalize\_}: termination of the computation after the last execution;
+\item {\bf deleteState\_}: destruction of the internal state.
+\end{enumerate}
+
+\paragraph{The functions' signatures}
+
+Depending on its role, each \index{function}function has a type of its own. By \emph{type} we mean all of the function's input arguments, ordered and typed, as well as the type of its return value.
+
+In the code wrappers designed for \OT , the {\bf exec\_} functions all play the same role and they are thus of the same type. This allows to call them in a generic and uniform way, without having to know the processing it carries out.
+
+The functions share the same type of return value. This type is always:
+
+\lstset{language=C++, basicstyle=\normalsize}
+\begin{lstlisting}[frame=TBRL]
+enum WrapperErrorCode func_... ( ... )
+\end{lstlisting}
+
+\small
+\begin{quote}
+\textit{Note: The inclusion of the \OT\ \index{WrapperInterface.h}{\bf WrapperInterface.h} and \index{WrapperCommon.h}{\bf WrapperCommon.h} files provides the definitions for the symbols used in this section.}
+\end{quote}
+\normalsize
+
+This means that the \index{function}function returns an error code indicating whether the processing was carried out properly or not. The \OT\ library uses this code to handle failure situations, stop the computations that cannot succeed and warn the user of the potential problem.
+
+This value of this \index{return code}code depends on the nature of the problem. Possible values are:
+
+\begin{itemize}
+\item {\bf WRAPPER\_OK}: processing was successful and the produced values are valid;
+\item {\bf WRAPPER\_MEMORY\_ERROR}: the wrapper encountered a problem in memory management (allocation, deallocation, etc.).
+\item {\bf WRAPPER\_INITIALIZATION\_ERROR}: the wrapper encountered a problem during the computational code's \index{initialization}initialization phase;
+\item {\bf WRAPPER\_EXECUTION\_ERROR}: the wrapper encountered a problem during the computational code's \index{execution}execution phase;
+\item {\bf WRAPPER\_FINALIZATION\_ERROR}: the wrapper encountered a problem during the computational code's \index{finalization}finalization phase;
+\item {\bf WRAPPER\_CANNOT\_CREATE\_STATE}: the wrapper can not create the \index{internal state}internal state for a reason other than a memory management problem;
+\item {\bf WRAPPER\_CANNOT\_DELETE\_STATE}: the wrapper can not free the internal state for a reason other than a memory management problem;
+\item {\bf WRAPPER\_CANNOT\_PROVIDE\_INFORMATION}: the wrapper cannot provide \OT\ with additional information;
+\item {\bf WRAPPER\_INTERNAL\_ERROR}: the wrapper encountered an internal error (other than the previous errors);
+\item {\bf WRAPPER\_WRONG\_ARGUMENT}: the wrapper was given an argument which is inconsistent with its settings;
+\item {\bf WRAPPER\_USAGE\_ERROR}: the wrapper has received a configuration file which is incompatible with its internal capabilities;
+\item {\bf WRAPPER\_NOT\_IMPLEMENTED}: the wrapper does not implement this feature.
+\end{itemize}
+
+This list may be supplemented in later versions of \OT.
+
+The rule regarding the return codes of the wrapper functions is:
+\ \\
+\ \\
+\fbox{
+\begin{minipage}{1\textwidth}
+\begin{center}
+{\bf The error code must be returned and its value must match the case met.}
+\end{center}
+\end{minipage}
+}
+\ \\
+
+Normally, wrappers are not supposed to write on the standard output or standard error. However, for debugging purposes, it is convenient to use the \index{getErrorAsString}{\bf getErrorAsString} function of the wrapper's library in order to convert the error code into a readable message (see Annex A).
+
+The signatures of the C functions are listed in the \index{WrapperInterface.h}{\bf WrapperInterface.h} file, but version 0.12.2 of the platform has brought many simplifications to the writing of wrappers wrapper writing, which we recommend using. The first of these simplifications consists in placing the name of the function implemented by the wrapper in a C macro:
+
+\lstset{language=C++, basicstyle=\normalsize}
+\begin{lstlisting}[frame=TBRL]
+#define WRAPPERNAME P
+\end{lstlisting}
+
+Thus {\bf WRAPPERNAME} will be replaced by its value throughout the rest of the file.
+
+\subparagraph{createState\_ function}
+
+The {\bf createState\_} function has the following prototype:
+
+\lstset{language=C++, basicstyle=\normalsize}
+\begin{lstlisting}[frame=TBRL]
+enum WrapperErrorCode
+createState_ ( void ** p_p_state,
+const struct WrapperExchangedData * p_exchangedData,
+void * p_error )
+\end{lstlisting}
+
+It uses a \index{data structure}{\bf struct WrapperExchangedData} type parameter which contains information from the XML \index{description file}description file, formatted so as to be more easily used by a C source code. We will not go into detail on this structure, whose content may be subject to changes over time. Experienced developers will have recognized in the first parameter an opaque pointer. The value of this opaque pointer is positioned by the {\bf createState\_} function. Thus this function receives from the \OT\ library the configuration described in the XML file and its role consists in allocating and producing an \index{internal state}internal state which will be returned to \OT . The content of this state is irrelevant for \OT\ since the library only sees it as an opaque, i.e. typeless pointer. The third parameter is a pointer to another opaque structure, known by \OT\ to manage errors inside wrappers. You do not need to care much about it, but you do have to pass this pointer "as is" to functions that may need it.
+
+The last two parameters are \emph{always} passed to the wrapper's functions. Therefore, from now on, we will not describe them anymore.
+
+We recommend using the {\bf CREATESTATE} macro to actually implement this function as shown below:
+\index{macro}
+\lstset{language=C++, basicstyle=\normalsize}
+\begin{lstlisting}[frame=TBRL]
+FUNC_CREATESTATE( WRAPPERNAME , {
+/* here you can allocate your internal state the way you want */
+} )
+\end{lstlisting}
+
+\subparagraph{deleteState\_ function}
+
+The {\bf deletestate\_} function has the following prototype:
+
+\lstset{language=C++, basicstyle=\normalsize}
+\begin{lstlisting}[frame=TBRL]
+enum WrapperErrorCode
+deleteState_ ( void * p_state,
+const struct WrapperExchangedData * p_exchangedData,
+void * p_error )
+\end{lstlisting}
+
+It takes  as input the opaque pointer to the \index{internal state}internal state, produced by the {\bf createState\_} function. Its role is to free the previously allocated space.
+
+\ \\
+\ \\
+\fbox{
+\begin{minipage}{1\textwidth}
+\begin{center}
+{\bf The allocated space \emph{must} be freed.}
+\end{center}
+\end{minipage}
+}
+\ \\
+
+This definition can be simplified as follows:
+\index{macro}
+\lstset{language=C++, basicstyle=\normalsize}
+\begin{lstlisting}[frame=TBRL]
+FUNC_DELETESTATE( WRAPPERNAME , {
+/* here you must deallocate the internal state you have created */
+} )
+\end{lstlisting}
+
+\subparagraph{getInfo\_ function}
+
+The {\bf getInfo\_} function has the following prototype:
+
+\lstset{language=C++, basicstyle=\normalsize}
+\begin{lstlisting}[frame=TBRL]
+enum WrapperErrorCode
+getInfo_ ( void * p_state,
+struct WrapperInformation * p_info,
+const struct WrapperExchangedData * p_exchangedData,
+void * p_error )
+\end{lstlisting}
+
+Its role is to fill in the fields of the {\bf struct WrapperInformation} structure. To achieve this, the function can rely on the content of the \index{internal state}internal state, which is passed to it as an argument, and on the content of the {\bf WrapperExchangedData} structure.
+
+There are currently only two fields to fill in: the size of the Function's entry point ({\bf inSize\_}) and the size of the Function's exit point ({\bf outSize\_}). The \index{getNumberOfVariables}{\bf getNumberOfVariables} function substantially helps the developer with this task, as shown in the following example:
+
+\index{macro}
+\lstset{language=C++, basicstyle=\normalsize}
+\begin{lstlisting}[frame=TBRL]
+FUNC_INFO( WRAPPERNAME , {
+p_info->inSize_  = getNumberOfVariables(p_exchangedData, WRAPPER_IN);
+p_info->outSize_ = getNumberOfVariables(p_exchangedData, WRAPPER_OUT);
+} )
+\end{lstlisting}
+
+
+\subparagraph{init\_ function}
+
+The {\bf init\_} has the following prototype:
+
+\lstset{language=C++, basicstyle=\normalsize}
+\begin{lstlisting}[frame=TBRL]
+enum WrapperErrorCode
+init_ ( void * p_state,
+const struct WrapperExchangedData * p_exchangedData,
+void * p_error )
+\end{lstlisting}
+
+Its role is to prepare the computation before its first execution. All the elements required by this preparation are either statically known in the wrapper, or obtained through the \index{internal state}internal state passed as an argument.
+
+The way to prepare the computation varies a lot and entirely depends on the computational code that is interfaced with \OT . An analytical formula has no requirements, whereas a networked computational code will probably require some preparation for the computation session. This function is the place for this preliminary work.
+
+Most often, the {\bf init\_} function has nothing to do, in which case it can be completely removed. If, however, it were to be maintained in the source code, we must be careful to return a correct return code ({\bf WRAPPER\_OK}).
+
+\index{macro}
+\lstset{language=C++, basicstyle=\normalsize}
+\begin{lstlisting}[frame=TBRL]
+FUNC_INIT( WRAPPERNAME ,
+{
+/* Write here the instructions performing the initialization */
+} )
+\end{lstlisting}
+
+\subparagraph{exec\_ function for the Function}
+
+The {\bf exec\_} function for the Function has the following prototype:
+
+\lstset{language=C++, basicstyle=\normalsize}
+\begin{lstlisting}[frame=TBRL]
+enum WrapperErrorCode
+func_exec_ ( void * p_state,
+const struct point * inPoint,
+struct point * outPoint,
+const struct WrapperExchangedData * p_exchangedData,
+void * p_error )
+\end{lstlisting}
+
+In addition to the \index{internal state}internal state which is passed as an argument, this function receives a \index{data structure}structure of type {\bf struct point} containing the entry point of the function ({\bf inPoint}), and an equivalent structure meant to contain the exit point ({\bf outPoint}). It is important to note that these structures are already allocated and, as a consequence, it is neither necessary nor permitted to modify their memory storage in any way.
+
+The {\bf struct point} structure contains two fields:
+\begin{itemize}
+\item the size of the point in question ({\bf size\_});
+\item the coordinates array of the point ({\bf data\_}).
+\end{itemize}
+
+The array is pre-allocated with the point size. No memory management is to be performed.
+
+We remind here that C arrays start at index zero.
+
+In the case of the entry point ({\bf inPoint}), the coordinate values are automatically filled in by the \OT\ library invoking the wrapper. However, the coordinates of the exit point ({\bf outPoint}) are not initialized. The values stored in the exit point coordinate array are therefore invalid and cannot be used until they have been correctly positioned by the {\bf exec\_} function.
+
+This function is the computational heart of the wrapper. It is responsible for calling the code to be interfaced according to the appropriate method. It may consult the content of the wrapper's \index{description file}description file in order to determine the type of interface and the instructions provided by the user to run the code. Before returning to the calling code, the exit point ({\bf outPoint}) should be positioned.
+
+It is important that this function correctly relays any error encountered during the execution of the code, so that the \OT\ library can manage the problem.
+
+This definition can be simplified as follows:
+\index{macro}
+\lstset{language=C++, basicstyle=\normalsize}
+\begin{lstlisting}[frame=TBRL]
+FUNC_EXEC( WRAPPERNAME ,
+{
+/* Write here the instructions performing the computation */
+} )
+\end{lstlisting}
+
+\subparagraph {exec\_sample\_ function for the Function}
+
+The {\bf exec\_sample\_} function for the Function has the following prototype:
+
+\lstset{language=C++, basicstyle=\normalsize}
+\begin{lstlisting}[frame=TBRL]
+enum WrapperErrorCode
+func_exec_sample_ ( void * p_state,
+const struct sample * inSample,
+struct sample * outSample,
+const struct WrapperExchangedData * p_exchangedData,
+void * p_error )
+\end{lstlisting}
+
+In the way it operates, it is very similar to the {\bf exec\_} function except that it operates on a \index{sample}sample ({\bf inSample}) placed in a \index{data structure}{\bf struct sample} structure and that it, in turn, produces a result sample ({\bf outSample}).
+
+The {\bf struct sample} structure is constructed as a collection of {\bf struct point} structures. In fact, it has two fields:
+\begin{itemize}
+\item the size of the sample, i.e. the number of present points ({\bf size\_});
+\item the array of points ({\bf data\_}).
+\end{itemize}
+
+The structures are already allocated when entering the Function and no memory management is to be performed.
+
+There are no {\bf exec\_sample\_} for the \index{Gradient}Gradient and the \index{Hessian}Hessian.
+
+This definition can be simplified as follows:
+\index{macro}
+\lstset{language=C++, basicstyle=\normalsize}
+\begin{lstlisting}[frame=TBRL]
+FUNC_EXEC_SAMPLE( WRAPPERNAME ,
+{
+/* Write here the instructions performing the sample computation */
+})
+\end{lstlisting}
+
+Very often, the user wants to take advantage of the multiprocessing capabilities of their hardware. The computation on samples is a good place to implement parallelism. But parallelism is a tricky matter and it may discourage the wrapper's developer. Therefore, we have defined a parallel version of the {\bf exec\_sample\_} function, which can be called as follows :
+\index{macro}
+\lstset{language=C++, basicstyle=\normalsize}
+\begin{lstlisting}[frame=TBRL]
+FUNC_EXEC_SAMPLE_MULTITHREADED( WRAPPERNAME )
+\end{lstlisting}
+
+As its name indicates, the proposed {\bf exec\_sample\_} function is multithreaded, which means that it calls the {\bf exec\_} function in parallel on machines with multiple processors or cores. For this to work properly, it is important to respect the rules concerning the implementation of parallel wrappers, especially the absence of static or global variables.
+
+\subparagraph{exec\_ function for the \index{Gradient}Gradient}
+
+The {\bf exec\_} function for the Gradient has the following prototype:
+
+\lstset{language=C++, basicstyle=\normalsize}
+\begin{lstlisting}[frame=TBRL]
+enum WrapperErrorCode
+grad_exec_ ( void * p_state,
+const struct point * inPoint,
+struct matrix * outMatrix,
+const struct WrapperExchangedData * p_exchangedData,
+void * p_error )
+\end{lstlisting}
+
+The only difference between the {\bf exec\_} function for the Function and the one for the Gradient is the type of structure returned. In the case of the Gradient, the function returns a \index{data structure}{\bf struct matrix} structure containing the Gradient matrix ({\bf outMatrix}) at the considered point ({\bf inPoint}).
+
+The structures are already allocated and no memory management is to be performed.
+
+The role of the function is to fill in the elements of the {\bf outMatrix} matrix.
+
+This example can be simplified as follows:
+\index{macro}
+\lstset{language=C++, basicstyle=\normalsize}
+\begin{lstlisting}[frame=TBRL]
+GRAD_EXEC( WRAPPERNAME ,
+{
+/* Write here the instructions performing the computation */
+} )
+\end{lstlisting}
+
+\subparagraph{exec\_ function for the \index{Hessian}Hessian}
+
+The {\bf exec\_} function for the Hessian has the following prototype:
+
+\lstset{language=C++, basicstyle=\normalsize}
+\begin{lstlisting}[frame=TBRL]
+enum WrapperErrorCode
+hess_exec_ ( void * p_state,
+const struct point * inPoint,
+struct tensor * outTensor,
+const struct WrapperExchangedData * p_exchangedData,
+void * p_error )
+\end{lstlisting}
+
+The only difference between the {\bf exec\_} function for the Function and the one for the Hessian is the type of structure returned. In the case of the Hessian, the function returns a \index{data structure}{\bf struct tensor} structure containing the Hessian tensor ({\bf outTensor}) at the considered point ({\bf inPoint}).
+
+The structures are already allocated and no memory management is to be performed.
+
+The role of the function is to fill in the elements of the {\bf outTensor} tensor.
+
+This example can be simplified as follows:
+\index{macro}
+\lstset{language=C++, basicstyle=\normalsize}
+\begin{lstlisting}[frame=TBRL]
+HESS_EXEC( WRAPPERNAME ,
+{
+/* Write here the instructions performing the computation */
+} )
+\end{lstlisting}
+
+\subparagraph{finalize\_ function}
+
+The {\bf finalize\_} function has the following prototype:
+
+\lstset{language=C++, basicstyle=\normalsize}
+\begin{lstlisting}[frame=TBRL]
+enum WrapperErrorCode
+finalize_ ( void * p_state,
+const struct WrapperExchangedData * p_exchangedData,
+void * p_error )
+\end{lstlisting}
+
+Its role is to finalize the computation after its last execution. All the elements necessary for this finalization are either statically known in the wrapper, or obtained through the \index{internal state}internal state passed as an argument.
+
+As with the {\bf init\_} function, the way to finalize a computation varies a great deal and entirely depends on the computational code interfaced with \OT . An analytical formula requires nothing, whereas a computational code launched through CORBA will probably need to terminate the computation session. This function is the place for this work.
+
+Most often, the {\bf finalize\_} function does nothing, in which case it can be completely removed. If, however, it were to be maintained in the source code, we must be careful to return a correct return code ({\bf WRAPPER\_OK}).
+
+This definition can be simplified as follows:
+\index{macro}
+% \lstset{language=C++, basicstyle=\normalsize}
+% \begin{lstlisting}[frame=TBRL]
+%   FUNC_FINALIZE( WRAPPERNAME ,
+%   {
+%   /* Write here the instructions performing the finalization */
+% } )
+% \end{lstlisting}
+
+\paragraph{Static linking with \index{FORTRAN}FORTRAN 77}
+
+History has it that FORTRAN 77 is the most commonly used language for writing scientific computational codes. However, it so happens that making C and FORTRAN 77 coexist is fairly easy. The developer of a \index{wrapper}wrapper for code written in FORTRAN 77 can thus benefit from this proximity to call subroutines\footnote{By subroutine, we mean any compilation unit of {\bf SUBROUTINE} type.} of the computational code directly from the\index{wrapper source code} wrapper's source coder. This way, the developer can benefit from the most efficient access to data while tightly controlling their code.
+
+However, this is not possible with FORTRAN 90, which has completely changed the way to interface itself with the rest of languages.
+
+Without going into the details of the interfacing techniques between C and FORTRAN 77%\footnote{Refer to the documentation of the {\bf automake} tool, which can be accessed with the {\bf info automake} command.}, which would lead us away from the scope of this document, we can remind of a few rules that help understand the technique used in \OT :
+\begin{itemize}
+\item any external symbol produced by the C compiler bears the same name in the source file and in the object file;
+\item any external symbol produced by the FORTRAN 77 compiler bears a different name in the object file and in the source file, but the translation algorithm is relatively simple (adding a variable number of underscore characters ({\bf \_}) as a prefix or suffix, changing the case for alphabetic characters, truncating the names of external symbols to 6 characters, etc.) and can be coded in a simple macro;
+\item the linking performed by the linker producing the wrapper maps identical symbols from object files (C and FORTRAN 77).
+\end{itemize}
+
+The situation is thus as follows: if one compiles C and FORTRAN 77 source files without noticing, chances are that the linking fails to produce the wrapper, because symbols on each side can not be matched. Which, in other words, means that it is not possible---unless by extraordinary chance---to call a FORTRAN 77 subroutine from C as is, or vice-versa.
+
+It is therefore necessary to transform one of both symbols to match its counterpart in the other language. It turns out that this is much easier to achieve on the C side than on the FORTRAN 77 side. We will therefore proceed to transform the C symbols in order to make them identical to the FORTRAN 77 symbols.
+
+To perform this operation in an easy, portable and maintainable way, we use the power of the {\bf autoconf} tool which is already used to compile the wrapper (on this point, see section 3.2.2).
+
+We only need to use the development structure, for which everything is ready, placed in the {\bf  share/openturns/WrapperTemplates/wrapper\_linked\_with\_F77\_function} directory (see Section 3.2.2).
+
+It was assumed here that the FORTRAN 77 computational code was fully included in a file named {\bf code.f}. If this was not the case, one must delve into the configuration details of the {\bf autoconf}, {\bf automake} and {\bf libtool} tools, which is outside the scope of this document. The reader should refer to the online documentation available via the {\bf info} command.
+
+For illustration purposes, it is also assumed that the subroutine performing the computation in the {\bf code.f} file has the following signature:
+
+\lstset{language=FORTRAN, basicstyle=\normalsize}
+\begin{lstlisting}[frame=TBRL]
+SUBROUTINE COMPUTE ( X, N, Y, P, RC )
+REAL*8 X(*)
+INTEGER*4 N
+REAL*8 Y(*)
+INTEGER*4 P
+INTEGER*4 RC
+\end{lstlisting}
+
+This is a subroutine named COMPUTE taking five input arguments:
+\begin{itemize}
+\item {\bf X} is an array of doubles containing the coordinates of the \index{Function}Function's entry point;
+\item {\bf N} is the size of {\bf X};
+\item {\bf Y} is an array of doubles containing the coordinates of the Function's exit point:
+\item {\bf P} is the size of {\bf Y};
+\item {\bf RC} contains a non-zero return value in case of an error during execution.
+\end{itemize}
+
+The last elements to edit are in the wrapper's source code ({\bf wrapper.c}). However, before showing these modifications, we will first assume that the {\bf exec\_} function is written as follows:
+
+\index{macro}
+\lstset{language=C++, basicstyle=\normalsize}
+\begin{lstlisting}[frame=TBRL]
+FUNC_EXEC( WRAPPERNAME ,
+{
+int status = 0;
+COMPUTE ( INPOINT_ARRAY,  & INPOINT_SIZE,
+OUTPOINT_ARRAY, & OUTPOINT_SIZE,
+status );
+
+if ( status ) return WRAPPER_EXECUTION_ERROR;
+} )
+\end{lstlisting}
+
+This writing is obviously not correct: changes will have to be made to it in order to make it work, but it shows several interesting points.
+
+First, we can see that writing an {\bf exec\_} function can be very simple, even if the processing performed by the COMPUTE subroutine is very complex.
+
+It also shows that the structures passed as arguments to the wrapper's functions ({\bf struct point}, but also {\bf struct matrix} and {\bf struct tensor}) can be easily interfaced with FORTRAN 77: this is a deliberate choice of the \OT\ platform. All of the data structures called upon to be handled by FORTRAN 77 are compatible with its storage system (\emph{column major}). They can thus be passed directly as arguments without further ado. This takes the simplification of wrapper writing one step further.
+
+Finallyn the call to the FORTRAN 77 subroutine is implemented as a classic C function call. It is on this last element that the modifications will be performed. Instead of directly calling the name of the COMPUTE subroutine, we use a macro%\footnote{This macro is produced by the {\bf AC\_F77\_WRAPPERS macro}.} which renames it with a name compatible with FORTRAN 77, that is to say with the same name given by FORTRAN 77. The developer cannot access this name but, in practice, this matters little.
+
+The macro that allows us to change the name is called {\bf F77\_FUNC} and takes two parameters: the first is the name of the FORTRAN 77 subroutine, in lower case ({\bf compute}) and the second is the same name in upper case ({\bf COMPUTE}). We store the result of the call to {\bf F77\_FUNC} in a symbol that we call {\bf COMPUTE\_F77} by convention and to indicate that this is the name of the FORTRAN 77 subroutine {\bf COMPUTE}.
+
+Then the call to {\bf COMPUTE} from the previous example is modified in a call to {\bf COMPUTE\_F77}.
+
+This is reflected in the new code for the {\bf exec\_} function:
+
+\lstset{language=C++, basicstyle=\normalsize}
+\begin{lstlisting}[frame=TBRL]
+#define COMPUTE_F77 F77_FUNC ( compute , COMPUTE )
+
+/* the FORTRAN subroutine prototype */
+void COMPUTE_F77 ( double *, int *,
+double *, int *,
+int * );
+
+FUNC_EXEC( WRAPPERNAME ,
+{
+int status = 0;
+COMPUTE_F77 ( INPOINT_ARRAY,  & INPOINT_SIZE,
+OUTPOINT_ARRAY, & OUTPOINT_SIZE,
+status );
+
+if ( status ) return WRAPPER_EXECUTION_ERROR;
+} )
+\end{lstlisting}
+
+At this stage, we have a Function computed not in the wrapper's source code, but in a function written in FORTRAN 77 and linked to the wrapper's code at the time of linking. We are thus halfway through the externalization process of the computation relatively to the wrapper. It is quite possible to avoid having to compile the FORTRAN source code, as we have just shown, and to rather link with the wrapper an already compiled static or dynamic library.
+
+\paragraph{Computation with data \index{sample}samples}
+
+If the computational code allows it, the \index{wrapper}wrapper can provide an {\bf exec\_sample\_} function allowing the direct computation of samples. The importance of computing samples is to group in a single call to the code executions of the computational code that would otherwise occur as many times as there are points in the sample.
+
+This may seem unnecessary when the function is directly linked to the wrapper (see sections 3.2.5 and 4.5) but it proves useful when each call to the computational code requires the creation of files or processes ({\bf fork} parameter as the type of the {\bf <wrap-mode>} tag in the \index{description file}description file). We can thus save much time. This is also essential when the code is executed on a server with a batch manager. Computations are grouped and submitted in batches.
+
+As has been stated already, it is necessary that the code accepts a collection of points on which it will successively perform its computations. However, it is possible to encapsulate the code in a script (or any other program) that reads the content of the sample and produces the files and calls necessary for the code execution.
+
+This documentation cannot detail all the possibilities of sample-based computation and it is the responsibility of the wrapper's developer to define the most appropriate procedure for their computational code.
+
+In the absence of any {\bf exec\_sample\_} function in the \index{wrapper source code}wrapper's source code, \OT\ handles the sample computation by successively calling the {\bf exec\_} function which must be present. There is no need to code an {\bf exec\_sample\_} function carrying out the same task in the wrapper because it would be redundant. Coding an {\bf exec\_sample\_} function is only interesting insofar as the call to the computational code is grouped.
+
+\paragraph{Computation with a \index{Gradient}Gradient or a \index{Hessian}Hessian}
+
+Some computational codes are able to provide all or part of the Gradient or Hessian of the \index{Function}Function at the considered point. These values can be retrieved to produce the matrix or tensor needed by \OT\ for some algorithmic solving operations%\footnote{FORM or SORM, for example.}.
+
+Therefore, the wrapper can optionally provide a Gradient and a Hessian for the Function. This requires acting in two places.
+
+The first modification occurs in the wrapper's \index{description file}description file, which must specify that it implements a Gradient or a Hessian by setting the {\bf provided} attribute of the {\bf <gradient>} or {\bf <hessian>} tags to {\bf yes}, and by defining the name of the Gradient or Hessian between the corresponding opening and closing tags. An example clarifies this point:
+
+\lstset{language=XML, basicstyle=\normalsize}
+\begin{lstlisting}[frame=TBRL]
+<function provided="yes">P</function>
+<gradient provided="yes">P</gradient>
+<hessian  provided="yes">P</hessian>
+\end{lstlisting}
+
+We used again here the example given in Section 3.2.4, after modifying it.
+
+In doing so, we declare in this file that the wrapper defines a Function, a Gradient and a Hessian, all bearing the name {\bf P}.
+
+This name does not need be the same for all three parts of the wrapper but it improves the readability and understandability of the operation. It makes it clear that we provide the {\bf P} Function, as well as {\bf P}'s Gradient and {\bf P}'s Hessian. We will see later why it may be interesting to \emph{not} have the same name for these three elements.
+
+The second change is in the \index{wrapper source code}wrapper's source code ({\bf wrapper.c}) which must now include the C functions corresponding to the Gradient and Hessian parts of the wrapper.
+
+As stated in Section 4.3, these functions vary in number as needed, but they must use the prefix {\bf grad\_} for the Gradient part and {\bf hess\_} for the Hessian part. We thus end up with at least two or three functions whose central term is {\bf exec\_}:
+\begin{itemize}
+\item {\bf func\_exec\_P};
+\item {\bf grad\_exec\_P};
+\item {\bf hess\_exec\_P}.
+\end{itemize}
+
+The sequence of steps is similar, though independent for each part. By default, each part has its own internal state, completely isolated from the others. It may therefore be different from one part to another, even present in one and absent in the other two.
+
+Each {\bf exec\_} function---there are three in this example---must execute the necessary call to fill in the data structure that is passed as an argument: {\bf struct point} for the Function, {\bf struct matrix} for the Gradient and {\bf struct tensor} for the Hessian.
+
+Since these functions are independent from each other, it is quite possible to use another code to compute the Gradient and the Hessian, if necessary through a completely different technique: analytical formula coded in the source, call to an external script, etc.
+
+There are currently no {\bf exec\_sample\_} functions for the Gradient or the Hessian.
+
+The wrapper's source code can contain several different Function parts. An explanation can be, for example, that the developer does not want to design several wrappers for very simple formulas. They then have a wrapper which provides a range of Functions that can be selected with the content of the {\bf <function>} tag of the description file, having if necessary several description files using the same wrapper \index{dynamic library}({\bf wrapper.so}).
+
+It is also possible to encode several Gradients (or Hessian) in the wrapper's source code. These may be linked to different Functions or to the same Function, which allows to have multiple implementations that can be selected using the description file.
+
+As in the previous example, if the wrapper contains two implementations of P's Gradient, we may choose to name them P1 and P2 and write this version of the description file:
+
+\lstset{language=C++, basicstyle=\normalsize}
+\begin{lstlisting}[frame=TBRL]
+<function provided="yes">P</function>
+<gradient provided="yes">P1</gradient>
+<hessian  provided="yes">P</hessian>
+\end{lstlisting}
+
+or this one:
+
+\lstset{language=C++, basicstyle=\normalsize}
+\begin{lstlisting}[frame=TBRL]
+<function provided="yes">P</function>
+<gradient provided="yes">P2</gradient>
+<hessian  provided="yes">P</hessian>
+\end{lstlisting}
+
+When the wrapper does not provide a Gradient or Hessian, \OT\ overcomes the problem by computing a Gradient or Hessian based on the Function by finite differences. One or the other may be absent independently.

@@ -1,0 +1,5290 @@
+% Copyright (C) 2005-2015 Airbus - EDF - IMACS - Phimeca
+% Permission is granted to copy, distribute and/or modify this document
+% under the terms of the GNU Free Documentation License, Version 1.2
+% or any later version published by the Free Software Foundation;
+% with no Invariant Sections, no Front-Cover Texts, and no Back-Cover
+% Texts.  A copy of the license is included in the section entitled "GNU
+% Free Documentation License".
+
+\newpage
+\extanchor{probModeling}
+\section{Probabilistic modeling}
+
+In this section, we describe all the objects necessary to model a random vector.
+
+% \index{Probabilistic modeling!Distribution}
+\index{Distribution}
+\subsection{Distribution}
+
+\begin{description}
+
+\item[Usage:] \textit{Distribution(dist)}
+
+\item[Arguments:] \rule{0pt}{1em}
+\begin{description}
+\item \textit{dist}: a DistributionImplementation which is particular distribution.
+\end{description}
+
+\item[Value:] a Distribution
+
+\item[Some methods:]  \rule{0pt}{1em}
+
+\begin{description}
+
+\item \textit{computeProbability}
+\begin{description}
+\item[Usage:]  \rule{0pt}{1em}
+\begin{description}
+\item \textit{computeProbability(interval)}
+\end{description}
+\item[Arguments:] \rule{0pt}{1em}
+\begin{description}
+\item \textit{interval}: an Interval
+\end{description}
+\item[Value:] \rule{0pt}{1em}
+\begin{description}
+\item it gives the evaluation (a scalar) of the probability for the given distribution to take values within the given interval \textit{interval}
+\end{description}
+\end{description}
+\bigskip
+
+\item \textit{computeCDF}
+\begin{description}
+\item[Usage:]  \rule{0pt}{1em}
+\begin{description}
+\item \textit{computeCDF(scalar)}
+\item \textit{computeCDF(vector)}
+\item \textit{computeCDF(sample)}
+\end{description}
+\item[Arguments:] \rule{0pt}{1em}
+\begin{description}
+\item \textit{scalar}: a NumericalScalar
+\item \textit{vector}: a NumericalPoint
+\item \textit{sample}: a NumericalSample
+\end{description}
+\item[Value:] evaluations on a numerical sample can be parallel:
+see \textit{DistributionImplementation-parallel} in the ResourceMap.
+\begin{description}
+\item using the first usage, it gives the evaluation (a scalar) of the CDF (Cumulative Distribution Function) of a distribution of dimension 1 at the given scalar value \textit{scalar}
+\item using the second usage, it gives the evaluation (a scalar) of the CDF (Cumulative Distribution Function) of a distribution of arbitrary dimension at the given point \textit{vector}
+\item using the third usage, it gives the evaluation (a NumericalSample) of the CDF (Cumulative Distribution Function) of a distribution of arbitrary dimension over the given sample \textit{sample}
+\end{description}
+\end{description}
+\bigskip
+
+\item \textit{computeComplementaryCDF}
+\begin{description}
+\item[Usage:]  \rule{0pt}{1em}
+\begin{description}
+\item \textit{computeComplementaryCDF(scalar)}
+\item \textit{computeComplementaryCDF(vector)}
+\item \textit{computeComplementaryCDF(sample)}
+\end{description}
+\item[Arguments:] \rule{0pt}{1em}
+\begin{description}
+\item \textit{scalar}: a NumericalScalar
+\item \textit{vector}: a NumericalPoint
+\item \textit{sample}: a NumericalSample
+\end{description}
+\item[Value:] \rule{0pt}{1em}
+\begin{description}
+\item using the first usage, it gives the evaluation (a scalar) of the complementary CDF ($1-F(\vect{x})$) of a distribution of dimension 1 at the given scalar value \textit{scalar}
+\item using the second usage, it gives the evaluation (a scalar) of the complementary CDF ($1-F(\vect{x})$)  of a distribution of arbitrary dimension at the given point \textit{vector}
+\item using the third usage, it gives the evaluation (a NumericalSample) of the complementary CDF ($1-F(\vect{x})$)  of a distribution of arbitrary dimension over the given sample \textit{sample}
+\end{description}
+\end{description}
+\bigskip
+
+\item \textit{computeCDFGradient}
+\begin{description}
+\item[Usage:] \textit{computeCDFGradient(vector)}
+\item[Arguments:] \textit{vector}: a NumericalPoint
+\item[Value:] a NumericalPoint object, the gradient of the distribution CDF, with respect to the parameters of the distribution, evaluated at point \textit{vector}
+\end{description}
+\bigskip
+
+\item \textit{computeCharacteristicFunction}
+\begin{description}
+\item[Usage:] \textit{computeCharacteristicFunction(scalar)}
+\item[Arguments:] \textit{scalar}: a float
+\item[Value:] a complex value, the value of the characteristic function at point \textit{scalar}. OpenTURNS proposes an implementation of all its univariate distributions, continuous or discrete ones. But only some of the them have the implementation of a specific algorithm that evaluates the characteristic function: it is the case of all the discrete distributions and most of (but not all) the continuous ones. In that case, the evaluation is performant. For the remaining distributions, the generic implementation might be time consuming for high arguments.
+\end{description}
+\bigskip
+
+\item \textit{computeLogCharacteristicFunction}
+\begin{description}
+\item[Usage:]  \rule{0pt}{1em}
+\begin{description}
+\item \textit{computeLogCharacteristicFunction(scalar)}
+\item \textit{computeLogCharacteristicFunction(vector)}
+\end{description}
+\item[Arguments:] \rule{0pt}{1em}
+\begin{description}
+\item \textit{scalar}: a float
+\item \textit{vector}: a NumericalPoint
+\end{description}
+\item[Value:] a complex value, the value of the log characteristic
+function at point \textit{scalar} or \textit{vector} . OpenTURNS proposes an implementation of all its univariate distributions, continuous or discrete ones. But only some of the them have the implementation of a specific algorithm that evaluates the characteristic function: it is the case of all the discrete distributions and most of (but not all) the continuous ones. In that case, the evaluation is performant. For the remaining distributions, the generic implementation might be time consuming for high arguments.
+\end{description}
+\bigskip
+
+\item \textit{computeDDF}
+\begin{description}
+\item[Usage:] \rule{0pt}{1em}
+\begin{description}
+\item \textit{computeDDF(vector)}
+\item \textit{computeDDF(sample)}
+\end{description}
+\item[Arguments:] \rule{0pt}{1em}
+\begin{description}
+\item \textit{vector}: a NumericalPoint
+\item \textit{sample}: a NumericalSample
+\end{description}
+\item[Value:] \rule{0pt}{1em}
+\begin{description}
+\item while using the first usage,  a NumericalPoint value, the gradient of the PDF (Probability Distribution Function) of the considered distribution at \textit{vector} (DDF = Derivative Density Function)
+\item while using the second usage,  a NumericalSample, the gradient of the PDF (Probability Distribution Function) of the considered distribution at \textit{vector} (DDF = Derivative Density Function)
+\end{description}
+\end{description}
+\bigskip
+
+\item \textit{computeGeneratingFunction}
+\begin{description}
+\item[Usage:] \rule{0pt}{1em}
+\begin{description}
+\item \textit{computeGeneratingFunction(value)}
+\end{description}
+\item[Arguments:] \rule{0pt}{1em}
+\begin{description}
+\item \textit{value}: a NumericalComplex, a numerical complex value
+within which module is $<1$ or a scalar
+\end{description}
+\item[Value:]  a numerical complex value, the value of the generating function at \textit{value}
+\end{description}
+\bigskip
+
+\item \textit{computeLogGeneratingFunction}
+\begin{description}
+\item[Usage:] \rule{0pt}{1em}
+\begin{description}
+\item \textit{computeLogGeneratingFunction(value)}
+\end{description}
+\item[Arguments:] \rule{0pt}{1em}
+\begin{description}
+\item \textit{value}: a NumericalComplex, a numerical complex value
+within which module is $<1$ or a scalar
+\end{description}
+\item[Value:]  a numerical complex value, the value of the log generating function at \textit{value}
+\end{description}
+\bigskip
+
+\item \textit{computePDF}
+\begin{description}
+\item[Usage:] \rule{0pt}{1em}
+\begin{description}
+\item \textit{computePDF(value)}
+\item \textit{computePDF(vector)}
+\item \textit{computePDF(sample)}
+\item \textit{computePDF(xmin, xmax, ptNumber)}
+\item \textit{computePDF(xminVect, xmaxvect, ptNumberVect, pdfList)}
+\end{description}
+\item[Arguments:] \rule{0pt}{1em}
+\begin{description}
+\item \textit{value}, \textit{xmin}, \textit{xmax}: some scalars
+\item \textit{vector},\textit{xminVect}, \textit{xmaxvect}, \textit{ptNumberVect}: some NumericalPoint
+\item \textit{sample}: a NumericalSample
+\item \textit{ptNumber}: an integer
+\item \textit{pdfList}: a empty NumericalSample of dimension 1
+\end{description}
+\item[Value:] evaluations on a numerical sample can be parallel:
+see \textit{DistributionImplementation-parallel} in the ResourceMap.
+\begin{description}
+\item in the first usage, a NumericalScalar, the  PDF   value of
+the considered distribution at \textit{value} for scalar distributions
+\item in the second usage, a NumericalPoint, the PDF value of the considered distribution at the vector \textit{vector}
+\item in the third usage, a NumericalSample, the PDF  values of the considered distribution at \textit{sample}
+\item in the fourth usage, a NumericalPoint, the  PDF values at
+each point of \textit{[xmin, xmax]} regularly discretized with \textit{ptNumber} scalars
+\item in the last usage, the method fulfills the argument
+\textit{pdfList} with all the values of the PDF at each point of the
+area such that \textit{xminVect} is the left bottom corner and
+\textit{xmaxvect} is the upper right corner. The discretization
+within each direction is given by  \textit{ptNumberVect}.
+\end{description}
+\end{description}
+\bigskip
+
+\item \textit{computeLogPDF}
+\begin{description}
+\item[Usage:] \rule{0pt}{1em}
+\begin{description}
+\item \textit{computeLogPDF(value)}
+\item \textit{computeLogPDF(vector)}
+\item \textit{computeLogPDF(sample)}
+\end{description}
+\item[Arguments:] \rule{0pt}{1em}
+\begin{description}
+\item \textit{vector}: a NumericalPoint
+\item \textit{sample}: a NumericalSample
+\end{description}
+\item[Value:] evaluations on a numerical sample can be parallel:
+see \textit{DistributionImplementation-parallel} in the ResourceMap.
+\begin{description}
+\item while using the first usage, a NumericalScalar, the log(pdf) of dimension 1 value of the considered distribution at \textit{value}
+\item while using the second usage, a NumericalPoint, the log(pdf) value of the considered distribution at the vector \textit{vector}
+\item while using the third usage, a NumericalSample, the log(pdf) values of the considered distribution at \textit{sample}
+\end{description}
+\end{description}
+\bigskip
+
+\item \textit{computePDFGradient}
+\begin{description}
+\item[Usage:] \textit{computePDFGradient(vector)}
+\item[Arguments:] \textit{vector}: a NumericalPoint
+\item[Value:] a NumericalPoint object, the gradient of the distribution PDF, with respect to the parameters of the distribution, evaluated at point \textit{vector}
+\end{description}
+\bigskip
+
+\item \textit{computeQuantile}
+\begin{description}
+\item[Usage:] \rule{0pt}{1em}
+\begin{description}
+\item \textit{computeQuantile(p)}
+\item \textit{computeQuantile(p, flag)}
+\item \textit{computeQuantile(listeQuan)}
+\item \textit{computeQuantile(listeQuan, flag)}
+\end{description}
+\item[Arguments:] \rule{0pt}{1em}
+\begin{description}
+\item $p$: a real scalar $0\leq p \leq 1$
+\item $p$:  a NumericalPoint, a list of probabilities,
+\item \textit{listeQuan}: a NumericalPoint, some real scalars $0\leq p \leq 1$
+\item \textit{flag}: a Bool
+\end{description}
+\item[Value:]\rule{0pt}{1em}
+\begin{description}
+\item  a NumericalPoint (resp. a NumericalSample), the value of the $p-$ quantile (resp. of all the quantiles of order \textit{listeQuan}) if flag = False, the value of the $(1-p)-$ quantile (resp. of all the complementary quantiles of order \textit{listeQuan}) if flag = True. \\
+If the distribution if of dimension $n>1$, the $p-$ quantile is
+the hyper surface in $\Rset^n$ defined by  $\{\vect{x}\in
+\Rset^n, F(x_1, \dots, x_n) = p \}$ where $F$ is the CDF. Open
+TURNS makes the choice to return one particular point among
+these points: $(x_1^p, \dots, x_n^p)$ such that $\forall i,
+F_i(x_i^p) =  \tau$ where $F_i$ is the marginal of component
+$X_i$ and $F(x_1, \dots, x_n) = C(\tau, \dots, \tau)$ where $C$
+is the distribution copula. Thus, OpenTURNS resolves the
+equation $ C(\tau, \dots, \tau)=p$ then computes $F_i^{-1}(\tau)
+= x_i^p$.
+\item a NumericalSample in both last usages: the list of the
+quantiles evaluated at each component of \textit{listeQuan}.
+\end{description}
+\end{description}
+\bigskip
+
+\item \textit{drawCDF}
+\begin{description}
+\item[Usage:] \rule{0pt}{1em}
+\begin{description}
+\item \textit{drawCDF()}
+\item \textit{drawCDF(min,max)}
+\item \textit{drawCDF(min,max,pointNumber)}
+\item \textit{drawCDF(vectMin,vectMax)}
+\item \textit{drawCDF(vectMin,vectMax,vectPointNumber)}
+\end{description}
+
+\item[Arguments:] \rule{0pt}{1em}
+\begin{description}
+\item \textit{min} and \textit{max}: real values with $min < max$, the range for the CDF curve of a distribution of dimension 1
+\item \textit{pointNumber}: an integer, the number of points to draw the CDF iso-curves of a distribution of dimension 1
+\item \textit{vectMin} and \textit{vectMax}: two NumericalPoint of dimension 2, respectively the left-bottom and ritgh-up corners of the square for the CDF iso-curves of a distribution of dimension 2
+\item \textit{vectPointNumber}: a NumericalPoint of dimension 2, the the number of points to draw the iso-curves of a distribution of dimension 2 on each direction
+\end{description}
+\item[Value:] a Graph, containing the elements of the curve or iso-curves of the CDF, depending on the dimension of the distribution (1 or 2)
+\end{description}
+
+\bigskip
+
+\item \textit{drawPDF}
+\begin{description}
+\item[Usage:] \rule{0pt}{1em}
+\begin{description}
+\item \textit{drawPDF()}
+\item \textit{drawPDF(min,max)}
+\item \textit{drawPDF(min,max,pointNumber)}
+\item \textit{drawPDF(vectMin,vectMax)}
+\item \textit{drawPDF(vectMin,vectMax,vectPointNumber)}
+\end{description}
+
+\item[Arguments:] \rule{0pt}{1em}
+\begin{description}
+\item \textit{min} and \textit{max}: real values with $min < max$, the range for the PDF curve of a distribution of dimension 1
+\item \textit{pointNumber}: an integer, the number of points to draw the PDF iso-curves of a distribution of dimension 1
+\item \textit{vectMin} and \textit{vectMax}: two NumericalPoint of dimension 2, respectively the left-bottom and ritgh-up corners of the square for the PDF iso-curves of a distribution of dimension 2
+\item \textit{vectPointNumber}: a NumericalPoint of dimension 2, the number of points to draw the iso-curves of a distribution of dimension 2 on each direction
+\end{description}
+\item[Value:] a Graph, containing the elements of the curve or iso-curves of the PDF, depending on the dimension of the distribution (1 or 2)
+\end{description}
+\bigskip
+
+
+
+\item \textit{drawQuantile}
+\begin{description}
+\item[Usage:] drawQuantile(qmin, qMax, nbPoints)
+\item[Arguments:] \rule{0pt}{1em}
+\begin{description}
+\item $qMin, qMax$: two reals in $[0,1]$
+\item \textit{nbPoints}: an integer
+\end{description}
+\item[Value:] a Graph.
+If $F$ is a distribution function of dimension 1, it contains the curve   $s \mapsto F^{-1}(s)$ drawn on the intervall $[qMin, qMax]$ regularly discretized into \textit{nbPoints} points. \\
+If $F$ is a distribution function of dimension 2, it contains the curve $s \mapsto (F_1^{-1}(s), F_2^{-1}(s))$  and the iso-density lines $F=p$, where $p\in  [qMin, qMax]$ regularly discretized into \textit{nbPoints} points. \\
+Care: only for univariate and bivariate distributions.
+\end{description}
+\bigskip
+
+\item \textit{drawMarginal1DCDF}
+\begin{description}
+\item[Usage:] \rule{0pt}{1em}
+\begin{description}
+\item \textit{drawMarginal1DCDF(i, min,max,pointNumber)}
+\end{description}
+
+\item[Arguments:] \rule{0pt}{1em}
+\begin{description}
+\item $i$: an integer, the marginal we want to draw (Care: numerotation begins at 0)
+\item \textit{min} and \textit{max}: real values with $min < max$, the range for the CDF curve of a distribution of dimension >1
+\item \textit{pointNumber}: an integer, the number of points to draw the CDF iso-curves of a distribution of dimension >1
+\end{description}
+\item[Value:] a Graph, containing the elements of the curve of the CDF of the marginal i of the distribution of dimension >1
+\end{description}
+
+\bigskip
+
+\item \textit{drawMarginal1DPDF}
+\begin{description}
+\item[Usage:] \rule{0pt}{1em}
+\begin{description}
+\item \textit{drawMarginal1DPDF(i, min, max, pointNumber)}
+\end{description}
+
+\item[Arguments:] \rule{0pt}{1em}
+\begin{description}
+\item $i$: an integer, the marginal we want to draw (Care: numerotation begins at 0)
+\item \textit{min} and \textit{max}: real values with $min < max$, the range for the PDF curve of a distribution of dimension >1
+\item \textit{pointNumber}: an integer, the number of points to draw the PDF iso-curves of a distribution of dimension >1
+\end{description}
+\item[Value:] a Graph, containing the elements of the curve of the PDF of the marginal i of the distribution of dimension >1
+\end{description}
+
+\bigskip
+
+\item \textit{drawMarginal2DCDF}
+\begin{description}
+\item[Usage:] \rule{0pt}{1em}
+\begin{description}
+\item \textit{drawMarginal2DCDF(i, j, vectMin,vectMax,vectPointNumber)}
+\end{description}
+
+\item[Arguments:] \rule{0pt}{1em}
+\begin{description}
+\item $i$ and $j$: two integer, the marginal we want to draw (Care: numerotation begins at 0)
+\item \textit{vectMin} and \textit{vectMax}: two NumericalPoint of dimension n>2, respectively the left-bottom and ritgh-up corners of the square for the PDF iso-curves of a distribution of dimension n
+\item \textit{vectPointNumber}: a NumericalPoint of dimension n>2, the number of points to draw the iso-curves of a distribution of dimension n on each direction
+\end{description}
+\item[Value:] a Graph, containing the elements of the iso-curve of the CDF of the marginals (i,j) of distribution of dimension n>2
+\end{description}
+
+\bigskip
+
+\item \textit{drawMarginal2DPDF}
+\begin{description}
+\item[Usage:] \rule{0pt}{1em}
+\begin{description}
+\item \textit{drawMarginal2DPDF(i, j, vectMin,vectMax,vectPointNumber)}
+\end{description}
+
+\item[Arguments:] \rule{0pt}{1em}
+\begin{description}
+\item $i$ and $j$: two integer, the marginal we want to draw (Care: numerotation begins at 0)
+\item \textit{vectMin} and \textit{vectMax}: two NumericalPoint of dimension n>2, respectively the left-bottom and ritgh-up corners of the square for the PDF iso-curves of a distribution of dimension n
+\item \textit{vectPointNumber}: a NumericalPoint of dimension n>2, the number of points to draw the iso-curves of a distribution of dimension n on each direction
+\end{description}
+\item[Value:] a Graph, containing the elements of the iso-curve of the PDF of the marginals (i,j) of distribution of dimension n>2
+\end{description}
+
+\bigskip
+
+\item \textit{getCopula}
+\begin{description}
+\item[Usage:] \textit{getCopula()}
+\item[Arguments:] no argument
+\item[Value:] a Copula, the copula of the considered distribution. If the distribution is of type ComposedDistribution, the copula is the one specified at the creation of the ComposedDistribution. If the distribution is not that sort (for example, a KernelMixture, a Mixture, a RandomMixture), the copula is computed from the Sklar theorem.
+\end{description}
+\bigskip
+
+\item \textit{getCovariance}
+\begin{description}
+\item[Usage:] \textit{getCovariance()}
+\item[Arguments:] no argument
+\item[Value:] a CovarianceMatrix of the considered distribution (if the distribution is unidimensional, it is the variance)
+\end{description}
+\bigskip
+
+\item \textit{getMarginal}
+\begin{description}
+\item[Usage:] \rule{0pt}{1em}
+\begin{description}
+\item \textit{getMarginal(i)}
+\item \textit{getMarginal(indices)}
+\end{description}
+
+
+\item[Arguments:]  \rule{0pt}{1em}
+\begin{description}
+\item $i$: an integer ($i$ is less or equal to the dimension of the considered distribution), with $0 \leq i$
+\item \textit{indices}: an Indices, which regroup all the indices considered
+\end{description}
+
+\item[Value:] a Distribution, the distribution of an extracted vector of the initial distribution
+\end{description}
+\bigskip
+
+\item \textit{getKurtosis}
+\begin{description}
+\item[Usage:] \textit{getKurtosis()}
+\item[Arguments:] no argument
+\item[Value:] a NumericalPoint, the value the kurtosis of each 1D marginal of the distribution
+\end{description}
+\bigskip
+
+\item \textit{getMean}
+\begin{description}
+\item[Usage:] \textit{getMean()}
+\item[Arguments:] no argument
+\item[Value:] a NumericalPoint, the value of the considered distribution mean
+\end{description}
+\bigskip
+
+\item \textit{getSample}
+\begin{description}
+\item[Usage:] \textit{getSample(n)}
+\item[Arguments:] $n$: integer, the size of the sample
+\item[Value:] a NumericalSample representing $n$ realizations of the random variable with the considered distribution
+\end{description}
+\bigskip
+
+\item \textit{getParametersCollection}
+\begin{description}
+\item[Usage:] \textit{getParametersCollection()}
+\item[Arguments:] one
+\item[Value:] a NumericalPointWithDescriptionCollection, the list of the parameters of the distribution
+
+\end{description}
+\bigskip
+
+
+\item \textit{getRealization}
+\begin{description}
+\item[Usage:] \textit{getRealization()}
+\item[Arguments:] no argument
+\item[Value:] a NumericalPoint, one realization of random variable with the considered distribution
+\end{description}
+\bigskip
+
+\item \textit{getRoughness}
+\begin{description}
+\item[Usage:] \textit{getRoughness()}
+\item[Arguments:] no argument
+\item[Value:] a NumericalScalar, the value $roughness(\vect{X}) = ||p||_{\cL^2} = \sqrt{\int_\vect{x} p^2(\vect{x})d\vect{x}}$
+\end{description}
+\bigskip
+
+\item \textit{getSupport}
+\begin{description}
+\item[Usage:] \rule{0pt}{1em}
+\begin{description}
+\item \textit{getSupport(interval)}
+\item \textit{getSupport()}
+\end{description}
+\item[Arguments:] \textit{interval}: a Interval
+\item[Value:] \rule{0pt}{1em}
+\begin{description}
+\item in the first usage, a NumericalSample which gathers the different points of the discrete range. Care: this service is implemented only for discrete 1D distribution.
+\item in the second usage, a NumericalSample which gathers the different points of the discrete range which are inside  \textit{interval}.
+\end{description}
+\end{description}
+\bigskip
+
+\item \textit{getSkewness}
+\begin{description}
+\item[Usage:] \textit{getSkewness()}
+\item[Arguments:] no argument
+\item[Value:] a NumericalPoint, the value the standard deviation of each 1D marginal of the distribution
+\end{description}
+\bigskip
+
+\item \textit{getStandardDeviation}
+\begin{description}
+\item[Usage:] \textit{getStandardDeviation()}
+\item[Arguments:] no argument
+\item[Value:] a NumericalPoint, the value the standard deviation of each 1D marginal of the distribution
+\end{description}
+\bigskip
+
+\item \textit{getWeight}
+\begin{description}
+\item[Usage:] \textit{getWeight()}
+\item[Arguments:] no argument
+\item[Value:] a NumericalScalar between 0 and 1, the weight of the considered distribution if used in a Mixture
+\end{description}
+\bigskip
+
+\item \textit{hasEllipticalCopula}
+\begin{description}
+\item[Usage:] \textit{hasEllipticalCopula()}
+\item[Arguments:] no argument
+\item[Value:] a boolean, it says if the considered distribution is elliptical
+\end{description}
+\bigskip
+
+\item \textit{hasIndependentCopula}
+\begin{description}
+\item[Usage:] \textit{hasIndependentCopula()}
+\item[Arguments:] no argument
+\item[Value:] a boolean which indicates wether the considered distribution is independent
+\end{description}
+\bigskip
+
+\item \textit{isElliptical}
+\begin{description}
+\item[Usage:] \textit{isElliptical()}
+\item[Arguments:] no argument
+\item[Value:] a boolean which indicates wether the considered distribution has an elliptical distribution
+\end{description}
+\bigskip
+
+\item \textit{isIntegral}
+\begin{description}
+\item[Usage:] \textit{isIntegral()}
+\item[Arguments:] no argument
+\item[Value:] a boolean which indicates wether the considered distribution has integer values.
+\end{description}
+\bigskip
+
+\item \textit{isCopula}
+\begin{description}
+\item[Usage:] \textit{isCopula()}
+\item[Arguments:] no argument
+\item[Value:] a boolean which indicates whether the distribution is a copula.
+\end{description}
+\bigskip
+
+\item \textit{str}
+\begin{description}
+\item[Usage:] \textit{str()}
+\item[Arguments:] no argument
+\item[Value:] a string describing the object
+\end{description}
+\bigskip
+
+\end{description}
+
+\end{description}
+
+% =============================================================
+\newpage
+% \index{Probabilistic modeling!Usual Distributions}
+\subsection{Usual Distributions} \label{UsualDistributions}
+
+
+% \index{Probabilistic modeling!Usual Distributions!Arcsine}
+\index{Arcsine}
+\subsubsection{Arcsine}
+
+This class inherits from the Distribution class.
+
+\begin{description}
+
+\item[Usage:] \rule{0pt}{1em}
+\begin{description}
+\item Main parameters set: \textit{Arcsine(a,b)}
+\item Second parameters set: \textit{Arcsine($\mu$, $\sigma$,1)}
+\item Default construction: \textit{Arcsine( )}
+\end{description}
+
+\item[Arguments:]  \rule{0pt}{1em}
+\begin{description}
+\item $a$: a real value, the lower bound
+\item $b$: a real value, the upper bound, constraint: $a<b$
+\end{description}
+
+\item[Value:]  Arcsine. In the default construction, we use the \textit{Arcsine(a,b) = Arcsine(-1.0,1.0)} definition.
+
+\item[Some methods:] \rule{0pt}{1em}
+\begin{description}
+
+\item \textit{getA}
+\begin{description}
+\item[Usage:] \textit{getA()}
+\item[Arguments:] none
+\item[Value:]  a real value, the lower bound
+\end{description}
+\bigskip
+
+\item \textit{getB}
+\begin{description}
+\item[Usage:] \textit{getB()}
+\item[Arguments:] none
+\item[Value:]  a real value, the upper bound
+\end{description}
+
+\item \textit{getMu}
+\begin{description}
+\item[Usage:] \textit{getMu()}
+\item[Arguments:] none
+\item[Value:]  a real value, the mean
+\end{description}
+\bigskip
+
+\item \textit{getSigma}
+\begin{description}
+\item[Usage:] \textit{getSigma()}
+\item[Arguments:] none
+\item[Value:]  a real value, the standard deviation
+\end{description}
+
+
+
+\end{description}
+
+\item[Details:]  \rule{0pt}{1em}
+\begin{description}
+\item density function:
+
+\begin{equation}
+\frac{1}{\pi\frac{b-a}{2}\sqrt{1-\left(\frac{x-\frac{a+b}{2}}{\frac{b-a}{2}}\right)^{2}}}
+\end{equation}
+
+\item relation between parameter sets:
+\begin{eqnarray*}
+\mu                                       &       =       \frac{a+b}{2}   \\
+\sigma                            &  =    &       \frac{b-a}{2\sqrt{2}}
+\end{eqnarray*}
+\begin{align*}
+\mbox{where}
+&&
+\mu = \Expect{X}
+&&
+\sigma = \sqrt{\Var{X} }
+\end{align*}
+\end{description}
+\bigskip
+
+\item[Links:]  \rule{0pt}{1em}
+\extref{ReferenceGuide}{Reference Guide - B121 DistributionSelection}{docref_B121_DistributionSelection}
+
+\end{description}
+
+
+Each  \textit{getMethod}  is associated to a \textit{setMethod}.
+% =============================================================
+
+\newpage
+% \index{Probabilistic modeling!Usual Distributions!Bernoulli}
+\index{Bernoulli}
+\subsubsection{Bernoulli}
+
+This class inherits from the Distribution class.
+
+\begin{description}
+
+\item[Usage:]\rule{0pt}{1em}
+\begin{description}
+\item Main parameters set: \textit{Bernoulli(p)}
+\item  Default construction: \textit{Bernoulli()}
+\end{description}
+
+\item[Arguments:]  $p$: a real value,
+constraint: $0\leq p\leq 1$
+
+\item[Value:] a Bernoulli. In the default construction, we use the \textit{Bernoulli() = Bernoulli(0.5)} definition.
+
+\item[Some methods:] \rule{0pt}{1em}
+\begin{description}
+
+\item \textit{getP}
+\begin{description}
+\item[Usage:] \textit{getP()}
+\item[Arguments:] none
+\item[Value:]  a real positive value $\leq 1$, the $p$ parameter of the  distribution.
+\end{description}
+\bigskip
+
+\item \textit{getSupport}
+\begin{description}
+\item[Usage:] \textit{getSupport(interval)}
+\item[Arguments:] \textit{interval}: a \textit{Interval}, an interval in $\Rset$
+\item[Value:]  a \textit{NumericalSample}, all the points (here of dimension 1) of the distribution range which are included in the interval \textit{interval}.
+\end{description}
+
+\end{description}
+
+\item[Details:]  \rule{0pt}{1em}
+\begin{description}
+\item probability distribution:
+\begin{equation}
+\Prob{X=1}  = p, \Prob{X=0} = 1-p
+\end{equation}
+\item relation between parameters set:
+\begin{eqnarray*}
+\mu  =   p                                              & \mbox{where}& \mu =\Expect{X} \\
+\sigma  = \sqrt{p(1-p)}  & \mbox{where}& \sigma =\sqrt{\Var{X} }
+\end{eqnarray*}
+
+\end{description}
+\bigskip
+
+\item[Links:]  \rule{0pt}{1em}
+\extref{ReferenceGuide}{Reference Guide - Standard parametric models}{standardparametricmodels}
+\end{description}
+
+
+Each  \textit{getMethod}  is associated to a \textit{setMethod}.
+
+
+% ==============================================
+\newpage
+% \index{Probabilistic modeling!Usual Distributions!Beta}
+\index{Beta}
+\subsubsection{Beta}
+
+This class inherits from the Distribution class.
+
+\begin{description}
+
+\item[Usage:] \rule{0pt}{1em}
+\begin{description}
+\item Main parameters set: \textit{Beta( r,  t,  a,  b)}
+\item Second parameters set: \textit{Beta($\mu$, $\sigma$, a, b, Beta.MUSIGMA)}
+\item Default construction: \textit{Beta( )}
+\end{description}
+
+\item[Arguments:]  \rule{0pt}{1em}
+\begin{description}
+\item $r$: real value, first shape parameter, constraint: $r>0$
+\item $t$:  real value, second shape parameter, constraint: $t>r$
+\item $a$: real value, lower bound
+\item $b$: real value, upper bound, constraint: $b>a$
+\item $\mu$: real value, mean value
+\item $\sigma$: real value, standard deviation, constraint: $\sigma >0$
+\end{description}
+\bigskip
+
+\item[Value:] a Beta. In the default construction, we use the \textit{Beta(r, t, a, b)= Beta(2, 4, -1, 1)} definition.
+
+\item[Some methods:]  \rule{0pt}{1em}
+\begin{description}
+
+\item \textit{getA}
+\begin{description}
+\item[Usage:] \textit{getA()}
+\item[Arguments:] none
+\item[Value:]  a real value, the $a$ parameter of the Beta distribution
+\end{description}
+\bigskip
+\item \textit{getB}
+\begin{description}
+\item[Usage:] \textit{getB()}
+\item[Arguments:] none
+\item[Value:]  a real value, the  $b$ parameter of the Beta distribution
+\end{description}
+\bigskip
+\item \textit{getMu}
+\begin{description}
+\item[Usage:] \textit{getMu()}
+\item[Arguments:] none
+\item[Value:]  a real value,  the $\mu$ parameter of the  distribution
+\end{description}
+\bigskip
+\item \textit{getSigma}
+\begin{description}
+\item[Usage:] \textit{getSigma()}
+\item[Arguments:] none
+\item[Value:]  a real value,  the $\sigma$ parameter of the  distribution
+\end{description}
+\bigskip
+\item \textit{getR}
+\begin{description}
+\item[Usage:] \textit{getR()}
+\item[Arguments:] none
+\item[Value:]  a real value,  the $r$ parameter of the  distribution
+\end{description}
+\bigskip
+\item \textit{getT}
+\begin{description}
+\item[Usage:] \textit{getT()}
+\item[Arguments:] none
+\item[Value:]  a real value,  the $t$ parameter of the  distribution
+\end{description}
+\bigskip
+
+\end{description}
+
+
+\item[Details:]  \rule{0pt}{1em}
+\begin{description}
+\item density probability function:
+\begin{equation}
+f(x) = \frac{(x-a)^{(r-1)}(b-x)^{(t-r-1)}}{(b-a)^{(t-1)}B(r,t-r)}\boldsymbol{1}_{[a,b]}(x)
+\end{equation}
+\item relation between parameters sets:
+\begin{equation}
+\begin{array}{lcl}
+\mu & = & \displaystyle a + \frac{(b - a)  r}{ t} \\
+\sigma & = & \displaystyle  \frac{(b - a)}{ t}\sqrt{\frac{r (t - r)}{ (t + 1)}}
+\end{array}
+\end{equation}
+\end{description}
+
+\item[Links:]  \rule{0pt}{1em}
+\extref{ReferenceGuide}{Reference Guide - Standard parametric models}{standardparametricmodels}
+\end{description}
+
+Each  \textit{getMethod}  is associated to a \textit{setMethod}.
+
+
+% ==============================================
+\newpage
+% \index{Probabilistic modeling!Usual Distributions!Binomial}
+\index{Binomial}
+\subsubsection{Binomial}
+
+This class inherits from the Distribution class.
+
+\begin{description}
+
+\item[Usage:]\rule{0pt}{1em}
+\begin{description}
+\item Main parameters set: \textit{Binomial(n,p)}
+\item  Default construction: \textit{Binomial()}
+\end{description}
+
+\item[Arguments:]  \rule{0pt}{1em}
+\begin{description}
+\item $n$: an integer $>0$,
+\item  $p$: a real value such as $0\leq p\leq 1$.
+\end{description}
+
+\item[Value:] a Binomial. In the default construction, we use the \textit{Binomial() = Binomial(1,0.5)} definition.
+
+\item[Some methods:] \rule{0pt}{1em}
+\begin{description}
+
+\item \textit{getP}
+\begin{description}
+\item[Usage:] \textit{getP()}
+\item[Arguments:] none
+\item[Value:]  a real positive value $\leq 1$, the $p$ parameter of the  distribution.
+\end{description}
+\bigskip
+
+\item \textit{getN}
+\begin{description}
+\item[Usage:] \textit{getN()}
+\item[Arguments:] none
+\item[Value:]  an integer, the $n$ parameter of the  distribution.
+\end{description}
+\bigskip
+
+\item \textit{getSupport}
+\begin{description}
+\item[Usage:] \textit{getSupport(interval)}
+\item[Arguments:] \textit{interval}: a \textit{Interval}, an interval in $\Rset$
+\item[Value:]  a \textit{NumericalSample}, all the points (here of dimension 1) of the distribution range which are included in the interval \textit{interval}.
+\end{description}
+
+\end{description}
+
+\item[Details:]  \rule{0pt}{1em}
+\begin{description}
+\item probability distribution:
+\begin{equation}
+\Prob{X=k}  = C_n^k p^k (1-p)^{n-k}, \, \forall k \in \{0, \hdots, n\}
+\end{equation}
+\item relation between parameters set:
+\begin{eqnarray*}
+\mu  =   p                                              & \mbox{where}& \mu =\Expect{X} \\
+\sigma  = \sqrt{p(1-p)}  & \mbox{where}& \sigma =\sqrt{\Var{X} }
+\end{eqnarray*}
+
+\end{description}
+\bigskip
+
+\item[Links:]  \rule{0pt}{1em}
+\extref{ReferenceGuide}{Reference Guide - Standard parametric models}{standardparametricmodels}
+\end{description}
+
+
+Each  \textit{getMethod}  is associated to a \textit{setMethod}.
+
+
+
+
+% ==============================================
+\newpage
+% \index{Probabilistic modeling!Usual Distributions!Burr}
+\index{Burr}
+\subsubsection{Burr}
+
+This class inherits from the Distribution class.
+
+\begin{description}
+
+\item[Usage:]\rule{0pt}{1em}
+\begin{description}
+\item Main parameters set: \textit{Burr(c,k)}
+\item  Default construction: \textit{Burr()}
+\end{description}
+
+\item[Arguments:]  \rule{0pt}{1em}
+\begin{description}
+\item $c$: an real $>0$,
+\item  $k$: a real value $>0$.
+\end{description}
+
+\item[Value:] a Burr. In the default construction, we use the \textit{Burr() = Burr(1,1.0)} definition.
+
+\item[Some methods:] \rule{0pt}{1em}
+\begin{description}
+
+\item \textit{getC}
+\begin{description}
+\item[Usage:] \textit{getC()}
+\item[Arguments:] none
+\item[Value:]  a real positive value, the $c$ parameter of the  distribution.
+\end{description}
+\bigskip
+
+\item \textit{getK}
+\begin{description}
+\item[Usage:] \textit{getK()}
+\item[Arguments:] none
+\item[Value:]  an real positive value, the $k$ parameter of the  distribution.
+\end{description}
+\bigskip
+
+\item \textit{getSupport}
+\begin{description}
+\item[Usage:] \textit{getSupport(interval)}
+\item[Arguments:] \textit{interval}: a \textit{Interval}, an interval in $\Rset$
+\item[Value:]  a \textit{NumericalSample}, all the points (here of dimension 1) of the distribution range which are included in the interval \textit{interval}.
+\end{description}
+
+\end{description}
+
+\item[Details:]  \rule{0pt}{1em}
+\begin{description}
+\item probability distribution:
+\begin{equation}
+p(x;\vect{\theta}) = ck\frac{x^{(c-1)}}{(1+x^c)^{(k+1)}} \mathbf{1}_{x >0}
+\end{equation}
+\item relation between parameters set:
+\begin{eqnarray*}
+\mu  =   kBeta(k-1/c, 1+1/c)                                              & \mbox{where}& \mu =\Expect{X}
+\end{eqnarray*}
+
+\end{description}
+\bigskip
+
+\item[Links:]  \rule{0pt}{1em}
+\extref{ReferenceGuide}{Reference Guide - Standard parametric models}{standardparametricmodels}
+\end{description}
+
+
+Each  \textit{getMethod}  is associated to a \textit{setMethod}.
+
+% =============================================================
+\newpage
+% \index{Probabilistic modeling!Usual Distributions!Chi}
+\index{Chi}
+\subsubsection{Chi}
+
+This class inherits from the Distribution class.
+
+\begin{description}
+
+\item[Usage:] \rule{0pt}{1em}
+\begin{description}
+\item Main parameters set: \textit{Chi($\nu$)}
+\item Default construction: \textit{Chi( )}
+\end{description}
+
+\item[Arguments:]  \rule{0pt}{1em}
+\begin{description}
+\item $\nu$: real value, degrees of feedom, constraint: $\nu>0$
+\end{description}
+\bigskip
+
+\item[Value:] a Chi. In the default construction, we use the \textit{Chi($\nu$)= Chi(1)} definition.
+
+\item[Some methods:]  \rule{0pt}{1em}
+\begin{description}
+
+\item \textit{getNu}
+\begin{description}
+\item[Usage:] \textit{getNu()}
+\item[Arguments:] none
+\item[Value:]  a real value, the $\nu$ parameter of the Chi distribution
+\end{description}
+\end{description}
+
+
+\item[Details:]  \rule{0pt}{1em}
+\begin{description}
+\item density probability function:
+\begin{equation}
+f(x) = \displaystyle x^{\nu-1}e^{-x^2/2}\frac{2^{1-\nu^{\strut}/2}}{\Gamma(\nu/2)_{\strut}} \boldsymbol{1}_{[0,+\infty[}(x)
+\end{equation}
+\end{description}
+
+\item[Links:]  \rule{0pt}{1em}
+\extref{ReferenceGuide}{Reference Guide - Standard parametric models}{standardparametricmodels}
+\end{description}
+
+Each  \textit{getMethod}  is associated to a \textit{setMethod}.
+
+
+
+% =============================================================
+\newpage
+% \index{Probabilistic modeling!Usual Distributions!ChiSquare}
+\index{ChiSquare}
+\subsubsection{ChiSquare}
+
+This class inherits from the Distribution class.
+
+\begin{description}
+
+\item[Usage:] \rule{0pt}{1em}
+\begin{description}
+\item Main parameters set: \textit{ChiSquare($\nu$)}
+\item Default construction: \textit{ChiSquare( )}
+\end{description}
+
+\item[Arguments:]  \rule{0pt}{1em}
+\begin{description}
+\item $\nu$: real value, degrees of feedom, constraint: $\nu>0$
+\end{description}
+\bigskip
+
+\item[Value:] a ChiSquare. In the default construction, we use the \textit{ChiSquare($\nu$)= ChiSquare(1)} definition.
+
+\item[Some methods:]  \rule{0pt}{1em}
+\begin{description}
+
+\item \textit{getNu}
+\begin{description}
+\item[Usage:] \textit{getNu()}
+\item[Arguments:] none
+\item[Value:]  a real value, the $\nu$ parameter of the ChiSquare distribution
+\end{description}
+\end{description}
+
+
+\item[Details:]  \rule{0pt}{1em}
+\begin{description}
+\item density probability function:
+\begin{equation}
+f(x) = \frac{2^{-\nu/2}}{\Gamma(\nu/2)} x^{(\nu/2-1)}e^{-x/2}\boldsymbol{1}_{[0,+\infty[}(x)
+\end{equation}
+\end{description}
+
+\item[Links:]  \rule{0pt}{1em}
+\extref{ReferenceGuide}{Reference Guide - Standard parametric models}{standardparametricmodels}
+\end{description}
+
+Each  \textit{getMethod}  is associated to a \textit{setMethod}.
+
+% =============================================================
+
+\newpage
+% \index{Probabilistic modeling!Usual Distributions!Dirac}
+\index{Dirac}
+\subsubsection{Dirac}
+
+This class inherits from the Distribution class.
+
+\begin{description}
+
+\item[Usage:]\rule{0pt}{1em}
+\begin{description}
+\item Main parameters set: \textit{Dirac(point)}
+\item Main parameters set: \textit{Dirac(p)}
+\item Default construction: \textit{Dirac()}
+\end{description}
+
+\item[Arguments:]  \rule{0pt}{1em}
+\begin{description}
+\item \textit{point}: a NumericalPoint, the support of the distribution
+\item $p$: a scalar, the support of the distribution. It is a shortcut for the 1D case
+\end{description}
+
+\item[Value:] a Dirac. In the default construction, we use the \textit{Dirac() = Dirac(0.0)} definition.
+
+\item[Some methods:] \rule{0pt}{1em}
+\begin{description}
+
+\item \textit{getPoint}
+\begin{description}
+\item[Usage:] \textit{getPoint()}
+\item[Arguments:] none
+\item[Value:]  a NumericalPoint, the support of the distribution.
+\end{description}
+\bigskip
+
+\item \textit{getSupport}
+\begin{description}
+\item[Usage:] \textit{getSupport(interval)}
+\item[Arguments:] \textit{interval}: a \textit{Interval}, an interval in $\Rset$
+\item[Value:]  a \textit{NumericalSample}, all the points (here of dimension 1) of the distribution range which are included in the interval \textit{interval}.
+\end{description}
+
+\end{description}
+
+\item[Details:]  \rule{0pt}{1em}
+\begin{description}
+\item probability distribution:
+\begin{equation}
+\Prob{\vect{X}=point} = 1
+\end{equation}
+\end{description}
+\bigskip
+\item[Links:]  \rule{0pt}{1em}
+\extref{ReferenceGuide}{Reference Guide - Standard parametric models}{standardparametricmodels}
+
+\end{description}
+
+
+Each  \textit{getMethod}  is associated to a \textit{setMethod}.
+
+
+% =============================================================
+\newpage
+% \index{Probabilistic modeling!Usual Distributions!ChiSquare}
+\index{Dirichlet}
+\subsubsection{Dirichlet}
+
+
+This class inherits from the Distribution class.
+
+\begin{description}
+
+\item[Usage:]
+\begin{description}
+\item Main parameters set: \textit{Dirichlet(vectTheta)}
+\item Default construction: \textit{Dirichlet()}
+\end{description}
+
+\item[Arguments:]  \rule{0pt}{1em}
+\begin{description}
+\item \textit{vectTheta}: a NumericalPoint: $(\theta_1, \hdots, \theta_{d+1})$ for a multivariate $d$-dimensional distribution, with $\theta_i > 0$.
+\end{description}
+
+\item[Value:] a Dirichlet. In the default construction, an univariate distribution is created with $(\theta_1, \theta_2) = (1,1)$.
+
+\item[Some methods:]  \rule{0pt}{1em}
+\begin{description}
+
+\item \textit{getTheta}
+\begin{description}
+\item[Usage:] \textit{getTheta()}
+\item[Arguments:] none
+\item[Value:]  a NumericalPoint: the $(\theta_1, \hdots, \theta_{d+1})$  parameter of the  distribution
+\end{description}
+
+\end{description}
+
+
+
+\item[Details:]  \rule{0pt}{1em}
+\begin{description}
+\item density probability function:
+\begin{equation}
+f_X(\vect{x};\vect{\theta}) = \displaystyle \frac{\Gamma(\sum_{j=1}^{d+1}\theta_j)}{\prod_{j=1}^{d+1}\Gamma(\theta_j)} \left[ 1-\sum_{j=1}^{d} x_j\right]^{\theta_{d+1}-1}\prod_{j=1}^d x_j^{\theta_j-1}\mathbf{1}_{\Delta}(\vect{x})
+\end{equation}
+with $\Delta = \{ \vect{x} \in \Rset^d / \forall i, x_i \geq 0, \sum_{i=1}^{d} x_i \leq 1 \}$.
+
+\end{description}
+
+\item[Links:]  \rule{0pt}{1em}
+\extref{ReferenceGuide}{Reference Guide - Standard parametric models}{standardparametricmodels}
+\end{description}
+
+Each  \textit{getMethod}  is associated to a \textit{setMethod}.
+
+
+
+% =============================================================
+\newpage
+% \index{Probabilistic modeling!Usual Distributions!Epanechnikov}
+\index{Epanechnikov}
+\subsubsection{Epanechnikov}
+
+
+This class inherits from the Distribution class.
+
+\begin{description}
+
+\item[Usage:]
+\begin{description}
+\item Default construction: \textit{Epanechnikov( )}
+\end{description}
+
+\item[Arguments:]  \rule{0pt}{1em}
+
+\item[Value:] an Epanechnikov, which is a \textit{Beta (a=-1, b=1, r=2, t=4)} distribution.
+
+\item[Some methods:]  \rule{0pt}{1em}
+
+
+
+\item[Details:]  \rule{0pt}{1em}
+\begin{description}
+\item density probability function:
+\begin{equation}
+f(x) = \displaystyle \frac{3^{\strut}}{4_{\strut}}(1 - x^2)\boldsymbol{1}_{[-1,1]}(x)
+\end{equation}
+
+\end{description}
+
+\item[Links:]  \rule{0pt}{1em}
+\extref{ReferenceGuide}{Reference Guide - Standard parametric models}{standardparametricmodels}
+\end{description}
+
+Each  \textit{getMethod}  is associated to a \textit{setMethod}.
+
+
+% =============================================================
+\newpage
+% \index{Probabilistic modeling!Usual Distributions!Exponential}
+\index{Exponential}
+\subsubsection{Exponential}
+
+
+This class inherits from the Distribution class.
+
+\begin{description}
+
+\item[Usage:]
+\begin{description}
+\item Main parameters set: \textit{Exponential($\lambda$,$\gamma$)}
+\item Default construction: \textit{Exponential( )}
+\end{description}
+
+\item[Arguments:]  \rule{0pt}{1em}
+\begin{description}
+\item $\lambda$: real value, scale parameter, constraint: $\lambda > 0 $
+\item $\gamma$:  real value.
+\end{description}
+
+\item[Value:] an Exponential. In the default construction, we use the \textit{Exponential(lambda, gamma) = Exponential(1.0, 0.0)} definition.
+
+\item[Some methods:]  \rule{0pt}{1em}
+\begin{description}
+
+\item \textit{getGamma}
+\begin{description}
+\item[Usage:] \textit{getGamma()}
+\item[Arguments:] none
+\item[Value:]  a real value, the $\gamma$ parameter of the  distribution
+\end{description}
+\bigskip
+
+\item \textit{getLambda}
+\begin{description}
+\item[Usage:] \textit{getLambda()}
+\item[Arguments:] none
+\item[Value:]  a real value, the $\lambda$ parameter of the  distribution
+\end{description}
+\bigskip
+\end{description}
+
+
+
+\item[Details:]  \rule{0pt}{1em}
+\begin{description}
+\item density probability function:
+\begin{equation}
+f(x) = \displaystyle \lambda e^{-\lambda(x-\gamma)}\boldsymbol{1}_{[\gamma,+\infty[}(x)
+\end{equation}
+\item relation between parameters sets:
+\begin{eqnarray*}
+\mu = \gamma + \frac{1}{\lambda}                                   &  \mbox{where}& \mu =\Expect{X}\\
+\sigma = \frac{1}{\lambda} &  \mbox{where}& \sigma =\sqrt{\Var{X} }
+\end{eqnarray*}
+
+\end{description}
+
+\item[Links:]  \rule{0pt}{1em}
+\extref{ReferenceGuide}{Reference Guide - Standard parametric models}{standardparametricmodels}
+\end{description}
+
+Each  \textit{getMethod}  is associated to a \textit{setMethod}.
+
+% =============================================================
+\newpage
+% \index{Probabilistic modeling!Usual Distributions!FisherSnedecor}
+\index{FisherSnedecor}
+\subsubsection{FisherSnedecor}
+
+
+This class inherits from the Distribution class.
+
+\begin{description}
+
+\item[Usage:]
+\begin{description}
+\item Main parameters set: \textit{FisherSnedecor(d1,d2)}
+\item Default construction: \textit{FisherSnedecor( )}
+\end{description}
+
+\item[Arguments:]  \rule{0pt}{1em}
+\begin{description}
+\item \textit{(d1,d2)}: two  real value, scale parameter, constraint: $d_i > 0 $
+\end{description}
+
+\item[Value:] an FisherSnedecor. In the default construction, we use the \textit{FisherSnedecor(d1,d2) = FisherSnedecor(1.0, 1.0)} definition.
+
+\item[Some methods:]  \rule{0pt}{1em}
+\begin{description}
+
+\item \textit{getD1}
+\begin{description}
+\item[Usage:] \textit{getD1()}
+\item[Arguments:] none
+\item[Value:]  a real value, the $d_1$ parameter of the  distribution
+\end{description}
+\bigskip
+
+\item \textit{getD2}
+\begin{description}
+\item[Usage:] \textit{getD2()}
+\item[Arguments:] none
+\item[Value:]  a real value, the $d_2$ parameter of the  distribution
+\end{description}
+\bigskip
+
+\end{description}
+
+\item[Details:]  \rule{0pt}{1em}
+\begin{description}
+\item density probability function:
+\begin{equation}
+f(x) = \displaystyle \frac{1}{xB(d_1/2, d_2/2)}\left[\left(\frac{d_1x}{d_1x+d_2}\right)^{d_1/2} \left(1-\frac{d_1x}{d_1x+d_2}\right)^{d_2/2} \right]\mathbf{1}_{x \geq 0}
+\end{equation}
+\end{description}
+
+\item[Links:]  \rule{0pt}{1em}
+\extref{ReferenceGuide}{Reference Guide - Standard parametric models}{standardparametricmodels}
+\end{description}
+
+Each  \textit{getMethod}  is associated to a \textit{setMethod}.
+
+% =============================================================
+\newpage
+% \index{Probabilistic modeling!Usual Distributions!Gamma}
+\index{Gamma}
+\subsubsection{Gamma}
+
+This class inherits from the Distribution class.
+
+\begin{description}
+
+\item[Usage:] \rule{0pt}{1em}
+\begin{description}
+\item Main parameters set: \textit{Gamma(k, $\lambda$, $\gamma$)}
+\item Second parameters set: \textit{Gamma($\mu$, $\sigma$, $\gamma$, Gamma.MUSIGMA)}
+\item Default construction: \textit{Gamma( )}
+\end{description}
+\bigskip
+
+\item[Arguments:]  \rule{0pt}{1em}
+\begin{description}
+\item $k$: integer value
+constraint: $k>0$
+\item $\lambda$:  real value,
+constraint: $\lambda >0$
+\item $\gamma$: real value,
+\item $\mu$: real value, mean value
+\item $\sigma$: real value, standard deviation, constraint: $\sigma > 0 $
+\end{description}
+
+\item[Value:] a Gamma. In the default construction, we use the \textit{Gamma(k, lambda, gamma) = Gamma(1.0, 1.0, 0.0)} definition.
+
+\item[Some methods:] \rule{0pt}{1em}
+\begin{description}
+
+\item \textit{getGamma}
+\begin{description}
+\item[Usage:] \textit{getGamma()}
+\item[Arguments:] none
+\item[Value:]  a real value, the $\gamma$ parameter of the  distribution
+\end{description}
+\bigskip
+
+\item \textit{getK}
+\begin{description}
+\item[Usage:] \textit{getK()}
+\item[Arguments:] none
+\item[Value:]  a real value, the $k$ parameter of the  distribution
+\end{description}
+\bigskip
+
+\item \textit{getLambda}
+\begin{description}
+\item[Usage:] \textit{getLambda()}
+\item[Arguments:] none
+\item[Value:]  a real value, the $\lambda$ parameter of the  distribution
+\end{description}
+\bigskip
+
+
+\item \textit{setKLambda}
+\begin{description}
+\item[Usage:] \textit{setKLambda(k, lambda)}
+\item[Arguments:]
+\begin{description}
+\item $k$: a NumericalScalar, the $k$ parameter of the distribution
+\item \textit{lambda}: a NumericalScalar, the $\lambda$ parameter of the distribution
+\end{description}
+\end{description}
+
+\end{description}
+
+\item[Details:]  \rule{0pt}{1em}
+\begin{description}
+\item density probability function:
+\begin{equation}
+f(x) = \frac{\lambda}{\Gamma(k)}(\lambda(x-\gamma))^{(k-1)}
+e^{-\lambda(x-\gamma)}\boldsymbol{1}_{[\gamma,+\infty[}(x)
+\end{equation}
+\item relation between parameters sets:
+\begin{eqnarray*}
+\mu  =   \frac{k}{\lambda}+\gamma                                                 &  \mbox{where}& \mu =\Expect{X} \\
+\sigma  = \frac{\sqrt{k}}{\lambda}                &  \mbox{where}& \sigma =\sqrt{\Var{X} }
+\end{eqnarray*}
+
+\end{description}
+
+\item[Links:]  \rule{0pt}{1em}
+\extref{ReferenceGuide}{Reference Guide - Standard parametric models}{standardparametricmodels}
+\end{description}
+
+Each  \textit{getMethod}  is associated to a \textit{setMethod}.
+
+% =============================================================
+\newpage
+% \index{Probabilistic modeling!Usual Distributions!Geometric}
+\index{Geometric}
+\subsubsection{Geometric}
+
+This class inherits from the Distribution class.
+
+\begin{description}
+
+\item[Usage:] Main parameters set: \textit{Geometric(p)}
+
+\item[Arguments:]  $p$: a real value,
+constraint: $0<p<1$
+
+\item[Value:] Geometric
+
+\item[Some methods:] \rule{0pt}{1em}
+\begin{description}
+
+\item \textit{getP}
+\begin{description}
+\item[Usage:] \textit{getP()}
+\item[Arguments:] none
+\item[Value:]  a real positive value <1, the $p$ parameter of the  distribution
+\end{description}
+\bigskip
+
+\item \textit{getSupport}
+\begin{description}
+\item[Usage:] \textit{getSupport(interval)}
+\item[Arguments:] \textit{interval}: a \textit{Interval}, an interval in $\Rset$
+\item[Value:]  a \textit{NumericalSample}, all the points (here of dimension 1) of the distribution range which are included in the interval \textit{interval}.
+\end{description}
+
+\end{description}
+
+\item[Details:]  \rule{0pt}{1em}
+\begin{description}
+\item probability distribution:
+\begin{equation}
+\Prob{X=k}  = (1-p)^{k-1} p, \, k\in \Nset^*
+\end{equation}
+\item relation between parameters set:
+\begin{eqnarray*}
+\mu  =   \frac{1}{p}                                              & \mbox{where}& \mu =\Expect{X} \\
+\sigma  = \sqrt{\frac{1-p}{p^2}}  & \mbox{where}& \sigma =\sqrt{\Var{X} }
+\end{eqnarray*}
+
+\end{description}
+\bigskip
+
+\item[Links:]  \rule{0pt}{1em}
+\extref{ReferenceGuide}{Reference Guide - Standard parametric models}{standardparametricmodels}
+\end{description}
+
+
+Each  \textit{getMethod}  is associated to a \textit{setMethod}.
+
+
+% =============================================================
+\newpage
+% \index{Probabilistic modeling!Usual Distributions!Gumbel}
+\index{Gumbel}
+\subsubsection{Gumbel}
+
+This class inherits from the Distribution class.
+
+\begin{description}
+
+\item[Usage:] \rule{0pt}{1em}
+\begin{description}
+\item Main parameters set: \textit{Gumbel($\alpha$, $\beta$)}
+\item Second parameters set: \textit{Gumbel($\mu$, $\sigma$,1)}
+\item Default construction: \textit{Gumbel( )}
+\end{description}
+
+\item[Arguments:]  \rule{0pt}{1em}
+\begin{description}
+\item $\alpha$:  a real value, the scale parameter (the inverse), constraint: $\alpha >0$
+\item $\beta$: a real value, location parameter
+\item $\mu$: a real value, the mean value
+\item $\sigma$: a real value, standard deviation, constraint: $\sigma > 0 $
+\end{description}
+
+\item[Value:] a Gumbel. In the default construction, we use the \textit{Gumbel(alpha, beta) = Gumbel(1.0, 1.0)} definition.
+
+\item[Some methods:]  \rule{0pt}{1em}
+\begin{description}
+
+\item \textit{getAlpha}
+\begin{description}
+\item[Usage:] \textit{getAlpha()}
+\item[Arguments:] none
+\item[Value:]  a real value, the  $\alpha$ of the considered distribution
+\end{description}
+\bigskip
+
+\item \textit{getBeta}
+\begin{description}
+\item[Usage:] \textit{getBeta()}
+\item[Arguments:] none
+\item[Value:]  a real value, the  $\beta$ of the considered distribution
+\end{description}
+\bigskip
+\item \textit{getMu}
+\begin{description}
+\item[Usage:] \textit{getMu()}
+\item[Arguments:] none
+\item[Value:]  a real value,  the $\mu$ parameter of the  distribution
+\end{description}
+\bigskip
+\item \textit{getSigma}
+\begin{description}
+\item[Usage:] \textit{getSigma()}
+\item[Arguments:] none
+\item[Value:]  a real value,  the $\sigma$ parameter of the  distribution
+\end{description}
+\bigskip
+\end{description}
+
+\item[Details:]  \rule{0pt}{1em}
+\begin{description}
+\item density probability function:
+\begin{equation}
+f(x) = \alpha e^{-\alpha(x-\beta)-e^{-\alpha(x-\beta)}}
+\end{equation}
+\item relation between parameters set:
+\begin{align*}
+\mu \;            =       &   \beta + \frac{c}{\alpha}
+& \mbox{where $c$ is the Euler-Mascheroni constant}
+&& (c \approx 0.5772156649)
+\\
+\sigma \;  =      &       \frac{1}{\sqrt{6}}\frac{\pi}{\alpha}
+\end{align*}
+\begin{align*}
+\mbox{where}
+&&
+\mu = \Expect{X}
+&&
+\sigma = \sqrt{\Var{X} }
+\end{align*}
+\end{description}
+
+\item[Links:]  \rule{0pt}{1em}
+\extref{ReferenceGuide}{Reference Guide - Standard parametric models}{standardparametricmodels}
+\end{description}
+
+Each  \textit{getMethod}  is associated to a \textit{setMethod}.
+
+% ================================================================================
+
+\newpage
+% \index{Probabilistic modeling!Usual Distributions!Histogram}
+\index{Histogram}
+\subsubsection{Histogram}
+
+This class inherits from the Distribution class.
+
+\begin{description}
+
+\item[Usage:] \rule{0pt}{1em}
+\begin{description}
+\item Main parameters set:   \textit{Histogram(first,Coll)}
+\end{description}
+\bigskip
+
+\item[Arguments:]  \rule{0pt}{1em}
+\begin{description}
+\item \textit{first}: a  real value, the lower bound of the distribution
+\item \textit{Coll}: an HistogramPairCollection, the collection of $(l_i, h_i)$ where $h_i$ is the frequency of the class $i$ and $l_i$ its width.
+\end{description}
+\bigskip
+
+\item[Value:] an Histogram distribution which probability density function graph has relative fequencies.
+
+\item[Some methods:]  \rule{0pt}{1em}
+\begin{description}
+
+\item \textit{getFirst}
+\begin{description}
+\item[Usage:] \textit{getFirst()}
+\item[Arguments:] none
+\item[Value:]  a real value, the  \textit{first} parameter of the considered distribution
+\end{description}
+\bigskip
+
+\item \textit{getPairCollection}
+\begin{description}
+\item[Usage:] \textit{getPairCollection()}
+\item[Arguments:] none
+\item[Value:]  a HistogramPairCollection, the  \textit{Coll} parameter of the considered distribution
+\end{description}
+\bigskip
+\end{description}
+
+\item[Details:] \rule{0pt}{1em}
+\begin{description}
+\item density probability function:
+\begin{equation}
+f(x) = \sum_{i=1}^{n}H_i\;\boldsymbol{1}_{[x_i,x_{i+1}]}(x)
+\end{equation}
+where
+\begin{itemize}
+\item[] $H_i=h_i/S$ is the relative frequency, with $S=\sum_{i=1}^nh_i\,l_i$ the total frequency of data.
+\item[] $l_i = x_{i+1} - x_i$, $1\leq i \leq n$
+\item[] $n$ is the size of the HistogramPairCollection
+\end{itemize}
+\end{description}
+\end{description}
+
+Each  \textit{getMethod}  is associated to a \textit{setMethod}.
+
+% =============================================================
+\newpage
+% \index{Probabilistic modeling!Usual Distributions!InverseNormal}
+\index{InverseNormal}
+\subsubsection{InverseNormal}
+
+
+This class inherits from the Distribution class.
+
+\begin{description}
+
+\item[Usage:]
+\begin{description}
+\item Main parameters set: \textit{InverseNormal(lambda, mu)}
+\item Default construction: \textit{InverseNormal( )}
+\end{description}
+
+\item[Arguments:]  \rule{0pt}{1em}
+\begin{description}
+\item $(lambda, mu)$: two  real value, scale parameter, constraint: $\lambda > 0 $ and $\mu>0$
+\end{description}
+
+\item[Value:] an InverseNormal. In the default construction, we use the \textit{InverseNormal(lambda, mu) = InverseNormal(1.0, 1.0)} definition.
+
+\item[Some methods:]  \rule{0pt}{1em}
+\begin{description}
+
+\item \textit{getLambda}
+\begin{description}
+\item[Usage:] \textit{getLambda()}
+\item[Arguments:] none
+\item[Value:]  a real value, the $\lambda$ parameter of the  distribution
+\end{description}
+\bigskip
+
+\item \textit{getMu}
+\begin{description}
+\item[Usage:] \textit{getMu()}
+\item[Arguments:] none
+\item[Value:]  a real value, the $\mu$ parameter of the  distribution
+\end{description}
+\bigskip
+
+\end{description}
+
+\item[Details:]  \rule{0pt}{1em}
+\begin{description}
+\item density probability function:
+\begin{equation}
+f(x) = \displaystyle \left(\frac{\lambda}{2\pi x^3} \right)^{1/2}e^{-\lambda(x-\mu)^2/(2\mu^2x)} \mathbf{1}_{x>0}
+\end{equation}
+\end{description}
+
+\item[Links:]  \rule{0pt}{1em}
+\extref{ReferenceGuide}{Reference Guide - Standard parametric models}{standardparametricmodels}
+\end{description}
+
+Each  \textit{getMethod}  is associated to a \textit{setMethod}.
+
+% =============================================================
+\newpage
+% \index{Probabilistic modeling!KPermutationsDistribution}
+\index{KPermutationsDistribution}
+\subsubsection{KPermutationsDistribution}
+
+This class inherits from the Distribution class.
+
+\begin{description}
+
+\item[Usage:]  \rule{0pt}{1em}
+\begin{description}
+\item \textit{KPermutationsDistribution(k, n)}
+\item \textit{KPermutationsDistribution(n)}
+\item \textit{KPermutationsDistribution()}
+\end{description}
+\bigskip
+
+\item[Arguments:]  \rule{0pt}{1em}
+\begin{description}
+\item $k$: integer value
+constraint: $k>0$
+\item $n$: integer value
+constraint: $n>0$
+\end{description}
+
+\item[Value:] a KPermutationsDistribution.  \rule{0pt}{1em}
+\begin{description}
+\item in the first usage, the User fixes $k$ and $n$,
+\item in the second usage, the User fixes $n$.and $k$ is taken equal
+to $n$,
+\item in the third usage, the default construction is  \textit{KPermutationsDistribution(1,1)}.
+\end{description}
+
+
+\item[Some methods:] \rule{0pt}{1em}
+\begin{description}
+
+\item \textit{getK}
+\begin{description}
+\item[Usage:] \textit{getK()}
+\item[Arguments:] none
+\item[Value:]  an integer, the $k$ parameter of the  distribution
+\end{description}
+\bigskip
+
+\item \textit{getN}
+\begin{description}
+\item[Usage:] \textit{getN()}
+\item[Arguments:] none
+\item[Value:]  a integer, the $n$ parameter of the  distribution
+\end{description}
+
+\end{description}
+
+\item[Details:]  \rule{0pt}{1em}
+\begin{description}
+\item The
+\textit{KPermutationsDistribution} is the discrete uniform distribution
+on the set of injective functions $(i_0, \hdots, i_{k_1})$ from $\{0, \hdots, k-1\}$ into
+$\{0, \hdots, n-1\}$:
+\begin{equation}
+\displaystyle \Prob{\vect{X} = (i_0, \hdots, i_{k-1})} = \frac{(n-k)!}{n!}
+\end{equation}
+\end{description}
+
+\item[Links:]  \rule{0pt}{1em}
+\extref{ReferenceGuide}{Reference Guide - Standard parametric models}{standardparametricmodels}
+\end{description}
+
+Each  \textit{getMethod}  is associated to a \textit{setMethod}.
+
+
+% =============================================================
+\newpage
+% \index{Probabilistic modeling!Usual Distributions!GeneralizedPareto}
+\index{GeneralizedPareto}
+\subsubsection{GeneralizedPareto}
+
+This class inherits from the Distribution class.
+
+\begin{description}
+
+\item[Usage:] \textit{GeneralizedPareto($\sigma$, $\xi$)}
+
+\item[Arguments:]  \rule{0pt}{1em}
+\begin{description}
+\item $\sigma$: a real value, the scale parameter, constraint  $\sigma >0$.
+\item $\xi$:  a real value, the extremal index
+\end{description}
+
+\item[Value:] GeneralizedPareto. In the default construction, we use the \textit{GeneralizedPareto() = GeneralizedPareto(1.0, 0.0)} definition.
+
+\item[Some methods:] \rule{0pt}{1em}
+\begin{description}
+
+\item \textit{getSigma}
+\begin{description}
+\item[Usage:] \textit{getSigma()}
+\item[Arguments:] none
+\item[Value:]  a real value, the  $\sigma$ parameter of the considered distribution
+\end{description}
+\bigskip
+
+\item \textit{getXi}
+\begin{description}
+\item[Usage:] \textit{getXi()}
+\item[Arguments:] none
+\item[Value:]  a real value, the  $\xi$ parameter of the considered distribution
+\end{description}
+\bigskip
+\end{description}
+
+\item[Details:]  \rule{0pt}{1em}
+\begin{description}
+\item cumulative density function:
+\begin{equation}
+\left\{
+\begin{array}{ll}
+\displaystyle F(x) =  1-\left[
+1+\xi\frac{x}{\sigma}\right]_{\strut}^{-1/\xi} & \mbox{if } \xi \neq 0 \\
+\displaystyle F(x) =  1-exp(-\frac{x}{\sigma}) & \mbox{if } \xi = 0
+\end{array}
+\right.
+\end{equation}
+\end{description}
+
+\item[Links:]  \rule{0pt}{1em}
+\extref{ReferenceGuide}{Reference Guide - Standard parametric models}{standardparametricmodels}
+\end{description}
+
+
+Each  \textit{getMethod}  is associated to a \textit{setMethod}.
+
+% =============================================================
+\newpage
+% \index{Probabilistic modeling!Usual Distributions!Laplace}
+\index{Laplace}
+\subsubsection{Laplace}
+
+This class inherits from the Distribution class.
+
+\begin{description}
+
+\item[Usage:]  \rule{0pt}{1em}
+\begin{description}
+\item Main parameters set: \textit{Laplace($\lambda$, $\mu$)}
+\item Default construction: \textit{Laplace( )}
+\end{description}
+
+\item[Arguments:]  \rule{0pt}{1em}
+\begin{description}
+\item $\lambda$:  a real value, scale parameter, constraint $\lambda>0$,
+\item $\mu$: a real value, mean value.
+\end{description}
+
+\item[Value:] Laplace. In the default construction, we use the \textit{Laplace($\lambda$, $\mu$) = Laplace(1.0, 0.0)} definition.
+
+\item[Some methods:] \rule{0pt}{1em}
+\begin{description}
+
+\item \textit{getLambda}
+\begin{description}
+\item[Usage:] \textit{getLambda()}
+\item[Arguments:] none
+\item[Value:]  a real value, the  $\lambda$ parameter of the considered distribution
+\end{description}
+\bigskip
+
+\item \textit{getMu}
+\begin{description}
+\item[Usage:] \textit{getMu()}
+\item[Arguments:] none
+\item[Value:]  a real value, the  $\mu$ parameter of the considered distribution
+\end{description}
+\bigskip
+\end{description}
+
+\item[Details:]  \rule{0pt}{1em}
+\begin{description}
+\item density function:
+\begin{equation}
+f(x) = \frac{\lambda}{2}e^{-\lambda|x-\mu|}
+\end{equation}
+\end{description}
+
+\item[Links:]  \rule{0pt}{1em}
+\extref{ReferenceGuide}{Reference Guide - Standard parametric models}{standardparametricmodels}
+\end{description}
+
+
+Each  \textit{getMethod}  is associated to a \textit{setMethod}.
+
+% =============================================================
+\newpage
+% \index{Probabilistic modeling!Usual Distributions!Logistic}
+\index{Logistic}
+\subsubsection{Logistic}
+
+This class inherits from the Distribution class.
+
+\begin{description}
+
+\item[Usage:]  \rule{0pt}{1em}
+\begin{description}
+\item Main parameters set: \textit{Logistic($\alpha$, $\beta$)}
+\item Default construction: \textit{Logistic( )}
+\end{description}
+
+\item[Arguments:]  \rule{0pt}{1em}
+\begin{description}
+\item $\alpha$:  a real value, mean value
+\item $\beta$:a  real value, scale parameter,
+constraint: $\beta \geq 0$
+\end{description}
+
+\item[Value:] Logistic. In the default construction, we use the \textit{Logistic($\alpha$, $\beta$) = Logistic(0.0, 1.0)} definition.
+
+\item[Some methods:] \rule{0pt}{1em}
+\begin{description}
+
+\item \textit{getAlpha}
+\begin{description}
+\item[Usage:] \textit{getAlpha()}
+\item[Arguments:] none
+\item[Value:]  a real value, the  $\alpha$ parameter of the considered distribution
+\end{description}
+\bigskip
+
+\item \textit{getBeta}
+\begin{description}
+\item[Usage:] \textit{getBeta()}
+\item[Arguments:] none
+\item[Value:]  a real value, the  $\beta$ parameter of the considered distribution
+\end{description}
+\bigskip
+\end{description}
+
+\item[Details:]  \rule{0pt}{1em}
+\begin{description}
+\item density function:
+\begin{equation}
+f(x) = \frac{e^{\left(-\frac{x-\alpha}{\beta}\right)}}
+{\beta\left(1+ e^{\left(-\frac{x-\alpha}{\beta}\right)}\right)^2}
+\end{equation}
+\item relation between parameters set:
+\begin{eqnarray*}
+\mu                                        &      =       &   \alpha              \\
+\sigma     &  =   &       \sqrt{\frac{1}{3}\pi^2\beta^2}
+\end{eqnarray*}
+\begin{align*}
+\mbox{where}
+&&
+\mu = \Expect{X}
+&&
+\sigma = \sqrt{\Var{X} }
+\end{align*}
+\end{description}
+
+\item[Links:]  \rule{0pt}{1em}
+\extref{ReferenceGuide}{Reference Guide - Standard parametric models}{standardparametricmodels}
+\end{description}
+
+
+Each  \textit{getMethod}  is associated to a \textit{setMethod}.
+
+% =============================================================
+\newpage
+% \index{Probabilistic modeling!Usual Distributions!LogNormal}
+\index{LogNormal}
+\subsubsection{LogNormal}
+
+This class inherits from the Distribution class.
+
+\begin{description}
+
+\item[Usage:] \rule{0pt}{1em}
+\begin{description}
+\item Main parameters set: \textit{LogNormal($\mu_\ell$, $\sigma_\ell$, $\gamma$)}
+\item Second parameters set: \textit{LogNormal($\mu$, $\sigma$, $\gamma$, LogNormal.MUSIGMA)}
+\item Third parameters set: \textit{LogNormal($\mu$, $\delta$, $\gamma$, LogNormal.MU\_SIGMAOVERMU)}
+\item Default construction: \textit{LogNormal( )}
+\end{description}
+
+\item[Arguments:]  \rule{0pt}{1em}
+\begin{description}
+\item $\mu_\ell$:  a real value, mean value of $\log(X)$,
+\item $\sigma_\ell$: a real value, standard deviation  of $\log(X)$, constraint: $\sigma_\ell>0$
+\item $\gamma$: a real value
+\item $\mu$: a real value, mean value, constraint: $\mu > \gamma$
+\item $\sigma$: a real value, standard deviation, constraint: $\sigma > 0 $
+\item $\delta$: a real value such as $\delta = \frac{\sigma}{\mu}$
+\end{description}
+
+\item[Value:] a LogNormal . In the default construction, we use the first set of parameters where
+\begin{equation}
+(\mu_\ell, \sigma_\ell,\gamma) = (0.0, 1.0, 0.0).
+\end{equation}
+
+\item[Some methods:] \rule{0pt}{1em}
+\begin{description}
+
+\item \textit{getGamma}
+\begin{description}
+\item[Usage:] \textit{getGamma()}
+\item[Arguments:] none
+\item[Value:]  a real value, the $\gamma$ parameter of the LogNormal distribution
+\end{description}
+\bigskip
+\item \textit{getMu}
+\begin{description}
+\item[Usage:] \textit{getMu()}
+\item[Arguments:] none
+\item[Value:]  a real value,  the $\mu$ parameter of the  LogNormaldistribution
+\end{description}
+\bigskip
+\item \textit{getMuLog}
+\begin{description}
+\item[Usage:] \textit{getMuLog()}
+\item[Arguments:] none
+\item[Value:]  a real value,  the $\mu_\ell$ parameter of the LogNormal distribution
+\end{description}
+\bigskip
+\item \textit{getSigma}
+\begin{description}
+\item[Usage:] \textit{getSigma()}
+\item[Arguments:] none
+\item[Value:]  a real value,  the $\sigma$ parameter of the LogNormal distribution
+\end{description}
+\bigskip
+\item \textit{getSigmaLog}
+\begin{description}
+\item[Usage:] \textit{getSigmaLog()}
+\item[Arguments:] none
+\item[Value:]  a real value,  the $\sigma_\ell$ parameter of the  LogNormal distribution
+\end{description}
+\bigskip
+
+\item \textit{getSigmaOverMu}
+\begin{description}
+\item[Usage:] \textit{getSigmaOverMu()}
+\item[Arguments:] none
+\item[Value:]  a real value, the  $\sigma/\mu$ parameter of the considered distribution
+\end{description}
+\end{description}
+
+\item[Details:]  \rule{0pt}{1em}
+\begin{description}
+\item density probability function:
+\begin{equation}
+f(x) = \frac{1}{\sqrt{2\pi}\sigma_\ell(x-\gamma)}\;
+e^{-\frac{1}{2}\left(\frac{\log(x-\gamma)-\mu_\ell}{\sigma_\ell}\right)^2}
+\boldsymbol{1}_{[\gamma,+\infty[}(x)
+\end{equation}
+\item relation between parameters set:
+\begin{eqnarray*}
+\mu &     =       &   e^{\mu_\ell + \sigma_\ell^2/2} + \gamma             \\
+\sigma     &  =   &  e^{\mu_\ell + \sigma_\ell^2/2} \sqrt{ \left( e^{\sigma_\ell^2} -1 \right)}
+\end{eqnarray*}
+\begin{align*}
+\mbox{where}
+&&
+\mu = \Expect{X}
+&&
+\sigma = \sqrt{\Var{X} }
+\end{align*}
+\end{description}
+
+\item[Links:]  \rule{0pt}{1em}
+\extref{ReferenceGuide}{Reference Guide - Standard parametric models}{standardparametricmodels}
+\end{description}
+
+Each  \textit{getMethod}  is associated to a \textit{setMethod}.
+
+% =============================================================
+\newpage
+% \index{Probabilistic modeling!Usual Distributions!LogUniform}
+\index{LogUniform}
+\subsubsection{LogUniform}
+
+This class inherits from the Distribution class.
+
+\begin{description}
+
+\item[Usage:] \rule{0pt}{1em}
+\begin{description}
+\item Main parameters set: \textit{LogUniform($a_\ell$, $b_\ell$)}
+\item Default construction: \textit{LogUniform( )}
+\end{description}
+
+\item[Arguments:]  \rule{0pt}{1em}
+\begin{description}
+\item $a_\ell$: a real value, lower bound of $\log(X)$,
+\item $b_\ell$: a real value, upper bound of $\log(X)$, constraint: $b_\ell>a_\ell$
+\end{description}
+
+\item[Value:] a LogUniform: the $\log$ of the variate is \textit{Uniform($a_\ell$, $b_\ell$)} distributed. In the default construction, we use the \textit{LogUniform($a_\ell$, $b_\ell$) = LogUniform(-1.0, 1.0)} definition.
+
+\item[Some methods:] \rule{0pt}{1em}
+\begin{description}
+\item \textit{getALog}
+\begin{description}
+\item[Usage:] \textit{getALog()}
+\item[Arguments:] none
+\item[Value:]  a real value,  the $a_\ell$ parameter of the LogUniform distribution
+\end{description}
+\bigskip
+\item \textit{getBLog}
+\begin{description}
+\item[Usage:] \textit{getBLog()}
+\item[Arguments:] none
+\item[Value:]  a real value,  the $b_\ell$ parameter of the LogUniform distribution
+\end{description}
+\bigskip
+
+\item[Details:]  \rule{0pt}{1em}
+\begin{description}
+\item density probability function:
+\begin{equation}
+f(x) = \frac{1}{x(b_\ell - a_\ell)}\boldsymbol{1}_{[a_\ell, b_\ell]}(\log(x))
+\end{equation}
+\item relation between parameters set:
+\begin{eqnarray*}
+\mu &     =       &  \displaystyle  \frac{e^{b_\ell} - e^{a_\ell}}{b_\ell - a_\ell}       \\
+\sigma^2     &  =   &  \displaystyle \frac{1}{2} \frac{(e^{b_\ell} - e^{a_\ell}) \left[ e^{b_\ell}(b_\ell - a_\ell -2) +  e^{a_\ell}(b_\ell - a_\ell +2)\right]}{(b_\ell - a_\ell)^2}
+\end{eqnarray*}
+\begin{align*}
+\mbox{where}
+&&
+\mu = \Expect{X}
+&&
+\sigma = \sqrt{\Var{X} }
+\end{align*}
+\end{description}
+\end{description}
+\item[Links:]  \rule{0pt}{1em}
+\extref{ReferenceGuide}{Reference Guide - Standard parametric models}{standardparametricmodels}
+\end{description}
+
+Each  \textit{getMethod}  is associated to a \textit{setMethod}.
+
+% =============================================================
+\newpage
+% \index{Probabilistic modeling!Usual Distributions!Multinomial}
+\index{Multinomial}
+\subsubsection{MeixnerDistribution}
+
+This class inherits from the Distribution class.
+
+\begin{description}
+
+\item[Usage:] Main parameters set: \textit{MeixnerDistribution($\alpha$, $\beta$, $\delta$, $\mu$)}
+
+\item[Arguments:]  \rule{0pt}{1em}
+\begin{description}
+\item $\alpha, \beta, \delta, \mu$:  reals with the constraints  $\alpha>0$, $\beta \in ]-\pi, \pi[$, $\delta >0$
+\end{description}
+
+\item[Value:] a MeixnerDistribution
+
+\item[Some methods:] \rule{0pt}{1em}
+\begin{description}
+
+\item \textit{getAlpha}
+\begin{description}
+\item[Usage:] \textit{getAlpha()}
+\item[Arguments:] none
+\item[Value:]  a real, the parameter $\alpha$
+\end{description}
+\bigskip
+
+\item \textit{getBeta}
+\begin{description}
+\item[Usage:] \textit{getBeta()}
+\item[Arguments:] none
+\item[Value:]  a real, the parameter $\beta$
+\end{description}
+\bigskip
+
+\item \textit{getDelta}
+\begin{description}
+\item[Usage:] \textit{getDelta()}
+\item[Arguments:] none
+\item[Value:]  a real, the parameter $\delta$
+\end{description}
+\bigskip
+
+\item \textit{getMu}
+\begin{description}
+\item[Usage:] \textit{getMu()}
+\item[Arguments:] none
+\item[Value:]  a real, the parameter $\mu$
+\end{description}
+\bigskip
+
+\item[Details:]  \rule{0pt}{1em}
+\begin{description}
+\item probability density function:
+\begin{equation}
+\displaystyle  f(x) = \frac{\left[ 2 \cos(\beta/2)\right]^{2\delta}}{2\alpha \pi \Gamma(2\delta)}e^{\frac{\beta(x-\mu)}{\alpha}}| \Gamma(\delta +i\frac{x-\mu}{\alpha})|^2
+\end{equation}
+with  $i^2=-1$.
+\end{description}
+\end{description}
+
+\item[Links:]  \rule{0pt}{1em}
+\extref{ReferenceGuide}{Reference Guide - Standard parametric models}{standardparametricmodels}
+\end{description}
+
+Each  \textit{getMethod}  is associated to a \textit{setMethod}.
+
+
+
+% =============================================================
+\newpage
+% \index{Probabilistic modeling!Usual Distributions!Multinomial}
+\index{Multinomial}
+\subsubsection{Multinomial}
+
+This class inherits from the Distribution class.
+
+\begin{description}
+
+\item[Usage:] Main parameters set: \textit{Multinomial(p, N)}
+
+\item[Arguments:]  \rule{0pt}{1em}
+\begin{description}
+\item $p$:  NumericalPoint of dimension $n$,
+constraint: $0\leq p_i \leq 1$, $\displaystyle q = \sum_{i=1}^n p_i \leq 1$
+\item $N$:  an integer,
+\end{description}
+
+\item[Value:] a Multinomial
+
+\item[Some methods:] \rule{0pt}{1em}
+\begin{description}
+
+\item \textit{getN}
+\begin{description}
+\item[Usage:] \textit{getN()}
+\item[Arguments:] none
+\item[Value:]  a integer, the  $N$ parameter of the considered distribution
+\end{description}
+\bigskip
+
+\item \textit{getP}
+\begin{description}
+\item[Usage:] \textit{getP()}
+\item[Arguments:] none
+\item[Value:]  a NumericalPoint, the  $p$ parameter of the considered distribution
+\end{description}
+\bigskip
+
+\item \textit{getSupport}
+\begin{description}
+\item[Usage:] \textit{getSupport(interval)}
+\item[Arguments:] \textit{interval}: a \textit{Interval}, an interval in $\Rset$
+\item[Value:]  a \textit{NumericalSample}, all the points (here of dimension $n$) of the distribution range which are included in the interval \textit{interval}.
+\end{description}
+\end{description}
+
+\item[Details:]  \rule{0pt}{1em}
+\begin{description}
+\item probability function:
+\begin{equation}
+\displaystyle P(\vect{X} = \vect{x}) = \frac{N!}{x_1!\dots x_n! (N-s)!}p_1^{x_1}\dots p_n^{x_n}(1-q)^{N-s}
+\end{equation}
+with $0\leq p_i \leq 1$, $x_i\in \Nset$, $\displaystyle q = \sum_{i=1}^n p_i \leq 1$, $s=  \sum_{i=1}^n x_i \leq N$
+\item relation between parameters set:
+\begin{eqnarray*}
+\mu_i                                     & =     &   N \, p_i            \\
+\sigma_i                          & =     &               \sqrt{N\, p_i \,(1-p_i) }\\
+\sigma_{i,j}              & =     &       -N \,p_i \, p_j
+\end{eqnarray*}
+\begin{align*}
+\mbox{where}
+&&
+\mu_i = \Expect{X_i}
+&&
+\sigma_i = \sqrt{\Var{X}_i }
+&&
+\sigma_{i,j} = \Cov(X_i,X_j)
+\end{align*}
+\end{description}
+
+\item[Links:]  \rule{0pt}{1em}
+\extref{ReferenceGuide}{Reference Guide - Standard parametric models}{standardparametricmodels}
+\end{description}
+
+Each  \textit{getMethod}  is associated to a \textit{setMethod}.
+
+% ==============================================
+\newpage
+% \index{Probabilistic modeling!Usual Distributions!NegativeBinomial}
+\index{NegativeBinomial}
+\subsubsection{NegativeBinomial}
+
+This class inherits from the Distribution class.
+
+\begin{description}
+
+\item[Usage:]\rule{0pt}{1em}
+\begin{description}
+\item Main parameters set: \textit{NegativeBinomial(r,p)}
+\item Default construction: \textit{NegativeBinomial()}
+\end{description}
+
+\item[Arguments:]  \rule{0pt}{1em}
+\begin{description}
+\item $r$: a real value $>0$,
+\item  $p$: a real value such as $0 < p < 1$.
+\end{description}
+
+\item[Value:] a NegativeBinomial. In the default construction, we use the \textit{NegativeBinomial() = NegativeBinomial(1,0.5)} definition.
+
+\item[Some methods:] \rule{0pt}{1em}
+\begin{description}
+
+\item \textit{getP}
+\begin{description}
+\item[Usage:] \textit{getP()}
+\item[Arguments:] none
+\item[Value:]  a real value in $(0, 1)$, the $p$ parameter of the distribution.
+\end{description}
+\bigskip
+
+\item \textit{getR}
+\begin{description}
+\item[Usage:] \textit{getR()}
+\item[Arguments:] none
+\item[Value:]  a positive real value, the $r$ parameter of the distribution.
+\end{description}
+\bigskip
+
+\item \textit{getSupport}
+\begin{description}
+\item[Usage:] \textit{getSupport(interval)}
+\item[Arguments:] \textit{interval}: a \textit{Interval}, an interval in $\Rset$
+\item[Value:]  a \textit{NumericalSample}, all the points (here of dimension 1) of the distribution range which are included in the interval \textit{interval}.
+\end{description}
+
+\end{description}
+
+\item[Details:]  \rule{0pt}{1em}
+\begin{description}
+\item probability distribution:
+\begin{equation}
+\Prob{X=k}  = \frac{\Gamma(k + r)}{\Gamma(r)\Gamma(k+1)}p^k(1-p)^r, \, \forall k \in \Nset
+\end{equation}
+\item relation between parameters set:
+\begin{eqnarray*}
+\mu  =  \frac{rp}{1-p}               & \mbox{where}& \mu =\Expect{X} \\
+\sigma  = \frac{\sqrt{rp}}{1-p}  & \mbox{where}& \sigma =\sqrt{\Var{X} }
+\end{eqnarray*}
+
+\end{description}
+\bigskip
+
+\item[Links:]  \rule{0pt}{1em}
+\extref{ReferenceGuide}{Reference Guide - Standard parametric models}{standardparametricmodels}
+\end{description}
+
+
+Each  \textit{getMethod}  is associated to a \textit{setMethod}.
+
+
+
+
+% =============================================================
+\newpage
+% \index{Probabilistic modeling!Usual Distributions!NonCentralChiSquare}
+\index{NonCentralChiSquare}
+\subsubsection{NonCentralChiSquare}
+
+This class inherits from the Distribution class.
+
+\begin{description}
+
+\item[Usage:] \rule{0pt}{1em}
+\begin{description}
+\item Main parameters set: \textit{NonCentralChiSquare($\nu$, $\lambda$)}
+\item Default construction: \textit{NonCentralChiSquare( )}
+\end{description}
+
+\item[Arguments:]  \rule{0pt}{1em}
+\begin{description}
+\item $\nu$:  a real positive value,  constraint: $\nu > 0$
+\item $\lambda$:  a real value, constraint: $\lambda \geq 0$
+\end{description}
+
+\item[Value:] a NonCentralChiSquare distribution. In the default construction, we use the \textit{NonCentralChiSquare($\nu$, $\lambda$) = NonCentralChiSquare(5, 0)} definition.
+
+\item[Some methods:] \rule{0pt}{1em}
+\begin{description}
+
+\item \textit{getNu}
+\begin{description}
+\item[Usage:] \textit{getNu()}
+\item[Arguments:] none
+\item[Value:]  a real value,  the $\mu$ parameter of the NonCentralChiSquare distribution
+\end{description}
+\bigskip
+
+\item \textit{getLambda}
+\begin{description}
+\item[Usage:] \textit{getLambda()}
+\item[Arguments:] none
+\item[Value:]  a real value,  the $\lambda$ parameter of the NonCentralChiSquare distribution
+\end{description}
+\bigskip
+\end{description}
+
+\item[Details:]  \rule{0pt}{1em}
+\begin{description}
+\item density function:
+\begin{equation}
+f(x) = \displaystyle \sum_{j=0}^{\infty} e^{-\lambda}\frac{\lambda^j}{j!}p_{\chi^2(\nu+2j)}(x)
+\end{equation}
+where $p_{\chi^2(q)}$ is the probability density function of a $\chi^2(q)$ random variate.
+\end{description}
+
+\item[Links:]  \rule{0pt}{1em}
+\extref{ReferenceGuide}{Reference Guide - Standard parametric models}{standardparametricmodels}
+\end{description}
+
+
+Each  \textit{getMethod}  is associated to a \textit{setMethod}.
+
+% =============================================================
+\newpage
+% \index{Probabilistic modeling!Usual Distributions!NonCentralStudent}
+\index{NonCentralStudent}
+\subsubsection{NonCentralStudent}
+
+This class inherits from the Distribution class.
+
+\begin{description}
+
+\item[Usage:] \rule{0pt}{1em}
+\begin{description}
+\item Main parameters set: \textit{NonCentralStudent($\nu$, $\delta$, $\gamma$)}
+\item Main parameters set: \textit{NonCentralStudent($\nu$, $\delta$)}
+\item Main parameters set: \textit{NonCentralStudent($\nu$)}
+\item Default construction: \textit{NonCentralStudent( )}
+\end{description}
+
+\item[Arguments:]  \rule{0pt}{1em}
+\begin{description}
+\item $\nu$:  a real positive value, generalised number degree of freedom, constraint: $\nu > 0$
+\item $\delta$:  a real value, the non-centrality parameter
+\item $\gamma$:  a real value, the shift from the origin
+\end{description}
+
+\item[Value:] a NonCentralStudent distribution. In the default construction, we use the \textit{NonCentralStudent($\nu$, $\delta$, $\gamma$) = NonCentralStudent(0.5, 0.0, 0.0)} definition, and in the alternative constructions we use \textit{NonCentralStudent($\nu$, $\delta$) = NonCentralStudent($\nu$, $\delta$, 0.0)} which is the classical non-central Student distribution and \textit{NonCentralStudent($\nu$) = NonCentralStudent($\nu$, 0.0, 0.0)} which is the classical Student distribution.
+
+\item[Some methods:] \rule{0pt}{1em}
+\begin{description}
+
+\item \textit{getNu}
+\begin{description}
+\item[Usage:] \textit{getNu()}
+\item[Arguments:] none
+\item[Value:]  a real value,  the $\mu$ parameter of the NonCentralStudent distribution
+\end{description}
+\bigskip
+\item \textit{getDelta}
+\begin{description}
+\item[Usage:] \textit{getDelta()}
+\item[Arguments:] none
+\item[Value:]  a real value,  the $\delta$ parameter of the NonCentralStudent distribution
+\end{description}
+\bigskip
+\item \textit{getGamma}
+\begin{description}
+\item[Usage:] \textit{getGamma()}
+\item[Arguments:] none
+\item[Value:]  a real value,  the $\gamma$ parameter of the NonCentralStudent distribution
+\end{description}
+\bigskip
+\end{description}
+
+\item[Details:]  \rule{0pt}{1em}
+\begin{description}
+\item density function:
+\begin{equation}
+f(x) =\frac{e^{(-\delta^2 / 2)}}{\sqrt{\nu\pi} \Gamma(\nu / 2)}\left(\frac{\nu}{\nu + (x-\gamma)^2}\right) ^ {(\nu + 1) / 2} \sum_{j=0}^{\infty} \frac{\Gamma\left(\frac{\nu + j + 1}{2}\right)}{\Gamma(j + 1)}\left(\delta(x-\gamma)\sqrt{\frac{2}{\nu + (x-\gamma)^2}}\right) ^ j
+\end{equation}
+\item relation between parameters set:
+\begin{eqnarray*}
+\sigma            &  =    &       \sqrt{\frac{\nu}{\nu-2} }
+\end{eqnarray*}
+\begin{align*}
+\mbox{where}
+&&
+\mu = \Expect{X}
+&&
+\sigma = \sqrt{\Var{X} }
+\end{align*}
+\end{description}
+
+\item[Links:]  \rule{0pt}{1em}
+\extref{ReferenceGuide}{Reference Guide - Standard parametric models}{standardparametricmodels}
+\end{description}
+
+
+Each  \textit{getMethod}  is associated to a \textit{setMethod}.
+
+
+
+% ===================================================
+\newpage
+% \index{Probabilistic modeling!Usual Distributions!Normal}
+\index{Normal}
+\subsubsection{Normal}
+
+
+\begin{description}
+\item[Usage:] \rule{0pt}{1em}
+\begin{description}
+\item \textit{Normal(mean,standardDeviation)}
+\item \textit{Normal(dim)}
+\item \textit{Normal($\mu$,$\sigma$,$R$)}
+\item \textit{Normal($\mu$,$\Sigma$)}
+\item Default construction: \textit{Normal( )}
+\end{description}
+
+\item[Arguments:]  \rule{0pt}{1em}
+\begin{description}
+\item \textit{mean}: a scalar, the mean value of the 1D normal distribution
+\item \textit{standardDeviation}: a scalar, the standard deviation value of the 1D normal distribution
+\item \textit{dim}, an integer: the dimension of the Normal distribution
+\item $\mu$: a NumericalPoint, the mean of the Distribution
+\item $\sigma$: a NumericalPoint, the standard deviation of each component, constraint: $\sigma[i]>0, \forall i $
+\item $R$: a CorrelationMatrix, the linear correlation matrix of the Normal distribution
+\item $\Sigma$: a CovarianceMatrix, the covariance matrix of the Normal distribution
+\end{description}
+
+\item[value:]  \rule{0pt}{1em}
+\begin{description}
+\item while using the first usage, a 1D normal distribution with \textit{mean} as mean value, \textit{standardDeviation} as standard deviation
+\item while using the second usage, a normal distribution of dimension \textit{dim}, with $\vect{0}$ mean value vector, $\vect{1}$-standard deviation vector and identity correlation matrix
+\item while using the third usage, a nD normal distribution with $\vect{\mu}$ as mean vector, $\vect{\sigma}$ as standard deviation vector and $\mat{R}$ as linear correlation matrix
+\item while using the fourth usage, a nD normal distribution with $\mu$ as mean vector, $\mat{\Sigma}$ as covariance matrix
+\item while using the defalt usage, a 1D normal distribution with O mean and unit variance.
+\end{description}
+
+\item[Some methods:] \rule{0pt}{1em}
+\begin{description}
+
+\item \textit{computeCharacteristicFunction}
+\begin{description}
+\item[Usage:] \rule{0pt}{1em}
+\begin{description}
+\item \textit{computeCharacteristicFunction(scalar)}
+\item \textit{computeCharacteristicFunction(vector)}
+\end{description}
+\item[Arguments:]  \rule{0pt}{1em}
+\begin{description}
+\item \textit{scalar}: a float
+\item \textit{vector}: a NumericalPoint if the distribution dimension is more than 1.
+\end{description}
+\item[Value:] a complex value, the value of the characteristic
+function at point \textit{scalar} or \textit{vector}. OpenTURNS proposes an implementation of all its univariate distributions, continuous or discrete ones. But only some of the them have the implementation of a specific algorithm that evaluates the characteristic function: it is the case of all the discrete distributions and most of (but not all) the continuous ones. In that case, the evaluation is performant. For the remaining distributions, the generic implementation might be time consuming for high arguments.
+\end{description}
+\bigskip
+
+\item \textit{computeLogCharacteristicFunction}
+\begin{description}
+\item[Usage:] \rule{0pt}{1em}
+\begin{description}
+\item \textit{computeLogCharacteristicFunction(scalar)}
+\item \textit{computeLogCharacteristicFunction(vector)}
+\end{description}
+\item[Arguments:] \rule{0pt}{1em}
+\begin{description}
+\item \textit{scalar}: a float
+\item \textit{vector}: a NumericalPoint if the distribution dimension is more than 1.
+\end{description}
+\item[Value:] a complex value, the value of the log characteristic function at point \textit{scalar} or \textit{vector}. OpenTURNS proposes an implementation of all its univariate distributions, continuous or discrete ones. But only some of the them have the implementation of a specific algorithm that evaluates the characteristic function: it is the case of all the discrete distributions and most of (but not all) the continuous ones. In that case, the evaluation is performant. For the remaining distributions, the generic implementation might be time consuming for high arguments.
+\end{description}
+\bigskip
+
+\end{description}
+
+\item[Details:]
+\begin{description}
+\item probability density function:
+\begin{equation}\displaystyle
+\frac{1}
+{
+\displaystyle (2\pi)^{\frac{n}{2}}(\mathrm{det}\mathbf{\Sigma})^{\frac{1}{2}}
+}
+\displaystyle e^{-\frac{1}{2}\Tr{(x-\mu)}\mathbf{\Sigma}^{-1}(x-\mu)}
+\end{equation}
+with $\Sigma = \Lambda(\sigma) R \Lambda(\sigma)$, $\Lambda(\sigma) = diag(\sigma)$, $R$ symmetric, definite and positive, $\sigma_i >0$.
+
+\end{description}
+
+\item[Links:]  \rule{0pt}{1em}
+\extref{ReferenceGuide}{Reference Guide - Standard parametric models}{standardparametricmodels}
+
+\end{description}
+
+
+Each  \textit{getMethod}  is associated to a \textit{setMethod}.
+
+% =============================================================
+\newpage
+% \index{Probabilistic modeling!Usual Distributions!Poisson}
+\index{Poisson}
+\subsubsection{Poisson}
+
+This class inherits from the Distribution class.
+
+\begin{description}
+
+\item[Usage:] Main parameters set: \textit{Poisson($\lambda$)}
+
+\item[Arguments:]  $\lambda$:  real value, mean and variance value, constraint: $\lambda>0$
+
+\item[Value:] Poisson
+
+\item[Some methods:]  \rule{0pt}{1em}
+\begin{description}
+
+\item \textit{getLambda}
+\begin{description}
+\item[Usage:] \textit{getLambda()}
+\item[Arguments:] none
+\item[Value:]  a real positive value, the  $\lambda$ parameter of the considered distribution
+\end{description}
+\bigskip
+\end{description}
+
+\item[Details:]  \rule{0pt}{1em}
+\begin{description}
+\item probability function:
+\begin{equation}
+\Prob{X=k} =
+\frac{\lambda^k}{k!}\;e^{-\lambda}, \,  k \in \Nset
+\end{equation}
+\item relation between parameters set:
+\begin{eqnarray*}
+\mu                                       &       =       &   \lambda             \\
+\sigma                            &  =    &       \sqrt{\lambda }
+\end{eqnarray*}
+\begin{align*}
+\mbox{where}
+&&
+\mu = \Expect{X}
+&&
+\sigma = \sqrt{\Var{X} }
+\end{align*}
+\end{description}
+
+\item[Links:]  \rule{0pt}{1em}
+\extref{ReferenceGuide}{Reference Guide - Standard parametric models}{standardparametricmodels}
+\end{description}
+
+Each  \textit{getMethod}  is associated to a \textit{setMethod}.
+
+% =============================================================
+\newpage
+% \index{Probabilistic modeling!Usual Distributions!Rayleigh}
+\index{Rayleigh}
+\subsubsection{Rayleigh}
+
+This class inherits from the Distribution class.
+
+\begin{description}
+
+\item[Usage:] Main parameters set: \textit{Rayleigh($\sigma$, $\gamma$)}
+
+\item[Arguments:]  \rule{0pt}{1em}
+\begin{description}
+\item $\sigma$:  a real positive value, constraint: $\sigma > 0$
+\item $\gamma$:  a real value
+\end{description}
+
+\item[Value:] Rayleigh. In the default construction, we use the \textit{Rayleigh($\sigma$, $\gamma$) = Rayleigh(1.0, 0.0)} definition.
+
+\item[Some methods:]  \rule{0pt}{1em}
+\begin{description}
+
+\item \textit{getSigma}
+\begin{description}
+\item[Usage:] \textit{getSigma()}
+\item[Arguments:] none
+\item[Value:]  a real positive value, the  $\sigma$ parameter of the considered distribution
+\end{description}
+\bigskip
+\item \textit{getGamma}
+\begin{description}
+\item[Usage:] \textit{getGamma()}
+\item[Arguments:] none
+\item[Value:]  a real value, the  $\gamma$ parameter of the considered distribution
+\end{description}
+\bigskip
+\end{description}
+
+\item[Details:]  \rule{0pt}{1em}
+\begin{description}
+\item probability function:
+\begin{equation}
+f(x) = \frac{(x - \gamma)}{\sigma^2}e^{-\frac{(x-\gamma)^2}{2\sigma^2}}\boldsymbol{1}_{[\gamma,+\infty[}(x)
+\end{equation}
+\end{description}
+
+\item[Links:]  \rule{0pt}{1em}
+\extref{ReferenceGuide}{Reference Guide - Standard parametric models}{standardparametricmodels}
+\end{description}
+
+Each  \textit{getMethod}  is associated to a \textit{setMethod}.
+
+% =============================================================
+\newpage
+% \index{Probabilistic modeling!Usual Distributions!Rice}
+\index{Rice}
+\subsubsection{Rice}
+
+This class inherits from the Distribution class.
+
+\begin{description}
+
+\item[Usage:] Main parameters set: \textit{Rice($\sigma$, $\nu$)}
+
+\item[Arguments:]  \rule{0pt}{1em}
+\begin{description}
+\item $\sigma$:  a real positive value, constraint: $\sigma > 0$
+\item $\nu$:  a real value, constraint: $\nu \geq 0$
+\end{description}
+
+\item[Value:] Rice. In the default construction, we use the \textit{Rice($\sigma$, $\nu$) = Rice(1, 0)} definition.
+
+\item[Some methods:]  \rule{0pt}{1em}
+\begin{description}
+
+\item \textit{getSigma}
+\begin{description}
+\item[Usage:] \textit{getSigma()}
+\item[Arguments:] none
+\item[Value:]  a real positive value, the  $\sigma$ parameter of the considered distribution
+\end{description}
+\bigskip
+\item \textit{getNu}
+\begin{description}
+\item[Usage:] \textit{getNu()}
+\item[Arguments:] none
+\item[Value:]  a real value, the  $\nu$ parameter of the considered distribution
+\end{description}
+\bigskip
+\end{description}
+
+\item[Details:]  \rule{0pt}{1em}
+\begin{description}
+\item probability function:
+\begin{equation}
+f(x) =  \displaystyle 2\frac{x}{\sigma^2}p_{\chi^2(2,\frac{\nu^2}{\sigma^2})}(\frac{x^2}{\sigma^2})
+\end{equation}
+where $p_{\chi^2(\nu, \lambda)}$ is the probability density function of a Non Central Chi Square distribution.
+
+\end{description}
+
+\item[Links:]  \rule{0pt}{1em}
+\extref{ReferenceGuide}{Reference Guide - Standard parametric models}{standardparametricmodels}
+\end{description}
+
+Each  \textit{getMethod}  is associated to a \textit{setMethod}.
+
+% =============================================================
+\newpage
+% \index{Probabilistic modeling!Usual Distributions!Rice}
+\index{Rice}
+\subsubsection{Skellam}
+
+This class inherits from the Distribution class.
+
+\begin{description}
+
+\item[Usage:] Main parameters set: \textit{Skellam($\lambda_1$, $\lambda_2$)}
+
+\item[Arguments:]   $\lambda_1$, $\lambda_2$:   real positive values.
+
+\item[Value:] Skellam. In the default construction, we use the \textit{Skellam($\lambda_1$, $\lambda_2$) = Skellam(1, 1)} definition.
+
+\item[Some methods:]  \rule{0pt}{1em}
+\begin{description}
+
+\item \textit{getLambda1}
+\begin{description}
+\item[Usage:] \textit{getLambda1()}
+\item[Arguments:] none
+\item[Value:]  a real positive value, the  $\lambda_1$ parameter of the considered distribution
+\end{description}
+\bigskip
+
+\item \textit{getLambda2}
+\begin{description}
+\item[Usage:] \textit{getLambda2()}
+\item[Arguments:] none
+\item[Value:]  a real positive value, the  $\lambda_2$ parameter of the considered distribution
+\end{description}
+\bigskip
+
+\end{description}
+
+
+\item[Details:]  The Skellan distribution takes its values in $\Zset$. It is the distribution of $(X_1-X_2)$ for $(X_1, X_2)$ independant and respectively distributed according to \textit{Poisson($\lambda_i$)}.
+\begin{description}
+\item probability distribution function:
+\begin{equation}
+\forall k \in \Zset, \quad \Prob{X = k} = 2\Prob{Y=2\lambda_1}
+\end{equation}
+where $Y$ is distributed according to the non central chi-square distribution $\chi^2_{\nu, \delta}$, with $\nu=2(k+1)$ and $\delta=2\lambda_2$.
+\end{description}
+
+\item[Links:]  \rule{0pt}{1em}
+\extref{ReferenceGuide}{Reference Guide - Standard parametric models}{standardparametricmodels}
+\end{description}
+
+Each  \textit{getMethod}  is associated to a \textit{setMethod}.
+
+
+
+
+% =============================================================
+\newpage
+% \index{Probabilistic modeling!Usual Distributions!Student}
+\index{Student}
+\subsubsection{Student}
+
+This class inherits from the Distribution class.
+
+\begin{description}
+
+\item[Usage:] \rule{0pt}{1em}
+\begin{description}
+\item \textit{Student($\nu$, $\vect{\mu}$, $\vect{\sigma}$, $\mat{R}$)}
+\item \textit{Student($\nu$)}
+\item \textit{Student($\nu$, $\mu$)}
+\item \textit{Student($\nu$, $\mu$, $\sigma$)}
+\item \textit{Student($\nu$, d)}
+\item Default construction: \textit{Student()}
+\end{description}
+
+\item[Arguments:]  \rule{0pt}{1em}
+\begin{description}
+\item $\nu$: a real positive value, generalised number degree of freedom, constraint: $\nu > 0$.
+\item $\vect{\mu} (\mu)$: a NumericalPoint (a real value), the mean value of the distribution if $\nu>1$, its location parameter for $\nu\leq 1$.
+\item $\vect{\sigma} (\sigma)$: a NumericalPoint (a real value), the scale parameter of the distribution, constraint: $\sigma_i > 0$.
+\item $\mat{R}$: a CorrelationMatrix, the correlation matrix of the distribution if $\nu>2$, its generalized correlation matrix for $\nu\leq 2$.
+\item \textit{d}: an integer value, the dimension of the distribution, constraint: $d \geq 1$.
+\end{description}
+
+\item[Value:] a Student distribution. In the simplified constructions where the dimension $d$ is not specified (usages number 2 to 5) and in the default construction, we use $d=1$, $\nu=3$, $\mu=0$, $\sigma=1$. In the last construction where the dimension $d$d is specified, we use $\vect{\mu}= (1, \dots, 1) \in \Rset^d$, $\vect{\sigma}= (1, \dots, 1) \in \Rset^d$ and $\mat{R} = \mat{Id}(d) \in \Rset^d \times \Rset^d$.
+
+\item[Some methods:] \rule{0pt}{1em}
+\begin{description}
+
+\item \textit{getMu}
+\begin{description}
+\item[Usage:] \textit{getMu()}
+\item[Arguments:] none
+\item[Value:]  a real value, the $\mu$ parameter of the Student distribution. Only defined when the dimension is 1 (else, use the getMEan() method inherited from the EllipticalDistribution class).
+\end{description}
+\bigskip
+\item \textit{getNu}
+\begin{description}
+\item[Usage:] \textit{getNu()}
+\item[Arguments:] none
+\item[Value:]  a real value, the generalized number of degrees of freedom of the Student distribution;
+\end{description}
+\bigskip
+\end{description}
+
+\item[Details:]  \rule{0pt}{1em}
+\begin{description}
+\item density function:
+\begin{equation}
+f(\vect{x}) = \frac{\Gamma\left(\frac{\nu+d}{2}\right)}
+{(\pi \nu)^{\frac{d}{2}}\Gamma\left(\frac{\nu}{2}\right)}\frac{\left|\mathrm{det}(\mat{R})\right|^{-1/2}}{\prod_{k=1}^d\sigma_k}\left(1+\frac{\vect{z}^t\mat{R}^{-1}\vect{z}}{\nu}\right)^{-\frac{\nu+d}{2}}
+\end{equation}
+where $\vect{z}=\mat{\Delta}^{-1}\left(\vect{x}-\vect{\mu}\right)$ with $\mat{\Delta}=\mat{\mathrm{diag}}(\vect{\sigma})$.
+\item relation between parameters and moments:
+\begin{eqnarray*}
+\vect{\Expect{X}} & = & \vect{\mu}\mbox{ if }\nu>1\\
+\mat{\Cov{X}} & = & \displaystyle \frac{\nu}{\nu-2}\mat{\Delta}^t\,\mat{R}\,\mat{\Delta}\mbox{ if }\nu>2
+\end{eqnarray*}
+\end{description}
+
+\item[Links:]  \rule{0pt}{1em}
+\extref{ReferenceGuide}{Reference Guide - Standard parametric models}{standardparametricmodels}
+\end{description}
+
+
+Each  \textit{getMethod}  is associated to a \textit{setMethod}.
+
+% =============================================================
+\newpage
+% \index{Probabilistic modeling!Usual Distributions!Trapezoidal}
+\index{Trapezoidal}
+\subsubsection{Trapezoidal}
+
+This class inherits from the Distribution class.
+
+\begin{description}
+
+\item[Usage:] \rule{0pt}{1em}
+\begin{description}
+\item Main parameters set: \textit{Trapezoidal(a,b,c,d)}
+\item Default construction: \textit{Trapezoidal( )}
+\end{description}
+
+\item[Arguments:]  \rule{0pt}{1em}
+\begin{description}
+\item \textit{a}: a real value, the lower bound
+\item \textit{b}: a real value, the level start
+\item \textit{c}: a real value, the level end
+\item \textit{d}: a real value, the upper bound, constraints: $a\leq b < c\leq d$
+\end{description}
+
+\item[Value:]  Trapezoidal. In the default construction, we use the \textit{Trapezoidal(a,b,c,d) = Trapezoidal(-2.0,-1.0,1.0, 2.0)} definition.
+
+\item[Some methods:] \rule{0pt}{1em}
+\begin{description}
+
+\item \textit{getA}
+\begin{description}
+\item[Usage:] \textit{getA()}
+\item[Arguments:] none
+\item[Value:]  a real value,  the $a$ parameter of the Trapezoidal distribution
+\end{description}
+\bigskip
+
+\item \textit{getB}
+\begin{description}
+\item[Usage:] \textit{getB()}
+\item[Arguments:] none
+\item[Value:]  a real value,  the $b$ parameter of the Trapezoidal distribution
+\end{description}
+
+\item \textit{getC}
+\begin{description}
+\item[Usage:] \textit{getC()}
+\item[Arguments:] none
+\item[Value:]  a real value,  the $c$ parameter of the Trapezoidal distribution
+\end{description}
+
+\item \textit{getD}
+\begin{description}
+\item[Usage:] \textit{getD()}
+\item[Arguments:] none
+\item[Value:]  a real value,  the $d$ parameter of the Trapezoidal distribution
+\end{description}
+
+\end{description}
+
+\item[Details:]  \rule{0pt}{1em}
+\begin{description}
+\item density function:
+\begin{equation}
+f_X(x;(a,b,c,d)) = \left\{
+\begin{array}{ll}
+\displaystyle h \frac {x-a}{b-a} & \textrm{if}\ a\leq x < b \\
+\displaystyle h & \textrm{if}\ b\leq x < c \\
+\displaystyle  h \frac{d-x}{d-c}& \textrm{if}\ c\leq x < d \\
+0 & \textrm{otherwise}
+\end{array}
+\right.
+\end{equation}
+with:
+$h=\frac{2}{d+c-a-b}$
+
+\item relation between parameter sets:
+\begin{eqnarray*}
+\mu           &   = &   \frac{h}{6}(d^2 + cd + c^2 - b^2 - ab - a^2)  \\
+\sigma^2        &  =  &  \frac{h^2}{72}(d^4 + 2cd^3 - 3bd^3 - 3ad^3 - 3bcd^2 - 3acd^2 + ...\\
+& & ... + 4b^2d^2 + 4abd^2 + 4a^2d^2 + 2c^3d - 3bc^2d - 3ac^2d   \\
+& & + 4b^2cd + 4abcd + 4a^2cd - 3b^3d - 3ab^2d - ...\\
+& & ... 3a^2bd - 3a^3d + c^4 - 3bc^3 - 3ac^3 +4b^2c^2 + 4abc^2   \\
+& & + 4a^2c^2 - 3b^3c - 3ab^2c - 3a^2bc - ...\\
+& & ... 3a^3c + b^4 + 2ab^3 + 2a^3b + a^4)
+\end{eqnarray*}
+\begin{align*}
+\mbox{where}
+&&
+\mu = \Expect{X}
+&&
+\sigma^2 = \Var{X}
+\end{align*}
+\end{description}
+\bigskip
+
+\item[Links:]  \rule{0pt}{1em}
+\extref{ReferenceGuide}{Reference Guide - B121 DistributionSelection}{docref_B121_DistributionSelection}
+\end{description}
+
+
+Each  \textit{getMethod}  is associated to a \textit{setMethod}.
+
+
+
+
+% =============================================================
+\newpage
+% \index{Probabilistic modeling!Usual Distributions!Trapezoidal}
+\index{Trapezoidal}
+\subsubsection{Triangular}
+
+This class inherits from the Distribution class.
+
+\begin{description}
+
+\item[Usage:] \rule{0pt}{1em}
+\begin{description}
+\item Main parameters set: \textit{Triangular(a,m,b)}
+\item Default construction: \textit{Triangular( )}
+\end{description}
+
+\item[Arguments:]  \rule{0pt}{1em}
+\begin{description}
+\item \textit{a}: a  real value, the lower bound
+\item \textit{b}: a real value, the upper bound, constraint: $b\geq a$
+\item \textit{m}: a real value, the mode, constant, $b\geq m \geq a$
+\end{description}
+
+\item[Value:] Triangular. In the default construction, we use the \textit{Triangular(a, m, b) = Triangular(-1.0, 0.0, 1.0)} definition.
+
+\item[Some methods:] \rule{0pt}{1em}
+\begin{description}
+
+\item \textit{getA}
+\begin{description}
+\item[Usage:] \textit{getA()}
+\item[Arguments:] none
+\item[Value:]  a real value,  the $a$ parameter of the Triangular distribution
+\end{description}
+\bigskip
+
+\item \textit{getB}
+\begin{description}
+\item[Usage:] \textit{getB()}
+\item[Arguments:] none
+\item[Value:]  a real value,  the $b$ parameter of the Triangular distribution
+\end{description}
+\bigskip
+
+\item \textit{getM}
+\begin{description}
+\item[Usage:] \textit{getM()}
+\item[Arguments:] none
+\item[Value:]  a real value,  the $m$ parameter of the Triangular distribution
+\end{description}
+\bigskip
+\end{description}
+
+\item[Details:]  \rule{0pt}{1em}
+\begin{description}
+\item density function:
+\begin{equation}
+f(x) =
+\left\{
+\begin{array}{ll}
+\displaystyle \frac{2(x-a)}{(m-a)(b-a)} & a \leq x \leq m \\
+\displaystyle \frac{2(b-x)}{(b-m)(b-a)} & m \leq x \leq b \\
+0 & \mbox{elsewhere}
+\end{array}
+\right.
+\end{equation}
+
+\item relation between parameters set:
+\begin{eqnarray*}
+\mu                                       &       =       &   \frac{1}{3}\,(a+m+b)        \\
+\sigma                            &  =    &       \sqrt{ \frac{1}{18} (a^2+b^2+m^2-ab-am-bm)}
+\end{eqnarray*}
+\begin{align*}
+\mbox{where}
+&&
+\mu = \Expect{X}
+&&
+\sigma = \sqrt{\Var{X} }
+\end{align*}
+\end{description}
+\bigskip
+
+\item[Links:]  \rule{0pt}{1em}
+\extref{ReferenceGuide}{Reference Guide - Standard parametric models}{standardparametricmodels}
+\end{description}
+
+
+Each  \textit{getMethod}  is associated to a \textit{setMethod}.
+
+% =============================================================
+\newpage
+% \index{Probabilistic modeling!Usual Distributions!TruncatedNormal}
+\index{TruncatedNormal}
+\subsubsection{TruncatedNormal}
+
+This class inherits from the Distribution class.
+
+\begin{description}
+
+\item[Usage:] \rule{0pt}{1em}
+\begin{description}
+\item Main parameters set: \textit{TruncatedNormal($\mu_n$,$\sigma_n$,a,b)}
+\item Default construction: \textit{TruncatedNormal( )}
+\end{description}
+
+\item[Arguments:]  \rule{0pt}{1em}
+\begin{description}
+\item $\mu_n$:  a real value which corresponds to the mean of the associated non truncated normal
+\item $\sigma_n$:  a real value which corresponds to the standard deviation of the associated non truncated normal
+\item $a$: a real value, the lower bound
+\item $b$: a real value, the upper bound, constraint: $b\geq a$
+\end{description}
+
+\item[Value:] TruncatedNormal . In the default construction, we use the \\
+\textit{TruncatedNormal($mu_n$, $sigma_n$, $a$, $b$) = TruncatedNormal(0.0, 1.0, -1.0, 1.0)} definition.
+
+\item[Some methods:]   \rule{0pt}{1em}
+\begin{description}
+
+\item \textit{getA}
+\begin{description}
+\item[Usage:] \textit{getA()}
+\item[Arguments:] none
+\item[Value:]  a real value, the $a$ parameter of the TruncatedNormal distribution
+\end{description}
+\bigskip
+\item \textit{getB}
+\begin{description}
+\item[Usage:] \textit{getB()}
+\item[Arguments:] none
+\item[Value:]  a real value, the  $b$ parameter of the TruncatedNormal distribution
+\end{description}
+\bigskip
+\item \textit{getMu}
+\begin{description}
+\item[Usage:] \textit{getMu()}
+\item[Arguments:] none
+\item[Value:]  a real value, the $\mu_n$ parameter of the TruncatedNormal distribution
+\end{description}
+\bigskip
+\item \textit{getSigma}
+\begin{description}
+\item[Usage:] \textit{getSigma()}
+\item[Arguments:] none
+\item[Value:]  a real value, the $\sigma_n$ parameter of the TruncatedNormal distribution
+\end{description}
+\bigskip
+\end{description}
+
+\item[Details:]  \rule{0pt}{1em}
+\begin{description}
+\item probability density function:
+\begin{equation}
+f(x) =
+\frac{\frac{1}{\sigma_n}\;\phi(\frac{x-\mu_n}{\sigma_n})}
+{\Phi(\frac{b-\mu_n}{\sigma_n}) - \Phi(\frac{a-\mu_n}{\sigma_n})}
+\boldsymbol{1}_{[a, b]}(x)
+\end{equation}
+(where $\phi$ and $\Phi$ are, respectively, the probability density distribution function and the cumulative
+distribution function of a standard normal distribution)
+
+\item relation between parameters set:
+\begin{eqnarray*}
+\mu                                       &       =       &   \mu_n -
+\sigma_n \;
+\frac{\phi(b_{red}) - \phi(a_{red})}
+{\Phi(b_{red}) - \Phi(a_{red})}   \\
+\sigma            &  =    &       \sigma_n
+\left\{
+1
+-
+\frac{b_{red}\,\phi(b_{red}) - a_{red}\,\phi(a_{red})}
+{\Phi(b_{red}) - \Phi(a_{red})}
+-
+\left[
+\frac{\phi(b_{red}) - \phi(a_{red})}
+{\Phi(b_{red}) - \Phi(a_{red})}
+\right]^2
+\right\}^{1/2}
+\end{eqnarray*}
+where
+\begin{eqnarray*}
+a_{red} = \frac{a - \mu_n}{\sigma_n} &&
+b_{red} = \frac{b - \mu_n}{\sigma_n}
+\end{eqnarray*}
+and
+\begin{align*}
+\mu = \Expect{X}
+&&
+\sigma = \sqrt{\Var{X} }
+\end{align*}
+\end{description}
+
+\item[Links:]  \rule{0pt}{1em}
+\extref{ReferenceGuide}{Reference Guide - Standard parametric models}{standardparametricmodels}
+\end{description}
+
+
+
+
+Each  \textit{getMethod}  is associated to a \textit{setMethod}.
+
+% =============================================================
+\newpage
+% \index{Probabilistic modeling!Usual Distributions!TruncatedNormal}
+\index{TruncatedNormal}
+\subsubsection{Uniform}
+
+This class inherits from the Distribution class.
+
+\begin{description}
+
+\item[Usage:] \rule{0pt}{1em}
+\begin{description}
+\item Main parameters set: \textit{Uniform(a,b)}
+\item Default construction: \textit{Uniform( )}
+\end{description}
+
+\item[Arguments:]  \rule{0pt}{1em}
+\begin{description}
+\item $a$: a  real value, the lower bound
+\item $b$: a real value, the upper bound, constraint: $b>a$
+\end{description}
+
+\item[Value:]  Uniform. In the default construction, we use the \textit{Uniform(a, b) = Uniform(-1.0, 1.0)} definition.
+
+\item[Some methods:] \rule{0pt}{1em}
+\begin{description}
+
+\item \textit{getA}
+\begin{description}
+\item[Usage:] \textit{getA()}
+\item[Arguments:] none
+\item[Value:]  a real value, the $a$ parameter of the Uniform distribution
+\end{description}
+\bigskip
+
+\item \textit{getB}
+\begin{description}
+\item[Usage:] \textit{getB()}
+\item[Arguments:] none
+\item[Value:]  a real value, the $b$ parameter of the Uniform distribution
+\end{description}
+
+\end{description}
+
+\item[Details:]  \rule{0pt}{1em}
+\begin{description}
+\item density function:
+\begin{equation}
+f(x) =
+\left\{
+\begin{array}{ll}
+\displaystyle \frac{1}{(b-a)} & a \leq x \leq b \\
+0 & \mbox{elsewhere}
+\end{array}
+\right.
+\end{equation}
+
+\item relation between parameters set:
+\begin{eqnarray*}
+\mu                                       &       =       &   \frac{a+b}{2}       \\
+\sigma                            &  =    &       \frac{b-a}{2\sqrt{3}}
+\end{eqnarray*}
+\begin{align*}
+\mbox{where}
+&&
+\mu = \Expect{X}
+&&
+\sigma = \sqrt{\Var{X} }
+\end{align*}
+\end{description}
+\bigskip
+
+\item[Links:]  \rule{0pt}{1em}
+\extref{ReferenceGuide}{Reference Guide - Standard parametric models}{standardparametricmodels}
+\end{description}
+
+
+Each \textit{getMethod} is associated to a \textit{setMethod}.
+
+
+
+% =================================================
+
+\newpage
+% \index{Probabilistic modeling!Usual Distributions!TruncatedNormal}
+\index{TruncatedNormal}
+\subsubsection{UserDefined}
+
+This class inherits from the Distribution class.
+
+\begin{description}
+
+\item[Usage:] \textit{UserDefined(Coll)}
+
+\item[Arguments:]  \textit{Coll}: a UserDefinedPairCollection. The collection of UserDefinedPair of the UserDefinedPairCollection does not need such that $\sum_1^n  p_i = 1.0$. If not the case, the weights are normalized.
+
+\item[Value:] a UserDefined
+
+\item[Some methods:]  \rule{0pt}{1em}
+\begin{description}
+
+
+\item \textit{getPairCollection}
+\begin{description}
+\item[Usage:] \textit{getPairCollection()}
+\item[Arguments:] none
+\item[Value:]  a UserDefinedPairCollection, the  \textit{Coll} parameter of the considered distribution where the weights are normalized.
+\end{description}
+\bigskip
+
+\item \textit{getSupport}
+\begin{description}
+\item[Usage:] \textit{getSupport(interval)}
+\item[Arguments:] \textit{interval}: a \textit{Interval}, an interval in $\Rset$
+\item[Value:]  a \textit{NumericalSample}, all the points (here of dimension $n$) of the distribution range which are included in the interval \textit{interval}.
+\end{description}
+\bigskip
+
+\item \textit{isIntegral}
+\begin{description}
+\item[Usage:] \textit{isIntegral()}
+\item[Arguments:] no argument
+\item[Value:] a boolean which indicates wether the considered distribution has integer values.
+\end{description}
+
+\end{description}
+
+\item[Details:] \rule{0pt}{1em}
+\begin{description}
+\item probability function:
+\begin{equation}
+\Prob{X=x_i} = p_i,\quad i = 1,\ldots,n
+\end{equation}
+where
+\begin{itemize}
+\item[] \textit{($x_i$,$p_i$)} and $i=1,\ldots,n$ are respectively a NumericalPoint and its associated probability
+\item[] $n$ is the size of the UserDefinedPairCollection
+\end{itemize}
+
+\item One must have
+\begin{equation}
+\sum_{i=1}^{n} p_i = 1
+\end{equation}
+
+\end{description}
+\end{description}
+
+Each  \textit{getMethod}  is associated to a \textit{setMethod}.
+
+% =============================================================
+\newpage
+% \index{Probabilistic modeling!Usual Distributions!Weibull}
+\index{Weibull}
+\subsubsection{Weibull}
+
+This class inherits from the Distribution class.
+
+\begin{description}
+
+\item[Usage:] \rule{0pt}{1em}
+\begin{description}
+\item Main parameters set: \textit{Weibull($\alpha$,$\beta$,$\gamma$)}
+\item Second parameter set: \textit{Weibull($\mu$,$\sigma$,$\gamma$,1)}
+\item Default construction: \textit{Weibull( )}
+\end{description}
+\bigskip
+
+\item[Arguments:]  \rule{0pt}{1em}
+\begin{description}
+\item $\alpha$       : a real value, the shape parameter, constraint: $\alpha > 0$
+\item $\beta$        : a real value, the scale parameter, constraint: $\beta > 0$
+\item $\gamma$       : a real value, the location parameter
+\item $\mu$  : a real value, the mean value,
+\item $\sigma$       : a real value, the standard deviation value, constraint: $\sigma > 0$
+\end{description}
+
+\item[Value:] a Weibull. In the default construction, we use the \textit{Weibull($\alpha$, $\beta$, $\gamma$) = Weibull(1.0, 1.0, 0.0)} definition.
+
+\item[Some methods:]  \rule{0pt}{1em}
+\begin{description}
+
+\item \textit{getAlpha}
+\begin{description}
+\item[Usage:] \textit{getAlpha()}
+\item[Arguments:] none
+\item[Value:]  a real value, the  $\alpha$ of the considered distribution
+\end{description}
+\bigskip
+
+\item \textit{getBeta}
+\begin{description}
+\item[Usage:] \textit{getBeta()}
+\item[Arguments:] none
+\item[Value:]  a real value, the  $\beta$ of the considered distribution
+\end{description}
+\bigskip
+
+\item \textit{getGamma}
+\begin{description}
+\item[Usage:] \textit{getGamma()}
+\item[Arguments:] none
+\item[Value:]  a real value, the $\gamma$ parameter of the considered distribution
+\end{description}
+\bigskip
+
+\item \textit{getMu}
+\begin{description}
+\item[Usage:] \textit{getMu()}
+\item[Arguments:] none
+\item[Value:]  a real value,  the $\mu$ parameter of the considered distribution
+\end{description}
+\bigskip
+\item \textit{getSigma}
+\begin{description}
+\item[Usage:] \textit{getSigma()}
+\item[Arguments:] none
+\item[Value:]  a real value,  the $\sigma$ parameter of the considered distribution
+\end{description}
+\bigskip
+\end{description}
+
+\item[Details:]  \rule{0pt}{1em}
+\begin{description}
+\item density function:
+\begin{equation}
+f(x) =
+\frac{\beta}{\alpha}
+\left(
+\frac{x-\gamma}{\alpha}
+\right)^{\beta-1}
+e^{
+\left(
+- \left(
+\frac{x-\gamma}{\alpha}
+\right)^{\beta}
+\right)}
+\boldsymbol{1}_{[\gamma,+\infty[}(x)
+\end{equation}
+
+
+\item relation between parameters set:
+\begin{eqnarray*}
+\mu                       &       =       & \alpha \,\Gamma\left(1+\frac{1}{\beta}\right) + \gamma        \\
+\sigma            &  =    &        \alpha \sqrt{\Gamma\left(1+\frac{2}{\beta}\right) -  \Gamma^2 \left(1+\frac{1}{\beta}\right)}
+\end{eqnarray*}
+where $\Gamma$ is the $\Gamma$-function and
+\begin{align*}
+\mu = \Expect{X}
+&&
+\sigma = \sqrt{\Var{X} }
+\end{align*}
+\end{description}
+
+\item[Links:]  \rule{0pt}{1em}
+\extref{ReferenceGuide}{Reference Guide - Standard parametric models}{standardparametricmodels}
+\end{description}
+
+Each  \textit{getMethod}  is associated to a \textit{setMethod}.
+
+
+
+% =============================================================
+\newpage
+% \index{Probabilistic modeling!Usual Distributions!ZipfMandelbrot}
+\index{ZipfMandelbrot}
+\subsubsection{ZipfMandelbrot}
+
+This class inherits from the Distribution class.
+
+\begin{description}
+
+\item[Usage:] \rule{0pt}{1em}
+\begin{description}
+\item Main parameters set: \textit{ZipfMandelbrot(N,q,s)}
+\item Default construction: \textit{ZipfMandelbrot( )}
+\end{description}
+
+\item[Arguments:]  \rule{0pt}{1em}
+\begin{description}
+\item $N$: a   integer, $N \geq 1$
+\item $q$: a real value, $q \geq 0$
+\item $s$: a real value, $s > 0$
+\end{description}
+
+\item[Value:]  ZipfMandelbrot. In the default construction, we use the \textit{ZipfMandelbrot(N,q,s) = ZipfMandelbrot(1,0,1)} definition.
+
+\item[Some methods:] \rule{0pt}{1em}
+\begin{description}
+
+\item \textit{getN}
+\begin{description}
+\item[Usage:] \textit{getN()}
+\item[Arguments:] none
+\item[Value:]  an integer,  the $N$ parameter of the ZipfMandelbrot distribution
+\end{description}
+\bigskip
+
+\item \textit{getQ}
+\begin{description}
+\item[Usage:] \textit{getQ()}
+\item[Arguments:] none
+\item[Value:]  a real value $\geq 0$,  the $q$ parameter of the ZipfMandelbrot distribution
+\end{description}
+\bigskip
+
+\item \textit{getS}
+\begin{description}
+\item[Usage:] \textit{getS()}
+\item[Arguments:] none
+\item[Value:]  a real value $>0$ ,  the $s$ parameter of the ZipfMandelbrot distribution
+\end{description}
+
+\end{description}
+
+\item[Details:]  \rule{0pt}{1em}
+\begin{description}
+\item distribution:
+\begin{equation}
+\forall k\in [1,N], P(X=k) = \frac{1}{(k+q)^s} \frac{1}{H(N,q,s)}
+\end{equation}
+where $H(N,q,s)$ is the Generalized Harmonic Number: $H(N,q,s) = \sum_{i=1}^{N} \displaystyle \frac{1}{(i+q)^s}$.
+
+\end{description}
+\bigskip
+
+\item[Links:]  \rule{0pt}{1em}
+\extref{ReferenceGuide}{Reference Guide - Standard parametric models}{standardparametricmodels}
+\end{description}
+
+
+Each  \textit{getMethod}  is associated to a \textit{setMethod}.
+
+
+
+
+% ===========================================================
+
+\newpage
+% \index{Probabilistic modeling!Usual Distributions!TruncatedDistribution}
+\index{TruncatedDistribution}
+\subsection{TruncatedDistribution}
+
+
+
+This class enables to truncate any distribution within a specified range which one of the bounds may be infinite. It offers the methods of the Distribution class.
+
+\begin{description}
+
+\item[Usage:] \rule{0pt}{1em}
+\begin{description}
+\item \textit{TruncatedDistribution(distribution, lowerBound, upperBound)}
+\item \textit{TruncatedDistribution(distribution, bound, TruncatedDistribution.UPPER)}
+\item \textit{TruncatedDistribution(distribution, bound, TruncatedDistribution.LOWER)}
+\end{description}
+\bigskip
+
+
+\item[Arguments:]  \rule{0pt}{1em}
+\begin{description}
+\item \textit{distribution}: a Distribution
+\item \textit{lowerBound}: a real, the new lower bound of the distribution : the distribution range is \textit{[lowerBound, $\infty$)} or \textit{[lowerBound, max)} if the distribution is already bounded by \textit{max}
+\item \textit{upperBound}: a real, the new upper bound of the distribution: the distribution range is \textit{($-\infty$,upperBound)} or \textit{[min, upperBound)} if the distribution is already bounded by \textit{min}
+\end{description}
+
+\item[Value:] a Distribution
+
+
+
+\item[Some methods:]  \rule{0pt}{1em}
+\begin{description}
+
+\item \textit{getStandardMoment}
+\begin{description}
+\item[Usage:] \textit{getStandardMoment(n)}
+\item[Arguments:] $n$: an integer
+\item[Value:] the non centered moment of order $n$ of the standard representative of the distribution.
+\end{description}
+\bigskip
+
+\item \textit{getStandardRepresentative}
+\begin{description}
+\item[Usage:] \textit{getStandardRepresentative()}
+\item[Arguments:] no argument
+\item[Value:] a Distribution: the standard representative of the distribution, that is a distribution of the same family with a specific set of parameters.Use the \emph{getStandardMoment} to identify the moments of the standard representative et refer to the reference Guide to knwo the specific set of parameters.
+\end{description}
+\bigskip
+
+\item \textit{isContinuous}
+\begin{description}
+\item[Usage:] \textit{isContinuous()}
+\item[Arguments:] no argument
+\item[Value:] a boolean which indicates wether the considered distribution is continuous.
+\end{description}
+\bigskip
+
+\item \textit{isDiscrete}
+\begin{description}
+\item[Usage:] \textit{isDiscrete()}
+\item[Arguments:] no argument
+\item[Value:] a boolean which indicates wether the considered distribution is discrete.
+\end{description}
+\bigskip
+
+\item \textit{isIntegral}
+\begin{description}
+\item[Usage:] \textit{isIntegral()}
+\item[Arguments:] no argument
+\item[Value:] a boolean which indicates wether the considered distribution has integer values.
+\end{description}
+\bigskip
+
+
+\item \textit{getSupport}
+\begin{description}
+\item[Usage:] \textit{getSupport()}
+\item[Arguments:] none
+\item[Value:] a NumericalSample which gathers the different points of the discrete range. Care: this service is implemented only for discrete 1D distribution.
+\end{description}
+
+\end{description}
+
+\item[Links:]  \rule{0pt}{1em}
+\extref{ReferenceGuide}{see ReferenceGuide - Copulas}{docref_B122_Copulas}
+
+\end{description}
+
+Each  \textit{getMethod}  is associated to a \textit{setMethod}.
+
+% ===========================================================
+
+\newpage
+% \index{Probabilistic modeling!Copulas}
+\subsection{Copulas}
+
+% \index{Probabilistic modeling!Copulas!Copula}
+\index{Copula}
+\subsubsection{Copula}
+
+
+This class inherits from the Distribution class.
+
+\begin{description}
+
+\item[Usage:] \textit{Copula(copulaImplementation)}
+
+\item[Arguments:]  \textit{copulaImplementation}       : a CopulaImplementation, i.e a distribution which must verify the properties of a copula. This distribution can be any of the particular OpenTURNS copula or a SklarCopula built upon a multivariate distribution (specific ones or  built from a  KernelMixture or Mixture mechanisms).
+
+\item[Value:] a Copula
+
+\item[Links:]  \rule{0pt}{1em}
+\extref{ReferenceGuide}{see ReferenceGuide - Copulas}{docref_B122_Copulas}
+\end{description}
+
+Each  \textit{getMethod}  is associated to a \textit{setMethod}.
+
+% =========================================================================
+\newpage
+% \index{Probabilistic modeling!Copulas!AliMikhailHaqCopula}
+\index{AliMikhailHaqCopula}
+\subsubsection{AliMikhailHaqCopula}
+
+This class inherits from the CopulaImplementation class.
+
+\begin{description}
+
+\item[Usage:] \rule{0pt}{1em}
+\begin{description}
+\item \textit{AliMikhailHaqCopula()}
+\item \textit{AliMikhailHaqCopula(theta)}
+\end{description}
+
+
+\item[Arguments:]  \textit{theta}    : a real, the only parameter of the copula, with $\theta\geq 0$, defined by:
+\begin{equation}
+C(u_1, u_2)  = \displaystyle \left(u_1^{-\theta}+u_2^{-\theta}-1\right)^{-1/\theta}
+\end{equation}
+for $u_i \in [0,1]$
+
+\item[Value:]  \rule{0pt}{1em}
+\begin{description}
+\item In the first usage, a   of dimension 2 with $\theta=0.0$,
+\item In the second usage, a  of dimension 2 with the $\theta$ specified.
+\end{description}
+
+\end{description}
+
+% =========================================================================
+\newpage
+% \index{Probabilistic modeling!Copulas!ClaytonCopula}
+\index{ClaytonCopula}
+\subsubsection{ClaytonCopula}
+
+This class inherits from the CopulaImplementation class.
+
+\begin{description}
+
+\item[Usage:] \rule{0pt}{1em}
+\begin{description}
+\item \textit{ClaytonCopula()}
+\item \textit{ClaytonCopula(theta)}
+\end{description}
+
+
+\item[Arguments:]  \textit{theta}    : a real, the only parameter of the Clayton copula, defined by: $\displaystyle \left(u_1^{-\theta}+u_2^{-\theta}-1\right)^{-1/\theta}$, for $u_i \in [0,1]$
+
+\item[Value:]  \rule{0pt}{1em}
+\begin{description}
+\item In the first usage, a  ClaytonCopula of dimension 2 with $\theta=2.0$,
+\item In the second usage, a ClaytonCopula of dimension 2 with the $\theta$ specified.
+\end{description}
+
+\end{description}
+
+% =========================================================================
+\newpage
+% \index{Probabilistic modeling!Copulas!FarlieGumbelMorgensternCopula}
+\index{FarlieGumbelMorgensternCopula}
+\subsubsection{FarlieGumbelMorgensternCopula}
+
+This class inherits from the CopulaImplementation class.
+
+\begin{description}
+
+\item[Usage:] \rule{0pt}{1em}
+\begin{description}
+\item \textit{FarlieGumbelMorgensternCopula()}
+\item \textit{FarlieGumbelMorgensternCopula(theta)}
+\end{description}
+
+
+\item[Arguments:]  \textit{theta}    : a real, the only parameter of the copula, with $\theta \in [-1,1]$, defined by:
+\begin{equation}
+C(u_1, u_2)  = \displaystyle u_1u_2 (1 + \theta(1 - u_1)(1 - u_2))
+\end{equation}
+for $u_i \in [0,1]$
+
+\item[Value:]  \rule{0pt}{1em}
+\begin{description}
+\item In the first usage, a  FarlieGumbelMorgensternCopula of dimension 2 with $\theta=0.0$,
+\item In the second usage, a FarlieGumbelMorgensternCopula of dimension 2 with the $\theta$ specified.
+\end{description}
+
+\end{description}
+
+% =========================================================================
+\newpage
+% \index{Probabilistic modeling!Copulas!FrankCopula}
+\index{FrankCopula}
+\subsubsection{FrankCopula}
+
+This class inherits from the CopulaImplementation class.
+
+\begin{description}
+
+\item[Usage:] \rule{0pt}{1em}
+\begin{description}
+\item \textit{FrankCopula()}
+\item \textit{FrankCopula(theta)}
+\end{description}
+
+
+\item[Arguments:]  \textit{theta}    : a real, the only parameter of the Gumbel copula, which PDF is:
+\begin{equation}
+C(u_1, u_2) = \displaystyle -\frac{1}{\theta}\log\left(1+\frac{(e^{-\theta u_1}-1)(e^{-\theta u_2}-1}{e^{-\theta}-1}\right)
+\end{equation}, for $u_i \in [0,1]$
+
+\item[Value:]  \rule{0pt}{1em}
+\begin{description}
+\item In the first usage, a  FrankCopula of dimension 2 with $\theta=2.0$,
+\item In the second usage, a FrankCopula of dimension 2 with the $\theta$ specified.
+\end{description}
+
+\item[Links:]
+\extref{ReferenceGuide}{see ReferenceGuide - Copulas}{docref_B122_Copulas}
+\end{description}
+
+% =========================================================================
+\newpage
+% \index{Probabilistic modeling!Copulas!GumbelCopula}
+\index{GumbelCopula}
+\subsubsection{GumbelCopula}
+
+This class inherits from the CopulaImplementation class.
+
+
+\begin{description}
+
+\item[Usage:] \rule{0pt}{1em}
+\begin{description}
+\item \textit{GumbelCopula()}
+\item \textit{GumbelCopula(theta)}
+\end{description}
+
+
+\item[Arguments:]  \textit{theta}    : a real, the only parameter of the Gumbel copula, defined by:
+\begin{equation}
+C(u_1, u_2) = \displaystyle e^{\left(-\left((-\log(u_1))^{\theta}+(-\log(u_2))^{\theta}\right)^{1/\theta}\right)}
+\end{equation}, for $u_i \in [0,1]$
+
+\item[Value:]  \rule{0pt}{1em}
+\begin{description}
+\item In the first usage, a  GumbelCopula of dimension 2 with $\theta=2.0$,
+\item In the second usage, a  GumbelCopula of dimension 2 with the $\theta$ specified.
+\end{description}
+
+\item[Links:]
+\extref{ReferenceGuide}{see ReferenceGuide - Copulas}{docref_B122_Copulas}
+\end{description}
+
+% =============================================================
+\newpage
+% \index{Probabilistic modeling!Copulas!IndependentCopula}
+\index{IndependentCopula}
+\subsubsection{IndependentCopula}
+
+This class inherits from the CopulaImplementation class.
+
+\begin{description}
+
+\item[Usage:] \rule{0pt}{1em}
+\begin{description}
+\item \textit{IndependentCopula()}
+\item \textit{IndependentCopula(n)}
+\end{description}
+
+\item[Arguments:]  $n$      : an integer, the dimension of the copula
+
+\item[Value:] \rule{0pt}{1em}
+\begin{description}
+\item In the first usage, a  IndependentCopula of dimension 1,
+\item In the second usage, a IndependentCopula  of the dimension $n$  specified, defined by:
+\begin{equation}
+C(u_1, \dots, u_n) = \displaystyle \prod_{i=1}^{n} u_i
+\end{equation}, for $u_i \in [0,1]$
+\end{description}
+
+\item[Links:]
+\extref{ReferenceGuide}{see ReferenceGuide - Copulas}{docref_B122_Copulas}
+\end{description}
+
+
+% =============================================================
+\newpage
+% \index{Probabilistic modeling!Copulas!MinCopula}
+\index{MinCopula}
+\subsubsection{MinCopula}
+
+This class inherits from the CopulaImplementation class.
+
+\begin{description}
+
+\item[Usage:] \rule{0pt}{1em}
+\begin{description}
+\item \textit{IndependentCopula()}
+\item \textit{IndependentCopula(n)}
+\end{description}
+
+\item[Arguments:]  $n$      : an integer, the dimension of the copula
+
+\item[Value:] \rule{0pt}{1em}
+\begin{description}
+\item In the first usage, a MinCopula of dimension 1,
+\item In the second usage, a MinCopula  of the dimension $n$  specified, defined by:
+\begin{equation}
+C(u_1, \dots, u_n) = \displaystyle \min_{i=1, n} u_i
+\end{equation}, for $u_i \in [0,1]$
+
+\end{description}
+
+\item[Links:]
+\extref{ReferenceGuide}{see ReferenceGuide - Copulas}{docref_B122_Copulas}
+\end{description}
+
+
+% =========================================================================
+\newpage
+% \index{Probabilistic modeling!Copulas!NormalCopula}
+\index{NormalCopula}
+\subsubsection{NormalCopula}
+
+This class inherits from the CopulaImplementation class.
+
+\begin{description}
+
+\item[Usage:] \rule{0pt}{1em}
+\begin{description}
+\item \textit{NormalCopula()}
+\item \textit{NormalCopula(R)}
+\end{description}
+
+\item[Arguments:] $R$ : a CorrelationMatrix which is not the Kendall nor the Spearman rank correlation matrix of the distribution. The $R$ matrix  can be evaluated from the Spearman or Kendall correlation matrix.
+
+\item[Value:] \rule{0pt}{1em}
+\begin{description}
+\item In the first usage, a NormalCopula  of dimension 1
+\item In the second usage, a NormalCopula  with the correlation matrix $R$ specified.
+\end{description}
+
+\item[Some methods:]  \rule{0pt}{1em}
+\begin{description}
+\item \textit{GetCorrelationFromKendallCorrelation}
+\begin{description}
+\item[Usage:] \textit{NormaCopula.GetCorrelationFromKendallCorrelation(K)}
+\item[Arguments:] $K$: a CorrelationMatrix, it must be the Kendall correlation matrix of the considered random vector
+\item[Value:] a CorrelationMatrix, the correlation matrix of the normal copula evaluated from the Kendall correlation matrix $K$
+\end{description}
+\bigskip
+
+\item \textit{GetCorrelationFromSpearmanCorrelation}
+\begin{description}
+\item[Usage:] \textit{NormalCopula.GetCorrelationFromSpearmanCorrelation(S)}
+\item[Arguments:]$S$: a CorrelationMatrix, it must be the Spearman correlation matrix of the considered random vector
+\item[Value:] a CorrelationMatrix, the correlation matrix of the normal copula evaluated from the Spearman correlation matrix $S$
+\end{description}
+\end{description}
+\item[Links:]
+\extref{ReferenceGuide}{see ReferenceGuide - Copulas}{docref_B122_Copulas}
+\end{description}
+
+
+% =========================================================================
+\newpage
+% \index{Probabilistic modeling!Copulas!SklarCopula}
+\index{SklarCopula}
+\subsubsection{SklarCopula}
+
+This class inherits from the CopulaImplementation class.
+
+\begin{description}
+
+\item[Usage:] \textit{SklarCopula(distribution)}
+
+\item[Arguments:] \textit{distribution}: a Distribution, whatever its type (UsualDistribution, ComposedDistribution, KernelMixture, Mixture, RandomMixture, Copula, ...)
+
+\item[Value:]  a  SklarCopula with the same dimension as the \textit{distribution}
+
+\item[Some methods:]  no specific method.
+\item[Links:]
+\extref{ReferenceGuide}{see ReferenceGuide - Copulas}{docref_B122_Copulas}
+\end{description}
+
+
+% =============================================================
+
+
+\newpage
+% \index{Probabilistic modeling!Copulas!ComposedCopula}
+\index{ComposedCopula}
+\subsubsection{ComposedCopula}
+
+
+This class inherits from the CopulaImplementation class.
+
+
+\begin{description}
+
+\item[Usage:] \textit{ComposedCopula(copulaCollection)}
+
+\item[Arguments:] \textit{copulaCollection}: a CopulaCollection
+
+\item[Value:] a ComposedCopula, defined as the product of the initial copulas. For example, if $C_1$ and $C_2$ are two copulas respectively of $\Rset^{n_1}$ and $\Rset^{n_2}$, we can create the copula of a random vector of $\Rset^{n_1+n_2}$, noted $C$ as follows:
+\begin{equation}
+C(u_1, \cdots, u_n) = C_1(u_1, \cdots, u_{n_1}) C_2(u_{n_1+1}, \cdots, u_{n_1+n_2})
+\end{equation}
+It means that both subvectors $(u_1, \cdots, u_{n_1}$ and $(u_{n_1+1}, \cdots, u_{n_1+n_2})$ of $\Rset^{n_1}$ and $\Rset^{n_2}$ are independent.
+
+\item[Some methods:]   \rule{0pt}{1em}
+\begin{description}
+\item \textit{getCopulaCollection}
+\begin{description}
+\item[Usage:] \textit{getCopulaCollection()}
+\item[Arguments:] none
+\item[Value:] a CopulaCollection, the collection of copulas from which the ComposedCopula is built
+\end{description}
+\bigskip
+\end{description}
+
+
+\item[Links:]
+\extref{ReferenceGuide}{Reference Guide - Step B JoinedCDF}{stepB}
+\end{description}
+
+
+
+% =============================================================
+
+
+\newpage
+% \index{Probabilistic modeling!ComposedDistribution}
+\index{ComposedDistribution}
+\subsection{ComposedDistribution}
+
+
+This class inherits from the Distribution class.
+
+
+\begin{description}
+
+\item[Usage:]  \rule{0pt}{1em}
+\begin{description}
+\item \textit{ComposedDistribution(distributionCollection, copula)}
+\item \textit{ComposedDistribution(distributionCollection)}
+\end{description}
+
+\item[Arguments:]  \rule{0pt}{1em}
+\begin{description}
+\item \textit{distributionCollection}: a DistributionCollection, the collection of the marginals of the distribution
+\item \textit{copula}: a Copula, the copula of the distribution.
+\end{description}
+
+\item[Value:] a ComposedDistribution,
+\begin{description}
+\item in the first usage: which marginals and copula are specified,
+\item in the second usage: which marginals are specified, and which copula is the independent one.
+\end{description}
+
+\item[Some methods:]   \rule{0pt}{1em}
+\begin{description}
+\item \textit{getDistributionCollection}
+\begin{description}
+\item[Usage:] \textit{getDistributionCollection()}
+\item[Arguments:] none
+\item[Value:] a DistributionCollection, the collection of distributions from which the ComposedDistribution is built
+\end{description}
+\bigskip
+\end{description}
+
+
+\item[Links:]
+\extref{ReferenceGuide}{Reference Guide - Step B JoinedCDF}{stepB}
+\end{description}
+
+Each  \textit{getMethod}  is associated to a \textit{setMethod}.
+
+
+% =============================================================
+
+
+\newpage
+% \index{Probabilistic modeling!CompositeDistribution}
+\index{ComposedDistribution}
+\subsection{CompositeDistribution}
+
+
+This class inherits from the Distribution class.
+
+
+\begin{description}
+
+\item[Usage:]  \textit{CompositeDistribution(f,antDist)}
+
+\item[Arguments:]  \rule{0pt}{1em}
+\begin{description}
+\item $f$: a NumericalMathFunction where  $f: \Rset \rightarrow \Rset$
+\item \textit{antDist}: a  Distribution which is scalar
+\end{description}
+
+\item[Value:] a CompositeDistribution, which is the image of the distribution {\itshape antDist} through the function {\itshape f}:  for all scalar random variable $X$ following the distribution {\itshape antDist}, $Y=f(X)$ follows the distribution image. 
+
+
+\end{description}
+
+% =============================================================
+
+\newpage
+% \index{Probabilistic modeling!Linear combination of probability density functions}
+\subsection{Linear combination of probability density functions}
+
+% \index{Probabilistic modeling!Linear combination of probability density functions!Mixture}
+\index{Mixture}
+\subsubsection{Mixture}
+
+A Mixture is a distribution such that its probability density function is a linear combination of probability density functions, with the linear combination coefficients greater or equal to zero such that their sum is equal to 1. \\
+It is important to note that the linear combination coefficients are given through the {\itshape weight} attribute of each component of the DistributionCollection, thanks to the command {\itshape DistributionCollection[i].setWeight(coefficient)}.
+
+\begin{description}
+
+\item[Usage:] \rule{0pt}{1em}
+\begin{description}
+\item \textit{Mixture(distributionCollection)}
+\item \textit{Mixture(distributionCollection, weights)}
+\end{description}
+
+\item[Arguments:] \rule{0pt}{1em}
+\begin{description}
+\item \textit{distributionCollection}    : a DistributionCollection, the collection of the  distributions which compose the linear combination
+\item \textit{weights}: a NumericalPoint, which contains the weights of the distributions in the mixture. These weights will be used instead of the individual weights of each distribution.
+\end{description}
+\item[Value:] a Mixture
+
+\item[Some methods:]  \rule{0pt}{1em}
+
+\begin{description}
+\item \textit{getDistributionCollection}
+\begin{description}
+\item[Usage:] \textit{getDistributionCollection()}
+\item[Arguments:] none
+\item[Value:] a DistributionCollection the collection of distribution from which the Mixture is built
+\end{description}
+\end{description}
+
+
+\item[Details:]  \rule{0pt}{1em}
+\begin{description}
+\item probability density function:
+\begin{equation}
+f(x) =  \sum_{i=1}^n \alpha_i p_i(x)
+\end{equation}
+with $\alpha_i\geq 0$. The null weights are automatically removed from the sum, and the coefficients are automatically normalized such that $\sum_{i=1}^n \alpha_i=1$.
+\end{description}
+
+\item[Links:]  \rule{0pt}{1em}
+\extref{ReferenceGuide}{Reference Guide - Standard parametric models}{standardparametricmodels}
+\end{description}
+
+Each  \textit{getMethod}  is associated to a \textit{setMethod}.
+
+
+% =============================================================
+
+
+\newpage
+% \index{Probabilistic modeling!Linear combination of probability density functions!KernelMixture}
+\index{KernelMixture}
+\subsubsection{KernelMixture}
+
+
+A KernelMixture is a distribution built from a NumericalSample, such that its probability density function is a linear combination of the kernel specified by the User, centered on each point of the NumericalSample, which standard deviation is the bandwidth specified by the User.
+It is important to note that the linear combination coefficients are all equal.
+
+
+
+\begin{description}
+
+\item[Usage:] \textit{KernelMixture(kernel, bandwidth, sample)}
+
+\item[Arguments:] \textit{distributionCollection}    : a DistributionCollection, the collection of the  distributions which compose the linear combination
+
+
+\item[Value:] a  KernelMixture
+
+\item[Some methods:]  \rule{0pt}{1em}
+\begin{description}
+\item \textit{getBandwidth}
+\begin{description}
+\item[Usage:] \textit{getBandwidth()}
+\item[Arguments:] none
+\item[Value:] a NumericalPoint, the bandwidth of the kernel mixture, (see equation below for dimension 1). The bandwidth is the same at each point of the NumericalSample
+\end{description}
+\bigskip
+
+\item \textit{getKernel}
+\begin{description}
+\item[Usage:] \textit{getKernel()}
+\item[Arguments:] none
+\item[Value:] a Distribution, the kernel $K$ of the mixture, (see equation below for dimension 1)
+\end{description}
+\bigskip
+
+\item \textit{getInternalSample}
+\begin{description}
+\item[Usage:] \textit{getInternalSample()}
+\item[Arguments:] none
+\item[Value:] a NumericalSample, the NumericalSample of the mixture, (see equation below for dimension 1)
+\end{description}
+
+
+\end{description}
+
+\item[Details:]  \rule{0pt}{1em}
+\begin{description}
+\item Probability density function in dimension 1:
+\begin{equation}
+f(x) =  \sum_{i=1}^n \frac{1}{nh}K(\frac{X^i-x}{h}), x \in \Rset
+\end{equation}
+where $(X^1, \dots, X^n)$ is  a NumericalSample
+\end{description}
+
+\item[Links:]  \rule{0pt}{1em}
+\extref{ReferenceGuide}{Reference Guide - Standard parametric models}{standardparametricmodels}
+\end{description}
+
+Each  \textit{getMethod}  is associated to a \textit{setMethod}.
+
+
+% =============================================================
+
+
+\newpage
+% \index{Probabilistic modeling!Linear combination of probability density functions!KernelSmoothing}
+\index{KernelSmoothing}
+\subsubsection{KernelSmoothing}
+
+
+The class KernelSmoothing enables to build some kernels used to fit a distribution to a numerical sample.
+
+
+\begin{description}
+
+\item[Usage:] \rule{0pt}{1em}
+\begin{description}
+\item \textit{KernelSmoothing()}
+\item \textit{KernelSmoothing(Distribution(myDistribution))}
+\item \textit{KernelSmoothing(DistributionImplentation())}
+\end{description}
+
+
+\item[Arguments:] \rule{0pt}{1em}
+\begin{description}
+\item \textit{myDistribution}: a 1D Distribution of any kind
+\item \textit{DistributionImplentation()}: default constructor of the 1D UsualDistribution. For example, \textit{Uniform()}, \textit{Triangular()}, ...
+\end{description}
+
+
+
+\item[Value:]  a Distribution
+\begin{description}
+\item In the first usage, the kernel is the  kernel product of 1D Normal(1.0, 0.0). The dimension of the product is detected from the numerical sample.
+\item In the second usage, the kernel is the  kernel product of 1D distributions specified by \textit{myDistribution}. Care: the kernel smoothing method is all the more efficient than the kernel is symmetric with respect to 0.0. The dimension of the product is detected from the numerical sample.
+\item In the third usage, the kernel is the  kernel product of the default constructions of the 1D UsualDistributions. Note that the default constructor of a UsualDistribution builds a distribution which is symmetric with respect to 0.0 when it is possible. The dimension of the product is detected from the numerical sample.
+\end{description}
+
+\item[Some methods:]  \rule{0pt}{1em}
+\begin{description}
+\item \textit{build}
+\begin{description}
+\item[Usage:] \rule{0pt}{1em}
+\begin{description}
+\item  \textit{build(sample)}
+\item  \textit{build(sample, boundaryCorrection)}
+\item  \textit{build(sample, bandwidth)}
+\item  \textit{build(sample, bandwidth, boundaryCorrection)}
+\end{description}
+\item[Arguments:] \rule{0pt}{1em}
+\begin{description}
+\item  \textit{sample}: a NumericalSample, the numerical sample from which the kernel mixture is built
+\item  \textit{boundaryCorrection}: a Bool which indicates if it is necessary to make a boundary treatment (according to the mirroring technique)
+\item  \textit{bandwidth}: a NumericalPoint, the bandwidth of the kernel product. The dimension is detected from the numerical sample \textit{sample} and evaluated according to the Scott rule.
+\end{description}
+\item[Value:]  a Distribution. When the bandwidth is not specified, OpenTURNS proceeds as follows: the plug-in method on the entire numerical sample if its size is inferior to 250; the mixted method in the other case. Refer to the Reference Guide in order to have details on these methods.
+\end{description}
+\bigskip
+
+\item \textit{computeSilvermanBandwidth}
+\begin{description}
+\item[Usage:] \textit{computeSilvermanBandwidth(sample)}
+\item[Arguments:] \textit{sample}: a NumericalSample, the numerical sample from which the kernel mixture is built
+\item[Value:] a NumericalPoint, the bandwidth automatically evaluated by OpenTURNS from the numerical sample according to the Silverman rule (see Reference Guide)
+\end{description}
+\bigskip
+
+\item \textit{computePluginBandwidth}
+\begin{description}
+\item[Usage:] \textit{computePluginBandwidth(sample)}
+\item[Arguments:] \textit{sample}: a NumericalSample, the numerical sample from which the kernel mixture is built
+\item[Value:] a NumericalPoint, the bandwidth automatically evaluated by OpenTURNS from the numerical sample according to the plug-in method (see Reference Guide)
+\end{description}
+\bigskip
+
+\item \textit{computeMixedBandwidth}
+\begin{description}
+\item[Usage:] \textit{computeMixedBandwidth(sample)}
+\item[Arguments:] \textit{sample}: a NumericalSample, the numerical sample from which the kernel mixture is built
+\item[Value:] a NumericalPoint, the bandwidth automatically evaluated by OpenTURNS from the numerical sample according to the mixted method (see Reference Guide)
+\end{description}
+\bigskip
+
+\item \textit{getBandwidth}
+\begin{description}
+\item[Usage:] \textit{getBandwidth()}
+\item[Arguments:] none
+\item[Value:] a NumericalPoint, the bandwidth of the kernel mixture, (see equation below for dimension 1). The bandwidth is the same at each point of the NumericalSample
+\end{description}
+\bigskip
+
+\item \textit{getKernel}
+\begin{description}
+\item[Usage:] \textit{getKernel()}
+\item[Arguments:] none
+\item[Value:] a Distribution, the kernel adopted for the kernel smoothing
+\end{description}
+
+
+\end{description}
+
+\item[Details:]  \rule{0pt}{1em}
+\begin{description}
+\item Probability density function in dimension 1:
+\begin{equation}
+p_n(x) =  \sum_{i=1}^n \frac{1}{nh}K\left(\frac{x-X^i}{h}\right), x \in \Rset
+\end{equation}
+where $(X^1, \dots, X^n)$ is  a NumericalSample and $K$ the kernel PDF,
+\item Probability density function in dimension $N$:
+\begin{equation}
+p_n(\vect{x}) = \displaystyle \frac{1}{n}\sum_{i=1}^{n} \prod_{j=1}^{N} \frac{1}{h_j} K\left(\frac{x_j-X_j^i}{h_j}\right)
+\end{equation}
+where $\prod_{j=1}^{N} K(x^j)$ is the kernel product and $\vect{h} = (h^1, \cdots, h^N)$ the vector of bandwidth.
+\end{description}
+
+\item[Links:]  \rule{0pt}{1em}
+\extref{ReferenceGuide}{Reference Guide - Standard parametric models}{standardparametricmodels}
+\end{description}
+
+
+% =============================================================
+
+\newpage
+% \index{Probabilistic modeling!Affine combinations of independent univariate random variables}
+\subsection{Affine combinations of independent univariate random variables}
+
+% \index{Probabilistic modeling!Affine combinations of independent univariate random variable!RandomMixture}
+\index{RandomMixture}
+\subsubsection{RandomMixture}
+
+A RandomMixture $Y$ is an univariate random variable defined as an affine combination of independent univariate random variable, as follows:
+\begin{equation}
+\displaystyle Y = a_0 + \sum_{k=1}^{n} a_k X_k
+\end{equation}
+where $(a_i)_{ 0 \leq k \leq n} \in \Rset$ and $(X_k)_{ 1 \leq k \leq n}$ are some independent univariate distributions.\\
+
+
+\begin{description}
+
+\item[Usage:] \rule{0pt}{1em}
+\begin{description}
+\item \textit{RandomMixture(collDist)}
+\item \textit{RandomMixture(collDist, constant)}
+\item \textit{RandomMixture(collDist, weights)}
+\item \textit{RandomMixture(collDist, weights, constant)}
+\end{description}
+
+
+\item[Arguments:] \rule{0pt}{1em}
+\begin{description}
+\item \textit{collDist}: a DistributionCollection, the collection of the  univariate independent distributions distributions which compose the affine combination,
+\item \textit{constant}: a scalar, the constant term $a_0$ of the affine combination,
+\item \textit{weights}: a NumericalPoint, which contains the weights of the affine combination: $(a_1, \dots, a_n)$.
+\end{description}
+
+
+
+
+\item[Value:] a  RandomMixture such that:
+\begin{description}
+\item in the first usage: the weights $a_i$ have been affected in the  distributions of the univariate random variables $X_i$, thanks to the method $setWeight(a_i)$, before the creation of \textit{collDist}. If not specified, the weight by default is $1.0$. The constant term $a_0 = 0$.
+\item in the second usage: the weights are defined as in the first usage and the constant term $a_0$ is equal to \textit{constant}.
+\item in the third usage: the weights are directly specified at the creation of the RandomMixture. The distribution weights are modified to be equal to those specified values. The constant term $a_0 = 0$.
+\item in the fourth usage: the weights are specified as in the third usage and the constant term $a_0$ is equal to \textit{constant}.
+\end{description}
+
+\item[Some methods:]  As a {\itshape RandomMixture} is a {\itshape Distribution}, it is possible to ask it any request compatible with a {\itshape Distribution} object: moments, quantiles, PDF and CDF evaluations, ...
+
+\item \textit{project}
+\begin{description}
+\item[Usage:] \rule{0pt}{1em}
+\begin{description}
+\item \textit{project(factoryCollection, testResult)}
+\item \textit{project(factoryCollection, testResult, size)}
+\end{description}
+\item[Arguments:] \rule{0pt}{1em}
+\begin{description}
+\item \textit{factoryCollection}: a FactoryCollection, the collection of models from which one want to find the best approximation of the RandomMixture.
+\item \textit{testResult}: a TestResult, the test result associated with the best model found within the collection of DistributionFactory upon which one projects the RandomMixture.
+\item \textit{size}: an integer. The RandomMixture is regularly sampled over a grid of $2\,size+1$ points that correspond to quantiles of regularly spaced levels, then one uses the Kolmogorov test to identify the best candidate amongst the several factories. If not given, size defaults to 50, which means a regular sample of size 101.
+\end{description}
+\item[Value:] a Distribution, the best candidates found according to the Kolmogorov test within the given DistributionFactoryCollection using the regular sample of size $2\,size+1$.
+\end{description}
+
+
+
+\item[Links:]  \rule{0pt}{1em}
+\extref{ReferenceGuide}{Reference Guide - Standard parametric models}{standardparametricmodels}
+\end{description}
+
+
+
+
+
+
+% =============================================================
+
+\newpage
+
+\subsection{Random generator}
+
+\index{RandomGenerator}
+\subsubsection{RandomGenerator}
+
+This class only proposed static methods. The random generator of uniform(0,1) sample of OpenTURNS is based on the DSFTM (Double precision  SIMD oriented Fast Mersenne Twister) algorithm described in the Reference Guide.
+
+\begin{description}
+
+
+\item[Some static methods:]  \rule{0pt}{1em}
+\begin{description}
+
+\item \textit{Generate}
+\begin{description}
+\item[Usage:]  \rule{0pt}{1em}
+\begin{description}
+\item \textit{Generate()}
+\item \textit{Generate(size)}
+\end{description}
+\item[Arguments:] \textit{size}: an integer, the number of realizations required. When not given, by default taken equal to 1.
+\item[Value:]  a NumericalPoint, the list of the required realizations of a uniform distribution on $[0,1]$.
+\end{description}
+\bigskip
+
+
+\item \textit{SetSeed}
+\begin{description}
+\item[Usage:] \textit{SetSeed(n)}
+\item[Arguments:] $n$: an integer in $[0, 2^{32}-1]$
+\item[Value:] none. This method fixes a particular state of the random generator algorithm thanks to the seed $n$. The seed of the random generator is automatically initialized to 0 when an openturns session is launched.
+\end{description}
+\bigskip
+
+\item \textit{SetState}
+\begin{description}
+\item[Usage:] \textit{SetState(particularState)}
+\item[Arguments:] \textit{particularState}: an RandomGeneratorState
+\item[Value:] none. This method fixes the entire state of the random generator algorithm thanks the specificationof the entire state \textit{particularState} usually previously obtained thanks to the {\itshape GetState()} method.
+\end{description}
+\bigskip
+
+\end{description}
+
+\end{description}
+
+% =============================================================
+
+\newpage
+% \index{Probabilistic modeling!Random Vector}
+\subsection{Random vector}
+
+% \index{Probabilistic modeling!Random Vector!ConditionalRandomVector}
+\index{ConditionalRandomVector}
+\subsubsection{ConditionalRandomVector}
+
+\begin{description}
+
+\item[Usage:] \textit{ConditionalRandomVector(conditionalDist, randomParameters)}
+
+\item[Arguments:]  \rule{0pt}{1em}
+\begin{description}
+\item \textit{conditionalDist}: a Distribution
+\item \textit{randomParameters}: a RandomVector
+\end{description}
+
+\item[Value:] a ConditionalRandomVector,  $\vect{Y}$ which distribution $\cL(\vect{\Theta})$ has random parameters $\vect{\Theta}$ distributed according to the distribution $\cD_{\vect{\Theta}}$. The random vector  $\vect{\Theta}$ can be:
+\begin{itemize}
+\item a {\itshape UsualRandomVector} which means described by a given distribution $\cD_{\vect{\Theta}}$,
+\item or a {\itshape CompositeRandomVector} which means the output vector of a fonction $f$ evaluated on the random vector $\vect{X}$ : $\vect{\Theta} = f(\vect{X})$. In that case, the distribution $\cD_{\vect{\Theta}}$ is not explicitely known.
+\end{itemize}
+
+\item[Some methods:]  \rule{0pt}{1em}
+\begin{description}
+
+\item \textit{getAntecedent}
+\begin{description}
+\item[Usage:] \textit{getRealization()}
+\item[Arguments:] no argument
+\item[Value:] a NumericalPoint, a realization of the final distribution of $\vect{Y}$. OpenTURNS proceeds as follows: it first generates a realization $\vect{\theta}$  of the random vector  $\vect{\Theta}$ according to  $\cD_{\vect{\Theta}}$ then a realization of the distribution $\cL(\vect{\theta})$ where the random vector $\vect{\Theta}$  is fixed to the previous realization $\vect{\theta}$ .\\
+\end{description}
+\bigskip
+
+\item \textit{getRandomParameters}
+\begin{description}
+\item[Usage:] \textit{getRandomParameters()}
+\item[Arguments:] no argument
+\item[Value:] a RandomVector, the random vector $\vect{\Theta}$.
+\end{description}
+\bigskip
+
+\item \textit{getDistribution}
+\begin{description}
+\item[Usage:] \textit{getDistribution()}
+\item[Arguments:] no argument
+\item[Value:] a Distribution, the conditional distribution $\cL(\vect{\Theta})$ .
+\end{description}
+\bigskip
+
+\item \textit{getDimension}
+\begin{description}
+\item[Usage:] \textit{getDimension()}
+\item[Arguments:] no argument
+\item[Value:] an integrer, the dimension of the distribution $\cL(\vect{\Theta})$.
+\end{description}
+
+
+\end{description}
+
+\end{description}
+
+% =============================================================
+
+\newpage
+\index{PosteriorRandomVector}
+\subsubsection{PosteriorRandomVector}
+
+This class inherits from the RandomVector class.
+
+\begin{description}
+
+\item[Usage:] \rule{0pt}{1em}
+\begin{description}
+\item \textit{PosteriorRandomVector(sampler)}
+\end{description}
+
+\item[Arguments:]  \rule{0pt}{1em}
+\begin{description}
+\item \textit{sampler}: a Sampler.
+\end{description}
+
+\item[Value:] a PosteriorRandomVector whose sampling is defined by the
+Sampler \textit{sampler}. \rule{0pt}{1em}
+
+\item[Details:] a PosteriorRandomVector corresponds to a random vector
+whose distribution poses some particular numerical difficulties such as
+evaluating its PDF, but which can be more easily sampled.
+By sampling a random vector, we means computing a i.i.d. sample according to
+its distribution or computing the realization of an ergodic Markov chain
+whose stationary distribution is the one of the random vector.
+Such random vector is typically encountered in Bayesian inference, where
+a common practice is to sample the posterior random vector of the infered
+parameters by Monte-Carlo Markov Chain.
+
+\item[Some methods:]  \rule{0pt}{1em}
+\begin{description}
+
+\item \textit{getDimension}
+\begin{description}
+\item[Usage:] \rule{0pt}{1em}
+\begin{description}
+\item \textit{getDimension()}
+\end{description}
+\item[Arguments:] none.
+\item[Value:] an integer, the dimension of the PosteriorRandomVector.
+\end{description}
+\bigskip
+
+\item \textit{getRealization}
+\begin{description}
+\item[Usage:] \rule{0pt}{1em}
+\begin{description}
+\item \textit{getRealization()}
+\end{description}
+\item[Arguments:] none.
+\item[Value:] a NumericalPoint, a new realization according to the Sampler
+given when creating the PosteriorRandomVector.
+\end{description}
+\bigskip
+
+\item \textit{getSample}
+\begin{description}
+\item[Usage:] \rule{0pt}{1em}
+\begin{description}
+\item \textit{getSample(size)}
+\end{description}
+\item[Arguments:] \textit{size}: an integer.\rule{0pt}{1em}
+\item[Value:] a NumericalSample of size \textit{size}, composed of \textit{size} new
+realizations according to the Sampler given when creating the
+PosteriorRandomVector.
+\end{description}
+\bigskip
+
+\item \textit{getSampler}
+\begin{description}
+\item[Usage:] \rule{0pt}{1em}
+\begin{description}
+\item \textit{getSampler()}
+\end{description}
+\item[Arguments:] none.\rule{0pt}{1em}
+\item[Value:] the Sampler provided when creating the PosteriorRandomVector.
+\end{description}
+
+\end{description}
+
+\end{description}
+
+% =============================================================
+
+\newpage
+
+% \index{Probabilistic modeling!Random Vector!RandomVector}
+\index{RandomVector}
+\subsubsection{RandomVector}
+
+\begin{description}
+
+\item[Usage:] \rule{0pt}{1em}
+\begin{description}
+\item \textit{RandomVector(distribution)}
+\item \textit{RandomVector(function, antecedent)}
+\item \textit{RandomVector(functionalChaosResult)}
+\item \textit{RandomVector(constant)}
+\end{description}
+
+\item[Arguments:]  \rule{0pt}{1em}
+\begin{description}
+\item \textit{distribution}: a Distribution
+\item \textit{function}: a NumericalMathFunction
+\item \textit{antecedent}: a RandomVector of type Usual (see farther)
+\item \textit{functionalChaosResult}: a FunctionalChaosResult which contains the results of a Chaos Polynomial approximation
+\item \textit{constant}: a NumericalPoint
+\end{description}
+
+\item[Value:] a RandomVector, which is of type: \rule{0pt}{1em}
+\begin{description}
+\item \textit{Usual}: if created thanks to the first usage. In that case, the RandomVector has for distribution the one specified through \textit{distribution}.
+\item \textit{Composite}: if created thanks to the second usage. In that case, the RandomVector is defined as the image through the function \textit{function} of the Usual RandomVector \textit{antecedent}:  \textit{Y=function(antecedent)}.
+\item \textit{FunctionalChaosRandomVector}: if created thanks to the third usage. In that case, the RandomVector is the image through a functionial chaos approximation model of the assoiated Usual RandomVector.
+\item \textit{Constant}: if created thanks to the fourth usage. In that case, the RandomVector is a constant vector equal to the NumericalPoint specified  \textit{constant}.
+\end{description}
+
+\item[Some methods:]  \rule{0pt}{1em}
+\begin{description}
+\item \textit{getAntecedent}
+\begin{description}
+\item[Usage:] \textit{getAntecedent()}
+\item[Arguments:] no argument
+\item[Value:] a RandomVector, only in the case of Composite RandomVector: the  RandomVector $X$ such that \textit{Y=function(X)}.
+\end{description}
+\bigskip
+\item \textit{getCovariance}
+\begin{description}
+\item[Usage:] \textit{getCovariance()}
+\item[Arguments:] no argument
+\item[Value:] a CovarianceMatrix, only in the case of Usual or FunctionalChaos RandomVector: the covariance of the  considered RandomVector
+\end{description}
+\bigskip
+
+\item \textit{getDistribution}
+\begin{description}
+\item[Usage:] \textit{getDistribution()}
+\item[Arguments:] no argument
+\item[Value:] a Distribution, only in the case of Usual RandomVector: the distribution of the RandomVector
+\end{description}
+\bigskip
+
+\item \textit{getDescription}
+\begin{description}
+\item[Usage:] \textit{getDescription()}
+\item[Arguments:] no argument
+\item[Value:] a Description, the description of the Randomvector
+\end{description}
+\bigskip
+
+\item \textit{getDimension}
+\begin{description}
+\item[Usage:] \textit{getDimension()}
+\item[Arguments:] no argument
+\item[Value:] an integer, the dimension of the RandomeVector
+\end{description}
+\bigskip
+
+\item \textit{getFunctionalChaosResult}
+\begin{description}
+\item[Usage:] \textit{getFunctionalChaosResult()}
+\item[Arguments:] no argument
+\item[Value:] a FunctionalChaosResult, only in the case of FunctionalChaos RandomVector: the  result structure of the Chaos Polynomial study.
+\end{description}
+\bigskip
+
+
+\item \textit{getMarginal}
+\begin{description}
+\item[Usage:] \rule{0pt}{1em}
+\begin{description}
+\item \textit{getMarginal(i)}
+\item \textit{getMarginal(indices)}
+\end{description}
+\item[Arguments:] \rule{0pt}{1em}
+\begin{description}
+\item $i$: an integer which indicates the component concerned
+\item \textit{indices}: an Indices which regroups all the components concerned
+\end{description}
+\item[Value:] a RandomVector restricted to the concerned components.
+\end{description}
+\item[Details:] Let's note $\vect{Y} = \Tr{(Y_1, \cdots, Y_n)}$ a random vector and $I \in [1, n]$ a set of indices. If $\vect{Y}$ is a UsualRandomvector, the subvector is defined by $\vect{\tilde{Y}} = \Tr{(Y_i)}_{i \in I}$. If $\vect{Y}$ is a CompositeRandomVector, defined by $\vect{Y} = f(\vect{X})$ with $f = (f_1, \cdots, f_n)$, $f_i$ some scalar functions, the sub vector is $\vect{\tilde{Y}} = (f_i(\vect{X}))_{i \in I}$.
+\bigskip
+\item \textit{getMean}
+\begin{description}
+\item[Usage:] $()$
+\item[Arguments:] no argument
+\item[Value:] a NumericalPoint, only in the case of Usual or FunctionalChaos RandomVector: the mean vector of the associated distribution
+\end{description}
+\bigskip
+
+\item \textit{getName}
+\begin{description}
+\item[Usage:] \textit{getName()}
+\item[Arguments:] no argument
+\item[Value:] a string, the name of the RandomVector
+\end{description}
+\bigskip
+
+\item \textit{getSample}
+\begin{description}
+\item[Usage:] \textit{getSample()}
+\item[Arguments:] no argument
+\item[Value:] a NumericalSample
+a sample of the random vector
+\end{description}
+\bigskip
+
+\item \textit{isComposite}
+\begin{description}
+\item[Usage:] \textit{isComposite()}
+\item[Arguments:] no argument
+\item[Value:] a boolean which indicates if the RandomVector is of type Composite or Usual.
+\end{description}
+\end{description}
+
+\end{description}
+
+Each  \textit{getMethod}  is associated to a \textit{setMethod}.
+
+% =============================================================
+
+\newpage
+\subsection{Sampler}
+
+\index{Sampler}
+\subsubsection{Sampler}
+
+\begin{description}
+
+\item[Usage:] \rule{0pt}{1em}
+\begin{description}
+\item \textit{Sampler(samplerImplementation)}
+\end{description}
+
+\item[Arguments:]  \textit{samplerImplementation}: a SamplerImplementation,
+which is a particular sampler. \rule{0pt}{1em}
+
+\item[Value:] a Sampler, that is an object whose fundamental ability is to produce
+samples according to a certain distribution.
+
+\item[Some methods:]  \rule{0pt}{1em}
+\begin{description}
+
+\item \textit{getDimension}
+\begin{description}
+\item[Usage:] \rule{0pt}{1em}
+\begin{description}
+\item \textit{getDimension()}
+\end{description}
+\item[Arguments:] none. \rule{0pt}{1em}
+\item[Value:] an integer, the dimension of the NumericalPoints that the
+Sampler can generate.
+\end{description}
+\bigskip
+
+\item \textit{getName}
+\begin{description}
+\item[Usage:] \textit{getName()}
+\item[Arguments:] no argument
+\item[Value:] a string, the name of the Sampler.
+\end{description}
+\bigskip
+
+\item \textit{getRealization}
+\begin{description}
+\item[Usage:] \rule{0pt}{1em}
+\begin{description}
+\item \textit{getRealization()}
+\end{description}
+\item[Arguments:] none. \rule{0pt}{1em}
+\item[Value:] a NumericalPoint, a new realization.
+\end{description}
+\bigskip
+
+\item \textit{getSample}
+\begin{description}
+\item[Usage:] \rule{0pt}{1em}
+\begin{description}
+\item \textit{getSample(size)}
+\end{description}
+\item[Arguments:] \textit{size}: an integer. \rule{0pt}{1em}
+\item[Value:] a NumericalSample composed of \textit{size} new realizations.
+\end{description}
+\bigskip
+
+\item \textit{getVerbose}
+\begin{description}
+\item[Usage:] \rule{0pt}{1em}
+\begin{description}
+\item \textit{getVerbose()}
+\end{description}
+\item[Arguments:] none. \rule{0pt}{1em}
+\item[Value:] a logical value, the verbose mode is activated if it is true,
+desactivated otherwise.
+\end{description}
+\bigskip
+
+\item \textit{setName}
+\begin{description}
+\item[Usage:] \textit{getName(name)}
+\item[Arguments:] \textit{name}: a string.
+\item[Value:] it gives the name of the Sampler the value \textit{name}.
+\end{description}
+\bigskip
+
+\item \textit{setVerbose}
+\begin{description}
+\item[Usage:] \rule{0pt}{1em}
+\begin{description}
+\item \textit{setVerbose(verbosity)}
+\end{description}
+\item[Arguments:] \textit{verbosity}, a logical value. \rule{0pt}{1em}
+\item[Value:] it makes the Sampler verbose (\textit{verbosity = true}) or not
+(false).
+\end{description}
+
+\end{description}
+
+\end{description}
+
+% =============================================================
+
+\index{MCMC}
+\subsubsection{MCMC}
+\label{sec:MCMC}
+
+This class inherits from the Sampler class. This class is virtual, thus cannot
+be instanciated. However, it is described so as not to repeat, in this document,
+the descriptions of constructors and methods shared between classes which
+are derived from it.
+
+\begin{description}
+
+\item[Usage:] \rule{0pt}{1em}
+\begin{description}
+\item \textit{MCMC(prior,conditionalDistribution,sample,initialState)}
+\item \textit{MCMC(prior,conditionalDistribution,model,sample,initialState)}
+\end{description}
+
+\item[Arguments:]  \rule{0pt}{1em}
+\begin{description}
+\item \textit{prior}: a Distribution, the prior distribution of the parameters of
+the underlying Bayesian statistical model,
+\item \textit{conditionalDistribution}: a Distribution, required to define the
+likelihood of the underlying Bayesian statistical model,
+\item \textit{model}: a NumericalMathFunction, needed to define
+the likelihood,
+\item \textit{sample}: a NumericalSample, required to define the
+likelihood,
+\item \textit{initialState}: a NumericalPoint, the initial state of the Monte-Carlo
+Markov chain on which the Sampler is based.
+\end{description}
+
+\item[Value:] a MCMC, which provides a implementation of the concept of
+sampler, using a Monte-Carlo Markov Chain (MCMC) algorithm starting from
+\textit{initialState}.
+More precisely, let $t(.)$ be the PDF of its target distribution
+and $d_\theta$ its dimension, $\pi(.)$ be the PDF of the distribution \textit{prior},
+$f(.|\vect{w})$ be the PDF of the distribution \textit{conditionalDistribution}
+when its parameters are set to $\vect{w}$, $d_w$ be the number of scalar
+parameters of \textit{conditionalDistribution} (which corresponds to the dimension of
+the above $\vect{w}$), $g(.)$ be the function corresponding to \textit{model}
+and $(\vect{y}^1,\cdots,\vect{y}^n)$ be the sample \textit{sample} (of size $n$):
+\rule{0pt}{1em}
+\begin{description}
+\item in the first usage, it creates a sampler based on an MCMC algorithm
+whose target distribution is defined by
+\begin{equation} \label{eq:MCMCtarget}
+t(\vect{\theta})
+\quad \substack{~\\[0.5em]\displaystyle\propto\\\scriptstyle\vect{\theta}} \quad
+\underbrace{~\pi(\vect{\theta})~}_{\mbox{prior}} \quad
+\underbrace{~\prod_{i=1}^n f(\vect{y}^i|\vect{\theta})~}_{\mbox{likelihood}};
+\end{equation}
+\item in the second usage, it creates a sampler based on an MCMC algorithm
+whose target distribution is defined by
+\begin{equation} \label{eq:MCMCtarget2}
+t(\vect{\theta})
+\quad \substack{~\\[0.5em]\displaystyle\propto\\\scriptstyle\vect{\theta}} \quad
+\underbrace{~\pi(\vect{\theta})~}_{\mbox{prior}} \quad
+\underbrace{~\prod_{i=1}^n f(\vect{y}^i|g^i(\vect{\theta}))~}_{\mbox{likelihood}}
+\end{equation}
+where the $g^i:\Rset^{d_\theta}\rightarrow\Rset^{d_w}$ ($1\leq{}i\leq{}n$) are such that
+$\begin{array}{rcl}
+g:\Rset^{d_\theta} & \longrightarrow & \Rset^{n\,d_w}\\
+\vect{\theta} & \longmapsto &
+g(\vect{\theta}) = \Tr{(\Tr{g^1(\vect{\theta})}, \cdots, \Tr{g^n(\vect{\theta})})}.
+\end{array}$\\
+In fact, the first usage is a particular case of the second.
+
+\end{description}
+
+\item[Some methods:]  \rule{0pt}{1em}
+\begin{description}
+
+\item \textit{getBurnIn}
+\begin{description}
+\item[Usage:] \rule{0pt}{1em}
+\begin{description}
+\item \textit{getBurnIn()}
+\end{description}
+\item[Arguments:] none. \rule{0pt}{1em}
+\item[Value:] an integer, the length of the burn-in period, that is the
+number of first iterates of the MCMC chain which will be thrown away when
+generating the sample.
+\end{description}
+\bigskip
+
+\item \textit{getConditional}
+\begin{description}
+\item[Usage:] \rule{0pt}{1em}
+\begin{description}
+\item \textit{getConditional()}
+\end{description}
+\item[Arguments:] none. \rule{0pt}{1em}
+\item[Value:] the Distribution taken into account in the definition of the
+likelihood, whose PDF with parameters $\vect{w}$ corresponds to $f(.|\vect{w})$
+in the equation~(\ref{eq:MCMCtarget}) or (\ref{eq:MCMCtarget2}).
+\end{description}
+\bigskip
+
+\item \textit{getModel}
+\begin{description}
+\item[Usage:] \rule{0pt}{1em}
+\begin{description}
+\item \textit{getModel()}
+\end{description}
+\item[Arguments:] none. \rule{0pt}{1em}
+\item[Value:] the NumericalMathFunction \textit{model} taken into account in the
+definition of the likelihood, which corresponds to $g$, that is the functions
+$g^i$ ($1\leq{}i\leq{}n$) in the equation~(\ref{eq:MCMCtarget2}).
+\end{description}
+\bigskip
+
+\item \textit{getObservations}
+\begin{description}
+\item[Usage:] \rule{0pt}{1em}
+\begin{description}
+\item \textit{getObservations()}
+\end{description}
+\item[Arguments:] none. \rule{0pt}{1em}
+\item[Value:] the NumericalSample taken into account in the definition of
+the likelihood, which corresponds to the $n$-tuple of the $\vect{y}^i$
+($1\leq{}i\leq{}n$) in the equation~(\ref{eq:MCMCtarget}) or
+(\ref{eq:MCMCtarget2}).
+\end{description}
+\bigskip
+
+\item \textit{getPrior}
+\begin{description}
+\item[Usage:] \rule{0pt}{1em}
+\begin{description}
+\item \textit{getPrior()}
+\end{description}
+\item[Arguments:] none. \rule{0pt}{1em}
+\item[Value:] a Distribution, the prior distribution of the parameter of the
+underlying Bayesian statistical model, whose PDF corresponds to $\pi$
+in the equation~(\ref{eq:MCMCtarget}) or (\ref{eq:MCMCtarget2}).
+\end{description}
+\bigskip
+
+\item \textit{getThinning}
+\begin{description}
+\item[Usage:] \rule{0pt}{1em}
+\begin{description}
+\item \textit{getThinning()}
+\end{description}
+\item[Arguments:] none. \rule{0pt}{1em}
+\item[Value:] an integer $k$, the thinning parameter: storing only every
+$k$-th point after the burn-in period.
+\item[Details:] Hence, when generating a sample of size $q$,
+the number of MCMC iterations performed is $l + 1 + (q - 1) \, k$
+where $l$ is the burn-in period length and $k$ the thinning parameter.
+\end{description}
+
+\end{description}
+
+\end{description}
+
+Except \textit{getConditional} and \textit{getModel}, each \textit{getMethod} is associated to a
+\textit{setMethod}.
+
+% =============================================================
+
+\newpage
+\index{RandomWalkMetropolisHastings}
+\subsubsection{RandomWalkMetropolisHastings}
+\label{sec:RandomWalkMetropolisHastings}
+
+This class inherits from the MCMC class.
+
+\begin{description}
+
+\item[Usage:] \rule{0pt}{1em}
+\begin{description}
+\item \textit{RandomWalkMetropolisHastings(prior,conditionalDistribution,sample,initialState,proposal)}
+\item \textit{RandomWalkMetropolisHastings(prior,conditionalDistribution,model,sample,initialState,proposal)}
+\end{description}
+
+\item[Arguments:]  \rule{0pt}{1em}
+\begin{description}
+\item See the class MCMC for the first parameters,
+\item \textit{proposal}: a DistributionCollection, from which the transition kernels
+of the MCMC are defined, as explained hereafter. In the following of this
+paragraph, $\delta \sim p_j$ means that the realization $\delta$ is obtained
+according to the $j$-th Distribution of the DistributionCollection \textit{proposal}
+of size $d$. The underlying MCMC algorithm is a Metropolis-Hastings one which
+draws candidates (for the next state of the chain) using a random walk: from
+the current state $\vect{\theta}^k$, the candidate $\vect{c}^k$ for
+$\vect{\theta}^{k+1}$ can be expressed as
+$\vect{c}^k = \vect{\theta}^k + \vect{\delta}^k$ where the
+distribution of $\vect{\delta}^k$ does not depend on $\vect{\theta}^k$.
+More precisely, here, during the $k$-th Metropolis-Hastings iteration,
+only the $j$-th component $\delta_j^k$ of $\vect{\delta}^k$,
+with $j = k \mbox{ mod } d$, is not zero and
+$\delta_j^k = \lambda_j^k \, \delta^k$ where $\lambda_j^k$ is a deterministic
+scalar ''calibration`` coefficient and where $\delta^k \sim p_j$.
+Moreover, $\lambda_j^k = 1$ by default, but adaptive strategy based on the
+acceptance rate of each component can be defined using the method
+\textit{setCalibrationStrategyPerComponent} (see the
+associated method \textit{getCalibrationStrategyPerComponent}).
+\end{description}
+
+\item[Value:] a RandomWalkMetropolisHastings, which enables to carry out MCMC
+sampling according to the preceding statements (see the class MCMC,
+section~\ref{sec:MCMC}, and the paragraph above). It is important to note that
+sampling one new realization comes to carrying out $d$ Metropolis-Hastings
+iterations (such as described above): all of the components of the new realization
+can differ from the corresponding components of the previous realization.
+Besides, the burn-in and thinning parameters do not take into consideration the
+number of MCMC iterations indeed, but the number of sampled realizations.
+\item[Some methods:]  \rule{0pt}{1em}
+\begin{description}
+
+\item \textit{getAcceptanceRate}
+\begin{description}
+\item[Usage:] \rule{0pt}{1em}
+\begin{description}
+\item \textit{getAcceptanceRate()}
+\end{description}
+\item[Arguments:] none. \rule{0pt}{1em}
+\item[Value:] a NumericalPoint of dimension $d$, whose $j$-th component
+corresponds to the acceptance rate of the candidates $\vect{c}^k$ obtained from
+a state $\vect{\theta}^k$ by only changing its $j$-th component, that is to the
+acceptance rate only relative to the $k$-th MCMC iterations such that
+$k \mbox{ mod } d = j$ (see the paragraph dedicated to
+the constructors of the class above). These are global acceptance rates over
+all the MCMC iterations performed.
+\end{description}
+\bigskip
+
+\item \textit{getCalibrationStrategyPerComponent}
+\begin{description}
+\item[Usage:] \rule{0pt}{1em}
+\begin{description}
+\item \textit{getCalibrationStrategyPerComponent()}
+\end{description}
+\item[Arguments:] none. \rule{0pt}{1em}
+\item[Value:] a CalibrationStrategyCollection \textit{strategy}, whose $j$-th
+component \textit{strategy}[j] defines whether and how the $\lambda_j^k$
+(see the paragraph dedicated to the constructors of the class above)
+are rescaled, on the basis of the last $j$-th-component acceptance rate
+$\rho_j^k$. The ''calibration`` coefficients are rescaled every $q \times d$
+MCMC iterations with $q =$ \textit{strategy}[j].getCalibrationStep(), thus
+on the basis of the acceptances or refusals of the last $q$ candidates
+obtained by only changing the $j$-th component of the current state:
+$\lambda_j^k = \varphi_j(\rho_j^k) \, \lambda_j^{k-q\,d}$ where
+$\varphi_j(.)$ is defined by \textit{strategy}[j].computeUpdateFactor.
+\end{description}
+\bigskip
+
+\item \textit{getProposal}
+\begin{description}
+\item[Usage:] \rule{0pt}{1em}
+\begin{description}
+\item \textit{getProposal()}
+\end{description}
+\item[Arguments:] none. \rule{0pt}{1em}
+\item[Value:] a DistributionCollection, the $d$-tuple of Distributions $p_j$
+($1\leq{}j\leq{}d$) from which the transition kernels of the random walk
+Metropolis-Hastings algorithm are defined; look at the paragraph dedicated to
+the constructors of the class above.
+\end{description}
+\bigskip
+
+\item \textit{setCalibrationStrategyPerComponent}
+\begin{description}
+\item[Usage:] \rule{0pt}{1em}
+\begin{description}
+\item \textit{setCalibrationStrategyPerComponent(strategy)}
+\end{description}
+\item[Arguments:] \rule{0pt}{1em}
+\begin{description}
+\item \textit{strategy}: a CalibrationStrategyCollection.
+\end{description}
+\item[Value:] this method is associated to the method
+\textit{getCalibrationStrategyPerComponent}.
+\end{description}
+\bigskip
+
+\item \textit{setProposal}
+\begin{description}
+\item[Usage:] \rule{0pt}{1em}
+\begin{description}
+\item \textit{setProposal(proposal)}
+\end{description}
+\item[Arguments:] \textit{proposal}: a DistributionCollection. \rule{0pt}{1em}
+\item[Value:] this method is associated to the method \textit{getProposal}.
+\end{description}
+
+\end{description}
+
+\end{description}
+
+% =============================================================
+
+\newpage
+\index{CalibrationStrategy}
+\subsubsection{CalibrationStrategy}
+
+\begin{description}
+
+\item[Usage:] \rule{0pt}{1em}
+\begin{description}
+\item \textit{CalibrationStrategy()}
+\item \textit{CalibrationStrategy(range)}
+\item \textit{CalibrationStrategy(range,expansionFactor,shrinkFactor)}
+\end{description}
+
+\item[Arguments:]  \rule{0pt}{1em}
+\begin{description}
+\item \textit{range}: a Interval, %(default value is $[0.117,0.468]$),
+the acceptance rate values for which no update
+of the ``calibration'' coefficient is performed,
+\item \textit{expansionFactor}: a real value, % (default value is $1.2$),
+the expansion factor
+($expansionFactor > 1$) to use to rescale the ``calibration'' coefficient if
+the latter is too high (greater than the upper bound of \textit{range}),
+\item \textit{shrinkFactor}: a real value, % (default value is $0.8$),
+the shrink factor
+($0 < shrinkFactor < 1$) to use to rescale the ``calibration'' coefficient if
+the latter is too low (smaller than the lower bound of \textit{range}).
+\end{description}
+
+\item[Value:] a CalibrationStrategy, which can be used by a
+RandomWalkMetropolisHastings for example (see the description of the
+method \textit{getCalibrationStrategyPerComponent},
+section~\ref{sec:RandomWalkMetropolisHastings}).
+
+\item[Some methods:]  \rule{0pt}{1em}
+
+\item \textit{computeUpdateFactor}
+\begin{description}
+\item[Usage:] \rule{0pt}{1em}
+\begin{description}
+\item \textit{computeUpdateFactor(rho)}
+\end{description}
+\item[Arguments:] \rule{0pt}{1em}
+\begin{description}
+\item \textit{rho}: a real value $\rho$, the acceptance rate to take into account.
+\end{description}
+\item[Value:] let $\lambda$ be the ``calibration'' coefficient to update,
+it gives a factor $\varphi(\rho)$ such that $\varphi(\rho)\,\lambda$ is the updated
+``calibration'' coefficient according to the strategy.
+The value is computed as follows:
+\begin{equation}
+\varphi(\rho) = \left\{ \begin{array}{l}
+s \mbox{ if } \rho < m\\
+e \mbox{ if } \rho > M\\
+1 \mbox{ otherwise}
+\end{array} \right.
+\end{equation}
+with $s$, $e$ and $[m,M]$ the values given, respectively, by the methods
+\textit{getShrinkFactor}, \textit{getExpansionFactor} and \textit{getRange}.
+\end{description}
+\bigskip
+
+\item \textit{getCalibrationStep}
+\begin{description}
+\item[Usage:] \rule{0pt}{1em}
+\begin{description}
+\item \textit{getCalibrationStep()}
+\end{description}
+\item[Arguments:] none. \rule{0pt}{1em}
+\item[Value:] an integer, the calibration step corresponding for example to
+$q$ in the description of the method \textit{getCalibrationStrategyPerComponent} of the
+section~\ref{sec:RandomWalkMetropolisHastings}.
+\end{description}
+\bigskip
+
+\item \textit{getExpansionFactor}
+\begin{description}
+\item[Usage:] \rule{0pt}{1em}
+\begin{description}
+\item \textit{getExpansionFactor()}
+\end{description}
+\item[Arguments:] none. \rule{0pt}{1em}
+\item[Value:] a real value, see the description of the method
+\textit{computeUpdateFactor} above.
+\end{description}
+\bigskip
+
+\item \textit{getRange}
+\begin{description}
+\item[Usage:] \rule{0pt}{1em}
+\begin{description}
+\item \textit{getRange()}
+\end{description}
+\item[Arguments:] none. \rule{0pt}{1em}
+\item[Value:] an Interval, see the description of the method
+\textit{computeUpdateFactor} above.
+\end{description}
+\bigskip
+
+\item \textit{getShrinkFactor}
+\begin{description}
+\item[Usage:] \rule{0pt}{1em}
+\begin{description}
+\item \textit{getShrinkFactor()}
+\end{description}
+\item[Arguments:] none. \rule{0pt}{1em}
+\item[Value:] a real value, see the description of the method
+\textit{computeUpdateFactor} above.
+\end{description}
+\bigskip
+
+\end{description}
+
+Each  \textit{getMethod}  is associated to a \textit{setMethod}.
+
+% =============================================================

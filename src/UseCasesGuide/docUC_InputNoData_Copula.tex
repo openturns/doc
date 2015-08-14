@@ -1,0 +1,182 @@
+% Copyright (C) 2005-2015 Airbus - EDF - IMACS - Phimeca
+% Permission is granted to copy, distribute and/or modify this document
+% under the terms of the GNU Free Documentation License, Version 1.2
+% or any later version published by the Free Software Foundation;
+% with no Invariant Sections, no Front-Cover Texts, and no Back-Cover
+% Texts.  A copy of the license is included in the section entitled "GNU
+% Free Documentation License".
+\renewcommand{\filename}{docUC_InputNoData_Copula}
+\renewcommand{\filetitle}{UC : List of Copula}
+
+% \HeaderNNIILevel
+% \HeaderIILevel
+\HeaderIIILevel
+
+
+
+
+
+
+
+
+The objective of this Use Case is to manipulate copulas of OpenTURNS.\\
+
+A copula may be considered as the restriction to $[0,1]^n$ of a distribution with uniform 1D marginals on $[0,1]$ and this copula as copula. That's why an object of type {\itshape Copula} offers the same methods as an object of type {\itshape Distribution} (see U.C. \ref{manipulation_distribution} to have the list of the methods).\\
+
+Details on copula may be found in the Reference Guide (\extref{ReferenceGuide}{see file Reference Guide - Step B -- Copula}{stepB}).\\
+
+
+
+\index{Copula!Ali-Mikhail-Haq}
+\index{Copula!Clayton}
+\index{Copula!Composed copula}
+\index{Copula!Farlie-Gumbel-Morgenstern}
+\index{Copula!Frank}
+\index{Copula!Gumbel}
+\index{Copula!Independent}
+\index{Copula!Normal}
+\index{Copula!Min}
+\index{Copula!Mixture}
+\index{Copula!Sklar}
+\index{Correlation!Correlation matrix of the Normal copula}
+\index{Correlation!Spearman rank correlation matrix}
+
+
+OpenTURNS proposes the copulas listed in Table.\ref{ListCopulas}.  Table.\ref{CaracCopulas} gives the main copula features, where AMH means Ali-Mikhail-Haq and FGM means Farlie-Gumbel-Morgenstern.
+
+\begin{table}[H]
+  \begin{center}
+    \begin{tabular}{|l|c|c|c|c|}
+      \hline
+      Copula & Archimedean & Independent & Elliptical & Other \\
+      \hline
+      AMH & $\times$ & for $\theta = 0$ &  & \\
+      \hline
+      Clayton & $\times$ &  for $\theta = 0$ & &\\
+      \hline
+      ComposedCopula & & \parbox[c]{4cm}{if each copula is Independent} & \parbox[c]{4cm}{if each copula is Normal} & $\times$ \\
+      \hline
+      FGM & & for $\theta = 0$ & & $\times$ \\
+      \hline
+      Frank & $\times$ & for $\theta = 0$ & &\\
+      \hline
+      Gumbel & $\times$ & for $\theta = 1 $ & &\\
+      \hline
+      Independant &$\times$ & $\times$& $\times$&\\
+      \hline
+      Min & & & &$\times$\\
+      \hline
+      Normal & & for $\mat{R} = \mat{I}$ & $\times$ &\\
+      \hline
+      SklarCopula & \parbox[c]{4cm}{if coming from a distribution with Archimedean copula}& the same & the same & $\times$ \\
+      \hline
+    \end{tabular}
+    \caption{Features of the OpenTURNS copula.}
+    \label{CaracCopulas}
+  \end{center}
+\end{table}
+\textspace\\
+
+
+
+
+
+\newcommand\B{\rule[-2.4ex]{0pt}{0pt}}
+\newcommand\Top{\rule{0pt}{4.8ex}}
+
+\begin{table}[H]
+  \begin{center}
+    \begin{tabular}{|l|c|c|c|}
+      \hline
+      Name & Dimension & $C(u_1, \cdots, u_n)$ & Parameters\textspace\Top\B\\
+      \hline
+      AMH & 2 & $\displaystyle \frac{u_1u_2}{1-\theta(1-u_1)(1-u_2)}$ & $|\theta|<1$\textspace\Top\B\\
+      \hline
+      Clayton & 2 & $\displaystyle \left(u_1^{-\theta}+u_2^{-\theta}-1\right)^{-1/\theta}$ & $\theta \geq 0$\textspace\Top\B\\
+      \hline
+      FGM & $2$ & $\displaystyle u_1u_2 (1 + \theta(1 - u_1)(1 - u_2))$ & $\theta\in[-1,1]$\textspace\Top\B\\
+      \hline
+      Frank & 2 & $\left\{^{\strut}\begin{array}{ll}\displaystyle -\frac{1}{\theta}\log\left(1+\frac{(e^{-\theta u_1}-1)(e^{-\theta u_2}-1}{e^{-\theta}-1}\right) & \mbox{ for }\theta\neq 0\\
+        \displaystyle  u_1u_2&\mbox{ for }\theta=0
+      \end{array}\right._{\strut}$ & $\theta>0$\textspace\Top\B\\
+      \hline
+      Gumbel & 2 & $\displaystyle \exp\left(-\left((-\log(u_1))^{\theta}+(-\log(u_2))^{\theta}\right)^{1/\theta}\right)$ & $\theta \geq 1$\textspace\Top\B\\
+      \hline
+      Independent & $n$ & $\displaystyle \prod_{i=1}^{n} u_i$ & $n$ \textspace\Top\B\\
+      \hline
+      Min & $n$ & $\displaystyle \min(u_1,\dots,u_n)$ & $n$\textspace\Top\B\\
+      \hline
+      Normal & 2 &  $\displaystyle\int_{-\infty}^{\Phi^{-1}(u_1)}\int_{-\infty}^{\Phi^{-1}(u_2)}\frac{1}{2\pi\sqrt{1-\rho^2}}\exp\left(-\frac{s^2-2\rho st+t^2}{2(1-\rho^2)}\right)\,\Diff s\,\Diff t$ \mathspace\Top\B & $\begin{array}{l}
+        \mat{R} = \left(\begin{array}{cc}
+          1 & \rho \\
+          \rho & 1
+        \end{array}
+        \right)^{\strut}\\
+        \rho \in (-1,1)
+      \end{array}$\\
+      \hline
+      Normal & $n$ & $\displaystyle\int_{-\infty}^{\Phi^{-1}(u_1)}\cdots \int_{-\infty}^{\Phi^{-1}(u_n)}\frac{1}{(2\pi)^{n/2} \sqrt{\det(\mat{R})}}\exp\left(-\frac{1}{2}\vect{x}^t \mat{R}^{-1} \vect{x} \right)\,\Diff \vect{x}$ & $\mat{R}$, SPD \textspace\Top\B\\
+      \hline
+      Sklar & $n$ & $\displaystyle F\left(F_1^{-1}(u_1), \dots, F_n^{-1}(u_n)\right)$ & $-$\textspace\Top\B\\
+      \hline
+    \end{tabular}
+    \caption{Expressions of the copulas of OpenTURNS.}
+    \label{ListCopulas}
+  \end{center}
+\end{table}
+\textspace\\
+
+
+Furthermore, OpenTURNS allows to extract the copula $C$ from any $n$ dimensional distribution, thanks to the inverse of the Sklar theorem :
+\begin{align*}
+  C(u_1, \dots, u_n) = F(F_1^{-1}(u_1), \dots, F_n^{-1}(u_n))
+\end{align*}
+where $F$ is the cumulative density function of the distribution and $F_i$ its respective marginals. This copula is denoted \emph{Sklar Copula} within OpenTURNS.\\
+
+OpenTURNS also allows to create some copula as the product of other copulas : if $C_1$ and $C_2$ are two copulas respectively of random vectors in  $\Rset^{n_1}$ and $\Rset^{n_2}$, we can create the copula of a random vector of $\Rset^{n_1+n_2}$, noted $C$ as follows :
+\begin{align*}
+  C(u_1, \cdots, u_n) = C_1(u_1, \cdots, u_{n_1}) C_2(u_{n_1+1}, \cdots, u_{n_1+n_2})
+\end{align*}
+It means that both subvectors $(u_1, \cdots, u_{n_1})$ and $(u_{n_1+1}, \cdots, u_{n_1+n_2})$ of $\Rset^{n_1}$ and $\Rset^{n_2}$ are independent.\\
+
+OpenTURNS also creates some mixtures of copulas (the density is a linear combination of some copulas densities) thanks to the object {\itshape Mixture} (see the use case \label{Mixture}). Note that the result still remains a copula.\\
+
+OpenTURNS also builds ordinal sums of copulas from a collection of $n$ copulas $(C_1, \dots, C_n)$, each one being of the same dimension $d$ and a collection of bounds $(\alpha_1, \dots, \alpha_{n+1})$ in $]0,1[$. The ordinal sums of copulas is defined by:
+\begin{equation}
+ C(\vect{u}) = \left\{
+    \begin{array}{ll}
+       \alpha_i+C_i \left( \dfrac{u_1-\alpha_i}{\alpha_{i+1} - \alpha_i} \right) & \mbox{ if } \vect{u} \in [\alpha_i, \alpha_{i+1}[ \\
+       M_d(\vect{u}) & \mbox{ else } 
+    \end{array}
+    \right.
+\end{equation}
+with $M_d$ the Min-copula: $M_d(\vect{u}) = \min_{k=1 \dots d} u_k$ and where, for convenience, we noted $\alpha_0=0$ and $\alpha_n=1$.\\
+Note that if  $\alpha_i=\alpha_{i+1}$ then the copula $C_{i+1}$ is erased from the list, for $i=0 \dots n-1$.
+
+
+
+
+ 
+\noindent%
+\requirements{
+  \begin{description}
+  \item[$\bullet$] none
+  \end{description}
+}
+             {
+               \begin{description}
+               \item[$\bullet$] all the copula named according to the rule : {\itshape typeCopula}
+               \item[type:] usual copula (for example NormalCopula,...)
+               \item[$\bullet$] a composed copula : {\itshape finalCopula}
+               \item[type:] ComposedCopula
+               \end{description}
+             }
+
+             \textspace\\
+             Python script for this UseCase :
+
+             \inputscript{script_docUC_InputNoData_Copula}
+
+             \textspace\\
+
+             Refer to the Reference Guide to get the graphs of the pdf iso-curves of each copula.

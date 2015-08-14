@@ -1,0 +1,62 @@
+% Copyright (C) 2005-2015 Airbus - EDF - IMACS - Phimeca
+% Permission is granted to copy, distribute and/or modify this document
+% under the terms of the GNU Free Documentation License, Version 1.2
+% or any later version published by the Free Software Foundation;
+% with no Invariant Sections, no Front-Cover Texts, and no Back-Cover
+% Texts.  A copy of the license is included in the section entitled "GNU
+% Free Documentation License".
+\renewcommand{\filename}{docUC_LSF_ExpertMixture.tex}
+\renewcommand{\filetitle}{UC : Defining a piece wise function according to a classifier}
+
+% \HeaderNNIILevel
+% \HeaderIILevel
+\HeaderIIILevel
+
+
+\label{ExpertMixture}
+
+\index{Limit State Function!ExpertMixture}
+
+
+The objective of this Use Case is define a piece wise function according to a classifier:
+\begin{eqnarray}\label{expMixtFct}
+  f(\vect{x})  & = f_1(\vect{x}) \quad \forall \vect{x} \in Classe\, 1 \\ \nonumber
+  & = f_k(\vect{x}) \quad \forall \vect{x} \in Classe\, k  \\\nonumber
+  & = f_N(\vect{x}) \quad \forall \vect{x} \in Classe\, N
+\end{eqnarray}
+where the $N$ classes are defined by the  classifier.
+
+
+
+The classifier is MixtureClassifier based on a  MixtureDistribution defined as:
+\begin{equation}\label{MixtDist}
+  p(\vect{x}) = \sum_{i=1}^N w_ip_i(\vect{x})
+\end{equation}
+
+The rule to assign a point to a class is defined as follows:  $\vect{x}$ is assigned to the class $i=\argmax_k \log w_kp_k(\vect{x})$.\\
+The grade of $\vect{x}$ with respect to the classe $k$ is $\log w_kp_k(\vect{x})$.\\
+
+The example here is a bivariate classifier that classes points among 2 classes, using the mixture distribution defined by:
+\begin{equation}\label{MixtDist}
+  p(\vect{x}) = \frac{1}{2}(\phi_1(\vect{x}) + \phi_2(\vect{x}))
+\end{equation}
+with $\phi_i$ the probability density function of the $Normal(\vect{\mu}, \vect{\sigma}, \mat{R}_i)$ where $\vect{\mu}=(-1, 1)^t$, $\vect{\sigma}=(1, 1)^t$, $\mat{R}_1[0,1]=-0.99$ and $\mat{R}_2[0,1]=0.99$.
+The  function $f$ is defined by:
+\begin{eqnarray}\label{expMixtFctEx}
+  f(\vect{x})  & = -\vect{x} \quad \forall \vect{x} \in Classe\, 1 \\ \nonumber
+  & = +\vect{x} \quad \forall \vect{x} \in Classe\, 2
+\end{eqnarray}
+
+\requirements{-
+}
+             {
+               \begin{description}
+               \item[$\bullet$] the {\itshape moe}: model of expert mixture
+               \item[type:] ExpertMixture
+               \end{description}
+             }
+
+             \textspace\\
+             Python script for this Use Case :
+
+             \inputscript{script_docUC_LSF_ExpertMixture}

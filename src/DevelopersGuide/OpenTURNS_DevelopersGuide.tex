@@ -1,0 +1,116 @@
+% Copyright (C) 2005-2015 Airbus - EDF - IMACS - Phimeca
+% Permission is granted to copy, distribute and/or modify this document
+% under the terms of the GNU Free Documentation License, Version 1.2
+% or any later version published by the Free Software Foundation;
+% with no Invariant Sections, no Front-Cover Texts, and no Back-Cover
+% Texts.  A copy of the license is included in the section entitled "GNU
+% Free Documentation License".
+
+\documentclass[a4paper,11pt]{article}
+
+\usepackage[utf8]{inputenc}
+\usepackage{graphicx}
+\usepackage{listings}
+\lstset{basicstyle=\color{blue}}
+\usepackage{fancyhdr}
+\usepackage{color}
+\usepackage{float}
+\usepackage{makeidx}
+
+\usepackage{otcommon}
+
+\pagestyle{fancy}
+\fancyhf{} \rhead{\bfseries \thepage} \lhead{\bfseries \nouppercase OpenTURNS -- Developer's guide}
+\rfoot{\bfseries \copyright 2005-2015 Airbus - EDF - IMACS - Phimeca} \lfoot{}
+
+% For OpenTURNS standard math notations
+\usepackage{Math_Notations}
+
+% fonts for the table and figure captions
+\usepackage[small,bf,up]{caption}
+%\newcommand{\captionfont}{\small\itshape}
+
+% macros used in the document
+\newcommand{\OT} {OpenTURNS}
+\newcommand{\Sal} {Salom\'e}
+
+\makeindex
+
+\begin{document}
+
+\begin{titlepage}
+  \vspace*{2cm}
+  \begin{center}
+    {\huge \bf Developer's guide}
+    \input{GenericInformation.tex}
+  \end{center}
+
+\end{titlepage}
+
+\newpage
+
+% \input{summary}
+
+\cleardoublepage
+% depth of the TOC
+% \setcounter{tocdepth}{4}
+\tableofcontents
+\cleardoublepage
+\listoffigures
+\cleardoublepage
+\listoftables
+\cleardoublepage
+
+\section*{Introduction}
+\input{introduction}
+\cleardoublepage
+
+\section{Architecture}
+\input{architecture}
+\cleardoublepage
+
+\section{Platform development}
+\input{platform_development}
+\cleardoublepage
+
+\section{Documentation development}
+\input{documentation_development}
+\cleardoublepage
+
+\section{Module development}
+\input{module_development}
+\cleardoublepage
+
+\extanchor{wrapperDev}
+\section{Wrapper development}
+\input{wrapper_development}
+\cleardoublepage
+
+\appendix
+
+\section{Coding rules}
+\input{coding_rules}
+\cleardoublepage
+
+\section{Version control}
+\input{version_control}
+\cleardoublepage
+
+\section{Windows port}
+\input{windows_port}
+\cleardoublepage
+
+\section{Windows native port}
+\input{windows_native_port}
+\cleardoublepage
+
+\section{Library wrapper}
+\input{library_wrapper}
+
+\ifpdf
+\cleardoublepage
+\phantomsection
+\addcontentsline{toc}{section}{Index}
+\fi
+\printindex
+\end{document}

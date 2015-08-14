@@ -1,0 +1,67 @@
+% Copyright (C) 2005-2015 Airbus - EDF - IMACS - Phimeca
+% Permission is granted to copy, distribute and/or modify this document
+% under the terms of the GNU Free Documentation License, Version 1.2
+% or any later version published by the Free Software Foundation;
+% with no Invariant Sections, no Front-Cover Texts, and no Back-Cover
+% Texts.  A copy of the license is included in the section entitled "GNU
+% Free Documentation License".
+\renewcommand{\etapemethodo}{C}
+\renewcommand{\nomfichier}{docref_C_UniformRandomGenerator}
+\renewcommand{\titrefiche}{Uniform Random Generator}
+
+\Header
+
+\MathematicalDescription{
+
+  \underline{\textbf{Goal}} \vspace{2mm}
+
+  Generating simulations according to a distribution is based on generating simulations according to a Uniform distribution on $[0,1]$ : several techniques exist then to transform a realization according to a uniform distribution onto a realization according to a distribution which cumulative distribution function is $F$ (refer to \otref{docref_C_DistributionRealisations}{Distribution realizations} for each OpenTURNS distribution). \\
+  Thus, the quality of the random generation of simulation is entirely based on the quality of the \emph{deterministic} algorithm which simulates realizations of the Uniform(0,1) distribution.\\
+  OpenTURNS uses the DSFTM algorithm described here, which is the acronyme of {\bf D}ouble precision {\bf S}IMD oriented {\bf F}ast {\bf M}ersenne {\bf T}wister.\\
+
+
+
+  \underline{\textbf{Principle}} \vspace{2mm}
+
+  Each character is detailed of the acronym is detailed :
+  \begin{itemize}
+  \item {\bf S = SIMD = Single Instruction Multiple Data}: the DSFMT algorithm is able to detect and take profit of the capacity of the microprocessor to realise several operations at a time.
+  \item {\bf F = Fast}: the transformation of the $k$-th state vector of the random generator into the  $(k+1)$-th state vector is written in order to optimize its performance.
+  \item {\bf MT = Mersenne Twister}: the algorithm characteristics are the following ones :
+
+    \begin{enumerate}
+    \item the algorithm is initialized with a high Mersenne Number, of type $2^{2^n}-1$, with $n=19937$.
+    \item the algorithm period $T$ depends on that initial point : $T = 2^{19937} \simeq 10^{6000}$. As a general way, the bad effects of the periodicity of the algorithm arise as soon as the number of simulations is greater than $\, \simeq \sqrt{T}$ simulations. Here, we have : $\sqrt{T} =2^{9968}\simeq 10^{3000}$.
+    \item the realizations of the DSFMT algorithm are uniformly distributed within $[0,1]^n$ until $n=624$.
+    \end{enumerate}
+  \end{itemize}
+
+
+}
+{--}
+
+
+\Methodology{
+
+  The uniform random generator is called as soon as some random realizations are required.  Then, they participate to the Step C : <<Propagating Uncertainties>> of the Methodologie.\\
+  The User of OpenTURNS is able to save and specify its initial state.
+
+
+}
+{
+  In order to appreciate the quality of the DSFMT algorithm, a comparison with some another algorithms is interesting :
+  \begin{itemize}
+  \item Crystal Ball : the random generator of the versions 7.1 and 7.3, and also the random generator of the current version at 30/06/2008 are multiplicative congruential generators, which simulations $R_n$ are given by the relation $R_{n+1}=(62089911 R_n) \, mod (2^{31} - 1)$. Their periodicity are $T = 2^{31}-2$. \\
+    So, it is recommended not to generate numerical samples of size greater than $\sqrt{T} = 46340$!\\
+    Furthermore, realizations can not be considered as independent and uniformly spread within  $[0,1]^n$ as soon as $n=3$....
+
+  \item Excel: the random generator has a periodicity equal to $T = 65000$ : it is recommended not to generate numerical samples of size greater than $\sqrt{T} = 256$.
+
+  \end{itemize}
+
+
+
+}
+\Example{
+  --
+}

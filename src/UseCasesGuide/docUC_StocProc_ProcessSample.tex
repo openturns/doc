@@ -1,0 +1,77 @@
+% Copyright (C) 2005-2015 Airbus - EDF - IMACS - Phimeca
+% Permission is granted to copy, distribute and/or modify this document
+% under the terms of the GNU Free Documentation License, Version 1.2
+% or any later version published by the Free Software Foundation;
+% with no Invariant Sections, no Front-Cover Texts, and no Back-Cover
+% Texts.  A copy of the license is included in the section entitled "GNU
+% Free Documentation License".
+\renewcommand{\filename}{docUC_ProcessSample.tex}
+\renewcommand{\filetitle}{UC : Manipulation of a process sample}
+
+% \HeaderNNIILevel
+\HeaderIILevel
+%\HeaderIIILevel
+
+\label{UCprocessSample}
+
+
+\index{Stochastic Process!Process Sample}
+
+The objective here is to create and manipulate a process sample. A process sample is a collection of fields which share the same mesh $\cM \in \Rset^n$.\\
+
+The method \emph{computeMean} evaluates the mean of the values associated to the same vertex $\vect{t}_i$ of the common mesh $\cM$. If $K$ is the number of fields of the process sample, the method evaluates:
+\begin{align}\label{meanProcessSample}
+  \displaystyle \frac{1}{K} \sum_{k=1}^K \vect{x}_i^k
+\end{align}
+where $(\vect{x}_0^k, \dots, \vect{x}_{N-1}^k)$ are the values of the field $k$ associated to the vertices $(\vect{t}_0, \dots, \vect{t}_{N-1})$ of $\cM$. It creates a numerical sample of size $N$ and dimension $d$.\\
+
+The method \emph{computeSpatialMean} evaluates the spatial mean defined in (\ref{spatMeanField}) for each field contained in the process sample. It creates a numerical sample of size $K$ and dimension $d$.\\
+
+
+A process sample can be obtained as $K$ realizations of a multivariate stochastic process  $X: \Omega \times \cD \rightarrow \Rset^d$   of dimension $d$ where $\cD \in \Rset^n$, when the realizations are discretized on the same mesh $\cM$ of $\cD$. The  values $(\vect{x}_0^k, \dots, \vect{x}_{N-1}^k)$ of the field $k$ are defined by:
+\begin{align}
+  \forall i \in [0, N-1],\quad   \vect{x}_i= X(\omega_k)(\vect{t}_i)
+\end{align}
+The mean defined in (\ref{meanProcessSample}) is an estimation of the stochastic mean of the process $X$ defined in (\ref{stocMean}). \\
+
+
+The $q$-quantiles per component vector of level $q$ of the random variable $X_{\vect{t}_i}$ is the vector of the marginal quantiles  of level $q$  of  $X_{\vect{t}_i}$. The  method \emph{computeQuantilePerComponent(q)} of the process $X$ creates a field that associates   the $q$-quantiles per component vector of the random variable $X_{\vect{t}_i}$ to each vertex  $\vect{t}_i\in \cM$. The marginal quantiles are evaluated from the empirical distribution defined by the process sample.\\
+
+
+\requirements{
+  \begin{description}
+  \item[$\bullet$] a  field : {\itshape myField}
+  \item[type:]  Field
+  \end{description}
+
+  \begin{description}
+  \item[$\bullet$] a process : {\itshape myProcess}
+  \item[type:]  Process
+  \end{description}
+}
+{
+  \begin{description}
+  \item[$\bullet$] a sample of processes : {\itshape myProcessSample, myProcessSample\_1}
+  \item[type:]  ProcessSample
+  \end{description}
+
+  \begin{description}
+  \item[$\bullet$] the stochastic mean process : {\itshape myMeanField}
+  \item[type:] Field
+  \end{description}
+
+  \begin{description}
+  \item[$\bullet$] the spatial mean : {\itshape myMeanNS}
+  \item[type:] NumericalSample
+  \end{description}
+
+  \begin{description}
+  \item[$\bullet$] the field of the quantiles per component : {\itshape myQuantileField}
+  \item[type:] Field
+  \end{description}
+}
+
+\textspace\\
+Python script for this Use Case :
+
+\inputscript{script_docUC_StocProc_ProcessSample}

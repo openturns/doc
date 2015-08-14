@@ -1,0 +1,62 @@
+% Copyright (C) 2005-2015 Airbus - EDF - IMACS - Phimeca
+% Permission is granted to copy, distribute and/or modify this document
+% under the terms of the GNU Free Documentation License, Version 1.2
+% or any later version published by the Free Software Foundation;
+% with no Invariant Sections, no Front-Cover Texts, and no Back-Cover
+% Texts.  A copy of the license is included in the section entitled "GNU
+% Free Documentation License".
+\renewcommand{\filename}{docUC_ThresholdExceedance_FORMandImportanceSampling.tex}
+\renewcommand{\filetitle}{UC : Probability evaluation from an analytical method (FORM/SORM) followed by a simulation method centered on the design point}
+
+% \HeaderNNIILevel
+% \HeaderIILevel
+\HeaderIIILevel
+
+
+
+\index{Threshold Probability!Post analytical importance sampling}
+\index{Threshold Probability!Post analytical controlled importance sampling}
+
+
+This Use Case illustrates the following method in order to evaluate the event probability, melting the FORM or SORM method and the simulation one :
+\begin{itemize}
+\item  perform an FORM or SORM study in order to find the design point,
+\item  perform an importance sampling study centered around the design point : the importance distribution operates in the standard space and is the standard distribution of the standard space (the standard elliptical distribution in the case of an elliptic copula of the input random vector, the standard normal one in all the other cases).
+\end{itemize}
+
+The importance sampling technique in the standard space may be of two kinds :
+\begin{itemize}
+\item the numerical sample is generated according to the new importance distribution : this technique is called {\itshape post analytical  importance sampling},
+\item the numerical sample is generated according to the new importance distribution and is controlled by the value of the linearised limit state function : this technique is called {\itshape post analytical  controlled importance sampling}.
+\end{itemize}
+
+This post analytical importance sampling algorithm is created from the result structure of a FORM or SORM algorithm, obtained on the Use Case \ref{analyticalRes}.\\
+It is parameterised exactly as a simulation algorithm, through the parameters {\itshape OuterSampling, BlockSize, ...}, defined in the Use case \ref{simuParam}. \\
+The results may be extracted and exploited exactly as defined in the Use case \ref{simuRes}.\\
+
+Let us note that the post FORM/SORM importance sampling method may be implemented thanks to the ImportanceSampling object as defined in the Use Case \ref{simuAlgo}, where the importance distribution is defined in the standard space : then, it requires that the event initially defined in the pysical space be transformed in the standard space, as explained in the Use Case \ref{StandardPhysicalEvent}.\\
+The controlled importance sampling technique is only accessible within the post analytical context.\\
+
+
+Details on the simulation algorithm method may be found in the Reference Guide (\extref{ReferenceGuide}{see files Reference Guide - Step C -- FORM and Importance Sampling}{stepC}).\\
+
+\requirements{
+  \begin{description}
+  \item[$\bullet$] the result of a FORM or SORM study : {\itshape myAnalyticalResult}
+  \item[type:] FORMResult or a SORMResult
+  \end{description}
+}
+             {
+               \begin{description}
+               \item[$\bullet$] the post analytical importance sampling simulation algorithm : {\itshape myPostAnalyticalISAlgo}
+               \item[type:] PostAnalyticalImportanceSampling
+               \item[$\bullet$] the post analytical controlled importance sampling simulation algorithm : {\itshape myPostAnalyticalControlledISAlgo}
+               \item[type:] PostAnalyticalControlledImportanceSampling
+               \end{description}
+             }
+
+
+             \textspace\\
+             Python script for this UseCase :
+
+             \inputscript{script_docUC_ThresholdExceedance_FORMandImportanceSampling}

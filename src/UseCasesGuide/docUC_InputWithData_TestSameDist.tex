@@ -1,0 +1,55 @@
+% Copyright (C) 2005-2015 Airbus - EDF - IMACS - Phimeca
+% Permission is granted to copy, distribute and/or modify this document
+% under the terms of the GNU Free Documentation License, Version 1.2
+% or any later version published by the Free Software Foundation;
+% with no Invariant Sections, no Front-Cover Texts, and no Back-Cover
+% Texts.  A copy of the license is included in the section entitled "GNU
+% Free Documentation License".
+\renewcommand{\filename}{docUC_InputWithData_TestSameDist.tex}
+\renewcommand{\filetitle}{UC : Do two samples have the same distribution : QQ-plot visual test, Smirnov numerical test}
+
+% \HeaderNNIILevel
+% \HeaderIILevel
+\HeaderIIILevel
+
+
+
+\index{Graph!QQ-plot}
+\index{Fitting Test!QQ-plot}
+\index{Comparison of distribution test!Smirnov}
+
+The objective of this Use Case is to decide whether both samples follow the same distribution or not. \\
+
+To help the decision, OpenTURNS  proposes one visual test and one numerical test :
+\begin{itemize}
+\item the QQ-plot visual test : Open Turns associates the empirical quantiles of each data from the both numerical samples,
+
+\item the Smirnov test : it tests if both samples (continuous ones only) follow the same distribution. If $F_{n_1}^{*}$ and $F_{n_2}^{*}$ are the empirical cumulative density functions of both samples of size $n_1$ and $n_2$, the Smirnov test evaluates the decision variable :
+  \begin{align*}
+    D^2 = \displaystyle \sqrt{\frac{n_1n_2}{n_1+n_2}} \sup_{x}|F_{n_1}^{*}(x) - F_{n_2}^{*}(x)|
+  \end{align*}
+  which tends towards the Kolmogorov distribution. The hypothesis of same distribution is rejected if $D^2$ is too high (depending on the p-value threshold).
+\end{itemize}
+
+
+
+Details on the QQ-polt and Kolmogorov-Smirnov  tests may be found in the Reference Guide (\extref{ReferenceGuide}{see files Reference Guide - Step B -- Using QQ-plot to compare two samples and Step B -- Comparison of two samples using Kolmogorov-Smirnov test}{stepB}).\\
+
+
+\requirements{
+  \begin{description}
+  \item[$\bullet$] two scalar numerical continuous samples : {\itshape sample1, sample2}
+  \item[type:]  NumericalSample
+  \end{description}
+}
+             {
+               \begin{description}
+               \item[$\bullet$] test result : {\itshape resultSmirnov}
+               \item[type:] TestResult
+               \end{description}
+             }
+
+             \textspace\\
+             Python script for this UseCase  :
+
+             \inputscript{script_docUC_InputWithData_estSameDist}

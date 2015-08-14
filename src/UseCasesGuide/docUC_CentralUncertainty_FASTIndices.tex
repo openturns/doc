@@ -1,0 +1,49 @@
+% Copyright (C) 2005-2015 Airbus - EDF - IMACS - Phimeca
+% Permission is granted to copy, distribute and/or modify this document
+% under the terms of the GNU Free Documentation License, Version 1.2
+% or any later version published by the Free Software Foundation;
+% with no Invariant Sections, no Front-Cover Texts, and no Back-Cover
+% Texts.  A copy of the license is included in the section entitled "GNU
+% Free Documentation License".
+\renewcommand{\filename}{docUC_CentralUncertainty_FASTIndices.tex}
+\renewcommand{\filetitle}{UC : Sensitivity analysis : FAST indices}
+
+% \HeaderNNIILevel
+% \HeaderIILevel
+\HeaderIIILevel
+
+
+\index{Sensitivity!FAST indices}
+
+The objective of the Use Case is to quantify the correlation between the input variables and the output variable of a model described by a numerical function : it is called sensitivity analysis. The FAST method, based upon the Fourier decomposition of the model response, is a relevant alternative to the classical simulation approach (See Use Case \ref{SobolIndices}) for computing Sobol sensitivity indices. The FAST indices, like the Sobol indices, allow to evaluate the importance of a single variable or a specific set of variables.\\
+In theory, FAST indices range is $\left[0; 1\right]$ ; the closer to 1 the index is, the greater the model response sensitivity to the variable is. The FAST method compute the first and total order indices.\\
+The first order indices evaluate the importance of one variable at a time ($d$ indices stored in a NumericalPoint, with $d$ the input dimension of the model).\\
+The $d$ total indices give the relative importance of every variables except the variable $X_i$, for every variable.\\
+
+Details on the FAST method may be found in the Reference Guide (\extref{ReferenceGuide}{see files Reference Guide - Step C' -- Sensitivity analysis by Fourier decomposition}{stepCprime}).\\
+
+\requirements{
+  \begin{description}
+
+  \item[$\bullet$] an independent joint distribution : {\itshape distribution}
+  \item[type:] Distribution
+  \item[$\bullet$] a function : {\itshape model}, which input dimension must fit the dimension of the distribution
+  \item[type:] NumericalMathFunction
+  \item[$\bullet$] sample size : {\itshape N}, from which the Fourier series are calculated. It represents the length of the discretization of the s-space.
+  \item[type:] int
+  \item[$\bullet$] number of resamplings : {\itshape Nr}, which enables to realize the procedure Nr times and then to calculate the arithmetic means of the results over the Nr estimates.
+  \item[type:] int
+  \item[$\bullet$] the interference factor : {\itshape M}, usually equal to 4 or higher. It corresponds to the truncation level of the Fourier series, i.e. the number of harmonics that are retained in the decomposition.
+  \end{description}
+}
+{
+  \begin{description}
+  \item[$\bullet$] the different FAST indices
+  \item[type:] NumericalPoint, for first and total indices
+  \end{description}
+}
+
+\textspace\\
+Python script for this UseCase :
+
+\inputscript{script_docUC_CentralUncertainty_FASTIndices}

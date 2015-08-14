@@ -1,0 +1,60 @@
+% Copyright (C) 2005-2015 Airbus - EDF - IMACS - Phimeca
+% Permission is granted to copy, distribute and/or modify this document
+% under the terms of the GNU Free Documentation License, Version 1.2
+% or any later version published by the Free Software Foundation;
+% with no Invariant Sections, no Front-Cover Texts, and no Back-Cover
+% Texts.  A copy of the license is included in the section entitled "GNU
+% Free Documentation License".
+\renewcommand{\filename}{docUC_OVI_RVExtraction.tex}
+\renewcommand{\filetitle}{UC : Extraction of a random subvector from a random vector}
+
+% \HeaderNNIILevel
+% \HeaderIILevel
+\HeaderIIILevel
+
+
+\index{Random Vector!Extracting a sub vector}
+
+The objective of this Use Case is to extract a subvector from a random vector which has been defined as well  as a UsualRandomvector (it means thanks to a distribution, see UC. \ref{UsualRandomVector}) than  as a CompositeRandomVector (as the image through a limit state function of an input  random vector, see UC. \ref{CompositeRandomVector}).\\
+
+Let's note $\vect{Y} = (Y_1, \cdots, Y_n)$ a random vector and $I \subset [1, n]$ a set of indices :
+\begin{itemize}
+\item In the first case, the subvector is defined by $\vect{\tilde{Y}} = (Y_i)_{i \in I}$,
+\item In the second case, where $\vect{Y} = f(\vect{X})$ with $f = (f_1, \cdots, f_n)$, $f_i$ some scalar functions, the sub vector is $\vect{\tilde{Y}} = (f_i(\vect{X}))_{i \in I}$.
+\end{itemize}
+
+
+\noindent%
+\requirements{
+  \begin{description}
+  \item[$\bullet$] the random vector : {\itshape myRandomVector}
+  \item[type:] RandomVector which implementation is a UsualRandomVector or CompositeRandomVector
+  \end{description}
+}
+             {
+               \begin{description}
+               \item[$\bullet$] the extracted random vector : {\itshape myExtractedRandomVector}
+               \item[type:] RandomVector which implementation is a UsualRandomVector or CompositeRandomVector
+               \end{description}
+             }
+
+             \textspace\\
+             Python script for this UseCase :
+
+
+             \begin{lstlisting}
+
+               # CASE 1 : Get the marginal of the random vector
+               # Corresponding to the component i
+
+               # Care : numerotation begins at 0
+               myExtractedRandomVector = myRandomVector.getMarginal(i)
+
+
+               # CASE 2 : Get the marginals of the random vector
+               # Corresponding to several components
+               # decribed in the myIndice table
+               # For example, components 0, 1, and 5
+
+               myExtractedRandomVector = myRandomVector.getMarginal( (0, 1, 5) )
+             \end{lstlisting}

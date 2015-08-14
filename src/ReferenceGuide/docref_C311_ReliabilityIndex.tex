@@ -1,0 +1,95 @@
+% Copyright (C) 2005-2015 Airbus - EDF - IMACS - Phimeca
+% Permission is granted to copy, distribute and/or modify this document
+% under the terms of the GNU Free Documentation License, Version 1.2
+% or any later version published by the Free Software Foundation;
+% with no Invariant Sections, no Front-Cover Texts, and no Back-Cover
+% Texts.  A copy of the license is included in the section entitled "GNU
+% Free Documentation License".
+\renewcommand{\etapemethodo}{C}
+\renewcommand{\nomfichier}{docref_C311_ReliabilityIndex}
+\renewcommand{\titrefiche}{Reliability Index}
+
+\Header
+
+\MathematicalDescription{
+
+  \underline{\textbf{Goal}} \vspace{2mm}
+
+  The generalised reliability index $\beta$ is used under the following context : $\vect{X}$ is a probabilistic input vector, $\pdf$ its joint density probability, $\vect{d}$ a determinist vector, $g(\vect{X}\,,\,\vect{d})$ the limit state function of the model, $\cD_f = \{\vect{X} \in \Rset^n \, / \, g(\vect{X}\,,\,\vect{d}) \le 0\}$ the  event considered here and {g(\vect{X}\,,\,\vect{d}) = 0} its boundary.\\
+  The probability content of the event $\cD_f$ is $P_f$:
+  \begin{eqnarray}\label{PfX6}
+    P_f =       \int_{g(\vect{X}\,,\,\vect{d}) \le 0}  \pdf\, d\vect{x}.
+  \end{eqnarray}
+
+  The generalised reliability index is defined as :
+  \begin{align*}
+    \beta_g = \Phi^{-1}(1-P_f) = -\Phi^{-1}(P_f).
+  \end{align*}
+
+  As $\beta_g$ increases, $P_f$ decreases rapidly.\\
+
+  \vspace{2mm}
+
+  \underline{\textbf{Principle}} \vspace{2mm}
+
+  OpenTURNS standard version  evaluates :
+  \begin{itemize}
+  \item[$\bullet$] $\beta_{FORM}$ the FORM reliability index, where $P_f$ is obtained with a FORM approximation (refer to \otref{docref_C311_Form}{FORM}\textasciitilde): in this case, the generalised reliability index is equal to the Hasofer-Lindt reliability index $\beta_{HL}$, which is the distance of the design point from the origin of the standard space,
+  \item[$\bullet$] $\beta_{SORM}$ the SORM reliability index, where $P_f$ is obtained with a SORM approximation : Breitung, Hohen-Bichler or Tvedt (refer to \otref{docref_C311_Sorm}{SORM}),
+  \item[$\bullet$] $\beta_g$ the generalised reliability index, where $P_f$ is obtained with another technique : Monte Carlo simulations, importance samplings,... (refer to \otref{docref_C321_MonteCarloStd}{Monte Carlo}, \otref{docref_C322_LHS}{LHS}\otref{docref_C322_TI}{Importance samplings} and \otref{docref_C322_DirectionalSimulation}{Directional Simulation}\textasciitilde).
+  \end{itemize}
+}
+{
+  --}
+
+\Methodology{
+  Within the global methodology, the reliability index is used in the step C: "Uncertainty propagation" in the case of the evaluation of the probability of an event.\\
+  It requires to have fulfilled before the following steps:
+  \begin{itemize}
+  \item step A1: identify of an input vector $\vect{X}$ of sources of uncertainties and an output variable of interest $Z=\tilde{g}(\vect{X},\vect{d})$, result of the model $\tilde{g}()$,
+  \item step A22: identify a probabilistic criteria such as a threshold exceedance $Z > z_s$ or equivalently a failure event ${g(\vect{X}\,,\,\vect{d}) \le 0}$,
+  \item step B: identify one of the proposed techniques to estimate a probabilistic model of the input vector $\vect{X}$,
+  \item step C3: select a method to evaluate the probability content of the event : the FORM or SORM approximation (step C31) or a simulation method (step C32).
+  \end{itemize}
+}
+            {
+              Interesting litterature on the subject is :
+              \begin{itemize}
+              \item Cornell, "A probability-based structural code," Journal of the American Concrete Institute, 1969, 66(12), 974-985.
+              \item O. Ditlevsen, 1979, "Generalised Second moment reliability index," Journal of Structural Mechanics,  ASCE, Vol.7, pp. 453-472.
+              \item O. Ditlevsen and H.O. Madsen, 2004, "Structural reliability methods," Department of mechanical engineering technical university of Denmark - Maritime engineering, internet publication.
+              \item Hasofer and Lind, 1974, "Exact and invariant second moment code format," Journal of Engineering Mechanics Division, ASCE, Vol. 100, pp. 111-121.
+              \end{itemize}
+            }
+
+            \Example{
+
+              Let's apply this method to the following analytical example which considers a cantilever beam, of Young's modulus E, length L, section modulus I. We apply a concentrated bending force at the other end of the beam. The vertical displacement $y$ of the extrême end is equal to :
+              \begin{align*}
+                y(E, F, L, I) = \displaystyle \frac{FL^3}{3EI}
+              \end{align*}
+              The objective is to propagate until $y$ the uncertainties of the variables $(E, F, L, I)$.\\
+              The input random vector is $\vect{X} = (E, F, L, I)$, which probabilistic modelisation is (unity is not provided):
+              \begin{align*}
+                \left\{
+                \begin{array}{lcl}
+                  E & = & Normal(50, 1) \\
+                  F & = & Normal(1, 1) \\
+                  L & = & Normal(10, 1) \\
+                  I & = & Normal(5, 1)
+                \end{array}
+                \right.
+              \end{align*}
+              The four random variables are independant.\\
+
+              The event considered is the threshold exceedance : $\cD_f = \{(E, F, L, I) \in \Rset^4 \, / \, y(E, F, L, I) \ge 3\}$
+              We obtain the following results :
+              \begin{itemize}
+              \item[$\bullet$] design point in the $\vect{x}$-space, $P^* = (E^* = 49.97,F^* = 1.842, l^* = 10.45,I^* = 4.668)$
+              \item[$\bullet$] generalized and Hasofer-Lind reliability index : $\beta_g = \beta_{HL} = 1.009$
+              \item[$\bullet$] Breitung generalized reliability index $\beta_{Breitung} = 6.591 e^{-1}$
+              \item[$\bullet$] HohenBichler generalized reliability index $\beta_{HohenBichler} = 6.285e^{-1}$
+              \item[$\bullet$] Tvedt generalized reliability index $\beta_{Tvedt} = 6.429e^{-1}$
+              \end{itemize}
+              We note here that the three approximations SORM are consistent between them and different from the FORM one. It may signify that the curvatures are not important to take into account in the evaluation of the event probability.
+            }

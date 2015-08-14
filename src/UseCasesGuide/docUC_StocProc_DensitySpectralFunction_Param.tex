@@ -1,0 +1,69 @@
+% Copyright (C) 2005-2015 Airbus - EDF - IMACS - Phimeca
+% Permission is granted to copy, distribute and/or modify this document
+% under the terms of the GNU Free Documentation License, Version 1.2
+% or any later version published by the Free Software Foundation;
+% with no Invariant Sections, no Front-Cover Texts, and no Back-Cover
+% Texts.  A copy of the license is included in the section entitled "GNU
+% Free Documentation License".
+\renewcommand{\filename}{docUC_StocProc_DensitySpectralFunction_Param.tex}
+\renewcommand{\filetitle}{UC :  Creation of a  parametric  spectral density function}
+
+% \HeaderNNIILevel
+% \HeaderIILevel
+\HeaderIIILevel
+
+\label{DensitySpectralFunctionParam}
+
+\index{Stochastic Process!Spectral Density Function}
+
+Let $X: \Omega \times \cD \rightarrow \Rset^d$  be a multivariate  stationary normal process of dimension $d$. We only treat here the case where the domain is of dimension 1: $\cD \in \Rset$ ($n=1$). \\
+If the process is continuous, then $\cD=\Rset$. In the discrete case, $\cD$  is a lattice. \\
+
+$X$ is supposed to be a second order process with zero mean and we suppose that its spectral density function $S : \Rset \rightarrow \mathcal{H}^+(d)$ defined in (\ref{specdensFunc}) exists. $\mathcal{H}^+(d) \in \mathcal{M}_d(\Cset)$ is the set of $d$-dimensional positive definite hermitian matrices.\\
+
+This use case illustrates how the User can create a density spectral function from parametric models. OpenTURNS  implements the  \emph{Cauchy spectral model}  as a parametric model for the spectral density fucntion $S$. \\
+
+{\bf The  Cauchy spectral model}: Its is associated to the Exponential covariance model.  The Cauchy spectral model is defined by :
+\begin{equation}\label{cauchyModel}
+  S_{ij}(f) = \displaystyle \frac{4R_{ij}a_ia_j(\lambda_i+ \lambda_j)}{(\lambda_i+ \lambda_j)^2 + (4\pi f)^2}, \quad \forall (i,j) \leq d
+\end{equation}
+where $\mat{R}$, $\vect{a}$ and $\vect{\lambda}$ are the parameters of the Exponential covariance model defined in section \ref{ParamStationaryCovarianceFunction}. The relation (\ref{cauchyModel}) can be explicited with the spatial covariance function  $\mat{C}^{spat}(\tau)$ defined in (\ref{relRA}).\\
+
+OpenTURNS defines this model thanks to the object {\itshape CauchyModel}.\\
+
+
+
+\requirements{
+  \begin{description}
+  \item[$\bullet$]  $\vect{a}$, $\vect{\lambda}$   : {\itshape amplitude, scale}
+  \item[type:]  NumericalPoint
+  \end{description}
+
+  \begin{description}
+  \item[$\bullet$]  $\mat{R}$,  : {\itshape spatialCorrelation}
+  \item[type:]  CorrelationMatrix
+  \end{description}
+
+  \begin{description}
+  \item[$\bullet$]  $\mat{C}^s$,  : {\itshape spatialCovariance}
+  \item[type:]  CovarianceMatrix
+  \end{description}
+
+
+  \begin{description}
+  \item[$\bullet$] a time grid : {\itshape myTimeGrid}
+  \item[type:]  RegularGrid
+  \end{description}
+
+}
+{
+  \begin{description}
+  \item[$\bullet$] a spectral model : {\itshape mySpectralModel\_Corr, mySpectralModel\_Cov }
+  \item[type:] SpectralModel
+  \end{description}
+}
+
+\textspace\\
+Python script for this UseCase :
+
+\inputscript{script_docUC_StocProc_DensitySpectralFunction_Param}

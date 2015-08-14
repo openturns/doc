@@ -1,0 +1,42 @@
+% Copyright (C) 2005-2015 Airbus - EDF - IMACS - Phimeca
+% Permission is granted to copy, distribute and/or modify this document
+% under the terms of the GNU Free Documentation License, Version 1.2
+% or any later version published by the Free Software Foundation;
+% with no Invariant Sections, no Front-Cover Texts, and no Back-Cover
+% Texts.  A copy of the license is included in the section entitled "GNU
+% Free Documentation License".
+\renewcommand{\filename}{docUC_InputNoData_CustomDistFromPython.tex}
+\renewcommand{\filetitle}{UC : Creation of a custom distribution or copula from the python script}
+
+% \HeaderNNIILevelx
+% \HeaderIILevel
+\HeaderIIILevel
+
+
+\label{creation_distribution}
+
+The objective of this Use Case is to describe how to create one own distribution or copula from a python script.\\
+
+
+The principle is to inherit from the \textit{PythonDistribution} class and overload the methods of the Distribution object.\\
+To create a Copula, one has to implement \emph{return = True} in the method {\itshape isCopula()}. Care: it is under the User's responsability.\\
+
+Then an instance of the new class can be passed on into a Distribution object.\\
+At least computeCDF should be overriden.
+
+\requirements{
+  \begin{description}
+  \item[$\bullet$] at least a CDF function expressed in python.
+  \end{description}
+}
+{
+  \begin{description}
+  \item[$\bullet$] an object proposing the same services as Distribution does.
+  \item[type:] Distribution
+  \end{description}
+}
+
+\textspace\\
+Python script for this UseCase :
+
+\inputscript{script_docUC_InputNoData_CustomDistFromPython}

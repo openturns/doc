@@ -1,0 +1,71 @@
+% Copyright (C) 2005-2015 Airbus - EDF - IMACS - Phimeca
+% Permission is granted to copy, distribute and/or modify this document
+% under the terms of the GNU Free Documentation License, Version 1.2
+% or any later version published by the Free Software Foundation;
+% with no Invariant Sections, no Front-Cover Texts, and no Back-Cover
+% Texts.  A copy of the license is included in the section entitled "GNU
+% Free Documentation License".
+\renewcommand{\nomfichier}{docref_Cprime212_SRC}
+\renewcommand{\titrefiche}{Uncertainty Ranking using Standard Regression Coefficients}
+
+\Header
+
+\MathematicalDescription{
+  \underline{\textbf{Goal}} \vspace{2mm}
+
+  This method deals with analysing the influence the random vector $\vect{X} = \left( X^1,\ldots,X^{n_X} \right)$ has on a random variable $Y^j$ which is being studied for uncertainty. Here we attempt to measure linear relationships that exist between $Y^j$ and the different components $X^i$. \vspace{2mm}
+
+  \underline{\textbf{Principle}} \vspace{2mm}
+
+  The principle of the multiple linear regression model (see \otref{docref_B234_LinearRegression}{Linear Regression} for more details) consists of attempting to find the function that links the variable $Y^j$ to the $n_x$ variables $X^1$,\ldots,$X^{n_X}$ by means of a linear model:
+  \begin{align*}
+    Y^j = a_0^j + \sum_{i=1}^{n_X} a_i^j X^i + \varepsilon^j
+  \end{align*}
+  where $\varepsilon^j$ describes a random variable with zero mean and standard deviation $\sigma_{\varepsilon}^j$ independent of the input variables $X^i$. If the random variables $X^1,\ldots,X^{n_X}$ are independent and with  finite variance $\Var{X^k} = (\sigma_k)^2$, the variance of $Y^j$ can be written as follows:
+  \begin{align*}
+    \Var{Y^j} = \sum_{i=1}^n (a_i^j)^2 \Var{X^i} + (\sigma_{\varepsilon}^j)^2
+  \end{align*}
+
+  The estimators   for the regression coefficients $a_0^j,\ldots,a_{n_X}^j$, and the standard deviation $\sigma^j$ are obtained from a sample of $(Y^j,X^1,\ldots,X^{n_X})$. Uncertainty ranking by linear regression ranks the $n_X$ variables $X^1,\ldots, X^{n_X}$ in terms of the estimated contribution of each $X^k$ to the variance of $Y^j$:
+  \begin{align*}
+    C^j_k = \frac{\displaystyle (a_k^j)^2  \Var{X^k}}{ \Var{Y^j}}
+  \end{align*}
+  which is estimated by :
+  \begin{align*}
+    \widehat{C}^j_k = \frac{\displaystyle (\widehat{a}_k^j)^2 \widehat{\sigma}_k^2}{\displaystyle \sum_{i=1}^{n_X} (a_i^j)^2 \widehat{\sigma}_i^2 + (\widehat{\sigma}_{\varepsilon}^j)^2}
+  \end{align*}
+  where $\widehat{\sigma}_i$ describes the empirical standard deviation of the sample of the input variables. This estimated contribution is by definition between 0 and 1. The closer it is to 1, the greater the impact the variable $X^i$ has on the dispersion of $Y^j$.
+}
+{
+  The contribution to the variance $C_i$ is sometimes described in the literature as the "importance factor", because of the similarity between this approach to linear regression and the method of cumulative variance quadratic which uses the term importance factor (see \otref{docref_C211_QuadraticCumul}{Quadratic combination -- Perturbation method} and \otref{docref_Cprime211_Factimp}{Importance Factors}).
+}
+
+\Methodology{
+  After a propagation of uncertainty (step C) using \otref{docref_C221_MonteCarloStd}{Standard Monte Carlo} simulation, a hierarchy of sources of uncertainty can be obtained using Linear Regression. In fact, the $N$ simulations enable the pairs  $(y^j_1, x^i_1)$, $(y^j_2, x^i_2)$,\ldots, $(y^j_N, x^i_N)$ to be generated, where:
+  \begin{itemize}
+  \item $\underline{X} = \left\{ X^1,\ldots,X^n \right\}$ describes the input vector specified in  step A "Specifying Criteria and the Case Study",
+  \item $Y^j$ describes the final variable of interest or output variable defined in the same step.
+  \end{itemize}
+
+  The results produced as output of this method are the estimated variance contributions $\widehat{C}_i$ that the user may use to order the variables $X^i$ hierarchically.
+}
+{
+  This method of hierarchical ordering is particularly useful:
+  \begin{itemize}
+  \item when the study of uncertainty deals with the central dispersion of the variable of interest $Y^j$ and not with its extreme values,
+    item when the relationships between $Y^j$ and the components of $\underline{X}$ are close to linear relationships, and more generally when all the underlying assumptions of the multiple linear regression model are valid,
+  \item when the components of vector $\underline{X}$ are independent, because if this is not the case the decomposition of the variance of $Y^j$ given here would be no longer exact,
+  \item when the number $N$ of Monte-Carlo simulations is significantly higher than the number $n_X$ of input random variables (it is preferable to have $N/n_X$ at least greater by a factor of 10 so that the estimation of the $n_X$ correlation coefficients provides a reasonable picture of reality).
+  \end{itemize}
+
+  Readers interested in the assumptions made for multiple linear regression models and in the tests needed to validate these assumptions are referred to \otref{docref_B234_LinearRegression}{Linear Regression}.
+
+  Other methods of uncertainty ranking can be applied after Monte-Carlo simulation, requiring a lesser number $N$ of simulations or that can deal with non-linear/non-independent cases, are described in \otref{docref_Cprime212_Pearson}{Uncertainty Ranking using Pearson}, \otref{docref_Cprime212_Spearman}{Uncertainty Ranking using Spearman}, \otref{docref_Cprime212_PCC}{Uncertainty Ranking using Pearson's Partial Correlation Coefficients} and \otref{docref_Cprime212_PRCC}{Uncertainty Ranking using Pearson's Partial Correlation Coefficients}.
+
+  The following references provide an interesting bibliographic starting point to further study of the method described here:
+  \begin{itemize}
+  \item Saltelli, A., Chan, K., Scott, M. (2000). "Sensitivity Analysis", John Wiley \& Sons publishers, Probability and Statistics series
+  \item J.C. Helton, F.J. Davis (2003). "Latin Hypercube sampling and the propagation of uncertainty analyses of complex systems". Reliability Engineering and System Safety 81, p.23-69
+  \item J.P.C. Kleijnen, J.C. Helton (1999). "Statistical analyses of scatterplots to identify factors in large-scale simulations, part 1 : review and comparison of techniques". Reliability Engineering and System Safety 65, p.147-185
+  \end{itemize}
+}

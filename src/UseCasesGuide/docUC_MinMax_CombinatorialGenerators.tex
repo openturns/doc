@@ -1,0 +1,54 @@
+% Copyright (C) 2005-2015 Airbus - EDF - IMACS - Phimeca
+% Permission is granted to copy, distribute and/or modify this document
+% under the terms of the GNU Free Documentation License, Version 1.2
+% or any later version published by the Free Software Foundation;
+% with no Invariant Sections, no Front-Cover Texts, and no Back-Cover
+% Texts.  A copy of the license is included in the section entitled "GNU
+% Free Documentation License".
+\renewcommand{\filename}{docUC_MinMax_CombinatorialGenerators.tex}
+\renewcommand{\filetitle}{UC: Creation of a combinatorial generator: subsets, injections, Cartesian products}
+
+% \HeaderNNIILevel
+% \HeaderIILevel
+\HeaderIIILevel
+
+\label{randomExpPlane}
+
+
+\index{Design of Experiments !Combinations generator }
+\index{Design of Experiments !K-permutations generator }
+\index{Design of Experiments !Tuples generator }
+\index{Combinatorial generators}
+
+The objective of this Use Case is to define a combinatorial generator, it means a design of experiment able to generate all the integer collections satisfying a given combinatorial constraint.\\
+
+
+Details on combinatorial generators may be found in the Reference Guide (\extref{ReferenceGuide}{see files Reference Guide - Step C -- Min-Max approach using Designs Of Experiment}{stepC}).\\
+
+OpenTURNS proposes the following combinatorial generators:
+\begin{itemize}
+\item the Tuples generator, which allows to generate all the elements of a Cartesian product $E=\{0,\hdots,n_0-1\}\times\hdots\times\{0,\hdots,n_{d-1}-1\}$, it means all the points $\vect{x}$ of dimension $d$ with integral components such that $0\leq x_0\leq n_0-1,\hdots,0\leq x_{d-1} \leq n_{d-1}-1$. The integers $n_0,\hdots,n_{d-1}$ are supposed to be positive, if one of them is zero then $E$ is the empty set. The total number of generated points is $N=\prod_{k=0}^{d-1}n_k$.
+\item the K-permutations generator, which allows to generate all the injective functions from $\{0,\hdots,k-1\}$ into $\{0,\hdots,n-1\}$, described by a point $\vect{x}$ of dimension $k$ with integral components, such that the associated injective function $\phi$ maps $\ell\in\{0,\hdots,k-1\}$ into $\phi(\ell)=x_{\ell}$. $k$ and $n$ are positive integers such that $k\leq n$, else there is no such injective function. The total number of generated points is $N=\dfrac{n!}{(n-k)!}$.
+\item the combinations generator, which allows to generate all the subsets of size $k$ of $\{0,\hdots,n-1\}$. The subsets are described using points $\vect{x}$ with integral components such that $0\leq x_0<\hdots<x_{k-1}\leq n$. If $k>n$, there is no such subset. The total number of generated points is $N=\dfrac{n!}{k!(n-k)!}$.
+\end{itemize}
+
+Be aware of the fact that the number of generated points grows very rapidly with the magnitude of the parameters.\\
+
+\requirements{
+  \begin{description}
+  \item[$\bullet$] the parameters of the combinatorial generator: {\itshape $(n, k)$ or $(n_0,\hdots,n_{d-1})$}
+  \item[type:] UnsignedLong
+  \end{description}
+}
+             {
+               \begin{description}
+               \item[$\bullet$] the sample generated: {\itshape experimentSample}
+               \item[type:] IndicesCollection
+               \end{description}
+             }
+
+             \textspace\\
+
+             Python script for this UseCase :
+
+             \inputscript{script_docUC_MinMax_CombinatorialGenerators}

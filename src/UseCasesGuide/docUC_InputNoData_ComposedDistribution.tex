@@ -1,0 +1,55 @@
+% Copyright (C) 2005-2015 Airbus - EDF - IMACS - Phimeca
+% Permission is granted to copy, distribute and/or modify this document
+% under the terms of the GNU Free Documentation License, Version 1.2
+% or any later version published by the Free Software Foundation;
+% with no Invariant Sections, no Front-Cover Texts, and no Back-Cover
+% Texts.  A copy of the license is included in the section entitled "GNU
+% Free Documentation License".
+\renewcommand{\filename}{docUC_InputNoData_ComposedDistribution.tex}
+\renewcommand{\filetitle}{UC : Creation  of nD distribution from (marginals, copula)}
+
+% \HeaderNNIILevel
+% \HeaderIILevel
+\HeaderIIILevel
+
+
+
+
+
+\index{Composed Distribution}
+\index{Copula!Independent}
+\index{Copula!Normal}
+\index{Correlation!Correlation matrix of the Normal copula}
+\index{Correlation!Spearman rank correlation matrix}
+\index{Distribution!Marginals and copula}
+
+
+The objective of the Use Case is to model a distribution, described by its marginal distributions and its dependence structure (a particular copula). A simplified way is proposed when the copula is the independent one.\\
+
+Details on copula may be found in the Reference Guide (\extref{ReferenceGuide}{see file Reference Guide - Step B -- Copula}{stepB}).\\
+
+This Use Case is particularly adapted to the modelisation of the distribution of the input random vector.\\
+
+The example here is a distribution of dimension 3 defined by :
+\begin{itemize}
+\item Beta, Triangular and Uniform marginals,
+\item an independent copula.
+\end{itemize}
+
+\noindent%
+\requirements{
+  \begin{description}
+  \item[$\bullet$] none
+  \end{description}
+}
+             {
+               \begin{description}
+               \item[$\bullet$] a nD distribution : {\itshape myDistribution}
+               \item[type:] Distribution which implementation is a ComposedDistribution
+               \end{description}
+             }
+
+             \textspace\\
+             Python script for this UseCase :
+
+             \inputscript{script_docUC_InputNoData_ComposedDistribution}

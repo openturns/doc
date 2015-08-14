@@ -1,0 +1,109 @@
+% Copyright (C) 2005-2015 Airbus - EDF - IMACS - Phimeca
+% Permission is granted to copy, distribute and/or modify this document
+% under the terms of the GNU Free Documentation License, Version 1.2
+% or any later version published by the Free Software Foundation;
+% with no Invariant Sections, no Front-Cover Texts, and no Back-Cover
+% Texts.  A copy of the license is included in the section entitled "GNU
+% Free Documentation License".
+\renewcommand{\etapemethodo}{Resp. Surf.}
+\renewcommand{\nomfichier}{docref_SurfRep_IntegLeastSquare}
+\renewcommand{\titrefiche}{Computation of the polynomial chaos coefficients}
+
+\Header
+
+\MathematicalDescription{
+
+  \underline{\textbf{Goal}} \vspace{4mm}
+
+  The polynomial chaos (PC) expansion allows one to obtain an explicit representation of the random response $\underline{Y} = h(\underline{X})$ of the model under consideration, see~\otref{docref_SurfRep_PCBasis}{Polynomial chaos basis}. More precisely, the response $\underline{Y}$ is cast as a converging series featuring orthonormal polynomials. For computational purpose, it is necessary though to retain a finite number of terms by truncating the expansion as shown in~\otref{docref_SurfRep_PCTrunc}{Truncation schemes for the polynomial chaos expansion}. Then it is necessary to estimate the PC coefficients in order to characterize $\underline{Y}$. This may be achieved using a \emph{projection strategy} as shown in the sequel. \\
+
+  \underline{\textbf{Projection strategy}} \vspace{4mm}
+
+  The model response is assumed to be \emph{scalar} for the sake of simplicity, i.e. $\vect{Y} = Y$. However the following derivations hold componentwise in case of a vector-valued random response. Let us consider the following truncated PC representation of the model response:
+  \begin{equation} \label{eq:PCforReg}
+    Y \, \,  \equiv \, \,  h(\underline{X}) \, \, \approx \, \,  \sum_{j \in \cA} \; a_{j} \; \psi_{j}(\underline{X})
+  \end{equation}
+  where $\cA$ is a non empty finite set of indices, whose cardinality is denoted by $P$. Using the matrix notation $\underline{a} = \{a_{0},\dots,a_{P-1}\}$ and $\vect{\psi}(\vect{X})  = \ \{\psi_{0}(\vect{X}) , \dots , \psi_{P-1}(\vect{X}) \}^{\textsf{T}}$, the PC representation in Eq.(\ref{eq:PCforReg}) rewrites:
+  \begin{equation}
+    Y \, \,  \equiv \, \,  h(\underline{X}) \, \, \approx \, \,  \underline{a}^{\textsf{T}} \, \,  \vect{\psi}(\vect{X})
+  \end{equation}
+  The coefficients may be computed by a $L^2$-projection onto the PC basis as follows:
+  \begin{equation}  \label{eq:LSstrat}
+    \underline{a} \, \, = \, \,  \argmin_{\underline{b} \in \Rset^{P}} \Expect{\left( h(\vect{X})   \, - \, \underline{b}^{\textsf{T}}  \,  \vect{\psi}(\vect{X}) \right)^2}
+  \end{equation}
+  Due to the orthonormality of the PC basis, it may be shown that the previous equation rewrites:
+  \begin{equation} \label{eq:integstrat}
+    \underline{a}  \, \, = \, \,  \Expect{h(\vect{X}) \; \vect{\psi}(\vect{X})}
+  \end{equation}
+  Two kinds of estimates can be derived depending in a discretization of either Eq.(\ref{eq:LSstrat}) or Eq.(\ref{eq:integstrat})
+
+  \paragraph*{Least squares strategy \\ \\}
+
+  The PC coefficients can be estimated by solving a discretized version of Eq.(\ref{eq:LSstrat}). An experimental design $\underline{\underline{\cX}} = \{x^{(1)},\dots,x^{(N)}\}$, i.e. a set of realizations of input parameters is required, as well as the corresponding model evaluations $\underline{\cY} = \{y^{(1)},\dots,y^{(N)}\}$. Note that the experimental design $\underline{\underline{\cX}}$ may be built using the various techniques introduced in~\otref{docref_C11_MinMaxPlanExp}{Min-Max Approach using Design of Experimentss }. \\
+
+  The following least squares problem has to be solved:
+  \begin{equation} \label{eq:PC_LS}
+    \widehat{\underline{a}} \, \, = \, \,  \argmin_{\underline{b} \in \Rset^{P}} \,  \sum_{i=1}^N \; \left( y^{(i)} \; - \; \underline{b}^{\textsf{T}} \; \underline{\psi}(\underline{x}^{(i)}) \right)^2
+  \end{equation}
+  A closed-form solution may be obtained as shown in \otref{docref_SurfRep_LSPolynomial}{Polynomial response surface based on least squares}. The numerical solving schemes for the least squares problem are studied in~\otref{docref_SurfRep_NumMethLS}{Numerical methods to solve least squares problems}.
+  % A closed-form solution is given by:
+  % \begin{equation}
+  % \widehat{\underline{a}} \, \, = \, \, \left( \underline{\underline{\Psi}}^{\textsf{T}} \underline{\underline{\Psi}}  \right)^{-1} \; \underline{\underline{\Psi}}^{\textsf{T}}  \; \underline{\cY}
+  % \end{equation}
+  % where:
+  % \begin{equation}
+  %     \underline{\underline{\Psi}} \, \, = \, \, \left\{ \psi_{\idx_j}(\underline{x}^{(i)}) \, \, , \, \, i=1,\dots,N \, \, , \, \, j=0,\dots,P-1 \right\}
+  % \end{equation}
+  % It is clear that the above equation is only valid for a full rank information matrix. A necessary condition is that the size $N$ of the experimental design is not less than the number $P$ of PC coefficients to estimate. In practice, it is not recommended to directly invert the matrix $\underline{\underline{\Psi}}^{\textsf{T}} \underline{\underline{\Psi}}$ since the solution may be particularly sensitive to an ill-conditioning of the matrix. The least-square problem is rather solved using more robust numerical methods such as \emph{singular value decomposition} (SVD) or \emph{QR-decomposition}.
+
+  \paragraph*{Sparse least squares strategy \\ \\}
+
+  If the size $P$ of the PC basis is of similar size to $N$, or even possibly significantly larger than $N$, then the ordinary least squares problem in Eq.(\ref{eq:PC_LS}) is ill-posed. The \emph{sparse} least squares approaches outlined in \otref{docref_SurfRep_SparseLSPolynomial}{Polynomial response surface based on sparse least squares}, namely LAR, LASSO and Forward Stagewise, may be employed instead. Eventually a \emph{sparse} PC representation is obtained, that is an approximation which only contains a small number of active basis functions.
+
+  \paragraph*{Integration strategy \\ \\}
+
+  As an alternative, the PC coefficients may be estimated by discretizing the ``simplified'' expression~(\ref{eq:integstrat}). Although this approach has not been implemented in \textit{OpenTURNS} yet, we provide the basic principles of the solving scheme. \\
+
+  By definition of the mathematical expectation operator $\Expect{\cdot}$, this corresponds to calculating the following multi-dimensional integral:
+  \begin{equation} \label{eq:integstrat}
+    \underline{a}  \, \, = \, \,  \Expect{h(\vect{X}) \; \vect{\psi}(\vect{X})} \, \, = \, \, \int_{\cD} \; h(\vect{x}) \; \vect{\psi}(\vect{x}) \; f_{\vect{X}}(\vect{x}) \; d\vect{x}
+  \end{equation}
+  where $\cD$ and $f_{\vect{X}}(\vect{x})$ are respectively the support and the probability density function of the random vector $\vect{X}$. The integral can be approximated by \emph{numerical quadrature} as follows:
+  \begin{equation}
+    \widehat{\underline{a}} \, \, = \, \, \sum_{i=1}^{N} \; w^{(i)}\; h(\vect{x}^{(i)}) \; \vect{\psi}(\vect{x}^{(i)})
+  \end{equation}
+  where the $w^{(i)}$'s and the $\vect{x}^{(i)}$'s are referred to as the quadrature \emph{weights} and \emph{nodes}, respectively. Both quantities may be selected according to well-known quadrature rules, such as Gauss quadrature or Clenshaw-Curtis quadrature. Otherwise, it is commonplace to generate independent realizations $\vect{x}^{(i)}$ of $\vect{X}$ and to set all the $w^{(i)}$'s equal to $1/N$. Such a scheme is known as \emph{Monte Carlo simulation} (see ~\otref{docref_C221_MonteCarloStd}{Standard Monte Carlo simulation}).
+}
+{--}
+
+\Methodology{
+  Within the global methodology, the method is used to build up a PC approximation of the model response prior to tackling the step C: ``Uncertainty propagation''. It requires a set of output values obtained with the initial model computed at different input values or the set of inputs and the initial model. Then the various uncertainty propagation techniques may be applied at a negligible computational cost. The method requires to have fulfilled the two following steps:
+  \begin{itemize}
+  \item step A1: identify of an input vector $\vect{X}$ of sources of uncertainties and an output variable of interest $\underline{Y} = h(\underline{X})$;
+  \item step B: identify one of the proposed techniques to estimate a probabilistic model of the input vector $\vect{X}$.
+  \end{itemize}
+}
+            {
+              The computation of the polynomial chaos coefficients by ordinary least squares was proposed in:
+              \begin{itemize}
+              \item M. Berveiller, 2005, ``El\'ements finis stochastiques : approches intrusive et non intrusive pour
+                des analyses de fiabilit\'e.'', PhD thesis, Clermont Université.
+              \end{itemize}
+              Besides, the use of sparse least squares approaches in the same purpose was advocated in:
+              \begin{itemize}
+              \item G. Blatman, 2009, ``Adaptive sparse polynomial chaos expansions for uncertainty propagation and sensitivity analysis'', PhD thesis, Clermont Université.
+              \end{itemize}
+            }
+
+            % \Example{
+            % Let us consider the so-called (scalar valued) Ishigami function defined by:
+            % \begin{equation}
+            %   Y \, \, =  \,\, h(\underline{X}) \, \, =  \,\,\sin X_{1} + 7 \sin^{2} X_{2} + 0.1 X_{3}^{4} \sin X_{1}
+            % \end{equation}
+            % where the $X_i$'s ($i=1,...,3$) are independent random variables that are uniformly distributed over $[-\pi , \pi]$. \\
+            %
+            % As shown in~\otref{docref_SurfRep_PCBasis}{Polynomial chaos basis}, the model response $Y$ may be expanded onto a PC expansion made of normalized Legendre polynomials:
+            % \begin{equation}
+            %   Y \, \, =  \,\, h(\underline{X}) \, \,  =  \,\, \sum_{\idx \in \Nset^3} \; a_{\idx} \; \psi_{\idx}(\underline{U}) \quad \quad , \quad \quad U_i \, \, = \, \, \frac{X_i}{\pi} \, \, \, , \, \, i=1,2,3
+            % \end{equation}
+            % }

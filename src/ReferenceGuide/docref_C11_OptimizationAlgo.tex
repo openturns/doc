@@ -1,0 +1,72 @@
+% Copyright (C) 2005-2015 Airbus - EDF - IMACS - Phimeca
+% Permission is granted to copy, distribute and/or modify this document
+% under the terms of the GNU Free Documentation License, Version 1.2
+% or any later version published by the Free Software Foundation;
+% with no Invariant Sections, no Front-Cover Texts, and no Back-Cover
+% Texts.  A copy of the license is included in the section entitled "GNU
+% Free Documentation License".
+\renewcommand{\etapemethodo}{C}
+\renewcommand{\nomfichier}{docref_C11_OptimizationAlgo}
+\renewcommand{\titrefiche}{Optimization Algorithms}
+
+\Header
+
+\MathematicalDescription{
+  \underline{\textbf{Goal}} \vspace{2mm}
+
+  The method is used in the following context: $\vect{x}= \left( x^1,\ldots,x^{n_X} \right)$ is a vector of  unknown variables, $\vect{d}$ a vector considered to be well known or where uncertainty is negligible, and $y = h(\vect{x},\vect{d})= $ is the scalar variable of interest. The objective here is to determine the extreme (minimum and maximum) values of  $y$ when $\vect{x}$ varies. \vspace{2mm}
+
+  \underline{\textbf{Principle}} \vspace{2mm}
+
+  It is possible to use some optimization algorithms. We give the principle of the TNC (Truncated Newton Constrained) algorithm which minimizes a function with variables subject to bounds, using gradient information.\\
+
+  Truncated-Newton methods are a family of methods suitable for solving large nonlinear optimization problems. At each iteration, the current estimate of the solution is updated by approximately solving the Newton equations using an iterative algorithm. This results in a doubly iterative method : an outer iteration for the nonlinear optimization problem and an inner iteration for the Newton equations. The inner iteration is typically stopped or {\itshape truncated} before the solution to the Newton equations is obtained.\\
+
+
+  The TNC algorithm resolves : $\min_{\vect{x} \in [\vect{a},\vect{b}] \in \overline{\Rset}^n} f(\vect{x})$ and proceeds as follows under the proper regularity of the objective function $f$ :
+  \begin{align*}
+    \left\{
+    \begin{array}{l}
+      \vect{\nabla f}(\vect{x}) =\vect{0}  \\
+      \mat{\nabla_2} f(\vect{x}) \mbox{ is definite positive}
+    \end{array}
+    \right.
+  \end{align*}
+
+  The Taylor development of second order of $f$ around  $\vect{x}_k$ leads to the determination of the iterate $\vect{x}_{k+1}$ such as :
+  \begin{equation}\label{linearSystem}
+    \left\{
+    \begin{array}{lcl}
+      \vect{\Delta}_k & = & \vect{x}_{k+1} - \vect{x}_k  \\
+      \mat{\nabla_2} f(\vect{x}_k)\vect{\Delta}_k & = & -\vect{\nabla f}(\vect{x}_k)
+    \end{array}
+    \right.
+  \end{equation}
+
+  The equation (\ref{linearSystem}) is truncated : the iterative research of $\vect{\Delta}_k$ is stopped as soon as $\vect{\Delta}_k$ verifies :
+  \begin{align*}
+    || \mat{\nabla_2} f(\vect{x}_k)\vect{\Delta}_k + \vect{\nabla f}(\vect{x}_k) || \leq \eta ||\vect{\nabla f}(\vect{x}_k) ||
+  \end{align*}
+  At last, the iteration $k+1$ is defined by :
+  \begin{align*}
+    \vect{x}_{k+1} = \vect{x}_k + \alpha_k \vect{\Delta}_k
+  \end{align*}
+  where $\alpha_k$ is the parameter \textit{stepmx}.
+
+
+
+}
+{
+  -
+}
+
+\Methodology{
+  This method is used in step C "Propagation of uncertainty" to evaluate a the minimum-maximum type of criterion for the output value defined in step A "Specifying the Criteria and the Case Study".
+
+}
+{
+  More details may be found in the following reference :
+  \begin{itemize}
+  \item Stephen G. Nash, 1999, "A survey of Truncated-Newton methods", Systems Engineering and Operations Research Dept., George Mason University, Fairfax, VA 22030.
+  \end{itemize}
+}

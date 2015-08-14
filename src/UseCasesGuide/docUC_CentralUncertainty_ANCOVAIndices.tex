@@ -1,0 +1,51 @@
+% Copyright (C) 2005-2015 Airbus - EDF - IMACS - Phimeca
+% Permission is granted to copy, distribute and/or modify this document
+% under the terms of the GNU Free Documentation License, Version 1.2
+% or any later version published by the Free Software Foundation;
+% with no Invariant Sections, no Front-Cover Texts, and no Back-Cover
+% Texts.  A copy of the license is included in the section entitled "GNU
+% Free Documentation License".
+\renewcommand{\filename}{docUC_CentralUncertainty_ANCOVAIndices.tex}
+\renewcommand{\filetitle}{UC : Sensitivity analysis : ANCOVA indices}
+
+% \HeaderNNIILevel
+% \HeaderIILevel
+\HeaderIIILevel
+
+
+\index{Sensitivity!ANCOVA indices}
+
+The objective of the Use Case is to estimate a generalization of the Sobol indices for a model with correlated inputs. These indices enable to measure the contribution of the input variables to the variance of the output and distinguish which part of this contribution is due the variable itself and which one is due to its correlation with the other input parameters.\\
+In theory, ANCOVA indices range is $\left[0; 1\right]$ ; the closer to 1 the index is, the greater the model response sensitivity to the variable is.
+These indices are a sum of a physical part $S_i^U$ and correlated part $S_i^C$.
+The correlation has a weak influence on the contribution of $X_i$, if $|S_i^C|$ is low and $S_i$ is close to $S_i^U$.
+On the contrary, the correlation has a strong influence on the contribution of the input $X_i$, if $|S_i^C|$ is high and $S_i$ is close to $S_i^C$.\\
+
+The ANCOVA indices $S_i$ evaluate the importance of one variable at a time ($d$ indices stored in a NumericalPoint, with $d$ the input dimension of the model).
+The $d$ uncorrelated parts of variance of the output due to each input $S_i^U$ are stored in a NumericalPoint and the effects of the correlation are represented by the indices resulting from the subtraction of these two previous lists.\\
+
+To evaluate the indices, OpenTURNS needs of a functional chaos result approximating the model response with uncorrelated inputs and a sample with correlated inputs used to compute the real values of the output. The sample dimension must be equal to the number of inputs of the model.\\
+
+Details on the ANCOVA decomposition method may be found in the Reference Guide (\extref{ReferenceGuide}{see files Reference Guide - Step C' -- Sensivity analysis for models with correlated inputs}{stepCprime}).\\
+
+\requirements{
+  \begin{description}
+
+  \item[$\bullet$] a functional chaos result : {\itshape functionalChaosResult}, which is built with a independent joint distribution
+  \item[type:] functionalChaosResult
+  \item[$\bullet$] an input sample : {\itshape inputSample}, which contains correlated inputs.
+  \item[type:] NumericalSample
+  \end{description}
+}
+{
+  \begin{description}
+  \item[$\bullet$] the different ANCOVA indices
+  \item[type:] NumericalPoint, for the first-order sensitivity indices
+  \item[type:] NumericalPoint, for the uncorrelated part of the latter indices
+  \end{description}
+}
+
+\textspace\\
+Python script for this UseCase :
+
+\inputscript{script_docUC_CentralUncertainty_ANCOVAIndices}

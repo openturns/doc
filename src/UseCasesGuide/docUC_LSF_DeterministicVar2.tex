@@ -1,0 +1,68 @@
+% Copyright (C) 2005-2015 Airbus - EDF - IMACS - Phimeca
+% Permission is granted to copy, distribute and/or modify this document
+% under the terms of the GNU Free Documentation License, Version 1.2
+% or any later version published by the Free Software Foundation;
+% with no Invariant Sections, no Front-Cover Texts, and no Back-Cover
+% Texts.  A copy of the license is included in the section entitled "GNU
+% Free Documentation License".
+\renewcommand{\filename}{docUC_LSF_DeterministicVar2.tex}
+\renewcommand{\filetitle}{UC : Introducing some deterministic variables, optimizing memory and CPU time}
+
+% \HeaderNNIILevel
+% \HeaderIILevel
+\HeaderIIILevel
+
+
+
+\index{Limit State Function!Reducing the initial limit state function}
+\index{Random Vector!Output random vector}
+
+The objective of this Use Case is to restrict a model which has been previously declared, to some of its variables, through an optimized way.\\
+
+Let's have the same context than in the UC\ref{linearNumericalMathFunction}. The idea here is to avoid the introduction of the potentially huge matrix $\mat{A}$ and the gradient matrix and hessian tensor  of the functions \textit{increase} and \textit{poutre}. For that last problem, it is sufficient to define the gradient matrix and hessian tensor to the final function \textit{poutreReduced} from a finite difference technique.\\
+
+The function {\itshape increase} is defined as follows :
+\begin{align*}
+  \begin{array}{l|lcl}
+    increase : & \Rset^{n_{prob}}  & \rightarrow & \Rset^n \\
+    &  \vect{X}_{prob} =
+    \begin{array}{|l}
+      "inputProb1" \\
+      \cdots       \\
+      "inputProbNprob"
+    \end{array}
+    & \mapsto     & increase(\vect{X}_{prob}) =
+    \begin{array}{|l}
+      "inputProb1" \\
+      \cdots       \\
+      "inputProbNprob" \\
+      valDet1 \\
+      \cdots       \\
+      valDetNdet
+    \end{array}
+  \end{array}
+\end{align*}
+
+where all the $(valDet1, ..., valDetNdet)$ are the $n_{det}$ values of the determinist components of $\vect{X}$.\\
+
+The same example is re-written in the folloing Use Case.
+
+\requirements{
+  \begin{description}
+  \item[$\bullet$] the initial limit state function : {\itshape poutre}
+  \item[type:] LinearNumericalMathFunction $(\Rset^4 \rightarrow \Rset)$
+  \end{description}
+}
+{
+  \begin{description}
+  \item[$\bullet$] the {\itshape increase} function
+  \item[type:] NumericalMathFunction $(\Rset^2 \rightarrow \Rset^4)$
+  \item[$\bullet$]  the new limit state function : {\itshape poutreReduced = poutre $\circ$ increase}
+  \item[type:] NumericalMathFunction $(\Rset^2 \rightarrow \Rset)$
+  \end{description}
+}
+
+\textspace\\
+Python script for this UseCase :
+
+\inputscript{script_docUC_LSF_DeterministicVar2}

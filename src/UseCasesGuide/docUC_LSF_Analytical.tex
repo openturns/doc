@@ -1,0 +1,59 @@
+% Copyright (C) 2005-2015 Airbus - EDF - IMACS - Phimeca
+% Permission is granted to copy, distribute and/or modify this document
+% under the terms of the GNU Free Documentation License, Version 1.2
+% or any later version published by the Free Software Foundation;
+% with no Invariant Sections, no Front-Cover Texts, and no Back-Cover
+% Texts.  A copy of the license is included in the section entitled "GNU
+% Free Documentation License".
+\renewcommand{\filename}{docUC_LSF_Analytical.tex}
+\renewcommand{\filetitle}{UC : From an analytical formula declared inline}
+
+% \HeaderNNIILevel
+% \HeaderIILevel
+\HeaderIIILevel
+
+
+\index{Limit State Function!Analytical formula declared in line}
+\index{Limit State Function!Gradient}
+\index{Limit State Function!Hessian}
+
+
+The objective of this Use Case is to specify the limit state function, defined through an analytical formula declared in line.\\
+
+OpenTURNS automatically evaluates the analytical expressions of the gradient and the hessian, except if the analytical expression of the function is not differentiable everywhere. In that case, OpenTURNS implements a finite difference method :
+\begin{itemize}
+\item the gradient evaluation method is the centered finite difference method, with the differential increment $h=1e-5$ for each direction,
+\item the hessian evaluation method is the centered finite difference method, with the differential increment $h=1e-4$ for each direction.
+\end{itemize}
+
+
+
+
+The example here is the analytical function {\itshape myAnalyticalFunction} defined by the formula :
+\begin{align*}
+  \begin{array}{l|cll}
+    myAnalyticalFunction : &   \Rset^2 & \rightarrow & \Rset \\
+    & (x_0, x_1)     & \mapsto     & y_0 = -(6+x_0^2-x_1)
+  \end{array}
+\end{align*}
+
+In the case of functions $scalarF : \Rset  \rightarrow \Rset$, a simplified constructor exists that requires to define the description of the scalar input and the description of the formulas. We give the example where $scalarF(x) = x^2$.\\
+
+\textspace\\
+
+\requirements{
+  \begin{description}
+  \item[$\bullet$] none
+  \end{description}
+}
+             {
+               \begin{description}
+               \item[$\bullet$] some functions : {\itshape myAnalyticalFunction, scalarF}
+               \item[type:] NumericalMathFunction
+               \end{description}
+             }
+
+             \textspace\\
+             Python script for this Use Case :
+
+             \inputscript{script_docUC_LSF_Analytical}

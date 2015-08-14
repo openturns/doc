@@ -1,0 +1,84 @@
+% Copyright (C) 2005-2015 Airbus - EDF - IMACS - Phimeca
+% Permission is granted to copy, distribute and/or modify this document
+% under the terms of the GNU Free Documentation License, Version 1.2
+% or any later version published by the Free Software Foundation;
+% with no Invariant Sections, no Front-Cover Texts, and no Back-Cover
+% Texts.  A copy of the license is included in the section entitled "GNU
+% Free Documentation License".
+\renewcommand{\filename}{docUC_ThresholdExceedance_DirectionalSampling.tex}
+\renewcommand{\filetitle}{UC : Creation of a Directional Sampling  simulation algorithm}
+
+% \HeaderNNIILevel
+% \HeaderIILevel
+\HeaderIIILevel
+
+
+
+\index{Threshold Probability!Directional sampling}
+
+
+The Directional Sampling simulation operates in the standard space. The maximum distant point of the standard space equal to 8 by default (this value may be changed with the {\itshape setMaximumDistance()} method).\\
+
+
+Details on the directional sampling method may be found in the Reference Guide (\extref{ReferenceGuide}{see files Reference Guide - Step C -- Directional Sampling}{stepC}).\\
+
+
+
+The Directional Sampling simulation method is defined from :
+\begin{itemize}
+\item an event,
+\item a Root Strategy :
+  \begin{itemize}
+  \item  RiskyAndFast : for each direction, we check whether there is a sign change of the standard limit state function between the maximum distant point (at distance {\itshape MaximumDistance} from the center of the standard space) and the center of the standard space. \\
+    In case of sign change, we research one root in the segment [origin, maximum distant point] with the selected non linear solver.\\
+    As soon as founded, the segment [root, infinity point] is considered within the failure space.
+
+  \item MediumSafe : for each direction, we go along the direction by step of length {\itshape stepSize} from the origin to the maximum distant point (at distance {\itshape MaximumDistance} from the center of the standard space) and we check whether there is a sign change on each segment so formed.\\
+    At the first sign change, we research one root in the concerned segment with the selected non linear solver. Then, the segment [root, maximum distant point] is considered within the failure space. \\
+    If {\itshape stepSize} is small enough, this strategy garantees us to find the root which is the nearest from the origin.
+
+  \item SafeAndSlow : for each direction, we go along the direction by step of length {\itshape stepSize} from the origin to the maximum distant point(at distance {\itshape MaximumDistance} from the center of the standard space) and we check whether there is a sign change on each segment so formed.\\
+    We go until the maximum distant point.  Then, for all the segments where we detected the presence of a root, we research the root with the selected non linear solver. We evaluate the contribution to the failure probability of each segment. \\
+    If {\itshape stepSize} is small enough, this strategy garantees us to find all the roots in the direction and the contribution of this direction to the failure probability is precisely evaluated.
+  \end{itemize}
+
+\item a Non Linear Solver :
+  \begin{itemize}
+  \item Bisection : bisection algorithm,
+  \item Secant : based on the evaluation of a segment between the two last iterated points,
+  \item Brent : mix of Bisection, Secant and inverse quadratic interpolation.
+  \end{itemize}
+
+\item and a Sampling Strategy :
+  \begin{itemize}
+  \item RandomDirection : we generate one point on the sphere unity according to the uniform distribution and we consider both opposite directions so formed. So one set of direction is composed of 2 directions.
+  \item OrthogonalDirection : this strategy is parameterized by $k\in \Nset$. We generate one direct orthonormalized base $(e_1, \dots, e_n)$ within the set of orthonormalized bases. We consider all the renormalized linear combinations of $k$ vectors within the $n$ vectors of the base, where the coefficients of the linear combinations are equal to ${+1, -1}$. There are $C_n^k 2^k$ new vectors $v_i$. We consider each direction defined by each vector $v_i$. So one set of direction is composed of $C_n^k 2^k$ directions.\\
+    If $k=1$, we consider all the axes of the standard space.
+  \end{itemize}
+\end{itemize}
+
+
+The example here is a Directional Sampling simulation method defined by :
+\begin{itemize}
+\item its parameters by default (CASE 1) :  Root Strategy by default : Slow and Safe, Non Linear Solver : Brent algorithm, Sampling Strategy : Random Direction,
+\item some other parameters (CASE 2) :  Root Strategy by default : Risky And Fast, Non Linear Solver : Brent algorithm, Sampling Strategy : Orthogonal Direction.
+\end{itemize}
+\vspace*{0.2cm}
+
+\requirements{
+  \begin{description}
+  \item[$\bullet$] the event in physical space :  {\itshape myEvent}
+  \item[type:] Event
+  \end{description}
+}
+             {
+               \begin{description}
+               \item[$\bullet$] Directional Sampling algorithm
+               \item[type:] Simulation
+               \end{description}
+             }
+
+             \textspace\\
+             Python  script for this UseCase :
+
+             \inputscript{script_docUC_ThresholdExceedance_DirectionalSampling}

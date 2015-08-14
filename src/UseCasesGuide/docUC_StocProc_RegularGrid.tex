@@ -1,0 +1,46 @@
+% Copyright (C) 2005-2015 Airbus - EDF - IMACS - Phimeca
+% Permission is granted to copy, distribute and/or modify this document
+% under the terms of the GNU Free Documentation License, Version 1.2
+% or any later version published by the Free Software Foundation;
+% with no Invariant Sections, no Front-Cover Texts, and no Back-Cover
+% Texts.  A copy of the license is included in the section entitled "GNU
+% Free Documentation License".
+\renewcommand{\filename}{docUC_RegularGrid.tex}
+\renewcommand{\filetitle}{UC : Creation of a time grid}
+
+% \HeaderNNIILevel
+\HeaderIILevel
+%\HeaderIIILevel
+
+\label{UCtimeGrig}
+
+
+\index{Stochastic Process!Time Grid}
+
+
+This section details first how to create a regular time grid. Note that a time grid is a particular mesh of $\cD=[0,T] \in \Rset$.\\
+
+
+A regular time grid is a regular discretization of the interval $[0, T] \in \Rset$ into $N$ points, noted $(t_0, \hdots, t_{N-1})$.\\
+
+The time grid can be defined using $(t_{Min}, \Delta t, N)$ where $N$ is the number of points in the time grid. $\Delta t$ the time step between two consecutive instants and $t_0 = t_{Min}$. Then,  $t_k = t_{Min} + k \Delta t$ and $t_{Max} = t_{Min} +  (N-1) \Delta t$.\\
+
+
+Consider $X: \Omega \times \cD \rightarrow \Rset^d$ a multivariate stochastic process of dimension $d$,  where $n=1$, $\cD=[0,T]$ and $t\in \cD$ is interpreted as a time stamp. Then the mesh associated to the process $X$ is a (regular) time grid.\\
+
+
+\requirements{
+  none
+
+}
+{
+  \begin{description}
+  \item[$\bullet$] a time grid : {\itshape myRegularGrid}
+  \item[type:]  RegularGrid
+  \end{description}
+}
+
+\textspace\\
+Python script for this UseCase :
+
+\inputscript{script_docUC_StocProc_TimeGrid}

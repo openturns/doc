@@ -1,0 +1,134 @@
+% Copyright (C) 2005-2015 Airbus - EDF - IMACS - Phimeca
+% Permission is granted to copy, distribute and/or modify this document
+% under the terms of the GNU Free Documentation License, Version 1.2
+% or any later version published by the Free Software Foundation;
+% with no Invariant Sections, no Front-Cover Texts, and no Back-Cover
+% Texts.  A copy of the license is included in the section entitled "GNU
+% Free Documentation License".
+
+
+\newpage
+\index{FFT}
+\section{FFT}
+
+The objective of this class is to implement the Fourier transformations (direct and inverse) using external tools such as KissFFT. \\
+
+As there are many ways to define the Discret Fourier Transform (DFT) and its inverse, varying for example the sign of the exponential term, the normalization factor...etc.
+we fix here the convention for direct and inverse transformations. Thus, for the DFT (see \textit{transform} method of the class), the convention used is : \\
+\begin{align*}
+Z_{k} = \sum_{n=0}^{N-1} X_{n} \exp\left\{ -2 \pi \imath \frac{nk}{N} \right\},\ k=0,1,\ldots,N-1
+\end{align*} \\
+
+The inverse DFT is defined as :\\
+\begin{align*}
+Y_{k} = \frac{1}{N} \sum_{n=0}^{N-1} Z_{n} \exp\left\{2 \pi \imath \frac{nk}{N} \right\},\ k=0,1,\ldots,N-1
+\end{align*} \\
+
+
+We describe here the methods of this class. \\
+
+\begin{description}
+
+\item[Usage:] \rule{0pt}{1em}
+\begin{description}
+\item \textit{FFT()}
+\item
+\end{description}
+
+\item[Value:] FFT
+\begin{description}
+\item This instantiates the Fast Fourier Transform (FFT) class
+\end{description}
+
+\item[Some methods :]  \rule{0pt}{1em}
+
+\item \textit{transform}
+\begin{description}
+\item[Usage:] \textit{transform(collection)}
+\item[Arguments:] NumericalComplexCollection
+\item[Value:] a NumericalComplexCollection. This computes the Fourier transformation of the values contained in collection.
+\end{description}
+\bigskip
+
+\item \textit{transform}
+\begin{description}
+\item[Usage:] \textit{transform(scalarCollection)}
+\item[Arguments:] NumericalScalarCollection
+\item[Value:] a NumericalComplexCollection. This computes the Fourier transformation of the values contained in a real collection.
+\end{description}
+\bigskip
+
+\item \textit{transform}
+\begin{description}
+\item[Usage:] \textit{transform(collection, first, size)}
+\item[Arguments:] NumericalScalarCollection, integer, integer
+\item[Value:] a NumericalComplexCollection. This computes the Fourier transformation of some values contained in a real collection (a block of the collection).
+This block has for size \textit{size} and the first element of the considerd block is the \textit{collection[first]}
+\end{description}
+\bigskip
+
+\item \textit{transform}
+\begin{description}
+\item[Usage:] \textit{transform(collection, first, step, last)}
+\item[Arguments:] NumericalScalarCollection, integer, integer, integer
+\item[Value:] a NumericalComplexCollection. This computes the Fourier transformation of some values contained in a real collection.
+This block is composed of element \textit{collection[first]}, \textit{collection[first + step]}, \textit{collection[first + 2 * step]},\textit{\ldots}, \textit{collection[last]}
+\end{description}
+\bigskip
+
+\item \textit{inverseTransform}
+\begin{description}
+\item[Usage:] \textit{inverseTransform(collection)}
+\item[Arguments:] NumericalComplexCollection
+\item[Value:] a NumericalComplexCollection. This computes the Fourier inverse transformation of the values contained in collection.
+\end{description}
+\bigskip
+
+\item \textit{inverseTransform}
+\begin{description}
+\item[Usage:] \textit{inverseTransform(collection, first, size)}
+\item[Arguments:] NumericalScalarCollection, integer, integer
+\item[Value:] a NumericalComplexCollection. This computes the Fourier inverse transformation of some values contained in a real collection (a block of the collection).
+This block has for size \textit{size} and the first element of the considerd block is the \textit{collection[first]}
+\end{description}
+\bigskip
+
+\item \textit{inverseTransform}
+\begin{description}
+\item[Usage:] \textit{inverseTransform(collection, first, step, last)}
+\item[Arguments:] NumericalScalarCollection, integer, integer, integer
+\item[Value:] a NumericalComplexCollection. This computes the inverse Fourier transformation of some values contained in a real collection.
+This block is composed of element \textit{collection[first]}, \textit{collection[first + step]}, \textit{collection[first + 2 * step]}..., \textit{collection[last]}
+\end{description}
+\bigskip
+
+\begin{description}
+\item \textit{getName}
+\begin{description}
+\item[Usage:] \textit{getName()}
+\item[Arguments:] none
+\item[Value:] a string, the name of the FFT.
+\end{description}
+\bigskip
+
+\item \textit{setName}
+\begin{description}
+\item[Usage:] \textit{setName(name)}
+\item[Arguments:] name : a string
+\item[Value:] the FFT is named \textit{name}
+\end{description}
+\bigskip
+
+\end{description}
+\end{description}
+
+
+
+% ==========================================================================
+
+\newpage
+%\index{FFT!KissFFT}
+\index{KissFFT}
+\subsubsection{KissFFT}
+The KissFFT class inherits from the FFT class. The methods are the same as the FFT class (there is no additional method).
+This class interacts with the \emph{kissfft} implemented and return results as OpenTurns objects (NumericalComplexCollection).

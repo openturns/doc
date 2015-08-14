@@ -1,0 +1,64 @@
+% Copyright (C) 2005-2015 Airbus - EDF - IMACS - Phimeca
+% Permission is granted to copy, distribute and/or modify this document
+% under the terms of the GNU Free Documentation License, Version 1.2
+% or any later version published by the Free Software Foundation;
+% with no Invariant Sections, no Front-Cover Texts, and no Back-Cover
+% Texts.  A copy of the license is included in the section entitled "GNU
+% Free Documentation License".
+\renewcommand{\filename}{docUC_Intro_PythonLib}
+\renewcommand{\filetitle}{Loading the openturns python library}
+
+\HeaderNNIILevel
+% \HeaderIILevel
+% \HeaderIIILevel
+
+
+
+In order to write a python file using fonctionalities proposed by the \emph{openturns} python module, it is necessary to load the module in the python shell. If there is no danger to overload functionalities coming from other python modules, the loading command is :
+
+\begin{center}
+  \begin{lstlisting}
+    from openturns import *
+  \end{lstlisting}
+\end{center}
+Otherwise, if some functionalities of the {\itshape openturns} python module might overload some functionalities coming from other python modules, it is preferable to launch the command :
+\begin{center}
+  \begin{lstlisting}
+    import openturns
+  \end{lstlisting}
+\end{center}
+In that second case, each call to an {\itshape openturns} type must be accompagnied by the prefix {\itshape openturns}. For example, to create a {\itshape NumericalPoint} of dimension 2, the command is {\itshape myNumericalPoint = openturns.NumericalPoint(2)}.\\
+
+In order to visualize graphics through the TUI, it is necessary to import the functionality {\itshape View} from the  {\itshape openturns.viewer} module, thanks to the command :
+\begin{center}
+  \begin{lstlisting}
+    from openturns.viewer import View
+  \end{lstlisting}
+\end{center}
+
+The command :
+\begin{center}
+  \begin{lstlisting}
+    dir()
+  \end{lstlisting}
+\end{center}
+gives a general overview of the whole objects proposed by the \emph{openturns} python library.\\
+
+If you want to remove the welcome message that shows the current OpenTURNS version, you can either add the {\itshape --silent} command line option:
+\begin{verbatim}
+  python myScript.py --silent
+\end{verbatim}
+
+or set the {\itshape OPENTURNS\_PYTHON\_SILENT} environment variable to some non empty value, e.g.
+
+\begin{verbatim}
+  export OPENTURNS_PYTHON_SILENT=Y
+  python myScript.py
+\end{verbatim}
+
+You can disable the thread-interrupt handler when using ipython by doing:
+\begin{verbatim}
+  export OPENTURNS_PYTHON_NO_INTERRUPT=Y
+  ipython
+\end{verbatim}
+Note that you won't be able to cancel long calculuses threads for example.

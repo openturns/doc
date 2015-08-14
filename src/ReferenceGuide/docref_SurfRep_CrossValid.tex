@@ -1,0 +1,96 @@
+% Copyright (C) 2005-2015 Airbus - EDF - IMACS - Phimeca
+% Permission is granted to copy, distribute and/or modify this document
+% under the terms of the GNU Free Documentation License, Version 1.2
+% or any later version published by the Free Software Foundation;
+% with no Invariant Sections, no Front-Cover Texts, and no Back-Cover
+% Texts.  A copy of the license is included in the section entitled "GNU
+% Free Documentation License".
+\renewcommand{\etapemethodo}{Resp. Surf.}
+\renewcommand{\nomfichier}{docref_SurfRep_CrossValid}
+\renewcommand{\titrefiche}{Assessment of the polynomial approximations by cross validation}
+
+
+\Header
+
+\MathematicalDescription{
+
+  \underline{\textbf{Goal}} \vspace{2mm}
+
+  Once a polynomial response surface $\widehat{h}$ has been built up, it is crucial to estimate the approximation error, i.e. the discrepancy between the response surface and the true model response in terms of a suitable norm such as the $L_2$-norm:
+  \begin{equation}
+    Err \, \, = \, \, \left\| h(\underline{x}) \; - \; h(\underline{x}) \right\|_{L_2}^2\, \, = \, \, \int_{\cD} \; \left( h(\underline{x}) \; - \; h(\underline{x}) \right)^2  \; d\underline{x}
+  \end{equation}
+  where $\cD$ denotes the domain of variation of the input parameters. As any model evaluation may be time-consuming, error estimates that are only based on already performed computer experiments are of interest. The so-called \emph{cross validation} techniques may be used in this context. \\
+
+  \underline{\textbf{Principles}} \vspace{2mm}
+
+  Any cross-validation scheme consists in dividing the data sample (i.e. the experimental design) into two subsamples. A metamodel $\widehat{h}$ is built from one subsample, i.e. the \emph{training set}, and its performance is assessed by comparing its predictions to the other subset, i.e. the \emph{test set}. A refinement of the method is the \emph{$\nu$-fold cross-validation}, in which the observations are randomly assigned to one of $\nu$ partitions of nearly equal size. The learning set contains in turn all but one of the partitions which is considered as the test set. The generalization error is estimated for each of the $\nu$ sets and then averaged over $\nu$. \\
+
+  \textbf{Classical leave-one-out error estimate} \vspace{2mm}
+
+  The \emph{leave-one-out} (LOO) cross-validation corresponds to the special case of $\nu$-fold cross-validation with $\nu = N$. It is recalled that a $P$-term polynomial approximation of the model response reads:
+  \begin{equation}
+    \widehat{h}(\underline{x}) \, \, = \, \,  \sum_{j=0}^{P-1} \; \widehat{a}_{j} \; \psi_{j}(\underline{x})
+  \end{equation}
+  where the $\widehat{a}_{j}$'s are estimates of the coefficients obtained by a specific method, e.g. least squares. \\
+
+  Let us denote by $\widehat{h}^{(-i)}$ the approximation that has been built from the experimental design $\cX \setminus \{\underline{x}^{(i)}\}$, i.e. when removing the $i$-th observation. The \emph{predicted residual} is defined as the difference between the model evaluation at $\underline{x}^{(i)}$ and its prediction based on $\widehat{h}^{(-i)}$:
+  \begin{equation} \label{eq:4.3:5}
+    \Delta^{(i)} \, \, \equiv \, \,  h(\underline{x}^{(i)}) - \widehat{h}^{(-i)}(\underline{x}^{(i)})
+  \end{equation}
+  The expected risk is then estimated by the following LOO error:
+  \begin{equation}\label{eq:4.3:6}
+    Err_{LOO} \, \, \equiv \, \, \frac{1}{N} \sum_{i=1}^{N} {\Delta^{(i)}}^{2}
+  \end{equation}
+  A nice feature of the LOO method is that the quantity $Err_{LOO}$ may be computed without performing further regression calculations when the PC coefficients have been estimated by regression. Indeed, the LOO error is given in this case by:
+  \begin{equation} \label{eq:4.3:7}
+    \Delta^{(i)} \, = \,
+    \frac{h(\underline{x}^{(i)}) - \widehat{h}(\underline{x}^{(i)})}{1 - h_i}
+  \end{equation}
+  where $h_i$ is the $i$-th diagonal term of the matrix $\underline{\Psi} (\underline{\Psi}^{\textsf{T}}\underline{\Psi})^{-1}\underline{\Psi}^{\textsf{T}}$, using the notation:
+  \begin{equation} \label{eq:4.3:7bis}
+    \underline{\Psi}_{ij} \, \, \equiv \, \, \left\{\psi_{j}(\underline{x}^{(i)}) \, \, , i=1,\dots,N  \, \, , \, \, j=0,\dots,P-1 \right\}
+  \end{equation}
+
+  In practice, one often computes the following normalized LOO error:
+  \begin{equation} \label{eq:4.3:8bis}
+    \varepsilon_{LOO} \, \, \equiv \, \, \frac{Err_{LOO}}{\hat{\Cov{\cY}}}
+  \end{equation}
+  where $\hat{\Cov{\mathcal{Y}}}$ denotes the empirical covariance of the response sample $\cY$:
+  \begin{equation} \label{eq:4.3:4bis}
+    \hat{\Cov{\mathcal{Y}}} \, \, \equiv \, \, \frac{1}{N-1} \; \sum_{i=1}^{N} \; \left( y^{(i)} \; - \;   \bar{\mathcal{Y}}  \right)^{2} \quad  \quad , \quad \quad   \bar{\mathcal{Y}} \, \, \equiv \, \, \frac{1}{N} \; \sum_{i=1}^{N} \; y^{(i)}
+  \end{equation}
+
+  \textbf{Corrected leave-one-out error estimate} \vspace{2mm}
+
+  A penalized variant of $\varepsilon_{LOO}$ may be used in order to increase its robustness with respect to overfitting, i.e. to penalize a large number of terms in the PC expansion compared to the size of the experimental design:
+  \begin{equation}
+    \varepsilon_{LOO}^{*} \, \, \equiv \, \, \varepsilon_{LOO} \, T(P,N)
+  \end{equation}
+  The penality factor is defined by:
+  \begin{equation}
+    T(P,N) \, \, = \, \,   \frac{N}{N-P}  \; \left(1 \; + \; \frac{\mbox{tr} \left( \underline{\underline{C}}_{emp}^{-1}  \right) }{N} \right)
+  \end{equation}
+  where:
+  \begin{equation} \label{eq:4.3:10bis}
+    \underline{\underline{C}}_{emp} \, \, \equiv \, \, \frac{1}{N}\underline{\underline{\Psi}}^{\textsf{T}}\; \underline{\underline{\Psi}} \quad \quad , \quad \quad
+    \underline{\underline{\Psi}} \, \, = \, \, \left\{ \psi_{j}(\underline{x}^{(i)}) \, \, , \, \, i=1,\dots,N \, \, , \, \, j=0,\dots,P-1 \right\}
+  \end{equation}
+  %This method is given a particular focus when the coefficients of the PC approximation have been computed by regression. Indeed,
+  %
+}
+{Leave-one-out cross validation is also known as \emph{jackknife} in statistics.}
+
+\Methodology{
+  Within the global methodology, the method is used to assess the accuracy of a polynomial response surface of a model output prior to tackling the step C: ``Uncertainty propagation''.
+}
+            {
+              The use of leave-one-out error goes back to:
+              \begin{itemize}
+              \item D. Allen, 1971, ``The prediction sum of squares as a criterion for selecting prediction variables'', Technical Report 23, Dept. of Statistics, University of Kentucky.
+              \end{itemize}
+              The definition of the penalized variant has been inspired from:
+              \begin{itemize}
+              \item O. Chapelle, V. Vapnik, and Y. Bengio, 2002, ``Model selection for small sample regression'', Machine Learning 48 (1), 9--23.
+              \end{itemize}
+            }

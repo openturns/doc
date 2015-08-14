@@ -1,0 +1,132 @@
+% Copyright (C) 2005-2015 Airbus - EDF - IMACS - Phimeca
+% Permission is granted to copy, distribute and/or modify this document
+% under the terms of the GNU Free Documentation License, Version 1.2
+% or any later version published by the Free Software Foundation;
+% with no Invariant Sections, no Front-Cover Texts, and no Back-Cover
+% Texts.  A copy of the license is included in the section entitled "GNU
+% Free Documentation License".
+\renewcommand{\nomfichier}{docref_Cprime212_FAST}
+\extanchor{FAST}
+\renewcommand{\titrefiche}{Sensivity analysis by Fourier decomposition}
+
+\Header
+
+\MathematicalDescription{
+  \underline{\textbf{Goal}} \vspace{2mm}
+
+  FAST is a sensitivity analysis method which is based upon the ANOVA decomposition of the variance of the model response $y = f(\vect{X})$, the latter being represented by its Fourier expansion. $\vect{X}=\{X^1,\dots,X^{n_X}\}$ is an input random vector of $n_X$ independent components.\vspace{2mm}
+
+  \underline{\textbf{Principle}} \vspace{2mm}
+
+  OpenTURNS implements the extended FAST method consisting in computing alternately the first order and the total-effect indices of each input.
+  This approach relies upon a Fourier decomposition of the model response. Its key idea is to recast this representation as a function of a $\mathit{scalar}$ parameter $s$, by defining parametric curves $s \mapsto x_i(s)$, $i=1, \dots, n_X$ exploring the support of the input random vector $\vect{X}$.\\
+
+  For each input, the same procedure is realized in three steps:
+  \begin{itemize}
+  \item Sampling:
+
+  Deterministic space-filling paths with random starting points are defined, i.e. each input $X^i$ is transformed as follows:
+  \begin{displaymath}
+    x^i_j = \frac{1}{2} + \frac{1}{\pi} \arcsin(\sin(\omega_i s_j + \phi_i)),
+    \quad i=1, \dots, n_X, \, j=1, \dots, N
+  \end{displaymath}
+
+  where $n_X$ is the number of input variables.
+  $N$ is the length of the discretization of the s-space, with $s$ varying in $(-\pi, \pi)$ by step of $2\pi/N$.
+  $\phi_i$ is a random phase-shift chosen uniformly in $[0, 2\pi]$ which enables to make the curves start anywhere within the unit hypercube $K^{n_X}=(\vect{X}|0\leq x_i\leq1; i=1, \dots, n_X)$.
+  The selection of the set $\{\phi_1, \dots, \phi_{n_X}\}$ induces a part of randomness in the procedure. So it can be asked to realize the procedure $Nr$ times and then to calculate the arithmetic means of the results over the $Nr$ estimates. This operation is called $\mathit{resampling}$.
+
+  $\{\omega_i\}, \forall i=1, \dots, n_X$ is a set of integer frequencies assigned to each input $X^i$. The frequency associated with the input of interest is set to the maximum admissible frequency satisfying the Nyquist criterion (which ensures to avoid aliasing effects):
+  \begin{displaymath}
+    \omega_i = \frac{N - 1}{2M}
+  \end{displaymath}
+
+  with $M$ the interference factor usually equal to 4 or higher. It corresponds to the truncation level of the Fourier series, i.e. the number of harmonics that are retained in the decomposition realized in the third step of the procedure.
+
+  In the paper by Saltelli et al. (1999), for high sample size, it is suggested that $16 \leq \omega_i/N_r \leq 64$.
+
+  And the maximum frequency of the complementary set of frequencies is:
+  \begin{displaymath}
+    \max(\omega_{-i}) = \frac{\omega_i}{2M} = \frac{N - 1}{4M^2}
+  \end{displaymath}
+
+  with the index '$-i$' which meaning 'all but $i$'.
+
+  The other frequencies are distributed uniformly between $1$ and $\max(\omega_{-i})$. The set of frequencies is the same whatever the number of resamplings is.
+
+  Let us make an example with eight input factors, $N=513$ and $M=4$ i.e. $\omega_i = \frac{N - 1}{2M} = 64$ and $\max(\omega_{-i}) = \frac{N - 1}{4M^2} = 8$ with $i$ the index of the input of interest.
+
+  When computing the sensitivity indices for the first input, the considered set of frequencies is : $\{64, 1, 2, 3, 4, 5, 6, 8\}$.\\
+  When computing the sensitivity indices for the second input, the considered set of frequencies is : $\{1, 64, 2, 3, 4, 5, 6, 8\}$.\\
+  etc.
+
+  The transformation defined above provides a uniformly distributed sample for the $x_i, \forall i=1, \dots, n_X$ oscillating between $0$ and $1$. In order to take into account the real distributions of the inputs, we apply an isoprobabilistic transformation on each $x_i$ before the next step of the procedure.
+
+  \item Simulations:
+
+  Output is computed such as:
+  $y = f(s) = f(x_1(s), \dots, x_{n_X}(s))$
+
+  Then $f(s)$ is expanded onto a Fourier series:
+  \begin{displaymath}
+    f(s) = \sum_{k \in \Zset^N} A_k \cos(ks) + B_k \sin(ks)
+  \end{displaymath}
+
+  where $A_k$ and $B_k$ are Fourier coefficients defined as follows:
+  \begin{eqnarray*}
+    A_k &=& \frac{1}{2\pi}\int_{-\pi}^{\pi}f(s) \cos(ks) \, ds \\
+    B_k &=& \frac{1}{2\pi}\int_{-\pi}^{\pi}f(s) \sin(ks) \, ds
+  \end{eqnarray*}
+
+  These coefficients are estimated thanks to the following discrete formulations:
+  \begin{eqnarray*}
+    \hat{A}_k &=& \frac{1}{N} \sum_{j=1}^N f(x_j^1,\dots,x_j^{N_X}) cos \left( \frac{2k\pi (j-1)}{N} \right) \quad , \quad -\frac{N}{2} \leq k \leq \frac{N}{2}\\
+    \hat{B}_k &=& \frac{1}{N} \sum_{j=1}^N f(x_j^1,\dots,x_j^{N_X}) sin \left( \frac{2k\pi (j-1)}{N} \right) \quad , \quad -\frac{N}{2} \leq k \leq \frac{N}{2}
+  \end{eqnarray*}
+
+  \item Estimations by frequency analysis:
+
+  The first order indices are estimated as follows:
+  \begin{displaymath}
+    \hat{S}_i = \frac{\hat{D}_i}{\hat{D}} \\
+              = \frac{\sum_{p=1}^M(\hat{A}_{p\omega_i}^2 + \hat{B}_{p\omega_i}^2)^2}
+                     {\sum_{n=1}^{(N-1)/2}(\hat{A}_n^2 + \hat{B}_n^2)^2}
+  \end{displaymath}
+
+  where $\hat{D}$ is the total variance and $\hat{D}_i$ the portion of $D$ arising from the uncertainty of the $i^{th}$ input. $N$ the size of the sample using to compute the Fourier series and $M$ is the interference factor. Saltelli et al. (1999) recommanded to set $M$ to a value in the range $[4, 6]$.
+
+  The total order indices are estimated as follows:
+  \begin{displaymath}
+    \hat{T}_i = 1 - \frac{\hat{D}_{-i}}{\hat{D}} \\
+              = 1 - \frac{\sum_{k=1}^{\omega_i/2}(\hat{A}_k^2 + \hat{B}_k^2)^2}
+                         {\sum_{n=1}^{(N-1)/2}(\hat{A}_n^2 + \hat{B}_n^2)^2}
+  \end{displaymath}
+
+  where $\hat{D}_{-i}$ is the part of the variance due to all the inputs except the $i^{th}$ input.
+  \end{itemize}
+}
+{
+  --}
+
+\Methodology{
+    The results produced as output of this method are the estimated relative (indices values belong to $\left[0; 1\right]$ ) variance contributions of subsets of variables  $\hat S_i, \hat T_i$ that the user may use to order the variables $X^i$ hierarchically. \\
+  This method of hierarchical ordering is particularly useful :
+  \begin{itemize}
+  \item when the problem focuses on the central dispersion of the variable of interest $Y^j$ and not on its extreme values.
+  \item when no particular hypothesis is made on the model other than the independance of the input variables $X_i$.
+  \end{itemize}
+    The extended FAST method is a convenient alternative technique to the method of Sobol'. However the computational cost of the extended FAST method tends to be lower than that of the method of Sobol'. Indeed, FAST estimates both the first-order indices and the total ones with the same set of model evaluations.
+}
+            {
+
+
+              The following reference provides more details on the FAST method:
+              \begin{itemize}
+              \item Saltelli, A., Tarantola, S. \& Chan, K. (1999). "A quantitative, model independent method for global sensitivity analysis of model output." Technometrics, 41(1), 39-56.
+              \end{itemize}
+            }
+
+
+            \Example{
+              --
+            }

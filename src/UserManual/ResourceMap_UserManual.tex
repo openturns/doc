@@ -1,0 +1,535 @@
+% Copyright (C) 2005-2015 Airbus - EDF - IMACS - Phimeca
+% Permission is granted to copy, distribute and/or modify this document
+% under the terms of the GNU Free Documentation License, Version 1.2
+% or any later version published by the Free Software Foundation;
+% with no Invariant Sections, no Front-Cover Texts, and no Back-Cover
+% Texts.  A copy of the license is included in the section entitled "GNU
+% Free Documentation License".
+
+% =================================================================
+
+\newpage
+\index{ResourceMap}
+\extanchor{ResourceMap}
+\section{Resource Map}
+
+
+The ResourceMap object contains the following constants. The
+documentation is an undergoing work.
+
+\begin{itemize}
+\item
+  ARMALikelihoodFactory-DefaultMaxFun = 10000,
+\item
+  ARMALikelihoodFactory-DefaultRhoBeg = 0.01,
+\item
+  ARMALikelihoodFactory-DefaultRhoEnd = 1.0e-10,
+\item
+  ARMALikelihoodFactory-DefaultStartingPointScale = 1.0,
+\item
+  ARMALikelihoodFactory-MaximalScaling = 1.0e5,
+\item
+  ARMALikelihoodFactory-RootEpsilon = 1.0e-6,
+\item
+  ARMALikelihoodFactory-StartingScaling = 1.0e-13,
+\item
+  AbdoRackwitz-DefaultOmega = 1.0e-4,
+\item
+  AbdoRackwitz-DefaultSmooth = 1.2,
+\item
+  AbdoRackwitz-DefaultTau = 0.5,
+\item
+  AliMikhailHaqCopulaFactory-ThetaEpsilon = 1e-14,
+\item
+  AnalyticalResult-DefaultWidth = 1.0,
+\item
+  BlendedStep-DefaultEta = 0.0,
+\item
+  BoundConstrainedAlgorithmImplementation-DefaultMaximumAbsoluteError = 1.0e-5,
+\item
+  BoundConstrainedAlgorithmImplementation-DefaultMaximumConstraintError = 1.0e-5,
+\item
+  BoundConstrainedAlgorithmImplementation-DefaultMaximumEvaluationsNumber = 100,
+\item
+  BoundConstrainedAlgorithmImplementation-DefaultMaximumObjectiveError = 1.0e-5,
+\item
+  BoundConstrainedAlgorithmImplementation-DefaultMaximumRelativeError = 1.0e-5,
+\item
+  BoxCoxFactory-DefaultMaxFun = 2000,
+\item
+  BoxCoxFactory-DefaultPointNumber = 201,
+\item
+  BoxCoxFactory-DefaultRhoBeg = 0.1,
+\item
+  BoxCoxFactory-DefaultRhoEnd = 1.0e-10,
+\item
+  BurrFactory-AbsolutePrecision = 1e-12,
+\item
+  BurrFactory-MaximumIteration = 10,
+\item
+  BurrFactory-RelativePrecision = 1e-12,
+\item
+  BurrFactory-ResidualPrecision = 1e-12,
+\item
+  CalibrationStrategyImplementation-DefaultCalibrationStep = 500,
+\item
+  CalibrationStrategyImplementation-DefaultExpansionFactor = 1.2,
+\item
+  CalibrationStrategyImplementation-DefaultLowerBound = 0.117,
+\item
+  CalibrationStrategyImplementation-DefaultShrinkFactor = 0.8,
+\item
+  CalibrationStrategyImplementation-DefaultUpperBound = 0.468,
+\item
+  CenteredFiniteDifferenceGradient-DefaultEpsilon = 1.0e-5,
+  the default value of the finite difference step.
+\item
+  CenteredFiniteDifferenceHessian-DefaultEpsilon = 1.0e-4,
+  the default value of the finite difference step.
+\item
+  CleaningStrategy-DefaultMaximumSize = 20,
+\item
+  CleaningStrategy-DefaultSignificanceFactor = 1.0e-4,
+\item
+  Cobyla-DefaultRhoBeg = 0.1,
+\item
+  Collection-size-visible-in-str-from = 10,
+\item
+  Compact-DefaultHalfMaximumSize = 1024,
+\item
+  ConditionalDistribution-MarginalIntegrationNodesNumber = 16,
+\item
+  ConditionalDistribution-MaximumIntegrationNodesNumber = 100000,
+\item
+  ContinuousDistribution-DefaultIntegrationNodesNumber = 51,
+\item
+  Contour-DefaultLevelsNumber = 10,
+\item
+  CorrelationAnalysis-DefaultMaximumOrder = 0,
+\item
+  CorrelationAnalysis-DefaultTotalIndiceComputation = false,
+\item
+  Dirichlet-DefaultIntegrationSize = 50,
+\item
+  Dirichlet-DefaultSamplingSize = 500000,
+\item
+  DirichletFactory-MaximumIteration = 10,
+\item
+  DirichletFactory-ParametersEpsilon = 1e-12,
+\item
+  DiscreteDistribution-SupportEpsilon = 1.0e-14,
+\item
+  DistFunc-MaximumIteration = 5000,
+\item
+  DistFunc-Precision = 1.0e-14,
+\item
+  DistributionImplementation-DefaultCDFEpsilon = 1.0e-14,
+\item
+  DistributionImplementation-DefaultIntegrationNodesNumber = 255,
+\item
+  DistributionImplementation-DefaultLevelNumber = 10,
+\item
+  DistributionImplementation-DefaultPDFEpsilon = 1.0e-14,
+\item
+  DistributionImplementation-DefaultPointNumber = 129,
+\item
+  DistributionImplementation-DefaultQuantileCacheSize = 128,
+\item
+  DistributionImplementation-DefaultQuantileEpsilon = 1.0e-12,
+\item
+  DistributionImplementation-DefaultQuantileIteration = 100,
+\item
+  DistributionImplementation-QMax = 8.5e-1,
+\item
+  DistributionImplementation-QMin = 1.5e-1,
+\item DistributionImplementation-parallel:
+  \begin{itemize}
+  \item \textit{DistributionImplementation-parallel = 1}: then the evaluation
+    of PDF, CDF and the log of PDF on a numerical sample benefits from  parallel evaluation,
+  \item \textit{DistributionImplementation-parallel = 0}: by default, no
+    parallel evaluation.
+  \end{itemize}
+\item
+  DistributionImplementationFactory-DefaultBootstrapSize = 100,
+\item
+  DrawableImplementation-AlternativePattern = S,
+\item
+  DrawableImplementation-DataThreshold = 2000,
+\item
+  DrawableImplementation-DefaultColor = blue,
+\item
+  DrawableImplementation-DefaultFillStyle = solid,
+\item
+  DrawableImplementation-DefaultLineStyle = solid,
+\item
+  DrawableImplementation-DefaultLineWidth = 1,
+\item
+  DrawableImplementation-DefaultPattern = s,
+\item
+  DrawableImplementation-DefaultPointStyle = plus,
+\item
+  DrawableImplementation-DefaultSurfaceColor = white,
+\item
+  DrawableImplementation-NoSpecifiedLabel = ,
+\item
+  DualLinearCombinationEvaluationImplementation-SmallCoefficient = 0.0,
+\item
+  FaureSequence-InitialSeed = 1,
+\item
+  FittingTest-ChiSquaredMinFrequency = 5,
+\item
+  FrankCopulaFactory-ThetaEpsilon = 1e-14,
+\item
+  FunctionalChaosAlgorithm-DefaultMaximumResidual = 1.0e-6,
+\item
+  KrigingAlgorithm-StartingScaling = 1.0e-13,
+\item
+  KrigingAlgorithm-MaximalScaling = 1.0e5,
+\item
+  SquaredExponential-DefaultTheta = 1.0e-1,
+\item
+  AbsoluteExponential-DefaultTheta = 1.0e-1,
+\item
+  GeneralizedExponential-DefaultTheta = 1.0e-1,
+\item
+  GaussProductExperiment-DefaultMarginalDegree = 5,
+\item
+  GeneralizedParetoFactory-MaximumAbsoluteError = 1.0e-10,
+\item
+  GeneralizedParetoFactory-MaximumConstraintError = 1.0e-10,
+\item
+  GeneralizedParetoFactory-MaximumEvaluationNumber = 1000,
+\item
+  GeneralizedParetoFactory-MaximumObjectiveError = 1.0e-10,
+\item
+  GeneralizedParetoFactory-MaximumRelativeError = 1.0e-10,
+\item
+  GeneralizedParetoFactory-SmallSize = 10,
+\item
+  GraphImplementation-DefaultHeight = 480,
+\item
+  GraphImplementation-DefaultLegendFontSize = 1.0,
+\item
+  GraphImplementation-DefaultWidth = 640,
+\item
+  GraphImplementation-NoSpecifiedLabel = ,
+\item
+  HaltonSequence-InitialSeed = 1,
+\item
+  HaselgroveSequence-InitialSeed = 1,
+\item
+  HyperbolicAnisotropicEnumerateFunction-DefaultQ = 0.4,
+\item
+  KFold-DefaultK = 10,
+\item
+  KernelSmoothing-AbsolutePrecision = 0.0,
+\item
+  KernelSmoothing-BinNumber = 256,
+\item
+  KernelSmoothing-CutOffPlugin = 5.0,
+\item
+  KernelSmoothing-MaximumIteration = 50,
+\item
+  KernelSmoothing-RelativePrecision = 1.0e-5,
+\item
+  KernelSmoothing-ResidualPrecision = 1
+\item .0e-10,
+  KernelSmoothing-SmallSize = 250,
+\item
+  KernelSmoothing-binnumber = 256,
+\item
+  Last-DefaultMaximumSize = 65536,
+\item
+  LinearCombinationEvaluationImplementation-SmallCoefficient = 0.0,
+\item
+  LinearModelFactory-DefaultLevelValue = 0.95,
+\item
+  LogNormal-CharacteristicFunctionIntegrationNodes = 256,
+\item
+  LogNormal-CharacteristicFunctionSmallSigmaThreshold = 0.2,
+\item
+  LogNormalFactory-AbsolutePrecision = 1e-12,
+\item
+  LogNormalFactory-EstimationMethod = 0,
+\item
+  LogNormalFactory-MaximumIteration = 50,
+\item
+  LogNormalFactory-RelativePrecision = 1e-12,
+\item
+  LogNormalFactory-ResidualPrecision = 1e-12,
+\item
+  MCMC-DefaultBurnIn = 2000,
+\item
+  MCMC-DefaultThinning = 100,
+\item
+  MarginalTransformationEvaluation-DefaultTailThreshold = 0.99,
+\item
+  Matrix-size-visible-in-str-from = 5,
+\item
+  MatrixImplementation-DefaultSmallPivot = 1.0e-7,
+\item
+  Mesh-SmallVolume = 1.0e-12,
+\item
+  Mixture-SmallWeight = 1.0e-12,
+\item
+  Multinomial-eta = 1.0e-9,
+\item
+  Multinomial-smallA = 10,
+\item
+  NearestPointAlgorithmImplementation-DefaultLevelValue = 0.0,
+\item
+  NearestPointAlgorithmImplementation-DefaultMaximumAbsoluteError = 1.0e-5,
+\item
+  NearestPointAlgorithmImplementation-DefaultMaximumConstraintError = 1.0e-5,
+\item
+  NearestPointAlgorithmImplementation-DefaultMaximumIterationsNumber = 100,
+\item
+  NearestPointAlgorithmImplementation-DefaultMaximumRelativeError = 1.0e-5,
+\item
+  NearestPointAlgorithmImplementation-DefaultMaximumResidualError = 1.0e-5,
+\item
+  NegativeBinomialFactory-AbsolutePrecision = 1e-12,
+\item
+  NegativeBinomialFactory-MaximumIteration = 50,
+\item
+  NegativeBinomialFactory-RelativePrecision = 1e-12,
+\item
+  NegativeBinomialFactory-ResidualPrecision = 1e-12,
+\item
+  NonCenteredFiniteDifferenceGradient-DefaultEpsilon = 1.0e-7,
+  fhe default value of the finite difference step.
+\item NonCentralStudent-CDFAlgo:
+  \begin{itemize}
+  \item \textit{NonCentralStudent-CDFAlgo = 0}: then the algorithm to evaluate the
+    CDF is Benton, Krishnanoorthy, CSDA (43), pp249-267, 2003.
+  \item  \textit{NonCentralStudent-CDFAlgo $\neq 0$}: the algorithm is ASA 243,
+    see Alan Macleod, Applied  Statistics, (38), pp397-402, 1989.
+  \end{itemize}
+\item
+  Normal-MarginalIntegrationNodesNumber = 16,
+\item
+  Normal-MaximumCDFEpsilon = 5.0e-6,
+\item
+  Normal-MaximumNumberOfPoints = 1000000
+\item 0,
+  Normal-MinimumCDFEpsilon = 5.0e-2,
+\item
+  Normal-MinimumNumberOfPoints = 100000,
+\item
+  Normal-SmallDimension = 6,
+\item
+  NumericalMathEvaluationImplementation-DefaultPointNumber = 129,
+\item
+  NumericalSampleImplementation-SmallKendallTau = 40,
+\item
+  Os-create-process = 0,
+\item
+  Pie-HorizontalMargin = 0.3,
+\item
+  Pie-LabelThreshold = 0.02,
+\item
+  Pie-VerticalMargin = 0.1,
+\item
+  R-executable-command = /usr/bin/R
+\item
+  RandomGenerator-InitialSeed = 0,
+\item
+  RandomMixture-DefaultAlpha = 5.0,
+\item
+  RandomMixture-DefaultBeta = 8.5,
+\item
+  RandomMixture-DefaultBlockMax = 16,
+\item
+  RandomMixture-DefaultBlockMin = 3,
+\item
+  RandomMixture-DefaultCDFEpsilon = 1.0e-10,
+\item
+  RandomMixture-DefaultMaxSize = 65536,
+\item
+  RandomMixture-DefaultPDFEpsilon = 1.0e-10,
+\item
+  RandomMixture-DefaultSizeProjection = 10000,
+\item
+  RandomMixture-GraphCDFEpsilon = 1.0e-5,
+\item
+  RandomMixture-GraphPDFEpsilon = 1.0e-5,
+\item
+  RandomMixture-ProjectionDefaultSize = 10000,
+\item
+  RandomMixture-ProjectionMaximumAbsoluteError = 1.0e-7,
+\item
+  RandomMixture-ProjectionMaximumConstraintError = 1.0e-7,
+\item
+  RandomMixture-ProjectionMaximumIteration = 1000,
+\item
+  RandomMixture-ProjectionMaximumObjectiveError = 1.0e-7,
+\item
+  RandomMixture-ProjectionMaximumRelativeError = 1.0e-7,
+\item
+  RandomMixture-SmallSize = 100,
+\item
+  ReverseHaltonSequence-InitialSeed = 1,
+\item
+  RiceFactory-AbsolutePrecision = 1e-12,
+\item
+  RiceFactory-MaximumIteration = 10,
+\item
+  RiceFactory-RelativePrecision = 1e-12,
+\item
+  RiceFactory-ResidualPrecision = 1e-12,
+\item
+  RootStrategyImplementation-DefaultMaximumDistance = 8.0
+\item ,
+  RootStrategyImplementation-DefaultStepSize = 1.0,
+\item
+  SQP-DefaultOmega = 1.0e-4,
+\item
+  SQP-DefaultSmooth = 1.2,
+\item
+  SQP-DefaultTau = 0.5,
+\item
+  SensitivityAnalysis-DefaultBlockSize = 1,
+\item
+  Simulation-DefaultBlockSize = 1,
+\item
+  Simulation-DefaultMaximumCoefficientOfVariation = 1.0e-1,
+\item
+  Simulation-DefaultMaximumOuterSampling = 1000,
+\item
+  Simulation-DefaultMaximumStandardDeviation = 0.0,
+\item
+  SimulationResultImplementation-DefaultConfidenceLevel = 0.95,
+\item
+  SimulationSensitivityAnalysis-DefaultSampleMargin = 400,
+\item
+  SobolSequence-InitialSeed = 1,
+\item
+  SolverImplementation-DefaultAbsoluteError = 1.0e-5,
+\item
+  SolverImplementation-DefaultMaximumFunctionEvaluation = 100,
+\item
+  SolverImplementation-DefaultRelativeError = 1.0e-5,
+\item
+  SolverImplementation-DefaultResidualError = 1.0e-8,
+\item
+  SpecFunc-Precision = 1.0e-12,
+\item
+  SpectralNormalProcess-CholeskyCacheSize = 16384,
+\item
+  SpectralNormalProcess-MaximalScaling = 1.0e5,
+\item
+  SpectralNormalProcess-StartingScaling = 1.0e-13,
+\item
+  StrongMaximumTest-DefaultDeltaPrecision = 1.0e-7,
+\item
+  StrongMaximumTest-Epsilon = 1.0e-10,
+\item
+  Student-MarginalIntegrationNodesNumber = 16,
+\item
+  Student-MaximumCDFEpsilon = 5.0e-6,
+\item
+  Student-MaximumNumberOfPoints = 10000000,
+\item
+  Student-MinimumCDFEpsilon = 5.0e-2,
+\item
+  Student-MinimumNumberOfPoints = 100000,
+\item
+  Student-SmallDimension = 6,
+\item
+  TNC-DefaultAccuracy = 1.0e-4,
+\item
+  TNC-DefaultEta = 0.25,
+\item
+  TNC-DefaultFmin = 1.0,
+\item
+  TNC-DefaultMaxCGit = 50,
+\item
+  TNC-DefaultRescale = 1.3,
+\item
+  TNC-DefaultStepmx = 10.0,
+\item
+  TemporalNormalProcess-MaximalScaling = 1.0e5,
+\item
+  TemporalNormalProcess-StartingScaling = 1.0e-13,
+\item
+  Tensor-size-visible-in-str-from = 5,
+\item
+  TimeSeries-DefaultEpsilonValue = 1e-10,
+\item
+  TrapezoidalFactory-MaximumIterationsNumber = 10000,
+\item
+  TrapezoidalFactory-RhoBeg = 0.1,
+\item
+  TrapezoidalFactory-RhoEnd = 1.0e-5,
+\item
+  TruncatedDistribution-DefaultThresholdRealization = 0.5,
+\item
+  TruncatedNormalFactory-MaximumIterationsNumber = 100000,
+\item
+  TruncatedNormalFactory-RhoBeg = 0.1,
+\item
+  TruncatedNormalFactory-RhoEnd = 1.0e-5,
+\item
+  UniVariatePolynomialImplementation-SmallDegree = 400,
+\item
+  VisualTest-KendallPlot-MonteCarloSize = 100,
+\item
+  WeightedExperiment-DefaultSize = 100,
+\item
+  WhiteNoise-MeanEpsilon = 1.0e-14,
+\item
+  WhittleFactory-DefaultMaxFun = 2000,
+\item
+  WhittleFactory-DefaultRhoBeg = 0.1,
+\item
+  WhittleFactory-DefaultRhoEnd = 1.0e-10,
+\item
+  WhittleFactory-DefaultStartingPointScale = 1.0,
+\item
+  WhittleFactory-RootEpsilon = 1.0e-6,
+\item
+  WrapperFile-version = 1,
+\item
+  cache-max-size = 1024,
+\item
+  computation-progression-update-interval = 5,
+\item
+  computation-progression-visible = true,
+\item
+  csv-file-separator = ;,
+\item
+  integer-regexp = ([+-]?[\hspace*{2cm}]*[0-9]+),
+\item
+  integer-regexp-shortcut = I,
+\item
+  output-files-timeout = 2,
+\item
+  parallel-execution-grainsize = 1,
+\item
+  parallel-threads = 4,
+\item
+  real-regexp =  ([+-]?[\hspace*{2cm}]*([0-9]+(\textbackslash.[0-9]*)?|\textbackslash.[0-9]+)([Ee][+-]?[0-9]+)?)
+\item
+  real-regexp-shortcut = R,
+\item
+  regexp-shortcut-width = 1,
+\item
+  run-command-retries = 3,
+\item
+  separator-regexp =  ([\hspace*{2cm}])
+\item
+  separator-regexp-shortcut = S,
+\item
+  slow-filesystem-error-recovery = 500000,
+\item
+  slow-filesystem-wait-time = 5000,
+\item
+  temporary-directory = \textbackslash tmp
+\item
+  user-prefix = openturnsComputation
+\end{itemize}
+
+
+
+
+% ==========================================================================

@@ -1,0 +1,78 @@
+% Copyright (C) 2005-2015 Airbus - EDF - IMACS - Phimeca
+% Permission is granted to copy, distribute and/or modify this document
+% under the terms of the GNU Free Documentation License, Version 1.2
+% or any later version published by the Free Software Foundation;
+% with no Invariant Sections, no Front-Cover Texts, and no Back-Cover
+% Texts.  A copy of the license is included in the section entitled "GNU
+% Free Documentation License".
+\renewcommand{\filename}{docUC_StocProc_ARMA_Creation.tex}
+\renewcommand{\filetitle}{UC : Creation of an ARMA process}
+
+% \HeaderNNIILevel
+% \HeaderIILevel
+\HeaderIIILevel
+
+\label{ARMACreation}
+
+
+\index{Stochastic Process!ARMA}
+
+
+
+
+The creation of an ARMA model requires the data of the AR and MA coefficients which are :
+\begin{itemize}
+\item a list of scalars in the unidmensional case : $(a_1, \hdots, a_p)$ for the AR-coefficients and  $(b_1, \hdots, b_q)$ for the MA-coefficients, defined thanks to a \emph{NumericalPoint}
+\item a list of square matrix $( \mat{A}_{\, 1}, \hdots, \mat{A}{\, _p})$ for the AR-coefficients and  $(\mat{B}_{\, 1}\, \hdots, \mat{B}_{\, q} )$ for the MA-coefficients, defined thanks to a \emph{SquareMatrixCollection}
+\end{itemize}
+Il also requires the definition of a white noise $ \vect{\varepsilon}$ that contains the same time grid as the one of the process.\\
+
+The current state of an ARMA model is characterized by its last $p$ values and the last $q$ values of its white noise. It is possible to get that state thanks to the methods \emph{getState}. \\
+
+
+
+It is possible to create an ARMA with a specific current state. That specific current state is  taken into account to  generate possible futurs but not to generate realizations (in order to respect the stationarity property of the model).\\
+
+At the creation step, OpenTURNS checks whether the process $ARMA(p,q)$ is stationnary, by evaluating the roots of the polynomials (\ref{PolPhi})  associated to the homogeneous system (\ref{dimnHom}). When the process is not stationary, OpenTURNS sends a message to prevent the User.\\
+
+
+
+
+\requirements{
+  \begin{description}
+  \item[$\bullet$] coefficients : {\itshape myARList}, {\itshape myMAList}
+  \item[type:]  NumericalPoint or SquareMatrixCollection
+  \end{description}
+
+  \begin{description}
+  \item[$\bullet$] a white noise : {\itshape myWhiteNoise}
+  \item[type:]  WhiteNoise
+  \end{description}
+
+  \begin{description}
+  \item[$\bullet$] the last realizations : {\itshape $myLastValues, myLastNoiseValues$}
+  \item[type:]  NumericalSample
+  \end{description}
+
+}
+{
+  \begin{description}
+  \item[$\bullet$] the AR and MA coefficients : {\itshape myARCoef, myMACoef}
+  \item[type:]  ARMACoefficients
+  \end{description}
+
+  \begin{description}
+  \item[$\bullet$] an ARMA process {\itshape myARMA}
+  \item[type:]  ARMA
+  \end{description}
+
+  \begin{description}
+  \item[$\bullet$] an ARMAState {\itshape myARMAState}
+  \item[type:]  ARMAState
+  \end{description}
+}
+
+\textspace\\
+Python script for this UseCase :
+
+\inputscript{script_docUC_StocProc_ARMA_Creation}

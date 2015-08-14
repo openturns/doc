@@ -1,0 +1,67 @@
+This section deals with the process of creation of a new extra module.
+
+\subsection{Copy and adapt an existing template}
+
+\begin{enumerate}
+\item Copy and rename the source tree of an example module (for example the Strange module) from the OpenTURNS source tree. The examples modules are located under the module subdirectory of OpenTURNS source tree:
+  \begin{lstlisting}
+    svn export https://svn.openturns.org/openturns-modules/template/trunk MyModule
+  \end{lstlisting}
+\item Adapt the template to your module:
+  \begin{lstlisting}
+    ./customize MyModule MyClass
+  \end{lstlisting}
+  This command changes the module name into MyModule in all the scripts, and adapt the example class to the new name MyClass.
+  \setcounter{oldenumi}{\value{enumi}}
+\item Set the version of your module:
+  \begin{lstlisting}
+    ./setVersionNumber.sh 1.0
+  \end{lstlisting}
+  This command changes the module version, which is 0.0 by default.
+  \setcounter{oldenumi}{\value{enumi}}
+\end{enumerate}
+
+\subsection{Develop the module}
+\begin{enumerate}
+  \setcounter{enumi}{\value{oldenumi}}
+\item Implement your module using the same rules as described in the sections \ref{SingleClass} and \ref{WholeDirectory}.
+\item Build your module as usual:
+  \begin{lstlisting}
+    mkdir build
+    cd build
+    cmake -DCMAKE_INSTALL_PREFIX=$PWD/install \
+    -DOpenTURNS_DIR=OT_PREFIX/lib/cmake/openturns ..
+    make
+    make check
+    make install
+    make installcheck
+  \end{lstlisting}
+  \setcounter{oldenumi}{\value{enumi}}
+\end{enumerate}
+
+\subsection{Install and test}
+\begin{enumerate}
+  \setcounter{enumi}{\value{oldenumi}}
+\item Check that you have a working OpenTURNS installation, for example by trying to load the OpenTURNS module:
+  \begin{lstlisting}
+    python -c "import openturns as ot; print(ot.__version__)"
+  \end{lstlisting}
+  and python should not complain about a non existing openturns module.
+
+\item Test your module within python:
+  Adjust your PYTHONPATH if necessary
+  \begin{lstlisting}
+    python
+    >>> import mymodule
+  \end{lstlisting}
+  and python should not complain about a non existing mymodule module.
+
+\item Create a source package of your module:
+  \begin{lstlisting}
+    make package_source
+  \end{lstlisting}
+  It will create a tarball named mymodule-X.Y.tar.gz (and mymodule-X.Y.tar.bz2), where X.Y is the version number of the module.
+
+  That's all folks!
+  \setcounter{oldenumi}{\value{enumi}}
+\end{enumerate}

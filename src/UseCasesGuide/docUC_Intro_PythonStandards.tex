@@ -1,0 +1,186 @@
+% Copyright (C) 2005-2015 Airbus - EDF - IMACS - Phimeca
+% Permission is granted to copy, distribute and/or modify this document
+% under the terms of the GNU Free Documentation License, Version 1.2
+% or any later version published by the Free Software Foundation;
+% with no Invariant Sections, no Front-Cover Texts, and no Back-Cover
+% Texts.  A copy of the license is included in the section entitled "GNU
+% Free Documentation License".
+\renewcommand{\filename}{docUC_Intro_PythonStandards}
+\renewcommand{\filetitle}{Link with other python standards}
+
+\HeaderNNIILevel
+% \HeaderIILevel
+% \HeaderIIILevel
+
+Many OpenTURNS object act like python ones, so they can be safely included in algorithms or passed as function parameters like any other python object.\\
+The table Tab.(\ref{conv}) gives all the conversion possibilities between OpenTURNS objects and python or scipy ones.
+
+\begin{table}
+  \begin{center}
+    \begin{tabular}[Hhtbp]{|l|c|c|c|}
+      \hline
+      \backslashbox{~~~~~~~~from~~~}{~~~to~~~~~~~~~}   & list     & tuple    & array \\
+      \hline
+      NumericalPoint            & $\times$ & $\times$ & $\times$ \\
+      \hline
+      NumericalSample           & $\times$ & $\times$ & $\times$ \\
+      \hline
+      Matrix                    &   --     &   --     & $\times$ \\
+      \hline
+      SquareMatrix              &   --     &   --     & $\times$ \\
+      \hline
+      SymmetricMatrix           &   --     &   --     & $\times$ \\
+      \hline
+      CovarianceMatrix          &   --     &   --     & $\times$ \\
+      \hline
+      CorrelationMatrix         &   --     &   --     & $\times$ \\
+      \hline
+      Tensor                    &   --     &   --     & $\times$ \\
+      \hline
+      SymmetricTensor           &   --     &   --     & $\times$ \\
+      \hline
+      ComplexMatrix             &   --     &   --     & $\times$ \\
+      \hline
+      SquareComplexMatrix       &   --     &   --     & $\times$ \\
+      \hline
+      HermitianMatrix           &   --     &   --     & $\times$ \\
+      \hline
+      TriangularComplexMatrix   &   --     &   --     & $\times$ \\
+      \hline
+      NumericalScalarCollection & $\times$ & $\times$ & $\times$ \\
+      \hline
+      Indices                   & $\times$ & $\times$ & $\times$\footnote{the type is not preserved} \\
+      \hline
+      BoolCollection            & $\times$ & $\times$ & $\times$\footnote{the type is not preserved} \\
+      \hline
+      UnsignedLongCollection    & $\times$ & $\times$ & $\times$\footnote{the type is not preserved} \\
+      \hline
+      NumericalPointCollection  & $\times$ & $\times$ & $\times$\footnote{if all the NumericalPoint instances share the same dimension} \\
+      \hline
+    \end{tabular}
+    \begin{tabular}[Hhtbp]{|l|c|c|c|}
+      \hline
+      \backslashbox{~~~~~~~~to~~~}{~~~from~~~~~~~~~}   & list     & tuple    & array \\
+      \hline
+      NumericalPoint            & $\times$ & $\times$ & $\times$ \\
+      \hline
+      NumericalSample           & $\times$ & $\times$ & $\times$ \\
+      \hline
+      Matrix                    &   --     &    --    & $\times$ \\
+      \hline
+      SquareMatrix              &   --     &    --    & $\times$ \\
+      \hline
+      SymmetricMatrix           &   --     &    --    & $\times$ \\
+      \hline
+      CovarianceMatrix          &   --     &    --    & $\times$ \\
+      \hline
+      CorrelationMatrix         &   --     &    --    & $\times$ \\
+      \hline
+      Tensor                    &   --     &    --    & $\times$ \\
+      \hline
+      SymmetricTensor           &   --     &    --    & $\times$ \\
+      \hline
+      ComplexMatrix             &   --     &    --    & $\times$ \\
+      \hline
+      SquareComplexMatrix       &   --     &    --    & $\times$ \\
+      \hline
+      HermitianMatrix           &   --     &    --    & $\times$ \\
+      \hline
+      TriangularComplexMatrix   &   --     &    --    & $\times$ \\
+      \hline
+      NumericalScalarCollection & $\times$ & $\times$ & $\times$ \\
+      \hline
+      Indices                   & $\times$ & $\times$ &   --     \\
+      \hline
+      BoolCollection            & $\times$ & $\times$ &   --     \\
+      \hline
+      UnsignedLongCollection    & $\times$ & $\times$ &   --     \\
+      \hline
+      NumericalPointCollection  & $\times$ & $\times$ & $\times$ \\
+      \hline
+    \end{tabular}
+    \caption{\label{conv} Conversions of OpenTURNS objects into python/scipy ones. A $\times$ means that the conversion works, a -- that it does not work and an empty cell means that no conversion is expected.}
+  \end{center}
+\end{table}
+
+For example, the NumericalPoint acts as a sequence object (aka, a list or a tuple).
+
+It can be defined a NumericalPoint from a python list, as follows:
+\begin{center}
+  \begin{lstlisting}
+    point = NumericalPoint( [1.1, 2.2, 3.3, 4.4] )
+  \end{lstlisting}
+\end{center}
+
+or from a python tuple, as follows:
+\begin{center}
+  \begin{lstlisting}
+    point2 = NumericalPoint( (1.1, 2.2, 3.3, 4.4) )
+  \end{lstlisting}
+\end{center}
+
+It can be printed:
+\begin{center}
+  \begin{lstlisting}
+    print point
+    print repr( point )
+    print str( point )
+  \end{lstlisting}
+\end{center}
+
+or iterated:
+\begin{center}
+  \begin{lstlisting}
+    l = len( point )
+    for x in point:
+    print x
+  \end{lstlisting}
+\end{center}
+
+The NumericalSample acts the same way. It can be define from a python list, as follows:
+\begin{center}
+  \begin{lstlisting}
+    point = NumericalSample( [[1., 2.], [3., 4.], [5., 6.]])
+  \end{lstlisting}
+\end{center}
+which represents the sample $(1,2), (3,4), 5,6)$.
+
+
+In fact any Collection object is python-aware.
+
+Moreover, as listed in the previous table, some OpenTURNS types can be converted from/to the numpy array type.
+
+Here is how to build a NumericalSample from a numpy array:
+\begin{center}
+  \begin{lstlisting}
+    import numpy as np
+    a0 = np.array( ((1.,2.,3.),(4.,5.,6)) )
+    n0 = NumericalSample( a0 )
+  \end{lstlisting}
+\end{center}
+
+and how to convert it back to array:
+\begin{center}
+  \begin{lstlisting}
+    a1 = np.array( n0 )
+  \end{lstlisting}
+\end{center}
+
+As we can see the OpenTURNS type to/from numpy array type is made easily by simpy calling the constructor of the desired type.\\
+Another convenient feature is that the tuple/list/array types are allowed when calling every method that requires a NumericalPoint, NumericalSample, Indices or Description object
+instead of explicitely creating an object of the required type and setting its content.\\
+
+For example when creating a NumericalMathFunction from variables and formulas using sequences of strings instead of Description objects:
+\begin{center}
+  \begin{lstlisting}
+    myFunction = NumericalMathFunction( np.array(('x0','x1')), ['y0','y1'], ('x0+x1','x0-x1') )
+  \end{lstlisting}
+\end{center}
+
+Another quick example for extracting the marginals of a Distribution object using a tuple of integers instead of a Indices object:
+\begin{center}
+  \begin{lstlisting}
+    distribution = ComposedDistribution(...)
+    myMarginal = distribution.getMarginal( (1,3) )
+  \end{lstlisting}
+\end{center}

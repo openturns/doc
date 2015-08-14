@@ -1,0 +1,94 @@
+% Copyright (C) 2005-2015 Airbus - EDF - IMACS - Phimeca
+% Permission is granted to copy, distribute and/or modify this document
+% under the terms of the GNU Free Documentation License, Version 1.2
+% or any later version published by the Free Software Foundation;
+% with no Invariant Sections, no Front-Cover Texts, and no Back-Cover
+% Texts.  A copy of the license is included in the section entitled "GNU
+% Free Documentation License".
+\renewcommand{\etapemethodo}{Resp. Surf.}
+\renewcommand{\nomfichier}{docref_SurfRep_LSPolynomial}
+\renewcommand{\titrefiche}{Polynomial response surface based on least squares}
+
+\Header
+
+\MathematicalDescription{
+
+  \underline{\textbf{Goal}}\\
+
+  Instead of replacing the model response $h(\underline{x})$ for a \emph{local} approximation around a given set $\underline{x}_0$ of input parameters as in~\otref{docref_SurfRep_Taylor}{Taylor approximations}, one may seek a \emph{global} approximation of $h(\underline{x})$ over its whole domain of definition. A common choice to this end is global polynomial approximation. For the sake of simplicity, a \emph{scalar} model response $y=h(\underline{x})$ will be considered from now on. Nonetheless, the following derivations hold for a vector-valued response.\\
+
+  \underline{\textbf{Principles}}\\
+
+  In the sequel, one considers global approximations of the model response using:
+  \begin{itemize}
+  \item a linear function, i.e. a polynomial of degree one;
+  \item a quadratic function, i.e. a polynomial of degree two.
+  \end{itemize}
+
+  \underline{\textit{Linear approximation}}\\
+
+  \begin{align*}
+    y \, \, \approx \, \, \widehat{h}(\underline{x}) \, \, = \, \, a_0 \, + \,  \sum_{i=1}^{n_{X}} \; a_{i} \; x_i
+  \end{align*}
+  where $(a_j  \, , \, j=0,\dots,n_X)$ is a set of unknown coefficients. \\
+
+  \underline{\textit{Quadratic approximation}}\\
+
+  \begin{align*}
+    \underline{y} \, \, \approx \, \, \widehat{h}(\underline{x}) \, \, = \, \, a_0 \, + \,  \sum_{i=1}^{n_{X}} \; a_{i} \; x_i \, + \,
+    \sum_{i=1}^{n_{X}} \; \sum_{j=1}^{n_{X}} \; a_{i,j} \; x_i \; x_j
+  \end{align*}
+
+  \underline{\textit{General expression}}\\
+
+  The two previous equations may be recast using a unique formalism as follows:
+  \begin{align*}
+    \underline{y} \, \, \approx \, \, \widehat{h}(\underline{x}) \, \, = \, \, \sum_{j=0}^{P-1} \; a_j \; \psi_j(\underline{x})
+  \end{align*}
+  where $P$ denotes the number of terms, which is equal to $(n_X + 1)$ (resp. to $(1 + 2n_X + n_X (n_X - 1)/2)$) when using a linear (resp. a quadratic) approximation, and the family $(\psi_j,j=0,\dots,P-1)$ gathers the constant monomial $1$, the monomials of degree one $x_i$ and possibly the cross-terms $x_i x_j$ as well as the monomials of degree two $x_i^2$. Using the vector notation $\underline{a} \, \, = \, \, (a_{0} , \dots , a_{P-1} )^{\textsf{T}}$ and $\underline{\psi}(\underline{x}) \, \, = \, \, (\psi_{0}(\underline{x}) , \dots , \psi_{P-1}(\underline{x}) )^{\textsf{T}}$, this rewrites:
+  \begin{align*}
+    \underline{y} \, \, \approx \, \, \widehat{h}(\underline{x}) \, \, = \, \, \underline{a}^{\textsf{T}} \; \underline{\psi}(\underline{x})
+  \end{align*}
+
+  \underline{Computation of the coefficients}\\
+
+  A \emph{global} approximation of the model response over its whole definition domain is sought. To this end, the coefficients $a_j$ may be computed using a least squares regression approach. In this context, an experimental design $\underline{\cX} =(x^{(1)},\dots,x^{(N)})$, i.e. a set of realizations of input parameters is required, as well as the corresponding model evaluations $\underline{\cY} =(y^{(1)},\dots,y^{(N)})$. Note that the experimental design $\cX$ may be built using the various techniques introduced in~\otref{docref_C11_MinMaxPlanExp}{Min-Max Approach using Design of Experimentss }. \\
+
+  The following minimization problem has to be solved:
+  \begin{align*}
+    \mbox{Find} \quad \widehat{\underline{a}} \quad \mbox{that minimizes} \quad \cJ(\underline{a}) \, \, = \, \, \sum_{i=1}^N \; \left( y^{(i)} \; - \; \underline{a}^{\textsf{T}}  \underline{\psi}(\underline{x}^{(i)}) \right)^2
+  \end{align*}
+  The solution is given by:
+  \begin{align*}
+    \widehat{\underline{a}} \, \, = \, \, \left( \underline{\underline{\Psi}}^{\textsf{T}} \underline{\underline{\Psi}}  \right)^{-1} \; \underline{\underline{\Psi}}^{\textsf{T}}  \; \underline{\cY}
+  \end{align*}
+  where:
+  \begin{align*}
+    \underline{\underline{\Psi}} \, \, = \, \, (\psi_{j}(\underline{x}^{(i)}) \; , \; i=1,\dots,N \; , \; j = 0,\dots,P-1)
+  \end{align*}
+  It is clear that the above equation is only valid for a full rank information matrix. A necessary condition is that the size $N$ of the experimental design is not less than the number $P$ of PC coefficients to estimate. In practice, it is not recommended to directly invert $\underline{\underline{\Psi}}^{\textsf{T}} \underline{\underline{\Psi}}$ since the solution may be particularly sensitive to an ill-conditioning of the matrix. The least-square problem is rather solved using more robust numerical methods such as \emph{singular value decomposition} (SVD) or \emph{QR-decomposition}~(see \otref{docref_SurfRep_NumMethLS}{Numerical methods to solve least squares problems} for more details). \\
+
+}
+{
+}
+
+
+\Methodology{
+
+  This method is aimed at building a response surface prior to tackling Step~C ``Uncertainty Propagation''. It requires an experimental design together with the corresponding model evaluations. Then the various uncertainty propagation techniques may be applied at a negligible computational cost.% The Taylor expansion allows the analytical derivation of:
+  % \begin{itemize}
+  % \item statistical moments of the response (Step C), see: \\
+  % \otref{docref_C211_QuadraticCumul}{Taylor variance decomposition -- Perturbation Method};
+  % \item local sensitivity indices named \emph{importance factors} (Step C'), see: \\
+  % \otref{docref_Cprime31_ImportanceFactor}{Importance Factors from FORM-SORM methods}.
+  % \end{itemize}
+
+}
+{
+  Provided that the model under consideration is sufficiently smooth, linear or quadratic polynomials may be accurate approximations. This is especially true for studying the model response not too far from its mean value, i.e. for a central trend analysis. Nonetheless, one should be careful when the estimation of the probability of exceeding a threshold is of interest, since the polynomial approximation in the tails of the response distribution may reveal poor. \\
+
+  Numerical details related to the least-square method may be found in:
+  \begin{itemize}
+  \item {\AA}. Bjorck, 1996, ``Numerical methods for least squares problems'', SIAM Press, Philadelphia, PA.
+  \end{itemize}
+}

@@ -1,0 +1,109 @@
+% Copyright (C) 2005-2015 Airbus - EDF - IMACS - Phimeca
+% Permission is granted to copy, distribute and/or modify this document
+% under the terms of the GNU Free Documentation License, Version 1.2
+% or any later version published by the Free Software Foundation;
+% with no Invariant Sections, no Front-Cover Texts, and no Back-Cover
+% Texts.  A copy of the license is included in the section entitled "GNU
+% Free Documentation License".
+\renewcommand{\filename}{docUC_LSF_SomeParticularFunctions.tex}
+\renewcommand{\filetitle}{UC : Some particular functions : linear combination, agregation, composition}
+
+% \HeaderNNIILevel
+% \HeaderIILevel
+\HeaderIIILevel
+
+
+\label{NumericalMathFunction}
+
+
+
+
+
+
+\index{Limit State Function!Composition}
+\index{Limit State Function!Linear combination}
+\index{Limit State Function!Agregated funtion}
+\index{Limit State Function!Gradient}
+\index{Limit State Function!Hessian}
+
+The objective of this Use Case is to create some particular functions :
+\begin{itemize}
+\item the scalar linear combination \textit{linComb} of vectorial functions $vectFctColl = (f_1, \hdots, f_N)$ where
+  \begin{align*}
+    \forall 1 \leq i \leq N, \,     f_i : \Rset^n \longrightarrow \Rset^{p}
+  \end{align*}
+  with specific scalar weights $scalWeight = (c_1, \hdots, c_N)\in \Rset^N $ :
+  \begin{align*}
+    \begin{array}{l|lcl}
+      linComb : & \Rset^n & \longrightarrow & \Rset^{p} \\
+      &  \vect{X} & \longrightarrow & \displaystyle \sum_{i=1}^N c_if_i (\vect{X})
+    \end{array}
+  \end{align*}
+
+
+\item the vectorial linear combination \textit{vectLinComb} of a set of  functions $scalFctColl = (f_1, \hdots, f_N)$ where
+  \begin{align*}
+    \forall 1 \leq i \leq N, \,     f_i : \Rset^n \longrightarrow \Rset
+  \end{align*}
+  with specific vectorial weights $vectWeight = (\vect {c}_1, \hdots, \vect{c}_N)$  where
+  \begin{align*}
+    \forall 1 \leq i \leq N, \,   \vect{c}_i \in \Rset^p
+  \end{align*}
+  \begin{align*}
+    \begin{array}{l|lcl}
+      vectLinComb : & \Rset^n & \longrightarrow & \Rset^{p} \\
+      &  \vect{X} & \longrightarrow & \displaystyle \sum_{i=1}^N \vect{c}_if_i (\vect{X})
+    \end{array}
+  \end{align*}
+
+\item the agregated function $h$ of a set of functions $(f_1, \hdots, f_N)$ where
+  \begin{align*}
+    f_i : \Rset^n \longrightarrow \Rset^{p_i}
+  \end{align*}
+  \begin{align*}
+    \begin{array}{l|lcl}
+      agregFct : & \Rset^n & \longrightarrow & \Rset^{p} \\
+      &  \vect{X} & \longrightarrow & (f_1(\vect{X}), \hdots, f_N(\vect{X}))^t
+    \end{array}
+  \end{align*}
+  with
+  \begin{align*}
+    p = \displaystyle \sum_{i=1}^N p_i
+  \end{align*}
+
+\item the indicator function $l$ of an event defined by a function $f$, a comparison operator and a threshold $s$. For example, if the comparison operator is $>$, then
+  \begin{align*}
+    l = 1_{\{f > s\}}
+  \end{align*}
+\end{itemize}
+
+
+OpenTURNS automatically evaluates the analytical expressions of the gradient and the hessian, except if the analytical expression of the function is not differentiable everywhere. In that case, OpenTURNS implements a finite difference method :
+\begin{itemize}
+\item the gradient evaluation method is the centered finite difference method, with the differential increment $h=1e-5$ for each direction,
+\item the hessian evaluation method is the centered finite difference method, with the differential increment $h=1e-4$ for each direction.
+\end{itemize}
+
+\requirements{
+  \begin{description}
+  \item[$\bullet$] some collections of scalar and vectorial functions : {\itshape scalFctColl, vectFctColl}
+  \item[type:] some NumericalMathFunctionCollection
+  \item[$\bullet$] a list of  scalar weights : {\itshape scalWeight}
+  \item[type:] a NumericalPoint
+  \item[$\bullet$] a list of  vectorial weights : {\itshape vectWeight}
+  \item[type:] a NumericalSample
+  \item[$\bullet$] a function : {\itshape function}
+  \item[type:] a NumericalMathFunction
+  \end{description}
+}
+             {
+               \begin{description}
+               \item[$\bullet$] some particular funtions : {\itshape linComb, vectLinComb, agregFct, indFactor}
+               \item[type:] some NumericalMathFunction
+               \end{description}
+             }
+
+             \textspace\\
+             Python script for this UseCase :
+
+             \inputscript{script_docUC_LSF_SomeParticularFunctions}

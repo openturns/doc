@@ -1,0 +1,141 @@
+% Copyright (C) 2005-2015 Airbus - EDF - IMACS - Phimeca
+% Permission is granted to copy, distribute and/or modify this document
+% under the terms of the GNU Free Documentation License, Version 1.2
+% or any later version published by the Free Software Foundation;
+% with no Invariant Sections, no Front-Cover Texts, and no Back-Cover
+% Texts.  A copy of the license is included in the section entitled "GNU
+% Free Documentation License".
+\renewcommand{\etapemethodo}{Resp. Surf.}
+\renewcommand{\nomfichier}{docref_SurfRep_OrthoPoly}
+\renewcommand{\titrefiche}{Orthogonal polynomials}
+
+\Header
+
+\MathematicalDescription{
+
+  \underline{\textbf{Goal}} \vspace{2mm}
+
+  This section provides some mathematical details on sequences of orthogonal polynomials. Some of these sequences will be used to construct the basis of the so-called \emph{polynomial chaos expansion}. \\
+
+
+
+  \textbf{Mathematical framework} \vspace{2mm}
+
+  The orthogonal polynomials are associated to an inner product, defined as follows:\\
+  Given an \emph{interval of orthogonality} $[\alpha,\beta]$ ($\alpha \in \Rset \cup \{-\infty\}$, $\beta \in \Rset \cup \{\infty\}$, $\alpha < \beta$) and a weight function $w(x)> 0 $, every pair of polynomials $P$ and $Q$ are orthogonal iff  :
+  \begin{align*}
+    \langle P,Q \rangle = \int_{\alpha}^{\beta}P(x)Q(x)~w(x) dx = 0
+  \end{align*}
+
+  Therefore, a sequence of orthogonal polynomials $(P_n)_{n\geq 0}$ ($P_n$: polynomial of degree $n$) verifies:
+  \begin{align*}
+    \langle P_m,P_n\rangle = 0 \text{~~for every~~} m \neq n
+  \end{align*}
+  The chosen inner product induces a norm on polynomials in the usual way:
+  \begin{align*}\parallel P_n\parallel=\langle P_n,P_n \rangle^{1/2}
+  \end{align*}
+
+  In the following, we consider weight functions $w(x)$ corresponding to \emph{probability density functions}, which satisfy:
+  \begin{align*}
+    \int_{\alpha}^{\beta} \; w(x) \;  dx \, \, = \,\, 1
+  \end{align*}
+  Moreover, we consider families of \emph{orthonormal} polynomials $(P_n)_{n\geq 0}$, that is polynomials with a unit norm:
+  \begin{align*}
+    \|P_n\| \, \, = \, \, 1
+  \end{align*}
+
+  \underline{Recurrence:} Any sequence of orthogonal polynomials has a recurrence formula relating any three consecutive polynomials as follows:
+  \begin{align*}
+    P_{n+1}\ =\ (a_nx+b_n)\ P_n\ +\ c_n\ P_{n-1}
+  \end{align*} \\
+
+  \textbf{Orthogonormal polynomials with respect to usual probability distributions} \vspace{2mm}
+
+  Below, a table showing an example of particular (normalized) orthogonal polynomials associated with \emph{continuous} weight functions.\\
+  Note that the orthogonormal polynomials determined by OpenTURNS are orthonormal with respect to the standard representative distribution of the given distribution. Refer to   \otref{docref_B121_DistributionSelection}{Standard Parametric Models} to get information on the parameters and the moments of the standard representative of each distribution.
+
+  \begin{center}
+
+    \begin{tabular}{|c|c|c|c|}
+      \hline
+      Ortho. poly. &  $P_n(x)$ &  Weight $w(x)^{\strut}$                                   &  Recurrence coefficients $(a_n,b_n,c_n)$   \\
+      \hline\hline
+      Hermite  &  ${He}_n(x)^{\strut}$            &  $\displaystyle \frac{1}{\sqrt{2 \pi}} e^{-\frac{x^2}{2}}$  &   $\begin{array}{ccc} a_n & = & \frac{1}{\sqrt{n+1}} \\     b_n & = & 0 \\ c_n & = &  - \sqrt{\frac{n}{n+1}} \end{array} $ \\
+      \hline
+      Legendre  &  $\begin{array}{c} {Le}_n(x) \\ \\ \alpha>-1 \\ \end{array}$                  &  $\displaystyle \frac{1}{2}^{\strut} \times \mathbb{I}_{[-1,1]}(x)$    &  $\begin{array}{ccc} a_n & = & \frac{\sqrt{(2n+1)(2n+3)}}{n+1} \\     b_n & = & 0 \\ c_n & = &  -\frac{ n \sqrt{2n+3} }{ (n+1)\sqrt{2n-1} } \end{array} $ \\
+      \hline
+      \begin{tabular}{c} Generalized \\ Laguerre \\ \end{tabular}  &  $L_n^{(\alpha)}(x)$        &  $\displaystyle \frac{x^{k-1}}{\Gamma(k)}~e^{-x} \mathbb{I}_{[0,+\infty[}(x)  $  &  $\begin{array}{ccc}  \omega_{n} & = & \left((n+1)(n+k+1) \right)^{-1/2} \\ a_n & = & \omega_{n} \\     b_n & = & -(2n+k+1)~\omega_{n} \\ c_n & = &  -\sqrt{(n+k)n}~\omega_{n} \end{array} $ \\
+
+          % &  $\alpha>-1$                  &                   &      \\
+          \hline
+          Jacobi  &  $\begin{array}{c} J^{(\alpha,\beta)}_n(x) \\ \\ \\ \alpha,\beta>-1 \\ \end{array}$  &  $ \frac{(1-x)^{\alpha}(1+x)^{\beta}}{2^{\alpha + \beta + 1} B(\beta + 1, \alpha + 1)} \mathbb{I}_{[-1,1]}(x)$  &  $\begin{array}{ccc}  K_{1,n} & = & \frac{2n+\alpha + \beta + 3}{(n+1)(n+\alpha+1)(n+\beta+1)(n+\alpha+\beta+1)} \\ \\ K_{2,n} & = & \frac{1}{2} \sqrt{(2n + \alpha + \beta + 1) K_{1,n}} \\ \\a_n & = & K_{2,n}(2n+\alpha + \beta + 2)  \\   \\  b_n & = & K_{2,n}\frac{(\alpha - \beta)(\alpha + \beta)}{2n+\alpha+\beta} \\ \\ c_n & = & - \frac{2n+\alpha+\beta + 2}{2n+\alpha+\beta} \Big[(n+\alpha)(n+\beta) \\ & & \times (n+\alpha+\beta)n\frac{K_{1,n}}{2n+\alpha+\beta-1}\Big]^{1/2}  \end{array} $ \\
+          %$ \frac{2^{\alpha+\beta+1}}{2n+\alpha+\beta+1}  \frac{\Gamma(n+\alpha+1)^{\strut}\Gamma(n+\beta+1)}{n!~\Gamma(n+\alpha+\beta+1)}$     \\
+          % &  $\alpha,\beta>-1$                  &                   &      \\
+          \hline
+
+    \end{tabular}
+
+  \end{center}
+
+  %
+  %   These particular polynomials are chosen because of the similarity between their weights and PDFs of some usual laws (Normal, Uniform, Gamma, etc.). \\
+
+  Furthermore, two families of orthonormal polynomials with respect to \emph{discrete} probability distributions are available in OpenTURNS, namely the so-called Charlier and Krawtchouk polynomials:
+
+  \begin{center}
+
+    \begin{tabular}{|c|c|c|c|}
+      \hline
+      Ortho. poly. &  $P_n(x)$ &  Probability mass function                                   &  Recurrence coefficients $(a_n,b_n,c_n)$   \\
+      \hline\hline
+      Charlier  &  $\begin{array}{c} Ch^{(\lambda)}_n(x) \\ \\ \lambda>0 \\ \end{array}$            &  $\begin{array}{c} \displaystyle{\frac{\lambda^k}{k!}~e^{-\lambda}} \\ \\ k=0,1,2,\dots \\ \end{array}$  &   $\begin{array}{ccc} a_n & = & - \frac{1}{\sqrt{\lambda (n+1)}} \\   \\  b_n & = & \frac{n+\lambda}{\sqrt{\lambda (n+1)}} \\ \\ c_n & = &  - \sqrt{1 - \frac{1}{n+1}} \end{array} $ \\
+      \hline
+      Krawtchouk$^{\dagger}$ & $\begin{array}{c} Kr^{(m,p)}_n(x) \\ \\ m \in \Nset~,~p \in [0,1] \\ \end{array}$ & $\begin{array}{c} \displaystyle{\binom{m}{k}p^k (1-p)^{m-k}} \\ \\ k=0,1,2,\dots \\ \end{array}$ & $\begin{array}{ccc} a_n & = & - \frac{1}{\sqrt{(n+1)(m-n)p(1-p)}} \\   \\  b_n & = & \frac{p(m-n)+n(1-p)}{\sqrt{(n+1)(m-n)p(1-p)}} \\ \\ c_n & = &  - \sqrt{(1 - \frac{1}{n+1})(1+\frac{1}{m-n})} \end{array} $ \\
+      \hline
+
+    \end{tabular}
+
+  \end{center}
+  {\footnotesize $^{\dagger}$ The Krawtchouk polynomials are only defined up to a degree $n$ equal to $m-1$. Indeed, for $n=m$, some factors of the denominators of the recurrence coefficients would be equal to zero.} \\
+
+  To sum up, the distribution types handled by OpenTURNS are reported in the table below together with the associated families of orthonormal polynomials. \\
+
+  %\begin{table}[!ht]
+  \begin{center}
+    %\caption{\small \em Correspondence between usual continuous distributions and families of orthogonal polynomials}
+    %\label{tab:3.1}
+    \begin{tabular}{ccc}
+      \hline
+      Distribution & Support & Polynomial \\
+      \hline
+      Normal $\cN(0,1)$      &  $\Rset$ & Hermite \\
+      Uniform   $\cU(-1,1)$     &   $[-1,1] $     & Legendre \\
+      Gamma $\Gamma(k,1,0)$   & $(0,+\infty)$   & Laguerre \\
+      %Chebyshev &  $(-1,1)$       & Chebyshev \\
+      Beta $B(\alpha,\beta,-1,1)$     &  $(-1,1)$       & Jacobi \\
+      Poisson $\cP(\lambda)$ & $\Nset$ & Charlier \\
+      Binomial $\cB(m,p)$ & $\{0,\dots,m\}$ & Krawtchouk$^{\dagger}$ \\
+      \hline
+    \end{tabular}
+  \end{center}
+      {\footnotesize $^{\dagger}$ It is recalled that the Krawtchouk polynomials are only defined up to a degree $n$ equal to $m-1$.} \\
+      \\
+
+      \textbf{Orthogonal polynomials with respect to arbitrary probability distributions} \vspace{2mm}
+
+      It is also possible to generate a family of orthonormal polynomials with respect to an arbitrary probability distribution $w(x)$. The well-known \emph{Gram-Schmidt} algorithm can be used to this end. Note that this algorithm gives a constructive proof of the existence of orthonormal bases.\\
+
+      However it is known to be numerically unstable, so alternative procedures are often used in practice. The two available algorithms in OpenTURNS so far are the so-called \emph{modified Gram-Schmidt algorithm} and the \emph{modified Chebyshev algorithm}. Another procedure based on Cholesky decomposition should be also available soon.
+        }
+        {-
+        }
+
+        \Methodology{
+          Within the global methodology, the orthogonal polynomial families are generated to construct the basis of the polynomial chaos expansion. The latter corresponds to a specific approach in order to tackle step C: ``Uncertainty propagation''. Then the various uncertainty propagation techniques may be applied at a negligible computational cost. The method requires to have fulfilled the two following steps:
+          \begin{itemize}
+          \item step A1: identify of an input vector $\vect{X}$ of sources of uncertainties and an output variable of interest $\underline{Y} = h(\underline{X})$;
+          \item step B: identify one of the proposed techniques to estimate a probabilistic model of the input vector $\vect{X}$.
+          \end{itemize}
+        }
+                    {-
+                    }

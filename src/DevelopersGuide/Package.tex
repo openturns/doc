@@ -1,0 +1,35 @@
+% Copyright (C) 2005-2015 Airbus - EDF - IMACS - Phimeca
+% Permission is granted to copy, distribute and/or modify this document
+% under the terms of the GNU Free Documentation License, Version 1.2
+% or any later version published by the Free Software Foundation;
+% with no Invariant Sections, no Front-Cover Texts, and no Back-Cover
+% Texts.  A copy of the license is included in the section entitled "GNU
+% Free Documentation License".
+
+In order to structure the code of the \OT\ project, the various elements (classes, functions, libraries, data) are logically organized in packages. This chapter describes the rules to be followed for the definition, management and use of these packages.
+
+\subsubsection{Packages}
+The \OT\ code is mainly located in a single library. This library is organized as a set of modules. However, there may be several interacting libraries in the future.\\
+The \OT\ library is interfaced with Python through a Python module exposing almost all the \OT\ classes and operators.
+\Rule{Library_independence}{Libraries at the same level are independent from each other.
+The source files of a function or a class can not be shared among several modules. If two libraries share the same functions or classes, these must be grouped in a common "utility" library, in order to avoid cyclic references and dependencies.}
+
+\Rule{C++-modules}{The C++ modules required for the \OT\ code are placed in \index{Modules!static library}\index{Library!static}static and \index{Modules!dynamic library}\index{Library!dynamic}dynamic libraries. All libraries related to \OT\ are prefixed by {\bf libOT}.}
+For the moment, the entire set of classes is located in {\bf libOT.so} for the dynamic part and in {\bf libOT.a} for the static part.
+\Rule{Python-modules}{Python modules required for the \OT\ code are grouped in a package that can be, if necessary, broken down into "sub-packages".}
+
+\emph{Example showing the import of modules via the {\bf openturns} Python package}
+\lstset{language=C++, basicstyle=\normalsize}
+\begin{lstlisting}[frame=TRBL]
+import openturns
+import openturns.base
+import openturns.uncertainty
+\end{lstlisting}
+
+\emph{Example showing the direct import of module operators or classes via the {\bf openturns} Python package}
+\lstset{language=C++, basicstyle=\normalsize}
+\begin{lstlisting}[frame=TRBL]
+from openturns import NumericalPoint
+from openturns.base import NumericalSample
+from openturns.uncertainty import RandomVector
+\end{lstlisting}

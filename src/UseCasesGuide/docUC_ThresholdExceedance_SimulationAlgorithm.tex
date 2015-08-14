@@ -1,0 +1,62 @@
+% Copyright (C) 2005-2015 Airbus - EDF - IMACS - Phimeca
+% Permission is granted to copy, distribute and/or modify this document
+% under the terms of the GNU Free Documentation License, Version 1.2
+% or any later version published by the Free Software Foundation;
+% with no Invariant Sections, no Front-Cover Texts, and no Back-Cover
+% Texts.  A copy of the license is included in the section entitled "GNU
+% Free Documentation License".
+\renewcommand{\filename}{docUC_ThresholdExceedance_SimulationAlgorithm.tex}
+\renewcommand{\filetitle}{UC : Creation of a Monte Carlo / LHS / Quasi Monte Carlo / Importance Sampling simulation algorithm}
+
+% \HeaderNNIILevel
+% \HeaderIILevel
+\HeaderIIILevel
+
+
+\label{simuAlgo}
+
+
+
+
+\index{Threshold Probability!Monte Carlo}
+\index{Threshold Probability!Quasi Monte Carlo}
+\index{Threshold Probability!LHS}
+\index{Threshold Probability!Importance sampling}
+
+
+The objective of this Use Case is to create a simulation algorithm in order to evaluate in fine the probability of the specified event according to the specified method : Monte Carlo sampling, LHS sampling, Importance sampling or the Quasi Monte Carlo method.\\
+
+The Importance sampling method requires the specification of the importance distribution according to which the numerical sample will be generated.\\
+
+For the LHS method, the copula of the multi-variate distribution must be independent.\\
+
+As the quasi-Monte Carlo method is based on deterministic sequences, we do not need to initialize the state of the random generator.\\
+
+
+
+Details on simulation algorithms may be found in the Reference Guide (\extref{ReferenceGuide}{see files Reference Guide - Step C -- Estimating the probability of an event using Sampling}{stepC} and files around).\\
+
+
+
+\requirements{
+  \begin{description}
+  \item[$\bullet$] the event we want to evaluate the pobability : {\itshape myEvent}
+  \item[type:] Event
+  \item[$\bullet$] the importance distribution : {\itshape myImportanceDist}
+  \item[type:] Event
+  \end{description}
+}
+             {
+               \begin{description}
+               \item[$\bullet$] the Monte Carlo simulation algorithm : {\itshape myMCAlgo}
+               \item[type:] Simulation
+               \item[$\bullet$] the LHS simulation algorithm : {\itshape myLHSAlgo}
+               \item[type:] Simulation
+               \item[$\bullet$] the Importance Sampling simulation algorithm : {\itshape myISAlgo}
+               \item[type:] Simulation
+               \end{description}
+             }
+
+             \textspace\\
+             Python  script for this UseCase :
+             \inputscript{script_docUC_ThresholdExceedance_SimulationAlgo}

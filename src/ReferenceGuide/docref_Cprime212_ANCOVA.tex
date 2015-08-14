@@ -1,0 +1,86 @@
+% Copyright (C) 2005-2015 Airbus - EDF - IMACS - Phimeca
+% Permission is granted to copy, distribute and/or modify this document
+% under the terms of the GNU Free Documentation License, Version 1.2
+% or any later version published by the Free Software Foundation;
+% with no Invariant Sections, no Front-Cover Texts, and no Back-Cover
+% Texts.  A copy of the license is included in the section entitled "GNU
+% Free Documentation License".
+\renewcommand{\nomfichier}{docref_Cprime212_ANCOVA}
+\extanchor{ANCOVA}
+\renewcommand{\titrefiche}{Sensivity analysis for models with correlated inputs
+}
+
+\Header
+
+\MathematicalDescription{
+  \underline{\textbf{Goal}} \vspace{2mm}
+
+  The ANCOVA (ANalysis of COVAriance) method, is a variance-based method generalizing the ANOVA (ANalysis Of VAriance) decomposition for models with correlated input parameters. \vspace{2mm}
+
+  \underline{\textbf{Principle}} \vspace{2mm}
+
+  Let us consider a model $Y = h(\vect{X})$ without making any hypothesis on the dependence structure of $\vect{X} = \{X^1, \ldots, X^{n_X}\}$, a $n_X$-dimensional random vector. The covariance decomposition requires a functional decomposition of the model. Thus the model response $Y$ is expanded as a sum of functions of increasing dimension as follows:
+  \begin{equation} \label{Model}
+    h(\vect{X}) = h_0 + \sum_{u\subseteq\{1,\dots,n_X\}} h_u(X_u)
+  \end{equation}
+
+  $h_0$ is the mean of $Y$. Each function $h_u$ represents, for any non empty set $u\subseteq\{1, \dots, n_X\}$, the combined contribution of the variables $X_u$ to $Y$.
+
+  Using the properties of the covariance, the variance of $Y$ can be decomposed into a variance part and a covariance part as follows:
+  \begin{eqnarray*}
+    Var[Y] &=& Cov\left[h_0 + \sum_{u\subseteq\{1,\dots,n_X\}} h_u(X_u), h_0 + \sum_{u\subseteq\{1,\dots,n\}} h_u(X_u)\right] \\
+           &=& \sum_{u\subseteq\{1,\dots,n_X\}} Cov\left[h_u(X_u), \sum_{u\subseteq\{1,\dots,n_X\}} h_u(X_u)\right] \\
+           &=& \sum_{u\subseteq\{1,\dots,n_X\}} \left[Var[h_u(X_u)] + Cov[h_u(X_u), \sum_{v\subseteq\{1,\dots,n_X\}, v\cap u=\varnothing} h_v(X_v)]\right]
+  \end{eqnarray*}
+
+  The total part of variance of $Y$ due to $X_u$ reads:
+  \begin{displaymath}
+    S_u = \frac{Cov[Y, h_u(X_u)]}{Var[Y]}
+  \end{displaymath}
+
+  The variance formula described above enables to define each sensitivity measure $S_u$ as the sum of a $\mathit{physical}$ (or $\mathit{uncorrelated}$) part and a $\mathit{correlated}$ part such as:
+  \begin{displaymath}
+    S_u = S_u^U + S_u^C
+  \end{displaymath}
+
+  where $S_u^U$ is the uncorrelated part of variance of $Y$ due to $X_u$:
+  \begin{displaymath}
+    S_u^U = \frac{Var[h_u(X_u)]}{Var[Y]}
+  \end{displaymath}
+
+  and $S_u^C$ is the contribution of the correlation of $X_u$ with the other parameters:
+  \begin{displaymath}
+    S_u^C = \frac{Cov[h_u(X_u), \displaystyle \sum_{v\subseteq\{1,\dots,n_X\}, v\cap u=\varnothing} h_v(X_v)]}{Var[Y]}
+  \end{displaymath}
+
+  As the computational cost of the indices with the numerical model $h$ can be very high, it is suggested to approximate the model response with a polynomial chaos expansion. However, for the sake of computational simplicity, the latter is constructed considering $\mathit{independent}$ components $\{X^1,\dots,X^{n_X}\}$. Thus the chaos basis is not orthogonal with respect to the correlated inputs under consideration, and it is only used as a metamodel to generate approximated evaluations of the model response and its summands in Eq. (\ref{Model}).
+  \begin{displaymath}
+    Y \simeq \hat{h} = \sum_{j=0}^{P-1} \alpha_j \Psi_j(x)
+  \end{displaymath}
+  Then one may identify the component functions. For instance, for $u = \{1\}$:
+  \begin{displaymath}
+    h_1(X_1) = \sum_{\alpha | \alpha_1 \neq 0, \alpha_{i \neq 1} = 0} y_{\alpha} \Psi_{\alpha}(\vect{X})
+  \end{displaymath}
+  where $\alpha$ is a set of degrees associated to the $n_X$ univariate polynomial $\psi_i^{\alpha_i}(X_i)$.
+
+  Then the model response $Y$ is evaluated using a sample $X=\{x_k, k=1,\dots,N\}$ of the correlated joint distribution. Finally, the several indices are computed using the model response and its component functions that have been identified on the polynomial chaos.
+}
+{
+  --}
+
+\Methodology{
+  The ANCOVA method is a generalization of the well-established Sobol sensitivity indices when the input parameters of the model are correlated. The Sobol indices measure the contribution of the input variables $X_i$ to the variance of the output $Y$. The ANCOVA decomposition allows one to distinguish which part of this contribution is due to the variable itself and which part is due to its correlation with the other input parameters. So if a variable has a high contribution, this method enables to know if it is due to its physical role in the model $h$ or because it is correlated with variables with high contributions.
+}
+            {
+
+
+              The following reference provides more details on the ANCOVA method:
+              \begin{itemize}
+              \item Caniou, Y. (2012). "Global sensitivity analysis for nested and multiscale modelling." PhD thesis. Blaise Pascal University-Clermont II, France.
+              \end{itemize}
+            }
+
+
+            \Example{
+              --
+            }

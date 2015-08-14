@@ -1,0 +1,125 @@
+% Copyright (C) 2005-2015 Airbus - EDF - IMACS - Phimeca
+% Permission is granted to copy, distribute and/or modify this document
+% under the terms of the GNU Free Documentation License, Version 1.2
+% or any later version published by the Free Software Foundation;
+% with no Invariant Sections, no Front-Cover Texts, and no Back-Cover
+% Texts.  A copy of the license is included in the section entitled "GNU
+% Free Documentation License".
+\renewcommand{\nomfichier}{docref_Cprime31_ImportanceFactor}
+\renewcommand{\titrefiche}{Importance Factors from FORM-SORM methods}
+
+\Header
+
+\MathematicalDescription{
+  \underline{\textbf{Goal}} \vspace{2mm}
+
+  Importance Factors are evaluated in the following context : $\vect{X}$ denotes a random input vector, representing the sources of uncertainties, $\pdf$ its joint density probability, $\vect{d}$ a determinist vector, representing the fixed variables $g(\vect{X}\,,\,\vect{d})$ the limit state function of the model, $\cD_f = \{\vect{X} \in \Rset^n \, / \, g(\vect{X}\,,\,\vect{d}) \le 0\}$ the  event considered here and ${g(\vect{X}\,,\,\vect{d}) = 0}$ its boundary (also called limit state surface).\\
+  The probability content of the event $\cD_f$ is $P_f$:
+  \begin{eqnarray}
+    P_f =       \int_{g(\vect{X}\,,\,\vect{d}) \le 0}  \pdf\, d\vect{x}.
+  \end{eqnarray}\label{PfX10}
+  In this context, the probability $P_f$ can often be efficiently estimated by FORM or SORM approximations (refer to \otref{docref_C311_Form}{FORM} and \otref{docref_C311_Sorm}{SORM}).\\
+
+  The FORM importance factors offer a way to rank the importance of the input components with respect the realization of the event. They are often interpreted also as indicators of the impact of modeling the input components as random variables rather than fixed values. The FORM importance factors are defined as follows.\\
+
+  \vspace{2mm}
+
+  \underline{\textbf{Principle}} \vspace{2mm}
+
+  The isoprobabilistic transformation $T$ used in the FORM and SORM approximation (refer to \otref{docref_C311_TransIso}{Iso Probabilistic Transformation}) is a diffeomorphism from $\supp(\vect{X})$ into $\Rset^n$, such that the distribution of the random vector $\vect{U}=T(\vect{X})$ has the following properties : $\vect{U}$ and $\mat{R}\,\vect{U}$ have the same distribution for all rotations $\mat{R}\in{\cS\cO}_n(\Rset)$.\\
+  In the standard space, the design point $\vect{u}^*$  is the point on the limit state boundary the nearest to the origin of the standard space. The design point is $\vect{x}^*$  in the physical space, where $\vect{x}^* = T^{-1}(\vect{u}^*)$. We note $\beta_{HL}$  the Hasofer-Lind reliability index : $\beta_{HL} = ||\vect{u}^{*}||$.\\
+
+  When the $\bdU$-space is normal, the litterature proposes to calculate the importance factor $\alpha_i^2$ of the variable $X_i$ as the square of the co-factors of the design point in the $\bdU$-space :
+  \begin{equation}\label{def1}
+    \alpha_i^2 = \displaystyle \frac{(u_i^{*})^2}{\beta_{HL}^2}
+  \end{equation}
+  This definition guarantees the relation : $ \Sigma_i \alpha_i^2 = 1$.\\
+
+  Let's note that this definition arises the following difficulties :
+  \begin{itemize}
+  \item Which signification for $\alpha_i$ when the variables $X_i$ are correlated? In that case, the isoprobabilistic transformation doesn't associate $U_i$ to $X_i$ but $U_i$ to a set of $X_i$.
+  \item In the case of dependence of the variables $X_i$, the shape of the limit state function in the $\bdU$-space depends on the isoprobabilistic transformation and in particular on the order of the variables $X_i$ within the random vector $\vect{X}$. Thus, changing this order has an impact on the localisation of the design point in the $\bdU$-space and, concequently, on the importance factors ... (see [R. Lebrun, A. Dutfoy, 2008] to compare the different isoprobabilistic transformations).
+  \end{itemize}
+
+  It is possible to give another definition to the importance factors which may be defined in the elliptical space of the iso-probabilistic transformation, where the marginal distributions are all elliptical, with cumulative distribution function noted $E$, and not yet decorrelated.\\
+  \begin{eqnarray}
+    \boldsymbol{Y}^* =  \left(
+    \begin{array}{c}
+      E^{-1}\circ F_1(X_1^*) \\
+      E^{-1}\circ F_2(X_2^*) \\
+      \vdots \\
+      E^{-1}\circ F_n(X_n^*)
+    \end{array}
+    \right).\label{varY10}
+  \end{eqnarray}
+
+  The importance factor $\alpha_i^2$ writes:
+  \begin{equation}\label{def2}
+    \alpha_i^2 = \displaystyle \frac{(y_i^{*})^2}{||\vect{y}^{*}||^2}
+  \end{equation}
+  This definition still guarantees the relation : $ \Sigma_i \alpha_i^2 = 1$.
+
+}
+{
+  Here, the event considered is explicited directly from the limit state function $g(\vect{X}\,,\,\vect{d})$ : this is the classical structural reliability formulation.\\
+  However, if the event is a threshold exceedance, it is useful to explicite the variable of interest $Z=\tilde{g}(\vect{X}\,,\,\vect{d})$, evaluated from the model $\tilde{g}(.)$. In that case, the event considered, associated to the threshold $z_s$ has the formulation: $\cD_f = \{ \vect{X} \in \Rset^n \, / \, Z=\tilde{g}(\vect{X}\,,\,\vect{d}) > z_s \}$
+  and the limit state function is : $g(\vect{X}\,,\,\vect{d}) = z_s - Z = z_s - \tilde{g}(\vect{X}\,,\,\vect{d})$. $P_f$ is the threshold exceedance probability, defined as : $P_f     =       P(Z \geq z_s) = \int_{g(\vect{X}\,,\,\vect{d}) \le 0}  \pdf\, d\vect{x}$.
+  Thus, the FORM importance factors offer a way to rank the importance of the input components with respect to the threshold exceedance by the quantity of interest $Z$. They can be seen as a specific sensitity analysis technique dedicated to the quantity Z around a particular threshold rather than to its variance.
+}
+
+
+\Methodology{
+  Within the global methodology, these importance factors are used in the step C': "Ranking sources of uncertainty" in the case of the evaluation of the probability of an event by an approximation method.\\
+  It requires to have fulfilled the following steps beforehand:
+  \begin{itemize}
+  \item step A: identify of an input vector $\vect{X}$ of sources of uncertainties and an output variable of interest $Z=\tilde{g}(\vect{X},\vect{d})$, result of the model $\tilde{g}()$; identify a probabilistic criteria such as a threshold exceedance $Z > z_s$ or equivalently a failure event ${g(\vect{X}\,,\,\vect{d}) \le 0}$,
+  \item step B: identify one of the proposed techniques to estimate a probabilistic model of the input vector $\vect{X}$,
+  \item step C: select an appropriate optimization algorithm among those proposed to evaluate the event probability : FORM or SORM.
+  \end{itemize}
+
+  When not specified, OpenTURNS evaluates the importance factors according to relation (\ref{def1}). Otherwise, OpenTURNS evaluates them according to  (\ref{def2}).\\
+
+  Note that the relevance of FORM importance factors as a means to rank the importance of the sources of uncertainty is closely dependant on the validity of FORM approximation (refer to \otref{docref_C311_Form}{FORM} and \otref{docref_C311_Sorm}{SORM}).\\
+
+  The sensitivity factors (refer to \otref{docref_Cprime31_SensitivityFactor}{Sensitivity Factors}) indicate the importance on the Hasofer-Lind reliability index (refer to \otref{docref_C311_ReliabilityIndex}{Reliability Index}) of the value of the parameters used to define the distribution of the random vector $\vect{X}$.
+
+}
+{
+  Interesting litterature on the subject is :
+  \begin{itemize}
+  \item H.O. Madsen, "Omission Sensitivity Factors," 1988, Structural Safety, 5, 35-45.
+  \item R. Lebrun, A. Dutfoy, 2008, "Do Rosenblatt and Nataf isoprobabilistic transformations really differ?", submitted to Probabilistic  Engineering Mechanics in august 2008, under temptatively accepted so far.
+  \end{itemize}
+}
+
+\Example{
+  Let's apply this method to the following analytical example which considers a cantilever beam, of Young's modulus E, length L, section modulus I. We apply a concentrated bending force at the other end of the beam. The vertical displacement $y$ of the extrême end is equal to :
+  \begin{align*}
+    y(E, F, L, I) = \displaystyle \frac{FL^3}{3EI}
+  \end{align*}
+  The objective is to propagate until $y$ the uncertainties of the variables $(E, F, L, I)$.\\
+  The input random vector is $\vect{X} = (E, F, L, I)$, which probabilistic modelisation is (unity is not provided):
+  \begin{align*}
+    \left\{
+    \begin{array}{lcl}
+      E & = & Normal(50, 1) \\
+      F & = & Normal(1, 1) \\
+      L & = & Normal(10, 1) \\
+      I & = & Normal(5, 1)
+    \end{array}
+    \right.
+  \end{align*}
+  The four random variables are independant.\\
+  The event considered is the threshold exceedance : $\cD_f = \{(E, F, L, I) \in \Rset^4 \, / \, y(E, F, L, I) \ge 3\}$.\\
+  The importance factors obtained are :
+  \begin{align*}
+    \left\{
+    \begin{array}{lcl}
+      \alpha^2_E & = & 9.456e^{-2}\, \% \\
+      \alpha^2_F & = & 6.959e^{+1}\, \% \\
+      \alpha^2_L & = & 1.948e^{+1}\, \% \\
+      \alpha^2_I & = & 1.084e^{+1}\, \%
+    \end{array}
+    \right.
+  \end{align*}
+}

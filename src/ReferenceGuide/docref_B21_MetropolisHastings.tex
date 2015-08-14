@@ -1,0 +1,161 @@
+% Copyright (C) 2005-2015 Airbus - EDF - IMACS - Phimeca
+% Permission is granted to copy, distribute and/or modify this document
+% under the terms of the GNU Free Documentation License, Version 1.2
+% or any later version published by the Free Software Foundation;
+% with no Invariant Sections, no Front-Cover Texts, and no Back-Cover
+% Texts.  A copy of the license is included in the section entitled "GNU
+%  Free Documentation License".
+\renewcommand{\etapemethodo}{B}
+\renewcommand{\nomfichier}{docref_B21_MetropolisHastings}
+\renewcommand{\titrefiche}{The Metropolis-Hastings Algorithm}
+
+\Header
+
+A rigorous and complete documentation about Markov Chain Monte-Carlo sampling is beyond the purpose
+of this section which provides a short introduction to the Metropolis-Hastings algorithm.
+In particular, the Metropolis-Hastings algorithm is only introduced hereafter
+in the context of the simulation of an \emph{homogeneous} Markov Chain (no dynamical
+adaptation).
+The reader is invited to refer to the monographs suggested below for further explanations or details.
+
+\MathematicalDescription{
+
+  \underline{\textbf{Definitions and notation}} \vspace{2mm}
+
+  \textbf{Markov chain.} Considering a $\sigma$-algebra $\cA$ on $\Omega$,
+  a Markov chain is a process ${(X_k)}_{k\in\Nset}$ such that
+  \begin{align*}
+    \forall{}(A,x_0,\ldots,x_{k-1})\in\cA\times\Omega^k
+    \quad \Prob{X_k\in A \,|\, X_0=x_0, \ldots, X_{k-1}=x_{k-1}}
+    = \Prob{X_k\in A \,|\, X_{k-1}=x_{k-1}}.
+  \end{align*}
+  %The Markov chain is said homogeneous iif $\Prob{X_k\inA \,|\, X_{k-1}=x_{k-1}}$
+  %does not depends on $k$, for all $x_{k-1}$.
+  An example is the \emph{random walk} for which $X_k = X_{k-1} + \varepsilon_k$ where
+  the steps $\varepsilon_k$ are independent and identically distributed.\\
+
+  \textbf{Transition kernel.} A transition kernel on $(\Omega, \cA)$ is a mapping
+  $K: (\Omega, \cA) \rightarrow [0, 1]$ such that
+  \begin{itemize}
+  \item $\forall{}A\in\cA \quad K(., A)$ is measurable;
+  \item $\forall{}x\in\Omega \quad K(x, .)$ is a probability distribution on $(\Omega, \cA)$.\\
+  \end{itemize}
+  The kernel $K$ has density $k$ if
+  $\forall(x,A)\in\Omega\times\cA \quad K(x, A) = \displaystyle\int_A \: k(x, y) \mbox{d}y$.
+
+  ${(X_k)}_{k\in\Nset}$ is a homogeneous Markov Chain of transition $K$ if
+  $\forall(A,x)\in\cA\times\Omega \quad \Prob{X_k\in{}A | X_{k-1}=x} = K(x, A)$.\\
+
+  \textbf{Some Notations.} Let ${(X_k)}_{k\in\Nset}$ be a homogeneous Markov Chain of transition $K$
+  on $(\Omega, \cA)$ with initial distribution $\nu$ (that is $X_0 \sim \nu$):
+  \begin{itemize}
+  \item $K_\nu$ denotes the probability distribution of the Markov Chain ${(X_k)}_{k\in\Nset}$;
+  \item $\nu{}K^k$ denotes the probability distribution of $X_k$ ($X_k \sim \nu{}K^k$);
+  \item  $K^k$ denotes the mapping defined by $K^k(x,A) = \Prob{X_k\in{}A|X_0=x}$ for all
+    $(x,A)\in\Omega\times\cA$.\\
+  \end{itemize}
+
+  \textbf{Total variation convergence.} A Markov Chain of distribution $K_\nu$ is said
+  to converge in total variation distance towards the distribution $t$ if
+  \begin{align*}
+    \lim_{k\to+\infty} \sup_{A\in\cA} \left|
+    \nu{}K^k(A) - t(A)
+    \right| = 0.
+  \end{align*}
+  Then the notation used here is $\nu{}K^k \rightarrow_{TV} t$.\\
+
+  \textbf{Some interesting properties.} Let $t$ be a (target) distribution
+  on $(\Omega, \cA)$, then a transition kernel $K$ is said to be:
+  \begin{itemize}
+  \item $t$-invariant if $t{}K = t$;
+  \item $t$-irreducible if, $\forall(A,x)\in\Omega\times\cA$ such that $t(A)>0$,
+    $\exists{}k\in\cN^* \quad {}K^k(x, A) > 0$ holds.
+  \end{itemize}
+
+
+  \underline{\textbf{Goal}} \vspace{2mm}
+
+  Markov Chain Monte-Carlo techniques allows to sample and integrate according to a distribution
+  $t$ which is only known up to a multiplicative constant.
+  This situation is common in
+  Bayesian statistics where the "target" distribution, the posterior one
+  $t(\vect{\theta})=\pi(\vect{\theta} | \mat{y})$, is proportional to
+  the product of prior and likelihood: see equation (\ref{eq:post_distribution}).
+
+  In particular, given a "target" distribution $t$ and a $t$-irreducible kernel transition $Q$,
+  the Metropolis-Hastings algorithm produces a Markov chain ${(X_k)}_{k\in\Nset}$ of distribution
+  $K_\nu$ with the following properties:
+  \begin{itemize}
+  \item the transition kernel of the Markov chain is $t$-invariant;
+  \item $\nu{}K^k \rightarrow_{TV} t$;
+  \item the Markov chain satisfies the \emph{ergodic theorem}: let $\phi$ be a real-valued
+    function such that $\Econd{X\sim{}t}{|\phi(X)|}<+\infty$, then, whatever the initial distribution
+    $\nu$ is:
+    \begin{align*}
+      \displaystyle\frac{1}{n} \sum_{k=1}^n \: \phi(X_k) \tendto{k}{+\infty} \Econd{X\sim{}t}{\phi(X)}
+      \mbox{ almost surely}.
+    \end{align*}
+  \end{itemize}
+  In that sense, simulating ${(X_k)}_{k\in\Nset}$ amounts to
+  sampling according to $t$ and can be used to integrate
+  relatively to the probability measure $t$.
+  Let us remark that the ergodic theorem implies that
+  $\displaystyle\frac{1}{n} \sum_{k=1}^n \: \fcar{A}{X_k}
+  \tendto{k}{+\infty} \ProbCond{X\sim{}t}{X\in{}A}$ almost surely.
+
+  \vspace{2mm}
+
+  \underline{\textbf{Principle}} \vspace{2mm}
+
+  By abusing the notation, $t(x)$ represents, in the remainder of this section, a function of $x$
+  which is proportional to the PDF of the target distribution $t$.
+  Given a transition kernel $Q$ of density $q$,
+  the scheme of the Metropolis-Hastings algorithm is the following
+  (lower case letters are used hereafter for both random variables and realizations
+  as usual in the bayesian literature):
+  \begin{description}
+  \item[0)] Draw $x_0 \sim \nu$ and set $k = 1$.
+  \item[1)] Draw a candidate for $x_k$ according to the given transition kernel $Q$:
+    $\tilde{x} \sim Q(x_{k-1}, .)$.
+  \item[2)] Compute the ratio $\rho = \displaystyle\frac{t(\tilde{x})/q(x_{k-1},\tilde{x})}
+    {t(x_{k-1})/q(\tilde{x},x_{k-1})}$.
+  \item[3)] Draw $u \sim \cU([0, 1])$; if $u \leq \rho$ then set $x_k = \tilde{x}$, otherwise
+    set $x_k = x_{k-1}$.
+  \item[4)] Set $k=k+1$ and go back to 1).
+  \end{description}
+
+  Of course, if $t$ is replaced by a different function of $x$ which is proportional to it,
+  the algorithm keeps unchanged, since $t$ only takes part in the latter in the ratio
+  $\frac{t(\tilde{x})}{t(x_{k-1})}$. Moreover,
+  if $Q$ proposes some candidates in a uniform manner (constant
+  density $q$), the candidate $\tilde{x}$ is accepted according to a ratio $\rho$
+  which reduces to the previous "natural" ratio $\frac{t(\tilde{x})}{t(x_{k-1})}$
+  of PDF. The introduction of $q$ in the ratio $\rho$ prevents from the bias of a non-uniform
+  proposition of candidates which would favor some areas of $\Omega$.
+
+  The $t$-invariance is ensured by the symmetry of the expression of $\rho$
+  ($t$-reversibility).
+
+  In practice, $Q$ is specified as a random walk ($\exists{}q_{RW}$ such that $q(x,y)=q_{RW}(x-y)$)
+  or as a independent sampling ($\exists{}q_{IS}$ such that $q(x,y)=q_{IS}(y)$),
+  or as a mixture of random walk and independent sampling.
+
+  \emph{The important property the practitioner have to keep in mind when choosing the transition
+    kernel $Q$ is the $t$-irreducibility.} Moreover, for efficient convergence, $Q$ has to be
+  chosen so as to explore quickly the whole support of $t$ without conducting to a too
+  small acceptance ratio (the ratio of accepted candidates $\tilde{x}$ ). It is usually
+  recommended that this latter ratio is about $0.2$ but such a ratio is neither
+  a warranty of efficiency, nor a substitute to a convergence diagnosis.\\
+
+  The following bibliographical references provide main starting points for further study of  this method:
+  \begin{itemize}
+  \item Robert, C.P. and Casella, G. (2004).
+    "Monte Carlo Statistical Methods" (Second Edition), Springer.
+  \item Meyn, S. and Tweedie R.L. (2009).
+    "Markov Chains ans Stochastic Stability" (Second Edition), Cambridge University Press.
+  \end{itemize}
+
+}
+{
+-
+}

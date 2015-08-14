@@ -1,0 +1,70 @@
+% Copyright (C) 2005-2015 Airbus - EDF - IMACS - Phimeca
+% Permission is granted to copy, distribute and/or modify this document
+% under the terms of the GNU Free Documentation License, Version 1.2
+% or any later version published by the Free Software Foundation;
+% with no Invariant Sections, no Front-Cover Texts, and no Back-Cover
+% Texts.  A copy of the license is included in the section entitled "GNU
+% Free Documentation License".
+\renewcommand{\filename}{docUC_InputWithData_MaxLikelihood.tex}
+\renewcommand{\filetitle}{UC : Maximum likelihood of a given probability density function }
+
+% \HeaderNNIILevel
+% \HeaderIILevel
+\HeaderIIILevel
+
+
+
+\index{Fitting Distribution! Maximum likelihood}
+
+
+The objective of this Use Case is to explicitate how to implement the evaluation of the parameters of a fitted distribution thanks to the Maximum Likelihood Principle.\\
+
+
+Details on the Maximum Likelihood  Principle may be found in the Reference Guide (\extref{ReferenceGuide}{see files Reference Guide - Step B -- Maximum Likelihood  Principle}{stepB}).\\
+
+Let us denote $(\vect{x}_1, \dots, \vect{x}_n)$ the sample, $p_{\vect{\theta}}$ the particular distribution of probability density function we want to fit to the sample, and  $\vect{\theta} \in \Theta \in \Rset^p$ its the parameter vector.\\
+
+The likelihood of the sample according to  $p_{\vect{\theta}}$ is :
+\begin{align*}
+  likelihood(\vect{x}_1, \dots, \vect{x}_n,\vect{\theta}) = \prod_{i=1}^n p_{\vect{\theta}}(\vect{x}_i)
+\end{align*}
+It may be implemented :
+\begin{itemize}
+\item either as a python function thanks to the class OpenTURNSPythonFunction, as explained in the UC.\ref{OpenTURNSPythonFunction},
+\item or thanks to the NumericalMathFunction class, as explained in the UC.\ref{NumericalMathFunction}.
+\end{itemize}
+
+The maximum likelihood estimation $\vect{\theta}_{MLE}$ is solution of the equation :
+\begin{align*}
+  \max_{\vect{\theta} \in \Theta} likelihood\, (\vect{x}_1, \dots, \vect{x}_n,\vect{\theta})
+\end{align*}
+or
+\begin{align*}
+  \max_{\vect{\theta} \in \Theta}  \log likelihood\, (\vect{x}_1, \dots, \vect{x}_n,\vect{\theta})
+\end{align*}
+
+
+The following UC illustrates the example of a Normal distribution, where $(\mu, \sigma) \in \Rset \times \Rset^+$ are defined through the maximum likelihood principle, where the log of the likelihood funciton  is implemented thanks to the OpenTURNSPythonFunction class.\\
+
+Note that to avoid underflow problems with the log of the likelihood function, it is necessary to bound the probability density function to a min value \textit{eps}, here equal to $1.0e-16$. The example illustrates how to proceed.\\
+
+
+\requirements{
+  \begin{description}
+  \item[$\bullet$] a sample of data : {\itshape sample}
+  \item[type:]  a NumericalSample
+  \end{description}
+}
+             {
+               \begin{description}
+               \item[$\bullet$] the log likelihood function in the openturns library : {\itshape myLogLikelihoodOT}
+               \item[type:] a NumericalMathFunction
+               \item[$\bullet$] the  MLE of $(\mu, \sigma)$ : {\itshape optimizer}
+               \item[type:] a NumericalPoint
+               \end{description}
+             }
+
+             \textspace\\
+             Python script for this UseCase :
+
+             \inputscript{script_docUC_InputWithData_MaxLikelihood}

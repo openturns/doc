@@ -1,0 +1,69 @@
+% Copyright (C) 2005-2015 Airbus - EDF - IMACS - Phimeca
+% Permission is granted to copy, distribute and/or modify this document
+% under the terms of the GNU Free Documentation License, Version 1.2
+% or any later version published by the Free Software Foundation;
+% with no Invariant Sections, no Front-Cover Texts, and no Back-Cover
+% Texts.  A copy of the license is included in the section entitled "GNU
+% Free Documentation License".
+\renewcommand{\filename}{docUC_MinMax_Evaluation.tex}
+\renewcommand{\filetitle}{UC : Min/Max research  from an design of experiments  and sensitivity analysis}
+
+% \HeaderNNIILevel
+% \HeaderIILevel
+\HeaderIIILevel
+
+\index{Min-Max!}
+\index{Sensitivity Analysis!Min-Max}
+
+
+The objective of this Use Case is to evaluate the min and max values of the output variable of interest from a numerical sample and to evaluate the gradient of the limit state function defining the output variable of interest at a particular point. \\
+
+Details on design of experiments   may be found in the Reference Guide (\extref{ReferenceGuide}{see files Reference Guide - Step C -- Min-Max approach using Design of Experimentss }{stepC}).\\
+
+The numerical sample of the output variable of interest may be obtained as follows :
+\begin{itemize}
+\item create an design of experiments  of the input random vector : deterministic scheme (see Use Case \ref{determExpPlane}) or random scheme (see Use Case \ref{randomExpPlane}), mixed deterministic/random scheme (see Use Case \ref{determRandomExpPlane}), or by re-using a previously elaborated design of experiments  (see Use Case \ref{fixedExpPlane}),
+\item evaluate the output variable of interest on each point of the design of experiments .
+\end{itemize}
+
+The example here is the limit state function {\itshape poutre} defined in Eq.(\ref{equatPoutre}) with the random input vector $(E,F,L,I)$.\\
+
+\requirements{
+  \begin{description}
+  \item[$\bullet$] the numerical sample of the input random vector : {\itshape inputSample}
+  \item[type:] NumericalSample
+  \item[$\bullet$] the limit state function : {\itshape poutre}
+  \item[type:] NumericalMathFunction
+  \item[$\bullet$] the input vector where gradient is evaluated : {\itshape input0}
+  \item[type:] NumericalPoint
+  \end{description}
+}
+             {
+               \begin{description}
+               \item[$\bullet$] the min and max of the output variable of interest
+               \item[type:] NumericalPoint
+               \item[$\bullet$] the deterministic gradient of the output variable of interest at $input_0$
+               \item[type:] Matrix
+               \end{description}
+             }
+
+             \textspace\\
+             Python script for this UseCase :
+
+             \begin{lstlisting}
+               # Generate the  values of the output variable of interest
+               # 'output = poutre(input)' corresponding to 'inputSample'
+               outputSample = poutre(inputSample)
+               print "outputSample = ", outputSample
+
+               # Get the min and the max of the output variable, component by component
+               min = outputSample.getMin()
+               max = outputSample.getMax()
+               print  "max =  ", max
+               print  "min =  ", min
+
+               # Get the gradient of 'poutre' with respect to 'input'
+               # at a particular point 'input0'
+               sensitivity = poutre.gradient(input0)
+               print "sensitivity at point input0 = ", sensitivity
+             \end{lstlisting}

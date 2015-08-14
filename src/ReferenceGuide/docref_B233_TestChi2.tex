@@ -1,0 +1,81 @@
+% Copyright (C) 2005-2015 Airbus - EDF - IMACS - Phimeca
+% Permission is granted to copy, distribute and/or modify this document
+% under the terms of the GNU Free Documentation License, Version 1.2
+% or any later version published by the Free Software Foundation;
+% with no Invariant Sections, no Front-Cover Texts, and no Back-Cover
+% Texts.  A copy of the license is included in the section entitled "GNU
+% Free Documentation License".
+\renewcommand{\etapemethodo}{B}
+\renewcommand{\nomfichier}{docref_B233_TestChi2}
+\renewcommand{\titrefiche}{Chi-squared test for independence}
+
+\Header
+
+\MathematicalDescription{
+
+  \underline{\textbf{Goal}} \vspace{2mm}
+
+  This method deals with the parametric modelling of a probability distribution for a random vector $\vect{X} = \left( X^1,\ldots,X^{n_X} \right)$. We seek here to detect possible dependencies that may exist between two components $X^i$ and $X^j$. In response to this, OpenTURNS offers the use of the $\chi^2$ test for Independence for discrete probability distributions.
+  \vspace{2mm}
+
+  \underline{\textbf{Principle}} \vspace{2mm}
+
+  As we are considering discrete distributions, the possible values for $X^i$ and $X^j$ respectively belong to the discrete sets $\cE_i$  and $\cE_j$. The $\chi^2$ test of independence can be applied when we have a sample consisting of $N$ pairs $\left\{ (x^i_1,x^j_1),(x^i_2,x^j_2),(x^i_N,x^j_N) \right\}$. We denote:
+  \begin{itemize}
+  \item $n_{u,v}$ the number of pairs in the sample such that $x^i_k = u$ and $x^j_k = v$,
+  \item $n^i_{u}$ the number of pairs in the sample such that $x^i_k = u$,
+  \item $n^j_{v}$ the number of pairs in the sample such that $x^j_k = v$.
+  \end{itemize}
+
+  The test thus uses the quantity denoted  $\widehat{D}_N^2$:
+  \begin{align*}
+    \widehat{D}_N^2 = \sum_{u \in \cE_i}\sum_{v\in \cE_2}\frac{\left(p_{u,v} - p^j_{v}p^i_{u}\right)^2}{p^i_{u}p^j_{v}}
+  \end{align*}
+  where:
+  \begin{align*}
+    p_{u,v} = \frac{n_{u,v}}{N},\ p^i_{u} =  \frac{n^i_{u}}{N},\ p^j_{v} =  \frac{n^j_{v}}{N}
+  \end{align*}
+
+  The probability distribution of the distance $\widehat{D}_N^2$ is asymptotically known (i.e. as the size of the sample tends to infinity). If $N$ is sufficiently large, this means that for a probability $\alpha$, one can calculate the threshold (critical value) $d_\alpha$ such that:
+  \begin{itemize}
+  \item if $\widehat{D}_N>d_{\alpha}$, we conclude, with the risk of error $\alpha$, that a dependency exists between $X^i$ and $X^j$,
+  \item if $\widehat{D}_N \leq d_{\alpha}$, the independence hypothesis is considered acceptable.
+  \end{itemize}
+
+  An important notion is the so-called "$p$-value" of the test. This quantity is equal to the limit error probability $\alpha_\textrm{lim}$ under which the independence hypothesis is rejected. Thus, independence is assumed if and only if $\alpha_\textrm{lim}$ is greater than the value $\alpha$ desired by the user. Note that the higher $\alpha_\textrm{lim} - \alpha$, the more robust the decision.
+
+}
+{
+  This method is also referred to in the literature as the $\chi^2$ test of contingency.
+}
+
+
+\Methodology{
+  The $\chi^2$ independence test is used in step B "Quantifying Sources of Uncertainty". It enables the existence of a dependency between two components $X^i$ and $X^j$ of the input vector $\underline{X}$, defined in step A "Specifying Criteria and the Case Study", to be verified.
+
+  {\bf Input data:}\\
+  Two samples $\left\{ x^i_1,\ldots,x^i_N \right\}$  and $\left\{ x^j_1,\ldots,x^j_N \right\}$  of variables $X^i$ and $X^j$, each pair $\left( x^i_k,x^j_k \right)$  corresponding to a simultaneous sampling of the two variables
+
+  {\bf Parameters:}\\
+  a probability $\alpha$ taking values strictly between 0 and 1, defining the risk of permissible decision error (significance level)
+
+  {\bf Outputs:}\\
+  \textit{Result}: Binary variable specifying whether the hypothesis of independence is rejected (0) or not (1) \\
+  $\alpha_\textrm{lim}$ : $p$-value of the test
+}
+{
+  The $\chi^2$ test of independence can be applied when the two variables of study are discrete. Its use for continuous distributions is only possible by means of an arbitrary discretisation of possible values of $X$, a high source of potential error.
+
+  On the other hand, no hypothesis is made in the form of the relationship between the two tested variables.
+  Readers interested in the detection of dependencies between two continuous variables are referred to \otref{docref_B231_Pearson}{Pearson's Test} and \otref{docref_B232_Spearman}{Spearman's test} in the reference documentation.\\
+
+  The following bibliographical references provide main starting points to further study of this method:
+  \begin{itemize}
+  \item Saporta, G. (1990). "Probabilités, Analyse de données et Statistique", Technip
+  \item Dixon, W.J. \& Massey, F.J. (1983) "Introduction to statistical analysis (4th ed.)", McGraw-Hill
+    % \item NIST/SEMATECH e-Handbook of Statistical Methods, http://www.itl.nist.gov/div898/handbook/
+    % \item D'Agostino, R.B. and Stephens, M.A. (1986). "Goodness-of-Fit Techniques", Marcel Dekker, Inc., New York.
+  \item Bhattacharyya, G.K., and R.A. Johnson, (1997). "Statistical Concepts and Methods", John Wiley and Sons, New York.
+  \item Sprent, P., and Smeeton, N.C. (2001). "Applied Nonparametric Statistical Methods -- Third edition", Chapman \& Hall
+    % \item Burnham, K.P., and Anderson, D.R (2002). "Model Selection and Multimodel Inference: A Practical Information Theoretic Approach", Springer
+\end{itemize}}

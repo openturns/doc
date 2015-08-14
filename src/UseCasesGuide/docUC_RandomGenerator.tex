@@ -1,0 +1,69 @@
+% Copyright (C) 2005-2015 Airbus - EDF - IMACS - Phimeca
+% Permission is granted to copy, distribute and/or modify this document
+% under the terms of the GNU Free Documentation License, Version 1.2
+% or any later version published by the Free Software Foundation;
+% with no Invariant Sections, no Front-Cover Texts, and no Back-Cover
+% Texts.  A copy of the license is included in the section entitled "GNU
+% Free Documentation License".
+\renewcommand{\filename}{docUC_RandomGenerator.tex}
+\renewcommand{\filetitle}{UC : Parametrisation of the Random Generator}
+
+% \HeaderNNIILevel
+\HeaderIILevel
+% \HeaderIIILevel
+
+\label{randomGenerator}
+
+
+\index{Random Generator}
+
+The seed of the random generator is automatically initialized to 0. It means that as soon as a the openturns session is launched, the sequence of random values generated within $[0,1]$ is the same one : if a script is launched several times, within different openturns sessions, the same results will be obtained. \\
+
+
+Details on the random generator may be found in the Reference Guide (\extref{ReferenceGuide}{see files Reference Guide - Step B -- Uniform Random Generator}{stepB}).\\
+
+
+Before any simulation, it is possible to initialise differently than the value by default or get the state of the random generator. \\
+To initialize the random generator state, it is possible :
+\begin{itemize}
+\item to use an easy procedure thanks to the method {\itshape SetSeed()}  parameterized with an integer in $[0, 2^{32}-1]$ :
+  \begin{itemize}
+  \item to obtain a reproductible sequence of generated random values, we need to explicitely give a deterministic integer,
+  \item to obtain a non reproductible sequence of generated random values (it means a new one each time the openturns session is launched), we can give a random integer, determined thanks to the time of the day or the number of the current python session.
+  \end{itemize}
+\item to specify a complete state of the random generator, usually previously obtained thanks to the {\itshape GetState()} method.
+\end{itemize}
+
+
+\begin{lstlisting}
+  # INITIALIZE THE RANDOM GENERATOR STATE
+
+  # Case 1 : reproductible sequence of generated random vector
+  # the seed is reproductible
+
+  # Initialise the state of the random generator
+  # thanks to the fonctionality SetSeed(n) where n is an UnsignedLong in [0, 2^(32)-1]
+  # which enables an easy initialisation for the user
+  RandomGenerator.SetSeed(77)
+
+  # or by specifying a complete state of the random generator : particularState
+  # coming from a previous particularState = RandomGenerator.GetState() :
+  RandomGenerator.SetState(particularState)
+
+  # Case 2 : non reproductible sequence of generated random vector
+  # the seed is not reproductible
+
+  # Example 1 : the number of the openturns python session
+  from os import getpid
+  RandomGenerator.SetSeed(getpid())
+
+  # Example 2 : times of the moment
+  from os import times
+  RandomGenerator.SetSeed(int(100*times()[4]))
+
+
+  # GET THE RANDOM GENERATOR STATE
+
+  # Get the complete state of the random generator before simulation
+  randomGeneratorStateBeforeRandomExperiment = RandomGenerator.GetState()
+\end{lstlisting}

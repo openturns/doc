@@ -1,0 +1,70 @@
+% Copyright (C) 2005-2015 Airbus - EDF - IMACS - Phimeca
+% Permission is granted to copy, distribute and/or modify this document
+% under the terms of the GNU Free Documentation License, Version 1.2
+% or any later version published by the Free Software Foundation;
+% with no Invariant Sections, no Front-Cover Texts, and no Back-Cover
+% Texts.  A copy of the license is included in the section entitled "GNU
+% Free Documentation License".
+\renewcommand{\nomfichier}{docref_Cprime212_SobolIndices}
+\extanchor{sobolindices}
+\renewcommand{\titrefiche}{Sensivity analysis using Sobol indices}
+
+\Header
+
+\MathematicalDescription{
+  \underline{\textbf{Goal}} \vspace{2mm}
+
+  This method deals with analysing the influence the random vector $\vect{X} = \left( X^1,\ldots,X^{n_X} \right)$ has on a random variable $Y^k$ which is being studied for uncertainty. Here we attempt to evaluate the part of variance of $Y^k$ due to the different components $X^i$. \vspace{2mm}
+
+  \underline{\textbf{Principle}} \vspace{2mm}
+
+  The estimators for the mean of  $ m_{Y^j} $ and the standard deviation $\sigma$ of $Y^k$ can be obtained from a first sample, as Sobol indices estimation requires two samples of the input variables : $(X^1,\ldots,X^{n_X})$, that is two sets of $N$ vectors of dimension $n_X$ $(x_{11}^{(1)},\ldots,x_{1n_X})^{(1)}$,\ldots,$(x_{N^1}^{(1)},\ldots,x_{Nn_X}^{(1)})$ and $(x_{11}^{(2)},\ldots,x_{1n_X})^{(2)}$,\ldots,$(x_{N^1}^{(2)},\ldots,x_{Nn_X}^{(2)})$
+
+  The estimation of sensivity indices for first order consists in estimating the quantity
+  \begin{displaymath}
+    V_i = \Var{\Expect{ Y^k \vert X_i}} = \Expect{ \Expect{Y^k \vert X_i}^2}  - \Expect{\Expect{ Y^k \vert X_i }} ^2 = U_i - \Expect{Y^k} ^2
+  \end{displaymath}
+
+  Sobol proposes to estimate the quantity $U_i = \Expect{\Expect{ Y^k \vert X_i}^2}$ by swaping every variables in the two samples except the variable $X_i$ between the two calls of the function :
+  \begin{displaymath}
+    \hat U_i = \frac{1}{N}\sum_{k=1}^N{ Y^k\left( x_{k1}^{(1)},\dots, x_{k(i-1)}^{(1)},x_{ki}^{(1)},x_{k(i+1)}^{(1)},\dots,x_{kn_X}^{(1)}\right) \times Y^k\left( x_{k1}^{(2)},\dots,x_{k(i-1)}^{(2)},x_{ki}^{(1)},x_{k(i+1)}^{(2)},\dots,x_{kn_X}^{(2)}\right)}
+  \end{displaymath}
+
+  Then the $n_X$ first order indices are estimated by
+  \begin{displaymath}
+    \hat S_i = \frac{\hat V_i}{\hat \sigma^2} = \frac{\hat U_i - m_{Y^k}^2}{\hat \sigma^2}
+  \end{displaymath}
+
+  For the second order, the two variables $X_i$ and $X_j$ are not swapped to estimate $U_{ij}$, and so on for higher orders, assuming that order $< n_X$.
+  Then the $\binom {n_X}{2}$ second order indices are estimated by
+  \begin{displaymath}
+    \hat S_{ij} = \frac{\hat V_{ij}}{\hat \sigma^2} = \frac{\hat U_{ij} - m_{Y^k}^2 - \hat V_i - \hat V_j}{\hat \sigma^2}
+  \end{displaymath}
+
+  For the $n_X$ total order indices $T_i$, we only swap the variable $X_i$ between the two samples.
+}
+{
+  --}
+
+\Methodology{
+  The results produced as output of this method are the estimated relative (indices values belong to $\left[0; 1\right]$ ) variance contributions of subsets of variables  $\hat S_i, \hat S_{ij}, \hat T_i$ that the user may use to order the variables $X^i$ hierarchically. \\
+  This method of hierarchical ordering is particularly useful :
+  \begin{itemize}
+  \item when the study of uncertainty deals with the central dispersion of the variable of interest $Y^j$ and not with its extreme values.
+  \item when we have no particular hypothesis on the model other than the independance of the input variables $X_i$.
+  \item when the size $N$ of both samples is high enough to provide a 'reasonable' picture of reality (the law of large numbers assures this method will show a $N^{-\frac{1}{2}}$ convergence order).
+  \end{itemize}
+}
+            {
+
+
+              The following references provide an interesting bibliographic starting point to further study of the method described here:
+              \begin{itemize}
+              \item Saltelli, A. (2002). ``Making best use of model evaluations to compute sensitivity indices", Computer Physics Communication, 145, 580-297
+              \end{itemize}
+            }
+
+
+            \Example{
+              --
+            }

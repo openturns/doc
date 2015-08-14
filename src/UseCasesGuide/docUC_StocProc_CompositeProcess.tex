@@ -1,0 +1,98 @@
+% Copyright (C) 2005-2015 Airbus - EDF - IMACS - Phimeca
+% Permission is granted to copy, distribute and/or modify this document
+% under the terms of the GNU Free Documentation License, Version 1.2
+% or any later version published by the Free Software Foundation;
+% with no Invariant Sections, no Front-Cover Texts, and no Back-Cover
+% Texts.  A copy of the license is included in the section entitled "GNU
+% Free Documentation License".
+\renewcommand{\filename}{docUC_StocProc_CompositeProcess.tex}
+\renewcommand{\filetitle}{UC : Trend addition, Box Cox transformation, Composite process}
+
+% \HeaderNNIILevel
+% \HeaderIILevel
+\HeaderIIILevel
+
+\label{UCprocess}
+
+
+\index{Stochastic Process!Composite Process}
+
+The objective here is to create a process $Y$ as the image through a dynamical function $f_{dyn}$ of another process $X$:
+\begin{align*}
+  Y=f_{dyn}(X)
+\end{align*}
+
+{\bf General case}:\\
+In the general case,  $X: \Omega \times\cD \rightarrow \Rset^d$ is a multivariate stochastic process of dimension $d$ where $\cD \in \Rset^n$,   $Y: \Omega \times \cD' \rightarrow \Rset^q$ a multivariate stochastic process of dimension $q$  where $\cD' \in \Rset^p$ and $f_{dyn}:\cD \times \Rset^d \rightarrow \cD' \times \Rset^q$ and $f_{dyn}$ is defined in (\ref{dynFct}).
+
+OpenTURNS builds the transformed process $Y$ thanks to the object \emph{CompositeProcess} from the data: $f_{dyn}$ and the process $X$.
+
+OpenTURNS proposes two kinds of dynamical function: the spatial functions  defined in (\ref{spatFunc}) and the temporal functions defined in (\ref{tempFunc}).\\
+
+{\bf Trend modifications}:\\
+Very often, we have to remove a trend from a process or to add it. If we note $f_{trend}: \Rset^n \rightarrow \Rset^d$ the  function modelling a trend, then the dynamical function which consists in adding the trend to a process is the temporal function  $f_{temp}: \cD \times \Rset^d \rightarrow \Rset^n \times \Rset^d$ defined by:
+\begin{align}\label{trendTempFunc}
+  f_{temp}(\vect{t}, \vect{x})=(\vect{t},  \vect{x} +  f_{trend}(\vect{t}))
+\end{align}
+
+
+OpenTURNS enables to directly convert the numerical math function $f_{trend}$ into the temporal function $f_{temp}$ thanks to  the \emph{TrendTranform} object which maps $f_{trend}$ into  the temporal function $f_{temp}$.\\
+
+Then, the process $Y$ is built with the object \emph{CompositeProcess} from the data: $f_{temp}$ and the process $X$ such that:
+\begin{align*}
+  \forall \omega \in \Omega, \forall \vect{t} \in \cD, \quad Y(\omega, \vect{t}) = X(\omega, \vect{t}) + f_{trend}(\vect{t})
+\end{align*}
+\vspace*{0.1cm}
+
+{\bf Box Cox transformation}: \\
+If the transformation of the process $X$ into $Y$ corresponds to the Box Cox transformation  $f_{BoxCox}: \Rset^d \rightarrow \Rset^d$  which transforms $X$ into a process $Y$ with stabilized variance, then the corresponding dynamical function is the spatial function $f_{spat}: \cD \times \Rset^d \rightarrow \cD \times \Rset^d$ defined by:
+\begin{align}\label{spatFuncBC}
+  f_{spat}(\vect{t}, \vect{x})=(\vect{t},f_{BoxCox}(\vect{x}))
+\end{align}
+
+OpenTURNS enables to directly convert the numerical math function $f_{BoxCox}$ into the spatial function $f_{spat}$ thanks to the  \emph{SpatialFunction} object. \\
+
+Then, the process $Y$ is built with the object \emph{CompositeProcess} from the data: $f_{spat}$ and the process $X$ such that:
+\begin{align*}
+  \forall \omega \in \Omega, \forall \vect{t} \in \cD, \quad Y(\omega, \vect{t}) = f_{BoxCox}(X(\omega, \vect{t}))
+\end{align*}
+\vspace*{0.1cm}
+
+
+\requirements{
+  \begin{description}
+  \item[$\bullet$] a stochastic process : {\itshape myXtProcess}
+  \item[type:]  Process
+  \end{description}
+
+  \begin{description}
+  \item[$\bullet$] a dynamical function : {\itshape myDynFct}
+  \item[type:]  DynamicalFunction
+  \end{description}
+
+  \begin{description}
+  \item[$\bullet$] the trend function : {\itshape fTrend}
+  \item[type:]  NumericalMathFunction
+  \end{description}
+}
+{
+  \begin{description}
+  \item[$\bullet$] the trend transformation : {\itshape fTemp}
+  \item[type:]  TrendTransform
+  \end{description}
+
+  \begin{description}
+  \item[$\bullet$] the Box Cox transformation : {\itshape fSpat}
+  \item[type:]  BoxCoxTransform
+  \end{description}
+
+  \begin{description}
+  \item[$\bullet$] some transformed processes : {\itshape myYtProcess, myYtProcess\_trend, myYtProcess\_boxcox}
+  \item[type:]  CompositeProcess
+  \end{description}
+}
+
+\textspace\\
+Python script for this Use Case :
+
+\inputscript{script_docUC_StocProc_CompositeProcess}

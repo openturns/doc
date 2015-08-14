@@ -1,0 +1,87 @@
+% Copyright (C) 2005-2015 Airbus - EDF - IMACS - Phimeca
+% Permission is granted to copy, distribute and/or modify this document
+% under the terms of the GNU Free Documentation License, Version 1.2
+% or any later version published by the Free Software Foundation;
+% with no Invariant Sections, no Front-Cover Texts, and no Back-Cover
+% Texts.  A copy of the license is included in the section entitled "GNU
+% Free Documentation License".
+\renewcommand{\filename}{docUC_ThresholdExceedance_FORMAlgorithm.tex}
+\renewcommand{\filetitle}{UC : Creation of an analytical algorithm : FORM/SORM}
+
+% \HeaderNNIILevel
+% \HeaderIILevel
+\HeaderIIILevel
+
+\label{analyticalRes}
+
+\index{Threshold Probability!FORM}
+\index{Threshold Probability!SORM}
+\index{Optimization!Cobyla}
+\index{Optimization!AbdoRacwitz}
+\index{Optimization!SQP}
+
+
+The objective of this Use Case is to create an analytical algorithm FORM or SORM, in order to evaluate in fine the event probability from the FORM or SORM  method and all the associated reliability indicators.\\
+
+
+
+
+Details on FORM algorithm may be found in the Reference Guide (\extref{ReferenceGuide}{see files Reference Guide - Step C -- FORM}{stepC}).\\
+
+
+
+Be carefull, the ouput vector of interest, defined in the Event, must be of type {\itshape CompositeRandomVector }, which means defined from the relation : $output = limitStateFunction(input)$.\\
+
+The possible constraints algorithms  in OpenTURNS are :
+\begin{itemize}
+\item Abdo-Rackwitz,
+\item Cobyla, which doesn't require the gradient evaluation of the limit state function,
+\item SQP.
+\end{itemize}
+
+The convergence is controlled by the evaluation of the following errors, evaluated in the standard space:
+\begin{itemize}
+ \item the absolute error which is the distance between two successive iterates:
+\begin{align*}
+\varepsilon_{abs} = ||\vect{u}_{n+1}-\vect{u}_n||
+\end{align*}
+ \item the constraint error, which is the  absolute value of the constraint function minus the threshold $s$:
+\begin{align*}
+\varepsilon_{cons} = |f(\vect{u}_{n})-s|
+\end{align*} 
+ \item the relative error, which is the relative distance between two successive iterates (with regards the second iterate): 
+\begin{align*}
+\displaystyle \varepsilon_{rel} = \frac{||\vect{u}_{n+1}-\vect{u}_n||}{||\vect{u}_{n+1}||}
+\end{align*}
+ \item the residual error, which is the orthogonality error (lack of orthogonality between the vector linking the Center and the Iterate and the constraint surface):
+\begin{align*}
+\displaystyle \varepsilon_{res} = <\vect{u}_{n}, \nabla f(\vect{u}_{n})>
+\end{align*}
+\end{itemize}
+The algorithm has  converged if all the final error values are less than the maximum value specified by the User or if the algorithm has reached the maximum number of iterations fixed by the User.\\
+
+
+It is often usefull to initialize the optimization of the algorithm with the mean of the input random vector, obtained thanks to the method \textit{getMean()}.\\
+
+
+\requirements{
+  \begin{description}
+  \item[$\bullet$] the event in physical space : {\itshape myEvent}
+  \item[type:] Event
+  \item[$\bullet$] the  distribution of the input random vector : {\itshape inputDist}
+  \item[type:] Event
+  \end{description}
+}
+             {
+               \begin{description}
+               \item[$\bullet$] the FORM algorithm : {\itshape myFORMalgo}
+               \item[type:] FORM
+               \item[$\bullet$] the SORM algorithm : {\itshape mySORMalgo}
+               \item[type:] SORM
+               \end{description}
+             }
+
+             \textspace\\
+             Python  script for this UseCase :
+
+             \inputscript{script_docUC_ThresholdExceedance_FORMAlgorithm}

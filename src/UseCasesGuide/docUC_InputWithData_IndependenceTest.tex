@@ -1,0 +1,73 @@
+% Copyright (C) 2005-2015 Airbus - EDF - IMACS - Phimeca
+% Permission is granted to copy, distribute and/or modify this document
+% under the terms of the GNU Free Documentation License, Version 1.2
+% or any later version published by the Free Software Foundation;
+% with no Invariant Sections, no Front-Cover Texts, and no Back-Cover
+% Texts.  A copy of the license is included in the section entitled "GNU
+% Free Documentation License".
+\renewcommand{\filename}{docUC_InputWithData_IndependenceTest.tex}
+\renewcommand{\filetitle}{UC : Are two scalar samples independent : ChiSquared test, Pearson test, Spearman test}
+
+% \HeaderNNIILevel
+% \HeaderIILevel
+\HeaderIIILevel
+
+
+
+\index{Independence Test!ChiSquared test}
+\index{Independence Test!Pearson test}
+\index{Independence Test!Spearman test}
+
+The objective of this Use Case is to decide whether two samples are independent or not.\\
+
+
+
+To help the decision, OpenTURNS proposes the following tests :
+\begin{itemize}
+\item the ChiSquared test : it tests if both scalar samples (discrete ones only) are independent.\\
+  If $n_{ij}$ is the number of values of the sample $i=(1,2)$ in the modality $1 \leq j \leq m$, $\displaystyle n_{i.} = \sum_{j=1}^m n_{ij}$ $\displaystyle n_{.j} = \sum_{i=1}^2 n_{ij}$, and the ChiSquared test evaluates the decision variable :
+  \begin{align*}
+    D^2 = \displaystyle \sum_{i=1}^2 \sum_{j=1}^m \frac{( n_{ij} - \frac{n_{i.} n_{.j}}{n} )^2}{\frac{n_{i.} n_{.j}}{n}}
+  \end{align*}
+  which tends towards the $\chi^2(m-1)$ distribution. The hypothesis of independence is rejected if $D^2$ is too high (depending on the p-value threshold).
+
+\item the Pearson test : it tests if there exists a linear relation between two scalar samples which form a gaussian vector (which is equivalent to have a linear correlation coefficient not equal to zero). \\
+  If both samples are $\vect{x} = (x_i)_{1 \leq i \leq n}$ and $\vect{y} = (y_i)_{1 \leq i \leq n}$, and $\bar{x} = \displaystyle \frac{1}{n}\sum_{i=1}^n x_i$ and $\bar{y} = \displaystyle \frac{1}{n}\sum_{i=1}^n y_i$, the Pearson test evaluates the decision variable :
+  \begin{align*}
+    D = \displaystyle \frac{\sum_{i=1}^n (x_i - \bar{x})(y_i - \bar{y})}{\sqrt{\sum_{i=1}^n (x_i - \bar{x})^2\sum_{i=1}^n (y_i - \bar{y})^2}}
+  \end{align*}
+  The variable $D$ tends towards a $\chi^2(n-2)$, under the hypothesis of normality of both samples. The hypothesis of a linear coefficient equal to 0 is rejected (which is equivalent to the independence of the samples) if D is too high (depending on the p-value threshold).
+
+\item the Spearman test : it tests if there exists a monotonous relation between two scalar samples.\\
+  If both samples are $\vect{x} = (x_i)_{1 \leq i \leq n}$ and $\vect{y}= (y_i)_{1 \leq i \leq n}$,, the Spearman test evaluates the decision variable :
+  \begin{align*}
+    D = \displaystyle 1-\frac{6\sum_{i=1}^n (r_i - s_i)^2}{n(n^2-1)}
+  \end{align*}
+  where $r_i = rank(x_i)$ and  $s_i = rank(y_i)$. $D$ is such that $\sqrt{n-1}D$ tends towards the gaussian (0,1) distribution.
+\end{itemize}
+
+
+
+
+Details on the independence tests  may be found in the Reference Guide (\extref{ReferenceGuide}{see files Reference Guide - Step B --Chi-squared test for independence, Step B -- Pearson correlation test, Step B -- Spearman correlation test}{stepB}).\\
+
+
+\requirements{
+  \begin{description}
+  \item[$\bullet$] two continuous scalar numerical samples of dimension 1 : {\itshape contSample1, contSample2 }
+  \item[type:]  NumericalSample
+  \item[$\bullet$] two discrete scalar numerical sample {\itshape discSample1, discSample2}
+  \item[type:] NumericalSample
+  \end{description}
+}
+             {
+               \begin{description}
+               \item[$\bullet$] tests results : {\itshape resultChiSquared, resultPearson, resultSpearman}
+               \item[type:] TestResult
+               \end{description}
+             }
+
+             \textspace\\
+             Python script for this UseCase :
+
+             \inputscript{script_docUC_InputWithData_IndependenceTest}

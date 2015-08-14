@@ -1,0 +1,819 @@
+\ProvidesPackage{otcommon}
+
+\usepackage{ifpdf}
+\usepackage{listings}
+\usepackage{color}
+\usepackage{refcount}
+\usepackage{xr-hyper}
+\RequirePackage[pdftex, bookmarks, colorlinks=true, urlcolor=green, linkcolor=red, filecolor=blue, citecolor=magenta]{hyperref}
+
+\setlength{\textwidth}{18.5cm}
+\setlength{\textheight}{23cm}
+\setlength{\hoffset}{-1.04cm}
+\setlength{\voffset}{-1.54cm}
+\setlength{\oddsidemargin}{0cm}
+\setlength{\evensidemargin}{0cm}
+\setlength{\topmargin}{0cm}
+\setlength{\headheight}{1cm}
+\setlength{\headsep}{0.5cm}
+\setlength{\marginparsep}{0cm}
+\setlength{\marginparwidth}{0cm}
+\setlength{\footskip}{1cm}
+\setlength{\parindent}{0cm}
+
+
+
+\newcommand{\inputscript}{
+  \begingroup
+  % hack to allow _ in caption
+  \catcode`_=12 \docodelstpdf
+}
+
+\newcommand{\docodelstpdf}[1]{%
+  \ifpdf
+  \lstset{caption=\texttt{#1.py}}
+  \else
+  \href{../../examples/#1.py}{#1.py}
+  \fi
+  \input{Scripts/#1.part}%
+  \endgroup
+}
+
+
+\ifpdf
+\newcommand{\extanchor}[1]{
+  \label{#1}
+}
+\else
+% define a named anchor for html (will produce sthg like <span id="youranchorname"/>
+\newcommand{\extanchor}[1]{
+  \hypertarget{#1}{}
+}
+\fi
+
+% point to an external anchor specified with extanchor
+% i.e: \extref{ReferenceGuide}{see files Reference Guide - Step C' -- Sensitivity analysis using Sobol indices}{sobolindices}
+\ifpdf
+% not all viewers can open those links
+% -> \href[page=15]{OpenTURNS_ReferenceGuide.pdf}{see files Reference Guide - Step C' -- Sensitivity analysis using Sobol indices}
+\makeatletter
+\newcommand{\extref}[3]{
+  % Optional argument \href[page] has been added in hyperref v6.81m, which is not yet installed on autobuilder
+  \ifx\Hy@href@page\@undefined
+  \href{OpenTURNS_#1.pdf}{#2}
+  \else
+  \href[page=\getpagerefnumber{#1-#3}]{OpenTURNS_#1.pdf}{#2}
+  \fi
+}
+\makeatother
+\else
+% -> \href{../ReferenceGuide/OpenTURNS_ReferenceGuide.xhtml\#sobolindices}{see files Reference Guide - Step C' -- Sensitivity analysis using Sobol indices}
+\newcommand{\extref}[3]{
+  \href{../#1/OpenTURNS_#1.xhtml\##3}{#2}
+}
+\fi
+
+
+% Les liens hypertextes
+\newcommand{\otrefext}[2]{
+  {
+    \!\!\!\![\href{#1.pdf}{\underline{#2}}]\!\!\!\!
+  }
+}
+\newcommand{\otref}[2]
+{
+  {
+    \!\!\!\![\hyperlink{#1}{\underline{#2}}]\!\!\!\!
+  }
+}
+
+\newcommand{\etapemethodo}{?}
+\newcommand{\nomfichier}{?}
+\newcommand{\titrefiche}{?}
+
+% Headers
+\newcommand{\Header}{
+  {
+    \hypertarget{\nomfichier}{} \label{\nomfichier}
+    \subsubsection{
+      {\large Step \etapemethodo \hspace{2mm} -- \titrefiche }
+    }
+  } % protection
+}
+
+% Head for Use Cases files at third level
+\newcommand{\HeaderIIILevel}{
+  {
+    \hypertarget{\filename}{} \label{\filename}
+    \subsubsection{\filetitle}
+  } % protection
+} % Header
+
+% Head for Use Cases files at second level
+\newcommand{\HeaderIILevel}{
+  {
+    \hypertarget{\filename}{} \label{\filename}
+    \subsection{\filetitle}
+  } % protection
+} % Header
+
+% Head for Use Cases files at not numbered second level
+\newcommand{\HeaderNNIILevel}{
+  {
+    \hypertarget{\filename}{} \label{\filename}
+    \subsection*{
+      \filetitle
+    }
+    \addcontentsline{toc}{subsection}{\filetitle}
+  } % protection
+} % Header
+
+
+% Cadre demi largeur droite
+\newcommand{\HalfBlock}[1]{
+  {
+    \hspace*{0.5\textwidth}%
+    \fbox{
+      \parbox{0.475\textwidth}{
+        #1\strut
+      } % parbox
+
+    } % fbox
+  } % protection
+} % halfbloc
+
+% Cadre pleine largeur
+\newcommand{\Block}[1]{
+  {
+    \begin{framed}
+      #1\strut
+    \end{framed}
+  } % protection
+} % Block
+
+% Description mathematique
+\newcommand{\MathematicalDescription}[2]{
+  {
+    \Block{
+      \textbf{\large Mathematical description}\\[1em]
+      #1\strut\\[1em]
+      \textbf{\textit{\large Other notations}}\\[1em]
+      #2\strut
+    } % Block
+  } % protection
+} % MathematicalDescription
+
+% Syntaxe de la commande
+\newcommand{\Syntax}[2]{
+  {
+    \Block{
+      \textbf{\large Syntax}\\[1em]
+      \texttt{
+        #1\strut
+      }\\[1em] % texttt
+      #2\strut
+    } % Block
+  } % protection
+} % Syntax
+
+% OpenTURNS Methodology
+\newcommand{\Methodology}[2]{
+  {
+    \Block{
+      \textbf{\large Link with OpenTURNS methodology}\\[1em]
+      #1\strut\\[1em]
+      \textbf{\textit{\large References and theoretical basics}}\\[1em]
+      #2\strut
+    } % Block
+  } % protection
+} % Syntax
+
+% Exemples
+\newcommand{\Example}[1]{
+  {
+    \Block{
+      \textbf{\large Examples}\\[1em]
+      #1\strut
+    } % Block
+  } % protection
+} % Exemple
+
+
+% Index a function typeset with fixed-width font
+\newcommand{\indexfunction}[1]{\index{#1@\texttt{#1}}}
+
+\ifpdf
+
+\definecolor{dkgreen}{rgb}{0,0.3,0}
+\definecolor{gray}{rgb}{0.5,0.5,0.5}
+\definecolor{mauve}{rgb}{0.4,0,0.5}
+
+\lstset{
+  language=Python,
+  keywordstyle=\color{blue}\bfseries,
+  tabsize=2,
+  frame=shadowbox,
+  rulesepcolor=\color{black},
+  breaklines=true,
+  commentstyle=\color{dkgreen},
+  stringstyle=\color{mauve},
+  showspaces=false,
+  showstringspaces=false,
+  showtabs=false,
+  keywords=[1]{ARMA,
+    ARMACoefficients,
+    ARMAFactory,
+    ARMAFactoryImplementation,
+    ARMALikelihoodFactory,
+    ARMAState,
+    AbdoRackwitz,
+    AbdoRackwitzSpecificParameters,
+    AbsoluteExponential,
+    AdaptiveStrategy,
+    AdaptiveStrategyImplementation,
+    AggregatedNumericalMathEvaluationImplementation,
+    AliMikhailHaqCopula,
+    AliMikhailHaqCopulaFactory,
+    Analytical,
+    AnalyticalNumericalMathEvaluationImplementation,
+    AnalyticalNumericalMathGradientImplementation,
+    AnalyticalNumericalMathHessianImplementation,
+    AnalyticalResult,
+    ApproximationAlgorithm,
+    ApproximationAlgorithmImplementation,
+    ApproximationAlgorithmImplementationFactory,
+    ArchimedeanCopula,
+    Arcsine,
+    ArcsineFactory,
+    Axial,
+    BarPlot,
+    Basis,
+    BasisFactory,
+    BasisImplementation,
+    BasisSequence,
+    BasisSequenceFactory,
+    BasisSequenceFactoryImplementation,
+    BasisSequenceImplementation,
+    BayesDistribution,
+    Bernoulli,
+    BernoulliFactory,
+    Beta,
+    BetaFactory,
+    Binomial,
+    BinomialFactory,
+    Bisection,
+    BlendedStep,
+    BoolCollection,
+    BootstrapExperiment,
+    BoundConstrainedAlgorithm,
+    BoundConstrainedAlgorithmImplementation,
+    BoundConstrainedAlgorithmImplementationResult,
+    Box,
+    BoxCoxEvaluationImplementation,
+    BoxCoxFactory,
+    BoxCoxTransform,
+    Brent,
+    Burr,
+    BurrFactory,
+    CalibrationStrategy,
+    CalibrationStrategyCollection,
+    CalibrationStrategyImplementation,
+    CauchyModel,
+    CenteredFiniteDifferenceGradient,
+    CenteredFiniteDifferenceHessian,
+    CharlierFactory,
+    ChebychevAlgorithm,
+    Chi,
+    ChiFactory,
+    ChiSquare,
+    ChiSquareFactory,
+    Classifier,
+    ClassifierImplementation,
+    ClaytonCopula,
+    ClaytonCopulaFactory,
+    CleaningStrategy,
+    Cloud,
+    Cobyla,
+    CobylaSpecificParameters,
+    Combinations,
+    CombinatorialGenerator,
+    CombinatorialGeneratorImplementation,
+    Compact,
+    ComparisonOperator,
+    ComparisonOperatorImplementation,
+    ComplexMatrix,
+    ComplexMatrixImplementation,
+    ComplexTensor,
+    ComplexTensorImplementation,
+    ComposedCopula,
+    ComposedDistribution,
+    ComposedNumericalMathEvaluationImplementation,
+    ComposedNumericalMathFunction,
+    ComposedNumericalMathGradientImplementation,
+    ComposedNumericalMathHessianImplementation,
+    Composite,
+    CompositeDistribution,
+    CompositeProcess,
+    CompositeRandomVector,
+    ComputedNumericalMathEvaluationImplementation,
+    ComputedNumericalMathGradientImplementation,
+    ComputedNumericalMathHessianImplementation,
+    ConditionalDistribution,
+    ConditionalRandomVector,
+    ConfidenceInterval,
+    ConfidenceIntervalCollection,
+    ConstantBasisFactory,
+    ConstantNumericalMathGradientImplementation,
+    ConstantNumericalMathHessianImplementation,
+    ConstantRandomVector,
+    ConstantStep,
+    ContinuousDistribution,
+    Contour,
+    Copula,
+    CopulaCollection,
+    CopulaImplementation,
+    CorrectedLeaveOneOut,
+    CorrelationAnalysis,
+    CorrelationMatrix,
+    CovarianceMatrix,
+    CovarianceMatrixCollection,
+    CovarianceModel,
+    CovarianceModelFactory,
+    CovarianceModelFactoryImplementation,
+    CovarianceModelImplementation,
+    Curve,
+    DatabaseNumericalMathEvaluationImplementation,
+    Description,
+    DickeyFullerTest,
+    Dirac,
+    DiracFactory,
+    DirectionalSampling,
+    DirectoryList,
+    Dirichlet,
+    DirichletFactory,
+    DiscreteDistribution,
+    DistFunc,
+    Distribution,
+    DistributionCollection,
+    DistributionFactory,
+    DistributionFactoryCollection,
+    DistributionImplementation,
+    DistributionImplementationFactory,
+    Domain,
+    DomainImplementation,
+    Drawable,
+    DrawableCollection,
+    DrawableImplementation,
+    DualLinearCombinationEvaluationImplementation,
+    DualLinearCombinationGradientImplementation,
+    DualLinearCombinationHessianImplementation,
+    DynamicalFunction,
+    DynamicalFunctionImplementation,
+    EllipticalDistribution,
+    EnumerateFunction,
+    EnumerateFunctionImplementation,
+    Epanechnikov,
+    Equal,
+    EvaluationImplementation,
+    Event,
+    EventDomainImplementation,
+    EventProcess,
+    EventRandomVectorImplementation,
+    Experiment,
+    ExperimentImplementation,
+    ExpertMixture,
+    Exponential,
+    ExponentialCauchy,
+    ExponentialFactory,
+    ExponentialModel,
+    ExponentiallyDampedCosineModel,
+    FFT,
+    FFTImplementation,
+    FORM,
+    FORMResult,
+    Factorial,
+    FarlieGumbelMorgensternCopula,
+    FarlieGumbelMorgensternCopulaFactory,
+    FaureSequence,
+    Field,
+    FieldImplementation,
+    FilteringWindows,
+    FilteringWindowsImplementation,
+    FiniteDifferenceGradient,
+    FiniteDifferenceHessian,
+    FiniteDifferenceStep,
+    FiniteDifferenceStepImplementation,
+    FisherSnedecor,
+    FisherSnedecorFactory,
+    FittingAlgorithm,
+    FittingAlgorithmImplementation,
+    FittingTest,
+    FixedExperiment,
+    FixedStrategy,
+    FrankCopula,
+    FrankCopulaFactory,
+    Full,
+    FunctionalBasis,
+    FunctionalBasisImplementation,
+    FunctionalBasisProcess,
+    FunctionalChaosAlgorithm,
+    FunctionalChaosRandomVector,
+    FunctionalChaosResult,
+    Gamma,
+    GammaFactory,
+    GaussKronrod,
+    GaussKronrodRule,
+    GaussProductExperiment,
+    GeneralizedExponential,
+    GeneralizedPareto,
+    GeneralizedParetoFactory,
+    Geometric,
+    GeometricFactory,
+    GetFullMemoryUsage,
+    GetMaxFullMemoryUsage,
+    GetMaxMemoryUsage,
+    GetMemoryUsage,
+    GradientImplementation,
+    GramSchmidtAlgorithm,
+    Graph,
+    GraphCollection,
+    GraphImplementation,
+    Greater,
+    GreaterOrEqual,
+    Gumbel,
+    GumbelCopula,
+    GumbelCopulaFactory,
+    GumbelFactory,
+    HaltonSequence,
+    Hamming,
+    Hanning,
+    HaselgroveSequence,
+    HermiteFactory,
+    HermitianMatrix,
+    HermitianMatrixCollection,
+    HessianImplementation,
+    Histogram,
+    HistogramFactory,
+    HistogramPair,
+    HistogramPairCollection,
+    HistoryStrategy,
+    HistoryStrategyImplementation,
+    HyperbolicAnisotropicEnumerateFunction,
+    HypothesisTest,
+    IdentityMatrix,
+    ImportanceSampling,
+    ImportanceSamplingExperiment,
+    IndependentCopula,
+    IndicatorNumericalMathEvaluationImplementation,
+    Indices,
+    IndicesCollection,
+    IntegrationAlgorithm,
+    IntegrationAlgorithmImplementation,
+    IntegrationStrategy,
+    Interval,
+    IntervalMesher,
+    InverseBoxCoxEvaluationImplementation,
+    InverseBoxCoxTransform,
+    InverseChiSquare,
+    InverseGamma,
+    InverseNatafEllipticalCopulaEvaluation,
+    InverseNatafEllipticalCopulaGradient,
+    InverseNatafEllipticalCopulaHessian,
+    InverseNatafEllipticalDistributionEvaluation,
+    InverseNatafEllipticalDistributionGradient,
+    InverseNatafEllipticalDistributionHessian,
+    InverseNatafIndependentCopulaEvaluation,
+    InverseNatafIndependentCopulaGradient,
+    InverseNatafIndependentCopulaHessian,
+    InverseNormal,
+    InverseNormalFactory,
+    InverseRosenblattEvaluation,
+    InverseTrendEvaluationImplementation,
+    InverseTrendTransform,
+    InverseWishart,
+    JacobiFactory,
+    KDTree,
+    KFold,
+    KPermutations,
+    KPermutationsDistribution,
+    KernelMixture,
+    KernelSmoothing,
+    KissFFT,
+    KrawtchoukFactory,
+    KrigingAlgorithm,
+    LAR,
+    LHS,
+    LHSExperiment,
+    LaguerreFactory,
+    Laplace,
+    LaplaceFactory,
+    Last,
+    LeastSquaresMetaModelSelection,
+    LeastSquaresMetaModelSelectionFactory,
+    LeastSquaresStrategy,
+    LegendreFactory,
+    Less,
+    LessOrEqual,
+    LevelSet,
+    LinearBasisFactory,
+    LinearCombinationEvaluationImplementation,
+    LinearCombinationGradientImplementation,
+    LinearCombinationHessianImplementation,
+    LinearEnumerateFunction,
+    LinearLeastSquares,
+    LinearModel,
+    LinearModelFactory,
+    LinearModelTest,
+    LinearNumericalMathEvaluationImplementation,
+    LinearNumericalMathFunction,
+    LinearNumericalMathGradientImplementation,
+    LinearTaylor,
+    Log,
+    LogNormal,
+    LogNormalFactory,
+    LogUniform,
+    LogUniformFactory,
+    Logistic,
+    LogisticFactory,
+    LowDiscrepancyExperiment,
+    LowDiscrepancySequence,
+    LowDiscrepancySequenceImplementation,
+    MCMC,
+    MarginalTransformationEvaluation,
+    MarginalTransformationGradient,
+    MarginalTransformationHessian,
+    Matrix,
+    MatrixImplementation,
+    MaximumEntropyOrderStatisticsDistribution,
+    MediumSafe,
+    MeixnerDistribution,
+    MeixnerDistributionFactory,
+    MeixnerFactory,
+    Mesh,
+    MeshFactory,
+    MeshFactoryImplementation,
+    MetaModelAlgorithm,
+    MetaModelResult,
+    MinCopula,
+    Mixture,
+    MixtureClassifier,
+    MonteCarlo,
+    MonteCarloExperiment,
+    Multinomial,
+    MultinomialFactory,
+    NatafEllipticalCopulaEvaluation,
+    NatafEllipticalCopulaGradient,
+    NatafEllipticalCopulaHessian,
+    NatafEllipticalDistributionEvaluation,
+    NatafEllipticalDistributionGradient,
+    NatafEllipticalDistributionHessian,
+    NatafIndependentCopulaEvaluation,
+    NatafIndependentCopulaGradient,
+    NatafIndependentCopulaHessian,
+    NearestPointAlgorithm,
+    NearestPointAlgorithmImplementation,
+    NearestPointAlgorithmImplementationResult,
+    NearestPointChecker,
+    NearestPointCheckerResult,
+    NegativeBinomial,
+    NegativeBinomialFactory,
+    NoNumericalMathEvaluationImplementation,
+    NoNumericalMathGradientImplementation,
+    NoNumericalMathHessianImplementation,
+    NonCenteredFiniteDifferenceGradient,
+    NonCentralChiSquare,
+    NonCentralStudent,
+    NonStationaryCovarianceModelFactory,
+    Normal,
+    NormalCopula,
+    NormalCopulaFactory,
+    NormalFactory,
+    NormalGamma,
+    NormalityTest,
+    Null,
+    NumericalComplexCollection,
+    NumericalComplexPersistenCollection,
+    NumericalMathEvaluationImplementation,
+    NumericalMathFunction,
+    NumericalMathFunctionCollection,
+    NumericalMathFunctionImplementation,
+    NumericalMathGradientImplementation,
+    NumericalMathHessianImplementation,
+    NumericalPoint,
+    NumericalPointCollection,
+    NumericalPointWithDescription,
+    NumericalPointWithDescriptionCollection,
+    NumericalSample,
+    NumericalSampleImplementation,
+    NumericalScalarCollection,
+    ODESolver,
+    ODESolverImplementation,
+    OpenTURNSPythonFunction,
+    OrthogonalBasis,
+    OrthogonalDirection,
+    OrthogonalFunctionFactory,
+    OrthogonalProductPolynomialFactory,
+    OrthogonalUniVariatePolynomial,
+    OrthogonalUniVariatePolynomialFactory,
+    OrthogonalUniVariatePolynomialFamily,
+    OrthonormalizationAlgorithm,
+    OrthonormalizationAlgorithmImplementation,
+    Pairs,
+    ParametricEvaluationImplementation,
+    ParametricGradientImplementation,
+    ParametricHessianImplementation,
+    Path,
+    PenalizedLeastSquaresAlgorithm,
+    PenalizedLeastSquaresAlgorithmFactory,
+    Pie,
+    PiecewiseHermiteEvaluationImplementation,
+    PiecewiseLinearEvaluationImplementation,
+    PlatformConfiguration,
+    PlatformInfo,
+    Poisson,
+    PoissonFactory,
+    Polygon,
+    PolynomialCollection,
+    PolynomialFamilyCollection,
+    PostAnalyticalControlledImportanceSampling,
+    PostAnalyticalImportanceSampling,
+    PostAnalyticalSimulation,
+    PosteriorDistribution,
+    PosteriorRandomVector,
+    Process,
+    ProcessImplementation,
+    ProcessSample,
+    ProductDistribution,
+    ProductNumericalMathEvaluationImplementation,
+    ProductNumericalMathFunction,
+    ProductNumericalMathGradientImplementation,
+    ProductNumericalMathHessianImplementation,
+    ProductPolynomialEvaluationImplementation,
+    ProjectionStrategy,
+    ProjectionStrategyImplementation,
+    PythonDistribution,
+    PythonFunction,
+    PythonRandomVector,
+    QuadraticBasisFactory,
+    QuadraticCumul,
+    QuadraticLeastSquares,
+    QuadraticNumericalMathEvaluationImplementation,
+    QuadraticNumericalMathFunction,
+    QuadraticTaylor,
+    QuasiMonteCarlo,
+    QuasiMonteCarloResult,
+    RandomDirection,
+    RandomGenerator,
+    RandomGeneratorState,
+    RandomMixture,
+    RandomVector,
+    RandomVectorImplementation,
+    RandomWalk,
+    RandomWalkMetropolisHastings,
+    RandomizedLHS,
+    RandomizedQuasiMonteCarlo,
+    Rayleigh,
+    RayleighFactory,
+    RegularGrid,
+    ResourceMap,
+    ResourceMapInstance,
+    ReverseHaltonSequence,
+    Rice,
+    RiceFactory,
+    RiskyAndFast,
+    RootStrategy,
+    RootStrategyImplementation,
+    RosenblattEvaluation,
+    RungeKutta,
+    SORM,
+    SORMResult,
+    SQP,
+    SQPSpecificParameters,
+    SafeAndSlow,
+    Sampler,
+    SamplerImplementation,
+    SamplingStrategy,
+    SamplingStrategyImplementation,
+    SciPyDistribution,
+    SciPyRandomVector,
+    Secant,
+    SecondOrderModel,
+    SecondOrderModelImplementation,
+    SensitivityAnalysis,
+    SequentialStrategy,
+    Simulation,
+    SimulationResult,
+    SimulationResultImplementation,
+    SimulationSensitivityAnalysis,
+    Skellam,
+    SkellamFactory,
+    SklarCopula,
+    SobolSequence,
+    Solver,
+    SolverImplementation,
+    SpatialFunction,
+    SpecFunc,
+    SpectralModel,
+    SpectralModelFactory,
+    SpectralModelFactoryImplementation,
+    SpectralModelImplementation,
+    SpectralNormalProcess,
+    SphericalModel,
+    SquareComplexMatrix,
+    SquareMatrix,
+    SquareMatrixCollection,
+    SquaredExponential,
+    Staircase,
+    StandardDistributionPolynomialFactory,
+    StandardEvent,
+    StationaryCovarianceModel,
+    StationaryCovarianceModelFactory,
+    StorageManager,
+    StratifiedExperiment,
+    StringCollection,
+    StringStringMap,
+    StrongMaximumTest,
+    Student,
+    StudentFactory,
+    Study,
+    SwigPyIterator,
+    SymmetricMatrix,
+    SymmetricTensor,
+    TNC,
+    TNCSpecificParameters,
+    TTY,
+    TemporalFunction,
+    TemporalNormalProcess,
+    Tensor,
+    TensorImplementation,
+    TestResult,
+    TestResultCollection,
+    TimeSeries,
+    Trapezoidal,
+    TrapezoidalFactory,
+    TrendEvaluationImplementation,
+    TrendFactory,
+    TrendTransform,
+    Triangular,
+    TriangularComplexMatrix,
+    TriangularFactory,
+    TriangularMatrix,
+    TruncatedDistribution,
+    TruncatedNormal,
+    TruncatedNormalFactory,
+    Tuples,
+    UniVariatePolynomial,
+    UniVariatePolynomialImplementation,
+    Uniform,
+    UniformFactory,
+    UnsignedIntegerCollection,
+    UserDefined,
+    UserDefinedCovarianceModel,
+    UserDefinedFactory,
+    UserDefinedPair,
+    UserDefinedPairCollection,
+    UserDefinedSpectralModel,
+    UserDefinedStationaryCovarianceModel,
+    UsualRandomVector,
+    VersionList,
+    VisualTest,
+    Weibull,
+    WeibullFactory,
+    WeightedExperiment,
+    WelchFactory,
+    WhiteNoise,
+    WhittleFactory,
+    WhittleFactoryState,
+    WhittleFactoryStateCollection,
+    Wilks,
+    Wishart,
+    WrapperComputedGradient,
+    WrapperConfiguration,
+    WrapperData,
+    WrapperDataFile,
+    WrapperDataFileCollection,
+    WrapperDataFileType,
+    WrapperDataTransfer,
+    WrapperDataVariable,
+    WrapperDataVariableCollection,
+    WrapperDataVariableLocation,
+    WrapperDataVariableType,
+    WrapperExchangedData,
+    WrapperFile,
+    WrapperFileList,
+    WrapperFileListElement,
+    WrapperFunctionDescription,
+    WrapperInformation,
+    WrapperMode,
+    WrapperParameter,
+    WrapperState,
+    WrapperSymbolProvided,
+    WrapperVariableList,
+    WrapperVariableListElement,
+    XMLStorageManager,
+    ZipfMandelbrot},
+  emphstyle={\color{black}\bfseries},
+  index=[1][keywords],
+  indexstyle=\indexfunction
+}
+\fi

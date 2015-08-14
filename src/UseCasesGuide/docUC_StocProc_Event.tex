@@ -1,0 +1,66 @@
+% Copyright (C) 2005-2015 Airbus - EDF - IMACS - Phimeca
+% Permission is granted to copy, distribute and/or modify this document
+% under the terms of the GNU Free Documentation License, Version 1.2
+% or any later version published by the Free Software Foundation;
+% with no Invariant Sections, no Front-Cover Texts, and no Back-Cover
+% Texts.  A copy of the license is included in the section entitled "GNU
+% Free Documentation License".
+\renewcommand{\filename}{docUC_EventProcess.tex}
+\renewcommand{\filetitle}{UC : Creation of an  event based on a process}
+
+% \HeaderNNIILevel
+% \HeaderIILevel
+\HeaderIIILevel
+
+\label{EventProcess}
+
+\index{Stochastic Process!Event based on a process}
+
+
+This section gives elements to create  an event based on a multivariate stochastic process.\\
+
+Let $X: \Omega \times \cD \rightarrow \Rset^d$ be a stochastic process of dimension $d$, where $\cD \in \Rset^n$ is discretized on the mesh $\cM$. We suppose that $\cM$ contains $N$ vertices.\\
+
+We define the event $\cE$ as:
+\begin{align}\label{eventProcStoch}
+  \displaystyle \cE(X) = \bigcup_{\vect{t}\in \cM}\left\{X_{\vect{t}}  \in \cA  \right\}
+  % \cE(X) = \{ \exists \vect{t} \in \cD \, | \, X_{\vect{t}}  \in \cA \}
+\end{align}
+where $\cA$ is a domain of $\Rset^d$. \\
+
+A particular domain $\cA$ is the cartesian product of type :
+\begin{align*}
+  \cA = \prod_{i=1}^d [a_i,b_i]
+\end{align*}
+In that case, OpenTURNS defines $\cA$ by its both extreme points : $\vect{a}$ and $\vect{b}$.\\
+
+In the general case, $\cA$ is a {\itshape Domain} object that is able to check if it contains a given point in $\Rset^d$.\\
+
+OpenTURNS creates an {\itshape Event} object from the process $X$ and the domain $\cA$. Then, it is possible to get a realization of the event $\cE$, which is scalar $1_{\cE(X)}(\vect{x}_0, \dots, \vect{x}_{N-1})$ if $(\vect{x}_0, \dots,\vect{x}_{N-1})$ is a realization of $X$ on $\cM$. \\
+
+\requirements{
+
+  \begin{description}
+  \item[$\bullet$] the  domain $\cA$: {\itshape myDomainA}
+  \item[type:] Domain
+  \end{description}
+
+  \begin{description}
+  \item[$\bullet$] the process : {\itshape myProcess}
+  \item[type:] Process
+  \end{description}
+}
+{
+  \begin{description}
+  \item[$\bullet$] the Event $\cE$: {\itshape myEvent}
+  \item[type:] Event
+  \end{description}
+
+}
+
+\textspace\\
+Python script for this UseCase :
+
+\inputscript{script_docUC_StocProc_Event}
+
+\textspace\\

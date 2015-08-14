@@ -1,0 +1,75 @@
+% Copyright (C) 2005-2015 Airbus - EDF - IMACS - Phimeca
+% Permission is granted to copy, distribute and/or modify this document
+% under the terms of the GNU Free Documentation License, Version 1.2
+% or any later version published by the Free Software Foundation;
+% with no Invariant Sections, no Front-Cover Texts, and no Back-Cover
+% Texts.  A copy of the license is included in the section entitled "GNU
+% Free Documentation License".
+\renewcommand{\filename}{docUC_RespSurface_LeastSquaresApprox.tex}
+\renewcommand{\filetitle}{UC : Linear Least Squares approximation from a sample of the input vector and the real function}
+
+% \HeaderNNIILevel
+% \HeaderIILevel
+\HeaderIIILevel
+
+
+
+\label{leastSquareApprox}
+
+
+\index{Response Surface!Linear least squares approximation}
+\index{Random Generator}
+
+
+This Use Case  details the second method to construct a response surface : by least squares method from a sample of the input vector and the real function. The output sample is obtained  by evaluating the function on the input sample.\\
+
+
+
+Details on response surface approximations may be found in the Reference Guide (\extref{ReferenceGuide}{see files Reference Guide - Step Res. Surf. -- Polynomial Response Surfaces : principles and -- Least Square Method}{responseSurface}).\\
+
+
+\requirements{
+  \begin{description}
+  \item[$\bullet$] the limit state function : {\itshape myFunc}
+  \item[type:]  NumericalMathFunction
+  \item[$\bullet$] a sample of the input vector : {\itshape inputSample}
+  \item[type:]  NumericalSample
+  \end{description}
+}
+             {
+               \begin{description}
+               \item[$\bullet$] linear approximation by least squares method {\itshape responseSurface}
+               \item[type:] NumericalMathFunction
+               \item[$\bullet$]  the coefficients of the linear approximation $myFunc(\vect{X}) = \vect{\vect{A}}\vect{X} + \vect{B}$
+               \item[type:] Matrix ($\vect{\vect{A}}$) , NumericalPoint ($\vect{B}$)
+               \end{description}
+             }
+
+             \textspace\\
+             Python  script for this Use Case :
+
+             \begin{lstlisting}
+               # Create the LinearLeastSquares algorithm
+               myLeastSquares = LinearLeastSquares(inputSample, myFunc)
+
+               # Perform the algorithm
+               myLeastSquares.run()
+               print "myLeastSquares=", myLeastSquares
+
+               # Stream out the results :
+               # get the matrix A :
+               linear = myLeastSquares.getLinear()
+               print "A = ", linear
+
+               # Get the constant term B :
+               constant = myLeastSquares.getConstant()
+               print "B = ", constant
+
+               # Get the linear response surface
+               responseSurface = myLeastSquares.getResponseSurface()
+               print "responseSurface=", responseSurface
+
+               # Compare the two models at a particular point 'inPoint'
+               print "(myFunc", inPoint, ")=", myFunc(inPoint)
+               print "responseSurface(", inPoint, ")=", responseSurface(inPoint)
+             \end{lstlisting}

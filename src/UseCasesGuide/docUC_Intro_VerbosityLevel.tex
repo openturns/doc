@@ -1,0 +1,43 @@
+% Copyright (C) 2005-2015 Airbus - EDF - IMACS - Phimeca
+% Permission is granted to copy, distribute and/or modify this document
+% under the terms of the GNU Free Documentation License, Version 1.2
+% or any later version published by the Free Software Foundation;
+% with no Invariant Sections, no Front-Cover Texts, and no Back-Cover
+% Texts.  A copy of the license is included in the section entitled "GNU
+% Free Documentation License".
+\renewcommand{\filename}{docUC_Intro_VerbosityLevel}
+\renewcommand{\filetitle}{Verbosity level of the OpenTURNS platform}
+
+\HeaderNNIILevel
+% \HeaderIILevel
+% \HeaderIIILevel
+
+
+It is possible to specify the verbosity level of the OpenTURNS platform, through the object {\itshape Log} which contains the internal following variables :
+\begin{itemize}
+\item {\itshape Log.DBG} to catch the messages related the level debug,
+\item {\itshape Log.WRAPPER} to catch the messages related to the wrapper,
+\item {\itshape Log.INFO} to catch the messages related to the platform information,
+\item {\itshape Log.USER} to catch the messages defined by the User,
+\item {\itshape Log.WARN} to catch the messages related to warnings,
+\item {\itshape Log.ERROR} to catch the messages related to errors.
+\end{itemize}
+By default, the OpenTURNS platform shows all the messages related to the levels DBG, WARN and ERROR.\\
+It is possible to change it by the command {\itshape Log.Show()}. For example to catch the messages related to the level debug, the warnings and information, the command is :
+\begin{center}
+  \begin{lstlisting}
+    Log.Show(Log.DBG + Log.WARN + Log.INFO)
+  \end{lstlisting}
+\end{center}
+In order to catch all the possible messages (highest verbosity level), the command is :
+\begin{center}
+  \begin{lstlisting}
+    Log.Show(Log.ALL)
+  \end{lstlisting}
+\end{center}
+In order to catch no message (lowest verbosity level), the command is :
+\begin{center}
+  \begin{lstlisting}
+    Log.Show(Log.NONE)
+  \end{lstlisting}
+\end{center}

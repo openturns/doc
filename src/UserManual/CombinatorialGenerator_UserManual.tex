@@ -1,0 +1,163 @@
+% Copyright (C) 2005-2015 Airbus - EDF - IMACS - Phimeca
+% Permission is granted to copy, distribute and/or modify this document
+% under the terms of the GNU Free Documentation License, Version 1.2
+% or any later version published by the Free Software Foundation;
+% with no Invariant Sections, no Front-Cover Texts, and no Back-Cover
+% Texts.  A copy of the license is included in the section entitled "GNU
+% Free Documentation License".
+
+\extanchor{combinatiorialGen}
+\newpage \section{Combinatorial Generators}
+
+\index{CombinatorialGenerator}
+\subsection{CombinatorialGenerator}
+
+\begin{description}
+
+\item[Usage:] \textit{CombinatorialGenerator(combGenImplentation)}
+
+\item[Arguments:]  \textit{combGenImplentation}: a CombinatorialGeneratorImplementation.
+
+\item[Value:] a CombinatorialGenerator
+
+\item[Some methods:]  \rule{0pt}{1em}
+\begin{description}
+\item \textit{generate}
+\begin{description}
+\item[Usage:] \textit{generate()}
+\item[Value:] an IndicesCollection, the collection of all the possible values of the combinatorial generator as a set of nonnegative integer values stored into an Indices.
+\end{description}
+\end{description}
+
+\item[Links]  \rule{0pt}{1em}
+\extref{ReferenceGuide}{see Reference Guide - C11 MinMaxPlanExp}{docref_C11_MinMax}
+
+\end{description}
+
+% =================================================
+
+\newpage
+\index{Combinations}
+\subsubsection{Combinations}
+
+This class inherits from the CombinatorialGenerator class.\\
+
+\begin{description}
+
+\item[Usage:] \rule{0pt}{1em}
+\begin{description}
+\item \textit{Combinations()}
+\item \textit{Combinations(k, n)}
+\end{description}
+
+\item[Arguments:]  \rule{0pt}{1em}
+\begin{description}
+\item $k$ : an UnsignedLong, the cardinal of the subsets
+\item $n$ : an UnsignedLong, the cardinal of the base set
+\end{description}
+
+\item[Value:] a Combinations generator
+\begin{description}
+\item In the first usage, the generator is built using the default values $k=1$, $n=1$.
+\item In the second usage, the generator produces all the subsets with $k$ elements of a base set with $n$ elements. The subsets are produced as a collection of Indices in lexical order, the elements of each subset being sorted in increasing order.
+\end{description}
+
+\item[Details:]  \rule{0pt}{1em}
+\begin{description}
+\item Number of indices generated : $\dfrac{n!}{k!(n-k)!}$
+\item The combinations generator generates an IndicesCollection where :
+\begin{description}
+\item the Indices are sorted in lexical order,
+\item the components are sorted within a given Indices.
+
+For $(k=2,n=5)$ we get $[[0,1],[0,2],[0,3],[0,4],[1,2],[1,3],[1,4],[2,3],[2,4],[3,4]]$.
+\end{description}
+\end{description}
+
+\item[Links] \rule{0pt}{1em}
+\extref{ReferenceGuide}{see Reference Guide - C11 MinMaxPlanExp}{docref_C11_MinMax}
+\end{description}
+
+
+% =================================================
+\newpage
+\index{KPermutations}
+\subsubsection{KPermutations}
+
+This class inherits from the CombinatorialGenerator class.\\
+
+\begin{description}
+
+\item[Usage:] \rule{0pt}{1em}
+\begin{description}
+\item \textit{KPermutations()}
+\item \textit{KPermutations(n)}
+\item \textit{KPermutations(k, n)}
+\end{description}
+
+\item[Arguments:]  \rule{0pt}{1em}
+\begin{description}
+\item $k$ : an UnsignedLong, the cardinal of the origin set
+\item $n$ : an UnsignedLong, the cardinal of the goal set
+\end{description}
+
+\item[Value:] a KPermutations generator
+\begin{description}
+\item In the first usage, the generator is built using the default values $k=1$, $n=1$.
+\item In the second usage, the generator is built using the value $k=n$.
+\item In the third usage, the generator produces all the injective functions from a set with $k$ elements into a set with $n$ elements. If $k=n$ it means all the permutations of a set with $n$ elements.
+\end{description}
+
+\item[Details:]  \rule{0pt}{1em}
+\begin{description}
+\item Number of indices generated : $\dfrac{n!}{(n-k)!}$
+\item The combinations generator generates an IndicesCollection that contains all the $k!$ permutations of all the $\dfrac{n!}{k!(n-k)!}$ subsets with $k$ elements of a set with $n$ elements. The subsets are generated in lexical order, and for each subset all the corresponding injective functions are generated in lexical order.
+
+For $k=2, n=4$ we get $[[0,1],[1,0],[0,2],[2,0],[0,3],[3,0],[1,2],[2,1],[1,3],[3,1],[2,3],[3,2]]$.
+\end{description}
+
+\item[Links] \rule{0pt}{1em}
+\extref{ReferenceGuide}{see Reference Guide - C11 MinMaxPlanExp}{docref_C11_MinMax}
+\end{description}
+
+
+% =================================================
+\newpage
+\index{Tuples}
+\subsubsection{Tuples}
+
+This class inherits from the CombinatorialGenerator class.\\
+
+\begin{description}
+
+\item[Usage:] \rule{0pt}{1em}
+\begin{description}
+\item \textit{Tuples()}
+\item \textit{Tuples(bounds)}
+\end{description}
+
+\item[Arguments:]  \rule{0pt}{1em}
+\begin{description}
+\item \textit{bounds}: an Indices, the cardinal of all the sets forming the cartesian product.
+\end{description}
+
+\item[Value:] a Tuples generator
+\begin{description}
+\item In the first usage, the generator is built using the default values $bounds=[1]$.
+\item In the second usage, the generator produces all the indices $[i_0,\hdots,i_{d-1}]$ with $i_k\in\{0,\hdots,bounds[k]-1\}$ where $d=bounds.getDimension()$.
+\end{description}
+
+\item[Details:]  \rule{0pt}{1em}
+\begin{description}
+\item Number of indices generated : $\displaystyle\prod_{k=0}^{d-1}bounds[k]$
+\item The tuples generator generates an IndicesCollection that contains all the elements of the Cartesian product $\displaystyle\prod_{k=0}^{d-1}\{0,\hdots,bounds[k]-1\}$.
+
+For $bounds=[3,4]$ we get $[[0,0],[1,0],[2,0],[0,1],[1,1],[2,1],[0,2],[1,2],[2,2],[0,3],[1,3],[2,3]]$.
+\end{description}
+
+\item[Links] \rule{0pt}{1em}
+\extref{ReferenceGuide}{see Reference Guide - C11 MinMaxPlanExp}{docref_C11_MinMax}
+\end{description}
+
+
+% =================================================

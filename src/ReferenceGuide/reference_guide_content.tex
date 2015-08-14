@@ -1,0 +1,519 @@
+% Copyright (C) 2005-2015 Airbus - EDF - IMACS - Phimeca
+% Permission is granted to copy, distribute and/or modify this document
+% under the terms of the GNU Free Documentation License, Version 1.2
+% or any later version published by the Free Software Foundation;
+% with no Invariant Sections, no Front-Cover Texts, and no Back-Cover
+% Texts.  A copy of the license is included in the section entitled "GNU
+% Free Documentation License".
+\extanchor{stepB}
+\section{OpenTURNS' methods for Step B: quantification of the uncertainty sources}
+
+This section is organized in three parts. The first one gives the list of probabilistic uncertainty models proposed by OpenTURNS. The second part gives an overview of the content of the statistical toolbox that may be used to build these uncertainty models if data are available. The last part is dedicated to the mathematical description of each method. \\
+
+
+\subsection{Probabilistic models proposed in OpenTURNS}
+
+OpenTURNS proposes two different types of probabilistic models: non-parametric and parametric ones.
+
+\subsubsection{Non-parametric models}
+
+\begin{itemize}
+
+\item \otref{docref_B11_EmpiricalCDF}{Empirical Cumulative Distribution Function} -- see page \pageref{docref_B11_EmpiricalCDF} \vspace{2mm}
+\item \otref{docref_B11_KernelSmoothing}{Kernel smoothing} -- see page \pageref{docref_B11_KernelSmoothing} \vspace{2mm}
+
+\end{itemize}
+
+\subsubsection{Parametric models}
+
+\begin{itemize}
+
+\item \otref{docref_B121_DistributionSelection}{Usual uni- and multi-dimensional probability distribution functions}  -- see page \pageref{docref_B121_DistributionSelection} \vspace{2mm}
+\item \otref{docref_B122_Copulas}{Copulas : a mathematical tool for multi-dimensional distributions}  -- see page \pageref{docref_B122_Copulas} \vspace{2mm}
+\item \otref{docref_B122_RandomMixture}{Random Mixture : affine combination of independent univariate distributions}  -- see page \pageref{docref_B122_RandomMixture} \vspace{2mm}
+
+\end{itemize}
+
+\subsection{Classical statistical tools for uncertainty quantification}
+
+Building a dataset may require to aggregate several data sources; OpenTURNS offers some techniques to check beforehand if these data sources are indeed related to the same probability distribution.
+
+Moreover, when a parametric model is used, OpenTURNS provide statistical tools to estimate the parameters, validate the resulting model and address the important issue of dependencies among uncertainty sources.
+
+\subsubsection{Aggregation of two samples}
+
+\begin{itemize}
+
+\item Qualitative analysis
+\begin{itemize}
+\item \otref{docref_B201_Graph}{Graphical analysis using QQ-plot} -- see page \pageref{docref_B201_Graph}
+\end{itemize}
+\item Quantitative analysis
+\begin{itemize}
+\item \otref{docref_B202_Smirnov}{Smirnov test} -- see page \pageref{docref_B202_Smirnov}
+\end{itemize}
+\end{itemize}
+
+\subsubsection{Estimation of a parametric models}
+
+\begin{itemize}
+
+\item \otref{docref_B21_MaximumLikelihood}{Maximum Likelihood Principle} -- see page \pageref{docref_B21_MaximumLikelihood}
+\item \otref{docref_B21_BayesianCalibration}{Bayesian Calibration} -- see page \pageref{docref_B21_BayesianCalibration}
+\item \otref{docref_B21_ParametricEstimation}{Parametric estimation} -- see page \pageref{docref_B21_ParametricEstimation}
+
+\end{itemize}
+
+\subsubsection{Analysis of the goodness of fit of a parametric model}
+
+\begin{itemize}
+
+\item Qualitative goodness-of-fit analysis
+\begin{itemize}
+\item \otref{docref_B221_Graph}{Graphical analysis : QQ-plot and Henry line} -- see page \pageref{docref_B221_Graph}
+\end{itemize}
+
+\item Quantitative goodness-of-fit analysis
+\begin{itemize}
+\item \otref{docref_B222_TestChi2}{Chi-square test} -- see page \pageref{docref_B222_TestChi2} \vspace{2mm}
+\item \otref{docref_B222_TestKS}{Kolmogorov-Smirnov test} -- see page \pageref{docref_B222_TestKS} \vspace{2mm}
+\item \otref{docref_B222_TestCVM}{Cramer-Von-Mises test} -- see page \pageref{docref_B222_TestCVM} \vspace{2mm}
+\item \otref{docref_B222_TestAD}{Anderson-Darling test} -- see page \pageref{docref_B222_TestAD} \vspace{2mm}
+\item \otref{docref_B222_BayesianInformationCriterion}{Bayesian Information Criterion (BIC)} -- see page \pageref{docref_B222_BayesianInformationCriterion} \vspace{2mm}
+\end{itemize}
+
+
+\end{itemize}
+
+\subsubsection{Detection and quantification of dependencies among uncertainty sources}
+
+\begin{itemize}
+
+\item Linear correlations
+\begin{itemize}
+\item \otref{docref_B231_Pearson}{Pearson correlation coefficient}  -- see page \pageref{docref_B231_Pearson} \vspace{2mm}
+\item \otref{docref_B231_TestPearson}{Pearson independence test} -- see page \pageref{docref_B231_TestPearson} \vspace{2mm}
+\end{itemize}
+
+\item Monotonous correlations
+\begin{itemize}
+\item \otref{docref_B232_Spearman}{Spearman correlation coefficient} -- see page \pageref{docref_B232_Spearman} \vspace{2mm}
+\item \otref{docref_B232_TestSpearman}{Spearman independance test} -- see page \pageref{docref_B232_TestSpearman} \vspace{2mm}
+\end{itemize}
+
+\item Model-free dependency analysis
+\begin{itemize}
+\item \otref{docref_B233_TestChi2}{Chi-square independence test} -- see page \pageref{docref_B233_TestChi2} \vspace{2mm}
+\end{itemize}
+
+\item Regression methods
+\begin{itemize}
+\item \otref{docref_B234_LinearRegression}{Linear regression} -- see page \pageref{docref_B234_LinearRegression} \vspace{2mm}
+\end{itemize}
+
+\end{itemize}
+
+\newpage
+
+\subsection{Methods description}
+
+\input{docref_B11_EmpiricalCDF.tex}
+\newpage
+\input{docref_B11_KernelSmoothing.tex}
+\newpage
+\input{docref_B121_DistributionSelection.tex}
+\newpage
+\input{docref_B122_Copulas.tex}
+\newpage
+\input{docref_B122_RandomMixture.tex}
+\newpage
+\input{docref_B201_Graph.tex}
+\newpage
+\input{docref_B202_Smirnov.tex}
+\newpage
+\input{docref_B21_MaximumLikelihood.tex}
+\newpage
+\input{docref_B21_BayesianCalibration.tex}
+\newpage
+\input{docref_B21_MetropolisHastings.tex}
+\newpage
+\input{docref_B21_ParametricEstimation.tex}
+\newpage
+\input{docref_B221_Graph.tex}
+\newpage
+\input{docref_B222_TestChi2.tex}
+\newpage
+\input{docref_B222_TestKS.tex}
+\newpage
+\input{docref_B222_TestCVM.tex}
+\newpage
+\input{docref_B222_TestAD.tex}
+\newpage
+\input{docref_B222_BayesianInformationCriterion.tex}
+\newpage
+%\input{docref_B223_Bootstrap.tex}
+\newpage
+\input{docref_B231_Pearson.tex}
+\newpage
+\input{docref_B231_TestPearson.tex}
+\newpage
+\input{docref_B232_Spearman.tex}
+\newpage
+\input{docref_B232_TestSpearman.tex}
+\newpage
+\input{docref_B233_TestChi2.tex}
+\newpage
+\input{docref_B234_LinearRegression.tex}
+\newpage
+
+\extanchor{stepC}
+\section{OpenTURNS' methods for Step C: uncertainty propagation}
+
+This section is organized according to the different uncertainty criterion defined in step A: deterministic min-max criterion, probabilist criterion on central dispersion (expectation and variance), probability of exceeding a threshold / failure probability, and probabilistic criterion based on quantiles. Each method proposed for these criteria is described at the end of the section. \\
+
+In order to generate random simulations according to a particular distribution, it is necessary to first generate random simulations according to the Uniform(0,1) distribution : OpenTURNS uses the Mersenne Twister algorithm. Then, several techniques exist in order to transform these uniform random simulations into random simulations according to a particular distribution :
+
+\begin{itemize}
+
+\item \otref{docref_C_UniformRandomGenerator}{Uniform Random Generator} -- see page \pageref{docref_C_UniformRandomGenerator} \vspace{2mm}
+\item \otref{docref_C_DistributionRealisations}{Distribution Realisations} -- see page \pageref{docref_C_DistributionRealisations} \vspace{2mm}
+
+\end{itemize}
+
+Furthermore,  low-discrepancy sequences are commonly used as a replacement of uniformly distributed random numbers. They are also called  \emph{quasi-random} or  \emph{sub-random} sequences : the \emph{quasi} modifier is used to denote more clearly that the values of a low-discrepancy sequence are neither random nor pseudorandom, but such sequences share some properties of random variables and in certain applications such as the quasi-Monte Carlo method their lower discrepancy is an important advantage. (source Wikipedia).
+
+\begin{itemize}
+\item \otref{docref_C_LowDiscrepancySequence}{Low Discrepancy Sequence} -- see page \pageref{docref_C_LowDiscrepancySequence} \vspace{2mm}
+\end{itemize}
+
+
+\subsection{Min-max criterion}
+
+The min or max of the ouput variable of interest can be found thanks to different techniques : \otref{docref_C11_MinMax}{Min-Max Approach} -- see page \pageref{docref_C11_MinMax}, based on :
+
+\begin{itemize}
+\item an  design of experiments  which can be deterministic or probabilistic : \otref{docref_C11_ExperimentPlanes}{Design of Experiments } -- see page \pageref{docref_C11_ExperimentPlanes}
+\item an optimization algorithm which researches the extreme values of the limit state function in a specified interval (which may be infinite) : \otref{docref_C11_OptimizationAlgo}{Optimization algorithm} -- see page \pageref{docref_C11_OptimizationAlgo}
+
+\end{itemize}
+
+\subsection{Probabilistic criterion}
+
+\subsubsection{Central dispersion}
+
+Two categories of method are proposed: approximation methods and sampling methods.
+
+\begin{itemize}
+
+\item Approximation methods
+\begin{itemize}
+\item \otref{docref_C211_QuadraticCumul}{Quadratic combination / Perturbation method}  -- see page \pageref{docref_C211_QuadraticCumul} \vspace{2mm}
+\end{itemize}
+
+\item Sampling methods
+\begin{itemize}
+\item \otref{docref_C221_MonteCarloStd}{Standard Monte Carlo simulation}  -- see page \pageref{docref_C221_MonteCarloStd} \vspace{2mm}
+\end{itemize}
+
+\end{itemize}
+
+\subsubsection{Probability of exceeding a threshold / failure probability / probability of an event}
+
+Again, two categories of methods are proposed: approximation methods and sampling methods.
+
+\begin{itemize}
+
+\item Approximation methods
+\begin{itemize}
+\item FORM-SORM methods
+\begin{itemize}
+\item \otref{docref_C311_TransIso}{Preliminary isoprobabilistic transformation}  -- see page \pageref{docref_C311_TransIso} \vspace{2mm}
+\item \otref{docref_C311_TransIso_GeneralizedNataf}{Generalized Nataf isoprobabilistic transformation}  -- see page \pageref{docref_C311_TransIso_GeneralizedNataf} \vspace{2mm}
+\item \otref{docref_C311_TransIso_Rosenblatt}{Rosenblatt isoprobabilistic transformation}  -- see page \pageref{docref_C311_TransIso_Rosenblatt} \vspace{2mm}
+\item \otref{docref_C311_Form}{FORM algorithm}  -- see page \pageref{docref_C311_Form} \vspace{2mm}
+\item \otref{docref_C311_Sorm}{SORM algorithm}  -- see page \pageref{docref_C311_Sorm} \vspace{2mm}
+\item \otref{docref_C311_ReliabilityIndex}{Reliability index}  -- see page \pageref{docref_C311_ReliabilityIndex} \vspace{2mm}
+\end{itemize}
+\item Validation of FORM-SORM underlying hypothesis
+\begin{itemize}
+\item \otref{docref_C312_SampleSphere}{Preliminary sphere sampling}  -- see page \pageref{docref_C312_SampleSphere} \vspace{2mm}
+\item \otref{docref_C312_StrongMaxTest}{Strong-maximum test}  -- see page \pageref{docref_C312_StrongMaxTest} \vspace{2mm}
+\end{itemize}
+\end{itemize}
+
+\item Sampling methods
+\begin{itemize}
+\item \otref{docref_C321_MonteCarloStd}{Monte Carlo}  -- see page \pageref{docref_C321_MonteCarloStd}
+\item Accelerated simulation
+\begin{itemize}
+\item \otref{docref_C322_TI}{Importance Simulation}  -- see page \pageref{docref_C322_TI} \vspace{2mm}
+\item \otref{docref_C322_DirectionalSimulation}{Directional Simulation}  -- see page \pageref{docref_C322_DirectionalSimulation} \vspace{2mm}
+\item \otref{docref_C322_LHS}{Latin Hypercube Simulation}  -- see page \pageref{docref_C322_LHS} \vspace{2mm}
+\item \otref{docref_C322_QuasiMonteCarlo}{Quasi-Monte Carlo Simulation}  -- see page \pageref{docref_C322_QuasiMonteCarlo} \vspace{2mm}
+\end{itemize}
+\end{itemize}
+
+\end{itemize}
+
+\subsubsection{Quantile of a variable of interest}
+
+Only one sampling approach is available in the current version of OpenTURNS.
+
+\begin{itemize}
+
+\item \otref{docref_C41_MonteCarloStd}{Monte carlo Simulation and Wilk's formula} -- see page \pageref{docref_C41_MonteCarloStd} \vspace{2mm}
+
+\end{itemize}
+
+\newpage
+
+\subsection{Methods description}
+
+\input{docref_C_UniformRandomGenerator}
+\newpage
+\input{docref_C_DistributionRealisations}
+\newpage
+\input{docref_C_LowDiscrepancySequence}
+\newpage
+\input{docref_C11_MinMax}
+\newpage
+\input{docref_C11_ExperimentPlanes}
+\newpage
+\input{docref_C11_OptimizationAlgo}
+\newpage
+\input{docref_C211_QuadraticCumul}
+\newpage
+\input{docref_C221_MonteCarloStd}
+\newpage
+\input{docref_C311_TransIso}
+\newpage
+\input{docref_C311_TransIso_GeneralizedNataf}
+\newpage
+\input{docref_C311_TransIso_Rosenblatt}
+\newpage
+\input{docref_C311_Form}
+\newpage
+\input{docref_C311_Sorm}
+\newpage
+\input{docref_C311_ReliabilityIndex}
+\newpage
+\input{docref_C312_SampleSphere}
+\newpage
+\input{docref_C312_StrongMaxTest}
+\newpage
+\input{docref_C321_MonteCarloStd}
+\newpage
+\input{docref_C322_TI}
+\newpage
+\input{docref_C322_DirectionalSimulation}
+\newpage
+\input{docref_C322_LHS}
+\newpage
+\input{docref_C322_QuasiMonteCarlo}
+\newpage
+\input{docref_C41_MonteCarloStd}
+\newpage
+
+\extanchor{stepCprime}
+\section{OpenTURNS' methods for Step C': ranking uncertainty sources / sensitivity analysis}
+
+Ranking methods can be used to analyse the respective importance of each uncertainty source with respect to a probabilistic criterion.
+OpenTURNS proposes ranking methods for two probabilistic criteria defined in the \otrefext{OpenTURNS_GlobalMethodology}{global methodology guide}: probabilist criterion on central dispersion (expectation and variance), probability of exceeding a threshold / failure probability.
+
+\subsection{Probabilistic criteria}
+
+\subsubsection{Central dispersion probabilistic criterion}
+
+Each propagation method available for this criterion (see step C) leads to one or several ranking methods.
+
+\begin{itemize}
+
+\item Approximation methods
+\begin{itemize}
+\item \otref{docref_Cprime211_ImportanceFactor}{Quadratic combination's importance factors}  -- see page \pageref{docref_Cprime211_ImportanceFactor} \vspace{2mm}
+\end{itemize}
+
+\item Sampling methods
+\begin{itemize}
+\item \otref{docref_Cprime212_Pearson}{Ranking based on Pearson correlation}  -- see page \pageref{docref_Cprime212_Pearson} \vspace{2mm}
+\item \otref{docref_Cprime212_Spearman}{Ranking based on Spearman rank correlation}  -- see page \pageref{docref_Cprime212_Spearman} \vspace{2mm}
+\item \otref{docref_Cprime212_SRC}{Ranking based on Standard Regression Coefficients (SRC)}  -- see page \pageref{docref_Cprime212_SRC} \vspace{2mm}
+\item \otref{docref_Cprime212_PCC}{Ranking based on Partial (Pearson) Correlation Coefficients (PCC)}  -- see page \pageref{docref_Cprime212_PCC} \vspace{2mm}
+\item \otref{docref_Cprime212_PRCC}{Ranking based on Partial (Spearman) Rank Correlation coefficients (PRCC)}  -- see page \pageref{docref_Cprime212_PRCC} \vspace{2mm}
+\item \otref{docref_Cprime212_SobolIndices}{Sensivity analysis using Sobol indices}  -- see page \pageref{docref_Cprime212_SobolIndices} \vspace{2mm}
+\item \otref{docref_Cprime212_ANCOVA}{Sensivity analysis for models with correlated inputs}  -- see page \pageref{docref_Cprime212_ANCOVA} \vspace{2mm}
+\item \otref{docref_Cprime212_FAST}{Sensivity analysis by Fourier decomposition}  -- see page \pageref{docref_Cprime212_FAST} \vspace{2mm}
+\end{itemize}
+
+\end{itemize}
+
+\subsubsection{Probability of exceeding a threshold / failure probability}
+
+\begin{itemize}
+
+\item Approximation methods
+\begin{itemize}
+\item FORM-SORM methods
+\begin{itemize}
+\item \otref{docref_Cprime31_ImportanceFactor}{FORM Importance Factors}  -- see page \pageref{docref_Cprime31_ImportanceFactor} \vspace{2mm}
+\item \otref{docref_Cprime31_SensitivityFactor}{FORM Sensitivity Factors}  -- see page \pageref{docref_Cprime31_SensitivityFactor} \vspace{2mm}
+\end{itemize}
+\end{itemize}
+
+\end{itemize}
+
+\newpage
+
+\subsection{Methods description}
+
+\input{docref_Cprime211_ImportanceFactor}
+\newpage
+\input{docref_Cprime212_Pearson}
+\newpage
+\input{docref_Cprime212_Spearman}
+\newpage
+\input{docref_Cprime212_SRC}
+\newpage
+\input{docref_Cprime212_PCC}
+\newpage
+\input{docref_Cprime212_PRCC}
+\newpage
+\input{docref_Cprime212_SobolIndices}
+\newpage
+\input{docref_Cprime212_ANCOVA}
+\newpage
+\input{docref_Cprime212_FAST}
+\newpage
+\input{docref_Cprime31_ImportanceFactor}
+\newpage
+\input{docref_Cprime31_SensitivityFactor}
+\newpage
+
+\extanchor{responseSurface}
+\section{OpenTURNS' methods for the construction of response surfaces}
+
+The current section is dedicated to the building of an analytical approximation of the response of a given model. Such an approximation is commonly referred to as a \emph{response surface} in the literature. This methodology is relevant if each model evaluation is time consuming. Indeed, once a response surface has been built up, the various methods in Step~C and Step~C' may be applied at a negligible cost. A special focus will be given to \emph{polynomial} response surfaces.
+
+% In the sequel, a focus is given to a specific type of response surface known as \emph{polynomial chaos} (PC) \emph{expansions}.
+
+\subsection{Deterministic response surfaces}
+
+In a first time, methods related to the approximation of a function depending on \emph{deterministic} variables are considered.
+
+\subsubsection{Polynomial response surfaces}
+
+
+\begin{itemize}
+\item Local approximation at the vicinity of a given set of input parameters:
+\begin{itemize}
+\item \otref{docref_SurfRep_Taylor}{Linear and quadratic Taylor expansions}
+\end{itemize}
+\item Global approximation over the whole domain of definition of the input parameters:
+\begin{itemize}
+\item \otref{docref_SurfRep_NumMethLS}{Numerical methods to solve least squares problems}
+\item \otref{docref_SurfRep_LSPolynomial}{Polynomial response surface based on least squares}
+\item \otref{docref_SurfRep_SparseLSPolynomial}{Polynomial response surface based on sparse least squares}
+\end{itemize}
+\end{itemize}
+
+\subsubsection{Error estimation based on cross-validation}
+\begin{itemize}
+\item \otref{docref_SurfRep_ErrorEstim}{Assessment of the polynomial approximations by cross-validation}
+\end{itemize}
+
+\subsubsection{Kriging}
+\begin{itemize}
+\item \otref{docref_SurfRep_Kriging}{Kriging}
+\end{itemize}
+
+\subsection{Stochastic response surfaces}
+
+In this section, the approximation of a model depending on \emph{random} variables is of interest.
+
+
+\subsubsection{Functional chaos expansions}
+
+
+\begin{itemize}
+\item \otref{docref_SurfRep_FunctionalChaos}{Functional chaos expansions}
+\end{itemize}
+
+\subsubsection{Polynomial chaos basis}
+
+\begin{itemize}
+\item \otref{docref_SurfRep_OrthoPoly}{Orthogonal polynomials}
+\item \otref{docref_SurfRep_PCBasis}{Polynomial chaos basis}
+% \item \otref{docref_SurfRep_SparsePCBasis}{Sparse polynomial chaos basis}  %%%%%%%%%%
+
+\end{itemize}
+
+\subsubsection{Truncation schemes for the polynomial chaos expansions}
+
+\begin{itemize}
+\item \otref{docref_SurfRep_Enum}{Strategies for enumerating the polynomial chaos basis}
+\item \otref{docref_SurfRep_PCTrunc}{Strategies for truncating the polynomial chaos basis}
+\end{itemize}
+%
+
+
+
+\subsubsection{Computation of the polynomial chaos coefficients}
+
+\begin{itemize}
+\item \otref{docref_SurfRep_IntegLeastSquare}{Projection strategies}
+
+\end{itemize}
+
+% \subsection{Estimation of the approximation error}
+%
+% The estimation of the error due to the PC approximation of the model is addressed in: \\
+% \otref{docref_SurfRep_CrossValid}{Leave-one-out error estimate for polynomial chaos approximations}.
+%
+% \subsection{Adaptive sparse polynomial chaos expansion}
+% Two methods for automatically buiding up a \emph{sparse} PC approximation (i.e. a PC approximation with few non zero coefficients) are detailed:
+% \begin{itemize}
+% \item \otref{docref_SurfRep_SparseLARPC}{Basis-adaptive polynomial chaos approximation based on LAR}
+% \item \otref{docref_SurfRep_SparseLARPC_SED}{Basis and experimental design-adaptive polynomial chaos approximation based on LAR}
+% \end{itemize}
+
+
+% \otref{docref_SurfRep_PCBasis}{Polynomial chaos basis}. \\
+
+
+
+\subsection{Methods description}
+
+\input{docref_SurfRep_Taylor}
+\newpage
+\input{docref_SurfRep_NumMethLS}
+\newpage
+\input{docref_SurfRep_LSPolynomial}
+\newpage
+\input{docref_SurfRep_SparseLSPolynomial}
+\newpage
+\input{docref_SurfRep_Kriging}
+\newpage
+\input{docref_SurfRep_CrossValid}
+\newpage
+\input{docref_SurfRep_FunctionalChaos}
+\newpage
+\input{docref_SurfRep_OrthoPoly}
+\newpage
+\input{docref_SurfRep_PCBasis}
+\newpage
+\input{docref_SurfRep_Enum}
+\newpage
+\input{docref_SurfRep_PCTrunc}
+\newpage
+\input{docref_SurfRep_IntegLeastSquare}
+% \newpage
+% \input{docref_SurfRep_AdapSparsePC}
+% \input{docref_SurfRep_SparseLS}
+% \newpage
+% \input{docref_SurfRep_SparseLARPC}
+% \newpage
+% \input{docref_SurfRep_SparseLARPC_SED}
+
+
+
+\newpage

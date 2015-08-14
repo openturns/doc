@@ -1,0 +1,92 @@
+% Copyright (C) 2005-2015 Airbus - EDF - IMACS - Phimeca
+% Permission is granted to copy, distribute and/or modify this document
+% under the terms of the GNU Free Documentation License, Version 1.2
+% or any later version published by the Free Software Foundation;
+% with no Invariant Sections, no Front-Cover Texts, and no Back-Cover
+% Texts.  A copy of the license is included in the section entitled "GNU
+% Free Documentation License".
+\renewcommand{\filename}{docUC_OVI_RandomMixture.tex}
+\renewcommand{\filetitle}{UC : Creation of a Random Mixture}
+
+% \HeaderNNIILevel
+% \HeaderIILevel
+\HeaderIIILevel
+
+
+\index{Random Vector!Output random vector}
+\index{Distribution!Random Mixture}
+
+The objective of this Use Case is to define a random vector $\vect{Y}$ as a RandomMixture, which means an affine transform of input random variables :
+\begin{align*}
+  \displaystyle \vect{Y}=\vect{y}_0+\mat{M}\,\vect{X}
+\end{align*}
+where $\vect{y}_0\in\mathbb{R}^d$ is a deterministic vector with $d\in\{1,2,3\}$, $\mat{M}\in\mathcal{M}_{d,n}(\mathbb{R})$ a deterministic matrix and $(X_k)_{ 1 \leq k \leq n}$ are some \emph{independent univariate} variables.\\
+
+Be careful! This notion is different from the Mixture notion where the combination is made on the probability density functions and not on the univariate random variable :
+\begin{itemize}
+\item Random Mixture (in dimension 1) : $Y = a_0 + \sum_{i=1}^n a_i X_i$,
+\item Mixture : $p_Y = \sum_{i=1}^n a_i p_{X_i}$, where $p_{X_i}$ is the probability density function of $X_i$ and $\sum_{i=1}^n a_i = 1$.
+\end{itemize}
+
+When not precised, the coefficient $\vect{y}_0$ is taken equal to $0$.\\
+
+
+
+OpenTURNS evaluates the probability density function and cumulative distribution function of the random variable $\vect{Y}$. So, it is possible to ask $\vect{Y}$ any request compatible with a {\itshape Distribution}: moments, quantiles(in dimension 1 only), PDF and CDF evaluations, ...\\
+
+It is important to note that the distribution evaluation of $\vect{Y}$ needs the evaluation of the characteristic functions of the univariate $X_i$. OpenTURNS proposes an implementation of all its univariate distributions, continuous or discrete ones. But only some of the them have the implementation of a specific algorithm that evaluates the characteristic function : it is the case of all the discrete distributions and most of (but not all) the continuous ones. In that case, the evaluation is performant. For the remaining distributions, the generic implementation might be time consuming for high arguments. \\
+
+Furthermore, let's note that as $\vect{Y}$ is \emph{not} a {\itshape CompositeRandomVector}; In dimension 1, it cannot be used by a FORM/SORM algorithm, a QuadraticCumul algorithm or even a Simulation algorithm... In order to use such algorithms, it is necessary to transform the {\itshape RandomMixture} in a {\itshape CompositeRandomVector} by using the identity function $f : \Rset \rightarrow \Rset$ quickly defined (see the following python script).\\
+
+The example here is an output variable of interest defined as the following combination :
+\begin{align*}
+  Y = 2 + 5X_1 + X_2
+\end{align*}
+where :
+\begin{itemize}
+\item  $X_1$ follows a $\cE(\lambda = 1.5)$,
+\item  $X_2$ follows a $\cN(\mu = 4,Variance = 1)$.
+\end{itemize}
+
+The UC asks $Y$ its mean, variance, probability density graph, quantile of order $90\%$, its probability to exceeds 3.
+
+
+
+\noindent%
+\requirements{
+  \begin{description}
+  \item[$\bullet$] none
+  \end{description}
+}
+             {
+               \begin{description}
+               \item[$\bullet$] the random mixture $Y$ : {\itshape myRandomMixtureY}
+               \item[type:] RandomMixture
+               \end{description}
+             }
+
+             \textspace\\
+             Python script for this UseCase :
+
+             \inputscript{script_docUC_OVI_RandomMixture}
+
+             \textspace\\
+
+
+             \begin{figure}[H]
+               \begin{minipage}{8cm}
+                 \begin{center}
+                   \includegraphics[width=8cm]{Figures/RandomMixture_pdf.png}
+                   \caption{Probability density function of a Random Mixture.}
+                   \label{PDFRandomMixture}
+                 \end{center}
+               \end{minipage}
+               \hfill
+               \begin{minipage}{8cm}
+                 \begin{center}
+                   \includegraphics[width=8cm]{Figures/RandomMixture_cdf.png}
+                   \caption{Cumulative density function of a Random Mixture.}
+                   \label{CDFRandomMixture}
+                 \end{center}
+               \end{minipage}
+             \end{figure}

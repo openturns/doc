@@ -1,0 +1,59 @@
+% Copyright (C) 2005-2015 Airbus - EDF - IMACS - Phimeca
+% Permission is granted to copy, distribute and/or modify this document
+% under the terms of the GNU Free Documentation License, Version 1.2
+% or any later version published by the Free Software Foundation;
+% with no Invariant Sections, no Front-Cover Texts, and no Back-Cover
+% Texts.  A copy of the license is included in the section entitled "GNU
+% Free Documentation License".
+\renewcommand{\filename}{docUC_InputBayesian_BayesDist.tex}
+\renewcommand{\filetitle}{UC : Creation of a multivariate distribution through conditioning}
+
+% \HeaderNNIILevel
+% \HeaderIILevel
+\HeaderIIILevel
+
+
+
+\index{Distribution!Bayesian}
+\index{Bayesian! Distribution}
+
+The objective of this Use Case is to create  the distribution of the random vector $(\vect{X},\vect{Y})$ where $$\vect{Y} \sim \cL_{\vect{Y}}$$ and $$\vect{X}|\vect{\Theta} \sim \cL_{\vect{X}|\vect{\Theta}}$$  whith $$\vect{\Theta}=g(\vect{Y})$$ where $g$ a given function of input dimension the dimension of $\cL_{\vect{Y}}$ and output dimension the dimension of $\vect{\Theta}$.
+
+
+\requirements{
+  \begin{description}
+  \item[$\bullet$] distribution of $\vect{X}|\vect{\Theta}$   : {\itshape conditionedDist}
+  \item[type:] Distribution
+  \item[$\bullet$] distribution of   $\vect{Y}$ : {\itshape conditioningDist}
+  \item[type:] Distribution
+  \item[$\bullet$] the function $g$ : {\itshape linkFunction}
+  \item[type:] NumericalMathFunction
+  \end{description}
+}
+{
+  \begin{description}
+  \item[$\bullet$] the conditional distribution : {\itshape  finalDist}
+  \item[type:]  ConditionalDistribution
+  \item[$\bullet$] a sample: {\itshape sampleY}
+  \item[type:]  NumericalSample
+  \end{description}
+}
+
+\textspace\\
+Python script for this UseCase :
+
+\inputscript{script_docUC_InputBayesian_BayesDist}
+
+\textspace\\
+
+The UC illustrates the distribution of  $X$ that follows a $Uniform(A,B)$ distribution, with $(A,B)=(Y, 1+Y)$ where $Y$ follows a $Uniform(-1, 1)$ distribution.\\
+The figure Fig.\ref{BayesPDF} draws a sample of $(X, Y)$.
+
+
+\begin{figure}[H]
+  \begin{center}
+    \includegraphics[width=7cm]{Figures/pdf_bayesianDist.pdf}
+    \caption{Iso-PDF and sample of $(X, Y)$ where $X \sim Uniform(Y, 1+Y)$ and $Y \sim Uniform(-1,1)$.}
+    \label{BayesPDF}
+  \end{center}
+\end{figure}

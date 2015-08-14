@@ -1,0 +1,102 @@
+% Copyright (C) 2005-2015 Airbus - EDF - IMACS - Phimeca
+% Permission is granted to copy, distribute and/or modify this document
+% under the terms of the GNU Free Documentation License, Version 1.2
+% or any later version published by the Free Software Foundation;
+% with no Invariant Sections, no Front-Cover Texts, and no Back-Cover
+% Texts.  A copy of the license is included in the section entitled "GNU
+% Free Documentation License".
+\renewcommand{\etapemethodo}{Response Surface}
+\renewcommand{\nomfichier}{docref_SurfRep_Taylor}
+\renewcommand{\titrefiche}{Response Surface obtained by regression using Support Vector Machines}
+
+\Header
+
+\MathematicalDescription{
+
+  \underline{\textbf{Goal}}\\
+
+  In order to reduce computational costs, we use approximate functions instead of the initial function. When studying  uncertainty management problems, one well-established class of method to deal with suitable approximations is the response surface method. The basic idea is to replace the initial model by an approximation, the so called response surface, whose function values can be computed more easily. Hence, there are three steps:
+  \begin{itemize}
+  \item \textbf{Step no. 1} \\ Choice of the type of kernel (rbf, polynomial,...) caracterized by a set of parameters.
+  \item \textbf{Step no. 2} \\ Estimate the best set of parameters through cross-validation.
+  \item \textbf{Step no. 3} \\ Estimation of the parameters of the response surface by a finite number of computations.
+  \end{itemize}
+
+  Within this file, we are dealing with the steps no. 1 and 2.
+
+  \vspace{2mm}
+
+  \underline{\textbf{Principles}}\\
+
+  One of main idea of the SVM method is to map the data through a kernel function $K$ into a high dimensional space, in which the problem is simpler to solve. The SVM optimization problem formulation in the case of regression becomes.\\
+
+  \underline{\textit{Primal Problem}}\\
+  \begin{align*}
+    \underset{\underline{w}, b}{Minimize} \hspace{2mm} \frac{1}{2} \underline{w}^T\underline{w} + C \sum_{i=1}^N (\xi_i + \xi_i^*)
+  \end{align*}
+  \begin{align*}
+    under \begin{cases} \forall i \in {1,...,N}: -\varepsilon -\xi_i^* \le \underline{w}^T \phi(x^i) + b - y_i \le \varepsilon + \xi_i \\ \forall i \in {1,...,N} : \xi_i, \xi_i^* \ge 0 \end{cases}
+  \end{align*}
+
+  \underline{\textit{Dual Problem}}\\
+
+  \begin{align*}
+    \underset{\underline{\lambda}}{Minimize} \hspace{2mm} \frac{1}{2} \sum_{i=1}^{N} \sum_{j=1}^{N} \lambda_i \lambda_j K(\underline{x^i}, \underline{x^j}) - \sum_{i=1}^{N} \lambda_i y_i + \varepsilon \sum_{i=1}^{N} \vert \lambda_i \vert
+  \end{align*}
+  \begin{align*}
+    under \begin{cases} \forall i \in {1,...,N}:  -C \le \lambda_i \le C \end{cases}
+  \end{align*}
+
+  The evaluation of the approximate function is given by
+  \begin{align*}
+    q\left( \underline{x}, \underline{\lambda}, \underline{\underline{x}}, b \right) =  \sum_{i=1}^N \lambda_i K(\underline{x^i}, \underline{x}) + b
+  \end{align*}
+
+  where:
+  \begin{itemize}
+  \item $(\underline{x}^1,...,\underline{x}^N)$ is the sample of $N$ vectors of the input variables,
+  \item $ (y^1,...,y^n)$ are the expected output over the input sample
+  \item $\varepsilon$ is the witdth of the insensitive margin
+  \item $C$ is the penalty coefficient
+  \item $K$ is the kernel function
+  \item $\xi_i, \xi_i^*$ are the slack variables for the primal problem
+  \item $\lambda_i$ are the lagrange multipliers for the dual problem
+  \end{itemize}
+
+  \vspace{2mm}
+
+  \underline{\textbf{Step 1}}: Choice of the kernel. Along with the SVM regression method, OpenTURNS provides several kernel functions to map the data into a high dimensional feature space :
+
+  \begin{center}
+    \begin{tabular}{ll}
+      Kernel type & Analytical expression \\
+      \hline
+      Normal RBF & $ K(\underline{x}, \underline{y}) = e^{\frac{\| \underline{x} - \underline{y} \|^2}{2\sigma^2}} $ \\
+      Exponential RBF & $ K(\underline{x}, \underline{y}) = e^{\frac{\| \underline{x} - \underline{y} \|}{2\sigma^2}} $ \\
+      Polynomial & $ K(\underline{x}, \underline{y}) = (a\underline{x}^T\underline{y} + b)^d $ \\
+      Rational & $ K(\underline{x}, \underline{y}) = 1 - \frac{\| \underline{x} - \underline{y} \|}{\| \underline{x} - \underline{y} \| + b} $
+    \end{tabular}
+  \end{center}
+
+  The accuracy of the response relies on the type of kernel used. The first kernel used should be the Normal RBF kernel, which will provide acceptable results in many cases.
+
+  \vspace{2mm}
+
+  \underline{\textbf{Step 2}}: Cross-validation.
+
+  The optimization problem depends on several parameters. The C coefficient determines the penalty of the error relatively to the expected values. There is also the kernel parameter, for example $\sigma$ for RBF kernels. The idea is to propose a set of possible values for both parameters, and the cross-validation step finds the best pair of parameters in term of error to the expected values. The C parameter depends on the values of the function ; values have to vary in a wide range ; $..., 10^{-2}, 1, 10^2, 10^4, 10^6...$.
+  The input sample is split into two parts : a training sample and a validation sample. For each pair of parameters, and for every combination of training/validation subsets, the svm model is built over the training sample, and tested on the validation sample. Then the model is rebuit over the whole sample with the parameters which minimized the error during the cross-validation step.
+}
+{
+  SVM regression can be referred to as Support Vector Regression or SVR.
+}
+
+\Methodology{
+  This method is used when one wants to build a surface response (before starting the step A). The model is only valid locally, where input samples have been provided. In order to preserve generalization capabilities, the model should not be built with to high values of C.
+}
+            {
+              The following provide an interesting bibliographical starting point to further study of this method:
+              \begin{itemize}
+              \item Bernhard Schölkopf and A. J. Smola: Learning with Kernels. MIT Press, Cambridge, MA, 2002.
+              \end{itemize}
+            }

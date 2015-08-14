@@ -1,0 +1,1646 @@
+% Copyright (C) 2005-2015 Airbus - EDF - IMACS - Phimeca
+% Permission is granted to copy, distribute and/or modify this document
+% under the terms of the GNU Free Documentation License, Version 1.2
+% or any later version published by the Free Software Foundation;
+% with no Invariant Sections, no Front-Cover Texts, and no Back-Cover
+% Texts.  A copy of the license is included in the section entitled "GNU
+% Free Documentation License".
+
+% =================================================================
+
+\newpage
+\index{Functions}
+\extanchor{functions}
+\section{Functions}
+
+\index{AggregatedNumericalMathEvaluationImplementation}
+\subsection{AggregatedNumericalMathEvaluationImplementation}
+
+AggregatedNumericalMathEvaluationImplementation inherits from NumericalMathEvaluationImplementation.
+
+\begin{description}
+
+\item[Usage:]   \rule{0pt}{1em}
+\begin{description}
+\item \textit{AggregatedNumericalMathEvaluationImplementation(functionsCollection)}
+\end{description}
+
+\item[Arguments:]  \rule{0pt}{1em}
+\begin{description}
+\item \textit{functionsCollection}: a NumericalMathFunctionCollection $(f_i)_{i=1,\hdots,\ell}$ of size $\ell$, such that $\forall i\in\{1,\hdots,\ell\},\: f_i:\Rset^n\rightarrow\Rset^{p_i}$.
+\end{description}
+
+
+\item[Value:] a NumericalMathFunction that implements the function $f:\Rset^n\rightarrow\Rset^{p_1+\cdots+p_{\ell}}$ defined by:
+\begin{equation*}
+\forall \vect{x}\in\Rset^n,\:f(\vect{x})=\Tr{(f_1(\vect{x}),\hdots,f_{\ell}(\vect{x}))}
+\end{equation*}
+
+\item[Some methods:]  \rule{0pt}{1em}
+\begin{description}
+
+\item \textit{getFunctionCollection}
+\begin{description}
+\item[Usage:] \textit{getFunctionCollection()}
+\item[Arguments:] none
+\item[Value:] a NumericalMathFunctionCollection, the collection of functions defining $f$.
+\end{description}
+\bigskip
+
+\item \textit{getOutputSample}
+\begin{description}
+\item[Usage:] \textit{getOutputSample()}
+\item[Arguments:] none
+\item[Value:] a NumericalSample, the output sample defining the function.
+\end{description}
+\bigskip
+
+\end{description}
+
+\end{description}
+
+% ==========================================================================
+
+\newpage
+\index{DatabaseNumericalMathEvaluationImplementation}
+\subsection{DatabaseNumericalMathEvaluationImplementation}
+
+DatabaseNumericalMathEvaluationImplementation inherits from NumericalMathEvaluationImplementation.
+
+\begin{description}
+
+\item[Usage:]   \rule{0pt}{1em}
+\begin{description}
+\item \textit{DatabaseNumericalMathEvaluationImplementation(inputSample, outputSample, activateCache)}
+\end{description}
+
+\item[Arguments:]  \rule{0pt}{1em}
+\begin{description}
+\item \textit{inputSample}: a NumericalSample $\cS^{in}$ of size $\ell$ and dimension $n$.
+\item \textit{outputSample}: a NumericalSample $\cS^{out}$ of size $\ell$ and dimension $p$.
+\end{description}
+
+
+\item[Value:] a NumericalMathFunction that implements a nearest-neighbor function $f:\Rset^n\rightarrow\Rset^p$ based on the input sample $\cS^{in}$ and taking values in the output sample $\cS^{out}$:
+\begin{equation*}
+\forall\vect{x}\in\Rset^n, f(\vect{x})=y_{i^*}\in\cS^{out}\mbox{ where }i^*=\argmin_{\begin{array}{c}
+i\in\{1,\hdots,\ell\}\\
+\vect{x}_i\in\cS^{in}
+\end{array}
+}
+\|\vect{x}-\vect{x}_i\|
+\end{equation*}
+
+\item[Some methods:]  \rule{0pt}{1em}
+\begin{description}
+
+\item \textit{getInputSample}
+\begin{description}
+\item[Usage:] \textit{getInputSample()}
+\item[Arguments:] none
+\item[Value:] a NumericalSample, the input sample defining the function.
+\end{description}
+\bigskip
+
+\item \textit{getOutputSample}
+\begin{description}
+\item[Usage:] \textit{getOutputSample()}
+\item[Arguments:] none
+\item[Value:] a NumericalSample, the output sample defining the function.
+\end{description}
+\bigskip
+
+\end{description}
+
+\end{description}
+
+% ==========================================================================
+
+\newpage
+%\index{Functions!DualLinearCombinationEvaluationImplementation}
+\index{DualLinearCombinationEvaluationImplementation}
+\subsection{DualLinearCombinationEvaluationImplementation}
+
+DualLinearCombinationEvaluationImplementation inherits from NumericalMathEvaluationImplementation.
+
+\begin{description}
+
+\item[Usage:]   \rule{0pt}{1em}
+\begin{description}
+\item \textit{DualLinearCombinationEvaluationImplementation(scalarFctColl, vectCoefColl)}
+\end{description}
+
+\item[Arguments:]  \rule{0pt}{1em}
+\begin{description}
+\item \textit{scalarFctColl}: a NumericalMathFunctionCollection $(f_i)_{i=1,\hdots,\ell}$ of size $\ell$, such that $\forall i\in\{1,\hdots,\ell\},\: f_i:\Rset^n\rightarrow\Rset$.
+\item \textit{vectCoefColl}: a NumericalSample $\cS=\{\vect{c}_1, \hdots, \vect{c}_{\ell}\}$ of size $\ell$ and dimension $p$.
+\end{description}
+
+
+\item[Value:] a NumericalMathFunction which is the function $f$ defined as the linear combination of the functions $f_i$ with vector coefficients in $\cS$:
+\begin{equation*}
+\forall\vect{x}\in\Rset^n,\:f(\vect{x})=\sum_{i=1}^{\ell}f_i(\vect{x})\vect{c}_i
+\end{equation*}
+
+\item[Some methods:]  \rule{0pt}{1em}
+\begin{description}
+
+\item \textit{getCoefficients}
+\begin{description}
+\item[Usage:] \textit{getCoefficients()}
+\item[Arguments:] none
+\item[Value:] a NumericalSample, the vectorial coefficents $(\vect{c}_1, \hdots, \vect{c}_N)$ which define the linear combination $f$.
+\end{description}
+\bigskip
+
+\item \textit{getFunctionsCollection}
+\begin{description}
+\item[Usage:] \textit{getFunctionsCollection()}
+\item[Arguments:] none
+\item[Value:] a NumericalMathFunctionCollection, the collection of scalar functions $(f_1, \hdots, f_{\ell})$  which defines the linear combination $f$.
+\end{description}
+\bigskip
+
+\item \textit{setFunctionsCollectionAndCoefficients}
+\begin{description}
+\item[Usage:] \rule{0pt}{1em}
+\begin{description}
+\item \textit{setFunctionsCollectionAndCoefficients(scalarFctColl, vectCoefColl)}
+\end{description}
+\item[Arguments:] \rule{0pt}{1em}
+\begin{description}
+\item \textit{scalarFctColl}: a NumericalMathFunctionCollection, collection of $\ell$ scalar NumericalMathFunction.
+\item \textit{vectCoefColl}: a NumericalSample of size $\ell$
+\end{description}
+\item[Value:] a  NumericalMathFunction $f$ defined from \textit{scalarFctColl} and \textit{vectCoefColl} as described above.
+\end{description}
+
+\end{description}
+
+\end{description}
+
+% ==========================================================================
+
+\newpage
+%\index{Functions!DualLinearCombinationGradientImplementation}
+\index{DualLinearCombinationGradientImplementation}
+\subsection{DualLinearCombinationGradientImplementation}
+
+
+DualLinearCombinationGradientImplementation inherits from NumericalMathGradientImplementation.
+
+\begin{description}
+
+\item[Usage:]   \rule{0pt}{1em}
+\begin{description}
+\item \textit{DualLinearCombinationGradientImplementation(myDLCEI)}
+\end{description}
+
+\item[Arguments:]  \rule{0pt}{1em}
+\begin{description}
+\item \textit{myDLCEI}: a DualLinearCombinationEvaluationImplementation.
+\end{description}
+
+
+\item[Value:] a  DualLinearCombinationGradientImplementation which the implementation of the gradient. By default, the analytical gradient is implemented.
+
+\end{description}
+
+
+
+% ==========================================================================
+
+\newpage
+%\index{Functions!DualLinearCombinationHessianImplementation}
+\index{DualLinearCombinationHessianImplementation}
+\subsection{DualLinearCombinationHessianImplementation}
+
+
+DualLinearCombinationHessianImplementation inherits from NumericalMathHessianImplementation.
+
+\begin{description}
+
+\item[Usage:]   \rule{0pt}{1em}
+\begin{description}
+\item \textit{DualLinearCombinationHessianImplementation(myDLCEI)}
+\end{description}
+
+\item[Arguments:]  \rule{0pt}{1em}
+\begin{description}
+\item \textit{myDLCEI}: a DualLinearCombinationEvaluationImplementation.
+\end{description}
+
+
+\item[Value:] a  DualLinearCombinationHessianImplementation which the implementation of the gradient. By default, the analytical gradient is implemented.
+
+\end{description}
+
+% ==========================================================================
+\newpage
+\index{LinearNumericalMathFunction}
+\subsection{LinearNumericalMathFunction}
+
+LinearNumericalMathFunction inherits from NumericalMathFunction.
+
+\begin{description}
+
+\item[Usage:]   \rule{0pt}{1em}
+\begin{description}
+\item \textit{LinearNumericalMathFunction(center, constant, linear)}
+\end{description}
+
+\item[Arguments:]  \rule{0pt}{1em}
+\begin{description}
+\item \textit{center}: a NumericalPoint.
+\item \textit{constant}: a NumericalPoint.
+\item \textit{linear}: a Matrix.
+\end{description}
+
+
+\item[Value:] a LinearNumericalMathFunction which is the linear
+NumericalMathFunction $f$ defined as
+\begin{align*}
+\begin{array}{rcl}
+f: \; \Rset^n & \longrightarrow & \Rset^p\\
+\vect{X} & \longmapsto & \mat{A} \, (\vect{X} - \vect{B}) + \vect{C}
+\end{array}
+\end{align*}
+where
+\begin{itemize}
+\item $A$ is the $\Rset^p \times \Rset^n$ matrix defined by the object \textit{linear},
+\item \textit{\vect{b}} is the $\Rset^n$ vector defined by the object \textit{center}
+\item and $\vect{c}$ is the $\Rset^p$ vector defined by the object \textit{constant}.
+\end{itemize}
+
+\end{description}
+
+% ==========================================================================
+\newpage
+%\index{Functions!NumericalMathFunction}
+\index{NumericalMathFunction}
+\subsection{NumericalMathFunction}
+
+
+\begin{description}
+
+\item[Usage:] \rule{0pt}{1em}
+\begin{enumerate}
+\item \textit{NumericalMathFunction(fileName)}
+\item \textit{NumericalMathFunction(modelPython)}
+\item \textit{NumericalMathFunction(input, output, formula)}
+\item \textit{NumericalMathFunction(inputString, outputString, formulaString)}
+\item \textit{NumericalMathFunction(f,g)}
+\item \textit{NumericalMathFunction(functionCollection)}
+\item \textit{NumericalMathFunction(functionCollection, scalarCoefficientColl)}
+\item \textit{NumericalMathFunction(scalarFunctionCollection, vectorCoefficientColl)}
+\item \textit{NumericalMathFunction(function, comparisonOperator, threshold)}
+\end{enumerate}
+
+\item[Arguments:]  \rule{0pt}{1em}
+\begin{description}
+\item \textit{fileName}: a string to name the XML file (without the extension ".xml") which contains the implementation
+of the considered function
+\item \textit{modelPython}: a NumericalMathFunctionImplementation, the implementation in the script python of a function. This function {\itshape modelPython} must derive from the class {\itshape OpenTURNSPythonFunction} (see the Use Cases Guide to have an example of implementation)
+of the considered function
+\item \textit{input}: a Description which describes the input of the NumericalMathFunction
+\item \textit{output}: a Description  which describes the output of the NumericalMathFunction
+\item \textit{formula}: a Description, the analytical formula of the NumericalMathFunction
+\item \textit{inputString}: a String which describes the input of the NumericalMathFunction
+\item \textit{outputString}: a String  which describes the output of the NumericalMathFunction
+\item \textit{formulaString}: a String, the analytical formula of the NumericalMathFunction
+\item \textit{f,g}: two NumericalMathFunction
+\item \textit{functionCollection}: a NumericalMathFunctionCollection,  collection of several NumericalMathFunction
+\item \textit{scalarFunctionCollection}: a NumericalMathFunctionCollection,  collection of several scalar NumericalMathFunction
+\item \textit{scalarCoefficientColl}: a NumericalPoint,
+\item \textit{vectorCoefficientColl}: a NumericalSample,
+\item \textit{function}: a NumericalMathFunction
+\item \textit{comparisonOperator}: a ComparisonOperator
+\item \textit{threshold}: a NumericalScalar
+\end{description}
+
+\item[Value:] \rule{0pt}{1em}
+\begin{description}
+\item usage 1: a NumericalMathFunction which is implemented in the wrapper file 'fileName',
+\item usage 2: a NumericalMathFunction which is implemented in a python class OpenTURNSPythonFunction,
+\item usage 3: a NumericalMathFunction which is defined by \textit{ouput = formula(input)}, see \ref{analytical_function_definition}
+\item usage 4: a NumericalMathFunction which is defined by \textit{ouputString = formulaString(inputString)}, see \ref{analytical_function_definition}
+\item usage 5: a NumericalMathFunction which is the composition function $f\circ g$
+\item usage 6: a NumericalMathFunction which is the agregated function \textit{agregFct} defined as follows: \\
+if
+\begin{align*}
+functionCollection = (f_1, \hdots, f_N)
+\end{align*}
+where
+\begin{align*}
+f_i: \Rset^n \longrightarrow \Rset^{p_i}
+\end{align*}
+then the agregated function is:
+\begin{align*}
+\begin{array}{l|lcl}
+agregFct: & \Rset^n & \longrightarrow & \Rset^{p} \\
+&  \vect{X} & \longrightarrow & (f_1(\vect{X}), \hdots, f_N(\vect{X}))^t
+\end{array}
+\end{align*}
+with
+\begin{align*}
+p = \displaystyle \sum_i p_i
+\end{align*}
+
+\item usage 7:   a NumericalMathFunction which is the linear combination \textit{linComb} of the functions defined in  \textit{functionCollection} with scalar weights defined in \textit{scalarCoefficientColl}. If
+\begin{align*}
+functionCollection  = (f_1, \hdots, f_N)
+\end{align*}
+where
+\begin{align*}
+\forall 1 \leq i \leq N, \,     f_i: \Rset^n \longrightarrow \Rset^{p}
+\end{align*}
+and
+\begin{align*}
+scalarCoefficientColl = (c_1, \hdots, c_N) \in \Rset^N
+\end{align*}
+then the linear combination is:
+\begin{align*}
+\begin{array}{l|lcl}
+linComb: & \Rset^n & \longrightarrow & \Rset^{p} \\
+&  \vect{X} & \longrightarrow & \displaystyle \sum_i c_if_i (\vect{X})
+\end{array}
+\end{align*}
+
+\item usage 8:   a NumericalMathFunction which is the linear combination \textit{vectLinComb} of the scalar functions defined in  \textit{scalarFunctionCollection} with vectorial weights defined in \textit{vectorCoefficientColl}. \\
+If
+\begin{align*}
+scalarFunctionCollection = (f_1, \hdots, f_N)
+\end{align*}
+where
+\begin{align*}
+\forall 1 \leq i \leq N, \,     f_i: \Rset^n \longrightarrow \Rset
+\end{align*}
+and
+\begin{align*}
+vectorCoefficientColl = (\vect{c}_1, \hdots, \vect{c}_N)
+\end{align*}
+where
+\begin{align*}
+\forall 1 \leq i \leq N, \,   \vect{c}_i \in \Rset^p
+\end{align*}
+then
+\begin{align*}
+\begin{array}{l|lcl}
+vectLinComb: & \Rset^n & \longrightarrow & \Rset^{p} \\
+&  \vect{X} & \longrightarrow & \displaystyle \sum_i \vect{c}_if_i (\vect{X})
+\end{array}
+\end{align*}
+
+\item usage 9:   a NumericalMathFunction which is the indicator function \textit{indFactor} of the event defined by \textit{function} , \textit{comparisonOperator} and \textit{threshold}. For example, if \textit{comparisonOperator} is $>$, then
+\begin{align*}
+indFactor = 1_{\{function > threshold\}}
+\end{align*}
+\end{description}
+
+\item[Some methods:]  \rule{0pt}{1em}
+\begin{description}
+
+\item $()$
+\begin{description}
+\item[Usage:]  \rule{0pt}{1em}
+\begin{description}
+\item \textit{NumericalMathFunction(x)}
+\item \textit{NumericalMathFunction(sample)}
+\end{description}
+\item[Arguments:] \rule{0pt}{1em}
+\begin{description}
+\item $x$: a NumericalPoint
+\item \textit{sample}: a NumericalSample
+\end{description}
+\item[Value:] \rule{0pt}{1em}
+\begin{description}
+\item while using the first usage, a NumericalPoint, the NumericalMathFunction value at point $x$
+\item while using the second usage, a NumericalSample, the NumericalMathFunction value on the sample \textit{sample}
+\end{description}
+\end{description}
+\bigskip
+
+
+\item \textit{clearCache}
+\begin{description}
+\item[Usage:] \textit{clearCache()}
+\item[Arguments:] none
+\item[Value:] it clears the cache of the function from all the previously stored values.
+\end{description}
+\bigskip
+
+\item \textit{draw}
+\begin{description}
+\item[Usage:] \rule{0pt}{1em}
+\begin{description}
+\item \textit{draw(inputMarg, outputMarg, CP, zMin, zMax,ptNb) }
+\item \textit{draw(firstInputMarg, secondInputMarg, outputMarg, CP, inputMin2, inputMax2,ptNb)}
+\item \textit{draw(xMin3, xMax3,ptNb)}
+\item \textit{draw(inputMin4, inputMax4, ptNb)}
+\end{description}
+\item[Arguments:] \rule{0pt}{1em}
+\begin{description}
+\item \textit{inputMarginal, outputMarginal}:UnsignedLong
+\item \textit{CP}: NumericalPoint
+\item \textit{zMin, zMax}: NumericalScalar
+\item \textit{ptNb}: UnsignedLong, the number of points to draw the curves.
+\end{description}
+\item[Value:]  \rule{0pt}{1em}
+\begin{description}
+\item in the first usage: we note $f: \mathbb{R}^n \rightarrow \mathbb{R}^p$ where we note $\vect{x} = (x_1, \dots, x_n)$ and $f(\vect{x}) = (f_1(\vect{x}), \dots,f_p(\vect{x}))$, with $n\geq 1$ and $p\geq 1$. It drawsgraph of any marginal $f_k: \mathbb{R}^n \rightarrow \mathbb{R}$ with respect to the variation of $x_j$ in the intervall $[x_j^{min}, x_j^{max}]$, when all the other components of $\vect{x}$ are fixed to the corresponding ones of the \emph{central point} noted $\vect{CP}$. Then OpenTURNS draws the graph: $t\in [x_j^{min}, x_j^{max}] \mapsto f_k(CP_1, \dots, CP_{j-1}, t,  CP_{j+1} \dots, CP_n)$. The method is $draw(arguments)$ whith the appropriate arguments.
+\item in the second usage: with the same function $f$ previously defined, it draws the iso-curves of the  function $f_k$ with respect to the variation of $(x_i, x_j)$ in the intervall $[x_i^{min}, x_i^{max}] \times [x_j^{min}, x_j^{max}] $, when all the other components of $\vect{x}$ are fixed to the corresponding ones of the \emph{central point} noted $\vect{CP}$. Then OpenTURNS draws the graph: $(t,u) \in [x_i^{min}, x_i^{max}] \times [x_j^{min}, x_j^{max}] \mapsto f_k(CP_1, \dots, CP_{i-1}, t,  CP_{i+1}, \dots, CP_{j-1}, u,  CP_{j+1} \dots, CP_n)$.
+\item in the third usage: the same as the first usage but only for function $f: \mathbb{R} \rightarrow \mathbb{R}$ .
+\item in the fourth usage:  the same as the second usage but only for function $f: \mathbb{R}^2 \rightarrow \mathbb{R}$.
+\end{description}
+\end{description}
+\bigskip
+
+\item \textit{getDescription}
+\begin{description}
+\item[Usage:] \textit{getDescription()}
+\item[Arguments:] none
+\item[Value:] a Description which describes the inputs and the ouputs
+of the NumericalMathFunction
+(use \verb|print NumericalMathFunction.getDescription()| command to
+visualize it)
+\end{description}
+\bigskip
+
+\item \textit{getEvaluationCallsNumber}
+\begin{description}
+\item[Usage:] \textit{getEvaluationCallsNumber()}
+\item[Arguments:] none
+\item[Value:] an integer that counts the number of times the NumericalMathFunction has been called since its creation
+\end{description}
+\bigskip
+
+\item \textit{getInputVariablesName}
+\begin{description}
+\item[Usage:] \textit{getInputVariablesName()}
+\item[Arguments:] none
+\item[Value:] a Description, the description of the input variables
+\end{description}
+\bigskip
+
+\item \textit{getFormula}
+\begin{description}
+\item[Usage:] \textit{getFormula()}
+\item[Arguments:] none
+\item[Value:] a String, the formula between the input and the output in the case where the function is: $\Rset \longrightarrow \Rset$
+\end{description}
+\bigskip
+
+\item \textit{getFormulas}
+\begin{description}
+\item[Usage:] \textit{getFormulas()}
+\item[Arguments:] none
+\item[Value:] a Description, the description of the formulas between the inputs and the outputs
+\end{description}
+\bigskip
+
+\item \textit{getGradientCallsNumber}
+\begin{description}
+\item[Usage:] \textit{getGradientCallsNumber()}
+\item[Arguments:] none
+\item[Value:] an integer that counts the number of times the gradient of the NumericalMathFunction has been called since its creation. Note that if the gradient is implemented by a finite difference method, the gradient calls numbers is equal to 0 and the different calls are counted in the evaluation calls number
+\end{description}
+\bigskip
+
+\item \textit{getGradientImplementation}
+\begin{description}
+\item[Usage:] \textit{getGradientImplementation()}
+\item[Arguments:] none
+\item[Value:] a NumericalMathGradientImplementation, the gradient function
+\end{description}
+\bigskip
+
+\item \textit{getHessianCallsNumber}
+\begin{description}
+\item[Usage:] \textit{getHessianCallsNumber()}
+\item[Arguments:] none
+\item[Value:] an integer that counts the number of times the gradient of the NumericalMathFunction has been called since its creation. Note that if the hessian is implemented by a finite difference method, the hessian calls numbers is equal to 0 and the different calls are counted in the evaluation calls number
+\end{description}
+\bigskip
+
+\item \textit{getHessianImplementation}
+\begin{description}
+\item[Usage:] \textit{getHessianImplementation()}
+\item[Arguments:] none
+\item[Value:] a NumericalMathHessianImplementation, the hessian function
+\end{description}
+\bigskip
+
+\item \textit{getInputDescription}
+\begin{description}
+\item[Usage:] \textit{getInputDescription()}
+\item[Arguments:] none
+\item[Value:] a Description which describes the inputs of the NumericalMathFunction
+\end{description}
+\bigskip
+
+\item \textit{getInputNumericalPointDimension} or   \textit{getInputDimension}
+\begin{description}
+\item[Usage:] \textit{getInputNumericalPointDimension(), getInputDimension()}
+\item[Arguments:] none
+\item[Value:] an integer, the dimension of the input space
+\end{description}
+\bigskip
+
+
+\item \textit{getEvaluationImplementation}
+\begin{description}
+\item[Usage:] \textit{getEvaluationImplementation()}
+\item[Arguments:] none
+\item[Value:] a NumericalMathEvaluationImplementation, the evaluation function
+\end{description}
+\bigskip
+
+\item \textit{getMarginal}
+\begin{description}
+\item[Usage:] \rule{0pt}{1em}
+\begin{description}
+\item \textit{getMarginal(i)}
+\item \textit{getMarginal(indices)}
+\end{description}
+\item[Arguments:] \rule{0pt}{1em}
+\begin{description}
+\item $i$: an integer corresponding to the marginal (Care: the numbering starts at 0 )
+\item \textit{indices}: an Indices, the set of indices for which the marginal is extracted
+\end{description}
+\item[Value:] a NumericalMathFunction, corresponding to either $f_i$  or $(f_i)_{i \in indices}$, with $f: \Rset^n  \longrightarrow \Rset^p$ and $f = (f_0, \cdots, f_{p-1})$.
+\end{description}
+\bigskip
+
+\item \textit{getOutputDescription}
+\begin{description}
+\item[Usage:] \textit{getOutputDescription()}
+\item[Arguments:] none
+\item[Value:] a Description which describes the outputs
+of the NumericalMathFunction object
+\end{description}
+\bigskip
+
+\item \textit{getOutputNumericalPointDimension} or   \textit{getOutputDimension}
+\begin{description}
+\item[Usage:] \textit{getOutputNumericalPointDimension(), getOutputDimension()}
+\item[Arguments:] none
+\item[Value:] an integer, the dimension of the output space
+\end{description}
+\bigskip
+
+\item \textit{getOutputHistory}
+\begin{description}
+\item[Usage:] \textit{getOutputHistory()}
+\item[Arguments:] none
+\item[Value:] a \textit{HistoryStrategy} which stores all the numerical points which are the values of the function associated to the InputStrategy.
+\end{description}
+\bigskip
+
+\item \textit{getInputHistory}
+\begin{description}
+\item[Usage:] \textit{getInputHistory()}
+\item[Arguments:] none
+\item[Value:] a \textit{HistoryStrategy} which stores all the numerical points over wichi the function has been evaluated
+\end{description}
+\bigskip
+
+\item \textit{disableHistory}
+\begin{description}
+\item[Usage:] \textit{disableHistory()}
+\item[Arguments:] None.
+\item[Value:] None. Disables the history mechanism.
+\end{description}
+\bigskip
+
+\item \textit{enableHistory}
+\begin{description}
+\item[Usage:] \textit{enableHistory()}
+\item[Arguments:] None.
+\item[Value:] None. Enables the history mechanism.
+\end{description}
+\bigskip
+
+\item \textit{isHistoryEnabled}
+\begin{description}
+\item[Usage:] \textit{isHistoryEnabled()}
+\item[Arguments:] None.
+\item[Value:] a logical value. True if the history mechanism is enabled. It is disabled by default.
+\end{description}
+\bigskip
+
+\item \textit{clearHistory}
+\begin{description}
+\item[Usage:] \textit{clearHistory()}
+\item[Arguments:] None.
+\item[Value:] None. Clears the history.
+\end{description}
+\bigskip
+
+\item \textit{disableCache}
+\begin{description}
+\item[Usage:] \textit{disableCache()}
+\item[Arguments:] None.
+\item[Value:] None. Desactivates the cache mechanism.
+\end{description}
+\bigskip
+
+\item \textit{enableCache}
+\begin{description}
+\item[Usage:] \textit{enableCache()}
+\item[Arguments:] None.
+\item[Value:] None. Activates the cache mechanism.
+\end{description}
+\bigskip
+
+\item \textit{isCacheEnabled}
+\begin{description}
+\item[Usage:] \textit{isCacheEnabled()}
+\item[Arguments:] None.
+\item[Value:] a logical value. True if the cache mechanism is enabled. It is disabled by default.
+\end{description}
+\bigskip
+
+\item \textit{getCacheHits}
+\begin{description}
+\item[Usage:] \textit{getCacheHits()}
+\item[Arguments:] None.
+\item[Value:] an integer that counts the number of computations saved thanks to the cache mecanism.
+\end{description}
+\bigskip
+
+\item \textit{getCacheInput}
+\begin{description}
+\item[Usage:] \textit{getCacheInput()}
+\item[Arguments:] None.
+\item[Value:] a NumericalSample that gives all the numerical points stored in the cache mecanism.
+\end{description}
+\bigskip
+
+\item \textit{addCacheContent}
+\begin{description}
+\item[Usage:] \textit{addCacheContent(inSample, outSample)}
+\item[Arguments:] \textit{inputSample, outputSample}: NumericalSample.
+\item[Value:] None. It adds the previous samples to the cache.
+\end{description}
+\bigskip
+
+\item \textit{clearCache}
+\begin{description}
+\item[Usage:] \textit{clearCache()}
+\item[Arguments:] None.
+\item[Value:] None. It empties the content of the cache.
+\end{description}
+\bigskip
+
+
+\item \textit{getOutputVariablesName}
+\begin{description}
+\item[Usage:] \textit{getOutputVariablesName()}
+\item[Arguments:] none
+\item[Value:] a Description, the description of the output variables
+\end{description}
+\bigskip
+
+
+\item \textit{getParameters}
+\begin{description}
+\item[Usage:] \textit{getParameters()}
+\item[Arguments:] none
+\item[Value:] a NumericalPoint, the NumericalPoint
+corresponding to parameters of the NumericalMathFunction
+\end{description}
+\bigskip
+
+
+\item \textit{GetValidOperators}
+\begin{description}
+\item[Usage:] \textit{GetValidOperators()}
+\item[Arguments:] none
+\item[Value:] a Description, containing the list of the operators we can use within OpenTURNS
+\end{description}
+\bigskip
+
+
+\item \textit{GetValidFunctions}
+\begin{description}
+\item[Usage:] \textit{GetValidFunctions()}
+\item[Arguments:] none
+\item[Value:] a Description, containing the list of the functions we can use within OpenTURNS
+\end{description}
+\bigskip
+
+
+\item \textit{GetValidConstants}
+\begin{description}
+\item[Usage:] \textit{GetValidConstants()}
+\item[Arguments:] none
+\item[Value:] a Description, containing the list of the constants we can use within OpenTURNS
+\end{description}
+\bigskip
+
+
+\item \textit{gradient}
+\begin{description}
+\item[Usage:] \textit{gradient(x)}
+\item[Arguments:] $x$: a NumericalPoint (which has the same dimension as the inputs)
+\item[Value:] a Matrix, the gradient (with respect to the inputs) of the
+NumericalMathFunction
+\end{description}
+\bigskip
+
+\item \textit{hessian}
+\begin{description}
+\item[Usage:] \textit{hessian(x)}
+\item[Arguments:] $x$: a NumericalPoint (which has the same dimension as the inputs)
+\item[Value:] a SymmetricTensor, the hessian (with respect to the inputs) of the
+NumericalMathFunction
+\end{description}
+\bigskip
+
+\item \textit{setName}
+\begin{description}
+\item[Usage:] \textit{setName(name)}
+\item[Arguments:] \textit{name}: a string (between quotations marks)
+\item[Value:] it gives a name to the NumericalMathFunction
+\end{description}
+
+\end{description}
+
+\end{description}
+
+\subsubsection{Analytical function definition}
+\label{analytical_function_definition}
+NumericalMathFunction allows to define an analytical function based on strings that contains the formula, input ant output variable names: \textit{ouput = formula(input)}.
+This \textit{formula} string is defined using a specific mathematical syntax.
+
+Here is the list of available constants:
+\begin{itemize}
+\item[$\bullet$] \textit{\_e}:  Euler's constant (2.71828...),
+\item[$\bullet$] \textit{\_pi}: Pi constant (3.14159...)
+\end{itemize}
+
+Here is the list of available functions:
+\begin{itemize}
+\item[$\bullet$] \textit{abs(arg)}:  absolute value function,
+\item[$\bullet$] \textit{acos(arg)}:  inverse cosine function,
+\item[$\bullet$] \textit{acosh(arg)}:  inverse hyperbolic cosine function,
+\item[$\bullet$] \textit{asin(arg)}:  inverse sine function,
+\item[$\bullet$] \textit{asinh(arg)}:  inverse hyperbolic sine function,
+\item[$\bullet$] \textit{atan(arg)}:  inverse tangent function (values in $[-\pi/2, \pi/2]$
+\item[$\bullet$] \textit{atan2(arg1, arg2)}:  inverse tangent function of the tangent value \textit{arg1 / arg2} (values in $[-\pi, \pi]$,
+\item[$\bullet$] \textit{atanh(arg)}:  inverse hyperbolic tangent function,
+\item[$\bullet$] \textit{avg(arg1, ..., argn)}:  mean value of all arguments,
+\item[$\bullet$] \textit{besselJ0(arg)}:  1rst kind Bessel function with parameter 0,
+\item[$\bullet$] \textit{besselJ1(arg)}:  1rst kind Bessel function with parameter 1,
+\item[$\bullet$] \textit{besselY0(arg)}:  2nd kind Bessel function with parameter 0,
+\item[$\bullet$] \textit{besselY1(arg)}:  2nd kind Bessel function with parameter 1,
+\item[$\bullet$] \textit{ceil(arg)}:  returns the smallest integer $\geq arg$,
+\item[$\bullet$] \textit{cbrt(arg)}:  cubic root function,
+\item[$\bullet$] \textit{cos(arg)}:  cosine function,
+\item[$\bullet$] \textit{cosh(arg)}:  hyperbolic cosine function,
+\item[$\bullet$] \textit{erf(arg)}:  error function,
+\item[$\bullet$] \textit{erfc(arg)}:  complementary error function,
+\item[$\bullet$] \textit{exp(arg)}:  exponential function,
+\item[$\bullet$] \textit{floor(arg)}: returns the greatest integer $\leq arg$,
+\item[$\bullet$] \textit{gamma(arg)}:  gamma function,
+\item[$\bullet$] \textit{if(arg1, arg2, arg3)}:  if arg1 then arg2 else arg3,
+\item[$\bullet$] \textit{lngamma(arg)}:  log of the gamma function,
+\item[$\bullet$] \textit{log2(arg)}:  logarithm in base 2,log10(arg) :  logarithm in base 10,
+\item[$\bullet$] \textit{log(arg), ln(arg)}:  logarithm in base e (2.71828...),
+\item[$\bullet$] \textit{max(arg1, ..., argn)}:  max of all arguments,
+\item[$\bullet$] \textit{min(arg1, ..., argn)}:  min of all arguments,
+\item[$\bullet$] \textit{pow(arg1, arg2)}: returns arg1 to the power arg2,
+\item[$\bullet$] \textit{rint(arg)}, \textit{round(arg)}:  round to nearest integer function,
+\item[$\bullet$] \textit{sign(arg)}:  sign function -1 if $x< 0$; 1 if $x>0$, 0 if $x=0$,
+\item[$\bullet$] \textit{sin(arg)}:  sine function,
+\item[$\bullet$] \textit{sinh(arg)}:  hyperbolic sine function,
+\item[$\bullet$] \textit{sqrt(arg)}:  square root function,
+\item[$\bullet$] \textit{sum(arg1, ..., argn)}:  sum of all arguments,
+\item[$\bullet$] \textit{tan(arg)}:  tangent function,
+\item[$\bullet$] \textit{tanh(arg)}:  hyperbolic tangens function,
+\item[$\bullet$] \textit{trunc(arg)}:  removes the decimal part of \textit{arg}.
+\end{itemize}
+
+Here is the list of operators proposed:
+\begin{itemize}
+\item[$\bullet$] $=$: assignement, can only be applied to variable names (priority -1),
+\item[$\bullet$] \textit{and}: logical and (priority 1),
+\item[$\bullet$] \textit{or}: logical or (priority 1),
+\item[$\bullet$] \textit{xor}: logical xor (priority 1),
+\item[$\bullet$] $<=$: less or equal (priority 2),
+\item[$\bullet$] $>=$: greater or equal (priority 2),
+\item[$\bullet$] $!=$: not equal (priority 2),
+\item[$\bullet$] $==$: equal (priority 2),
+\item[$\bullet$] $>$: greater than (priority 2),
+\item[$\bullet$] $<$: less than (priority 2),
+\item[$\bullet$] $+$: addition (priority 3),
+\item[$\bullet$] $-$: subtraction (priority 3),
+\item[$\bullet$] $*$: multiplication (priority 4),
+\item[$\bullet$] $/$: division (priority 4),
+\item[$\bullet$] \textasciitilde: logical negation (priority 4),
+\item[$\bullet$] \textit{not}: alias for ~ (priority 4),
+\item[$\bullet$] $-$: sign change (priority 4),
+\item[$\bullet$] \textasciicircum: raise x to the power of y (priority 5).
+\end{itemize}
+
+% ==========================================================================
+
+\newpage
+\index{PythonFunction}
+\subsection{PythonFunction}
+% 
+\begin{description}
+% 
+\item[Usage:] This constructor allows to build a NumericalMathFunction from a regular python function without having to subclass OpenTURNSPythonFunction.
+% 
+\item[Arguments:] \rule{0pt}{1em}
+\begin{description}
+\item $n$: an integer, the number of input parameters
+\item $p$: an integer, the number of output parameters
+\item \textit{func}: a python function, which takes as arguments a sequence of float and returns a sequence of float
+\item \textit{func\_sample}: optional, a function for sample evaluation
+\end{description}
+\item[Value:] a NumericalMathFunction, bound to func.
+\end{description}
+
+% ==========================================================================
+
+
+\newpage
+%\index{Functions!NumericalMathEvaluationImplementation}
+\index{NumericalMathEvaluationImplementation}
+\subsection{NumericalMathEvaluationImplementation}
+
+\begin{description}
+
+\item[Usage:]   this object is the result of the method \textit{getEvaluationImplementation()} of a NumericalMathFunction.
+
+\item[Some methods:]  \rule{0pt}{1em}
+\begin{description}
+
+\item \textit{getMarginal}
+\begin{description}
+\item[Usage:] \rule{0pt}{1em}
+\begin{description}
+\item \textit{getMarginal(i)}
+\item \textit{getMarginal(indices)}
+\end{description}
+\item[Arguments:] \rule{0pt}{1em}
+\begin{description}
+\item $i$: an integer corresponding to the marginal (Care: the numbering starts at 0 )
+\item \textit{indices}: a Indices, the set of indices for which the marginal is extracted
+\end{description}
+\item[Value:] a NumericalMathFunction, the restriction of the Evaluation function to its components functions which indices are $i$ or in \textit{indices}
+\end{description}
+
+\end{description}
+
+\end{description}
+
+% ==========================================================================
+
+\newpage
+%\index{Functions!NumericalMathGradientImplementation}
+\index{NumericalMathGradientImplementation}
+\subsection{NumericalMathGradientImplementation}
+
+
+\begin{description}
+
+\item[Usage:]   this object is the result of the method \textit{getGradientImplementation()} of a NumericalMathFunction.
+
+\item[Some methods:]  \rule{0pt}{1em}
+\begin{description}
+
+\item \textit{getMarginal}
+\begin{description}
+\item[Usage:] \rule{0pt}{1em}
+\begin{description}
+\item \textit{getMarginal(i)}
+\item \textit{getMarginal(indices)}
+\end{description}
+\item[Arguments:] \rule{0pt}{1em}
+\begin{description}
+\item $i$: an integer corresponding to the marginal (Care: the numbering starts at 0 )
+\item \textit{indices}: a Indices, the set of indices for which the marginal is extracted
+\end{description}
+\item[Value:] a NumericalMathFunction, the restriction of the Gradient function to its components functions which indices are $i$ or in \textit{indices}
+\end{description}
+
+\end{description}
+
+\end{description}
+
+
+
+% ==========================================================================
+
+\newpage
+%\index{Functions!NumericalMathHessianImplementation}
+\index{NumericalMathHessianImplementation}
+\subsection{NumericalMathHessianImplementation}
+
+
+\begin{description}
+
+\item[Usage:]   this object is the result of the method \textit{getHessianImplementation()} of a NumericalMathFunction.
+
+\item[Some methods:]  \rule{0pt}{1em}
+\begin{description}
+
+\item \textit{getMarginal}
+\begin{description}
+\item[Usage:] \rule{0pt}{1em}
+\begin{description}
+\item \textit{getMarginal(i)}
+\item \textit{getMarginal(indices)}
+\end{description}
+\item[Arguments:]  \rule{0pt}{1em}
+\begin{description}
+\item $i$: an integer corresponding to the marginal (Care: the numbering starts at 0 )
+\item \textit{indices}: a Indices, the set of indices for which the marginal is extracted
+\end{description}
+\item[Value:] a NumericalMathFunction, the restriction of the Hessian function to its components functions which indices are $i$ or in \textit{indices}.
+\end{description}
+
+\end{description}
+
+\end{description}
+
+
+% ==========================================================================
+\newpage
+%\index{Functions!CenteredFiniteDifferenceGradient}
+\index{CenteredFiniteDifferenceGradient}
+\subsection{CenteredFiniteDifferenceGradient}
+
+CenteredFiniteDifferenceGradient inherits from NumericalMathGradientImplementation
+
+It provides a first order centered finite-difference scheme:
+\begin{equation}
+  \frac{\partial f_j}{\partial x_i} \approx \frac{f_j(x + \epsilon_i) - f_j(x - \epsilon_i)}{2 \epsilon_i}
+\end{equation}
+
+\begin{description}
+\item[Usage:] \rule{0pt}{1em}
+\begin{description}
+\item \textit{CenteredFiniteDifferenceGradient(epsilon, evalImpl)}
+\item \textit{CenteredFiniteDifferenceGradient(step, evalImpl)}
+\end{description}
+
+\item[Arguments:]  \rule{0pt}{1em}
+\begin{description}
+\item \textit{evalImpl} a NumericalMathFunctionEvaluationImplementation, the implementation of the evaluation of a function
+\item \textit{epsilon}: a NumericalScalar, the finite difference step
+\item \textit{epsilon}: a NumericalPoint, the finite difference steps for each dimension
+\item \textit{step}: a FiniteDifferenceStep, the object that defines how finite difference steps values are computed
+\end{description}
+
+\item[Value:] \rule{0pt}{1em}
+\begin{description}
+\item a CenteredFiniteDifferenceGradient
+\end{description}
+
+\end{description}
+
+% ==========================================================================
+
+\newpage
+%\index{Functions!NonCenteredFiniteDifferenceGradient}
+\hyphenation{Non-Centered-Finite-Difference-Math-Gradient-Implementation}
+\index{NonCenteredFiniteDifferenceGradient}
+\subsection{NonCenteredFiniteDifferenceGradient}
+
+NonCenteredFiniteDifferenceGradient inherits from NumericalMathGradientImplementation
+
+It provides a first order non-centered finite-difference scheme:
+\begin{equation}
+  \frac{\partial f_j}{\partial x_i} \approx \frac{f_j(x + \epsilon_i) - f_j(x)}{\epsilon_i}
+\end{equation}
+
+\begin{description}
+\item[Usage:] \rule{0pt}{1em}
+\begin{description}
+\item \textit{NonCenteredFiniteDifferenceGradient(epsilon, evalImpl)}
+\item \textit{NonCenteredFiniteDifferenceGradient(step, evalImpl)}
+\end{description}
+
+\item[Arguments:]  \rule{0pt}{1em}
+\begin{description}
+\item \textit{evalImpl} a NumericalMathFunctionEvaluationImplementation, the implementation of the evaluation of a function
+\item \textit{epsilon}: a NumericalScalar, the finite difference step
+\item \textit{epsilon}: a NumericalPoint, the finite difference steps for each dimension
+\item \textit{step}: a FiniteDifferenceStep, the object that defines how finite difference steps values are computed
+\end{description}
+
+\item[Value:] \rule{0pt}{1em}
+\begin{description}
+\item a NonCenteredFiniteDifferenceGradient
+\end{description}
+
+\end{description}
+
+
+
+
+% ==========================================================================
+
+\newpage
+%\index{Functions!CenteredFiniteDifferenceHessian}
+\index{CenteredFiniteDifferenceHessian}
+\subsection{CenteredFiniteDifferenceHessian}
+
+CenteredFiniteDifferenceHessian inherits from NumericalMathHessianImplementation
+
+It provides a second order centered finite-difference scheme:
+\begin{equation}
+  \frac{\partial^2 f_k}{\partial x_i \partial x_j} \approx \frac{f_k(x + \epsilon_i + \epsilon_j) - f_k(x + \epsilon_i - \epsilon_j) + f_k(x - \epsilon_i - \epsilon_j) - f_k(x - \epsilon_i + \epsilon_j)}{4 \epsilon_i \epsilon_j}
+\end{equation}
+
+\begin{description}
+\item[Usage:] \rule{0pt}{1em}
+\begin{description}
+\item \textit{CenteredFiniteDifferenceHessian(epsilon, evalImpl)}
+\item \textit{CenteredFiniteDifferenceHessian(step, evalImpl)}
+\end{description}
+
+\item[Arguments:]  \rule{0pt}{1em}
+\begin{description}
+\item \textit{evalImpl} a NumericalMathFunctionEvaluationImplementation, the implementation of the evaluation of a function
+\item \textit{epsilon}: a NumericalScalar, the finite difference step
+\item \textit{epsilon}: a NumericalPoint, the finite difference steps for each dimension
+\item \textit{step}: a FiniteDifferenceStep, the object that defines how finite difference steps values are computed
+\end{description}
+
+\item[Value:] \rule{0pt}{1em}
+\begin{description}
+\item a CenteredFiniteDifferenceHessian
+\end{description}
+
+\end{description}
+
+
+% ==========================================================================
+
+\newpage
+%\index{Functions!FiniteDifferenceStep}
+\index{FiniteDifferenceStep}
+\subsection{FiniteDifferenceStep}
+
+\begin{description}
+\item[Usage:] \rule{0pt}{1em}
+\begin{description}
+\item \textit{FiniteDifferenceStep(finiteDifferenceStepImplementation)}
+\end{description}
+
+\item[Arguments:]  \rule{0pt}{1em}
+\begin{description}
+\item \textit{finiteDifferenceStepImplementation} a FiniteDifferenceStepImplementation, the implementation of the finite difference step
+\end{description}
+
+\item[Value:] \rule{0pt}{1em}
+\begin{description}
+\item a FiniteDifferenceStep
+\end{description}
+
+\item[Details:] Defines how finite difference steps are computed
+\end{description}
+
+% ==========================================================================
+
+\newpage
+%\index{Functions!ConstantStep}
+\index{ConstantStep}
+\subsection{ConstantStep}
+
+ConstantStep inherits from FiniteDifferenceStepImplementation
+
+\begin{description}
+\item[Usage:] \rule{0pt}{1em}
+\begin{description}
+\item \textit{ConstantStep(epsilon)}
+\end{description}
+
+\item[Arguments:]  \rule{0pt}{1em}
+\begin{description}
+\item \textit{epsilon} a NumericalPoint, the finite difference steps for each dimension
+\end{description}
+
+\item[Value:] \rule{0pt}{1em}
+\begin{description}
+\item a ConstantStep
+\end{description}
+
+\item[Details:] The finite difference step is constant and equal to epsilon
+\end{description}
+
+% ==========================================================================
+
+\newpage
+%\index{Functions!BlendedStep}
+\index{BlendedStep}
+\subsection{BlendedStep}
+
+BlendedStep inherits from FiniteDifferenceStepImplementation
+
+\begin{description}
+\item[Usage:] \rule{0pt}{1em}
+\begin{description}
+\item \textit{BlendedStep(epsilon)}
+\item \textit{BlendedStep(epsilon, eta)}
+\item \textit{BlendedStep(epsilon, eta)}
+\end{description}
+
+\item[Arguments:]  \rule{0pt}{1em}
+\begin{description}
+\item \textit{epsilon} a NumericalPoint, the finite difference step factor for each dimension
+\item \textit{eta} a NumericalScalar, the finite difference step offset for every dimension, must be positive
+\item \textit{eta} a NumericalPoint, the finite difference step offset for each dimension, must be positive
+\end{description}
+
+\item[Value:] \rule{0pt}{1em}
+\begin{description}
+\item a BlendedStep,
+\end{description}
+
+\item[Details:] The finite difference step is $epsilon \cdot ( |x| + eta )$
+\end{description}
+
+
+% ======================================
+
+
+\newpage
+%\index{Functions!MaginalTransformationEvaluation}
+\index{MaginalTransformationEvaluation}
+\subsection{MarginalTransformationEvaluation}
+
+
+\begin{description}
+
+\item[Usage:] \rule{0pt}{1em}
+\begin{description}
+\item \textit{MarginalTransformationEvaluation(distCol, direction)}
+\item \textit{MarginalTransformationEvaluation(distCol)}
+\item \textit{MarginalTransformationEvaluation(distCol, outputDistCol)}
+\end{description}
+
+\item[Arguments:]  \rule{0pt}{1em}
+\begin{description}
+\item \textit{distCol}: a DistributionCollection,
+\item \textit{direction}: an integer or \textit{MarginalTransformationEvaluation.FROM} (associated to the integer 0) or \textit{MarginalTransformationEvaluation.TO} (associated to the integer 1). If not specified, \textit{direction = 1}.
+\item \textit{outputDistCol}: a DistributionCollection
+\end{description}
+
+\item[Value:] NumericalMathEvaluationImplementation: this class contains NumericalMathFunction which can be evaluated in one points but which proposes no gradient nor hessian implementation. \rule{0pt}{1em}
+\begin{description}
+\item In the first usage, if \textit{direction = MarginalTransformationEvaluation.FROM}, the created operator transforms a NumericalPoint into its rank according to the marginal distributions described in \textit{distributionCollection}: if we note $(F_{X_1}, \hdots, F_{X_n})$ the CDF of the distributions contained in \textit{distributionCollection}, then the created operator works as follows:
+\begin{align*}
+(x_1, \hdots, x_n) \longrightarrow (F_{X_1}(x_1), \hdots, F_{X_n}(x_n))
+\end{align*}
+If \textit{direction = MarginalTransformationEvaluation.TO}, the created operator works in the opposite direction:
+\begin{align*}
+(x_1, \hdots, x_n) \longrightarrow (F_{X_1}^{-1}(x_1), \hdots, F_{X_n}^{-1}(x_n))
+\end{align*}
+In that case, it requires that all the values $x_i$ be in $[0,1]$.
+\item In the second usage, the created operator transforms a NumericalPoint into the following one, where  \textit{outputDistributionCollection} contains the $(F_{Y_1}, \hdots, F_{Y_n})$ distributions:
+\begin{align*}
+(x_1, \hdots, x_n) \longrightarrow (F_{Y_1}^{-1} \circ F_{X_1}(x_1), \hdots,F_{Y_n}^{-1} \circ  F_{X_n}(x_n))
+\end{align*}
+\end{description}
+
+\item[Some methods:]  \rule{0pt}{1em}
+\begin{description}
+
+\item $()$
+\begin{description}
+\item[Usage:]  \textit{MarginalTransformationEvaluation(point)}
+\item[Arguments:]  \textit{point}: a NumericalPoint
+\item[Value:] a NumericalPoint
+\end{description}
+
+\end{description}
+
+\end{description}
+
+% ==========================================================================
+
+\newpage
+%\index{Functions!DynamicalFunction}
+\index{DynamicalFunction}
+\subsection{DynamicalFunction}
+
+\begin{description}
+
+\item[Usage:] \rule{0pt}{1em}
+\begin{enumerate}
+\item \textit{DynamicalFunction(implementation)}
+\end{enumerate}
+
+\item[Arguments:]  \rule{0pt}{1em}
+\begin{description}
+\item \textit{implementation}: a DynamicalFunctionImplementation object, which can be a TemporalFunction or a SpatialFunction for example.
+\end{description}
+
+\item[Value:] a DynamicalFunction,  $f_{dyn}:\cD \times \Rset^d \rightarrow \cD' \times \Rset^q$ where $\cD \in \Rset^n$ and  $\cD' \in \Rset^p$ defined by:
+\begin{align}\label{dynFct}
+f_{dyn}(\vect{t}, \vect{x}) = (t'(\vect{t}), v'(\vect{t}, \vect{x}))
+\end{align}
+with $t': \cD \rightarrow \cD'$ and $v': \cD \times \Rset^d \rightarrow \Rset^q$.
+OpenTURNS v1.3 only proposes dynamical functions where $\cD'=\cD$ and $\cM'=\cM$ which means that $t'=Id$ and $d=p$.
+
+\item[Some methods:]  \rule{0pt}{1em}
+\begin{description}
+
+\item $()$
+\begin{description}
+\item[Usage:]  \rule{0pt}{1em}
+\begin{description}
+\item \textit{DynamicalFunction(field)}
+\item \textit{DynamicalFunction(processSample)}
+\end{description}
+\item[Arguments:] \rule{0pt}{1em}
+\begin{description}
+\item \textit{field}: a Field
+\item \textit{processSample}: a ProcessSample
+\end{description}
+\item[Value:] \rule{0pt}{1em}
+\begin{description}
+\item in the first usage, a Field,
+\item in the second usage, a ProcessSample.
+\end{description}
+\end{description}
+\bigskip
+
+\item \textit{getInputDescription}
+\begin{description}
+\item[Usage:] \textit{getInputDescription()}
+\item[Arguments:] none
+\item[Value:] a Description which describes the inputs of the DynamicalFunction
+\end{description}
+\bigskip
+
+\item \textit{getInputDimension}
+\begin{description}
+\item[Usage:] \textit{getInputDimension()}
+\item[Arguments:] none
+\item[Value:] an integer, the input dimension $n$ of the dynamical function.
+\end{description}
+\bigskip
+
+\item \textit{getOutputDescription}
+\begin{description}
+\item[Usage:] \textit{getOutputDescription()}
+\item[Arguments:] none
+\item[Value:] a Description which describes the outputs of the DynamicalFunction
+\end{description}
+\bigskip
+
+\item \textit{getOutputDimension}
+\begin{description}
+\item[Usage:] \textit{getOutputDimension()}
+\item[Arguments:] none
+\item[Value:] an integer, the output dimension $p$ of the dynamical function.
+\end{description}
+\bigskip
+
+\item \textit{getCallsNumber}
+\begin{description}
+\item[Usage:] \textit{getCallsNumber()}
+\item[Arguments:] none
+\item[Value:] an integer that counts the number of times the DynamicalFunction has been called since its creation
+\end{description}
+\bigskip
+
+\item \textit{getMarginal}
+\begin{description}
+\item[Usage:] \rule{0pt}{1em}
+\begin{description}
+\item \textit{getMarginal(i)}
+\item \textit{getMarginal(indices)}
+\end{description}
+\item[Arguments:] \rule{0pt}{1em}
+\begin{description}
+\item $i$: an integer corresponding to the marginal (Care: the numbering starts at 0 )
+\item \textit{indices}: an Indices, the set of indices for which the marginal is extracted
+\end{description}
+\item[Value:] a DynamicalFunction, corresponding to the marginal $i$ or \textit{indices} of the dynamical function $f_{dyn}$.
+\end{description}
+\end{description}
+\end{description}
+
+% ==========================================================================
+\newpage
+
+%\index{Functions!SpatialFunction}
+\index{SpatialFunction}
+\subsection{SpatialFunction}
+
+
+
+SpatialFunction inherits from DynamicalFunctionImplementation.
+
+\begin{description}
+
+\item[Usage:]    \textit{SpatialFunction(g,dim)}
+
+\item[Arguments:]
+\begin{description}
+\item $g$: a NumericalMathFunction, $g : \Rset^d  \rightarrow \Rset^q$.
+\item \textit{dim}: an integer
+\end{description}
+
+
+\item[Value:] a SpatialFunction wich  is a particular dynamical function that lets invariant the mesh of a field of dimension \textit{dim}, defined as follows.  The resulting  spatial function $f_{spat}: \cD \times \Rset^d \rightarrow \cD \times \Rset^q$ where $\cD \in \Rset^{dim}$, is defined by:
+\begin{align}\label{spatFunc}
+f_{spat}(\vect{t}, \vect{x})=(\vect{t}, g(\vect{x}))
+\end{align}
+
+\item[Some methods:]  \rule{0pt}{1em}
+\begin{description}
+
+\item \textit{getInputDimension()}
+\begin{description}
+\item[Usage:] \textit{getInputDimension()}
+\item[Arguments:] none
+\item[Value:] an integer, the dimension $d$
+\end{description}
+\bigskip
+
+\item \textit{getOutputDimension()}
+\begin{description}
+\item[Usage:] \textit{getOutputDimension()}
+\item[Arguments:] none
+\item[Value:] an integer, the dimension $q$
+\end{description}
+\bigskip
+
+
+
+\end{description}
+\end{description}
+
+% ==========================================================================
+\newpage
+
+%\index{Functions!TemporalFunction}
+\index{TemporalFunction}
+\subsection{TemporalFunction}
+
+TemporalFunction inherits from DynamicalFunctionImplementation.
+
+\begin{description}
+
+\item[Usage:]   \textit{TemporalFunction(h, dim)}
+
+\item[Arguments:]
+\begin{description}
+\item$h$: a NumericalMathFunction, $h :  \Rset^{dim} \times \Rset^d  \rightarrow \Rset^q$
+\item \textit{dim}: an integer
+\end{description}
+
+
+\item[Value:] a TemporalFunction which is a particular dynamical function that lets invariant the mesh of a field  of dimension \textit{dim}, defined as follows.  The resulting  temporal function $f_{temp}: \cD \times \Rset^d \rightarrow \cD \times \Rset^q$  where $\cD \in \Rset^{dim}$, is defined by:
+\begin{align}\label{tempFunc}
+f_{temp}(\vect{t}, \vect{x})=(\vect{t}, h(\vect{t},\vect{x}))
+\end{align}
+
+
+\item[Some methods:]  \rule{0pt}{1em}
+\begin{description}
+
+
+\item \textit{getInputDimension()}
+\begin{description}
+\item[Usage:] \textit{getInputDimension()}
+\item[Arguments:] none
+\item[Value:] an integer, the dimension $d$
+\end{description}
+\bigskip
+
+\item \textit{getOutputDimension()}
+\begin{description}
+\item[Usage:] \textit{getOutputDimension()}
+\item[Arguments:] none
+\item[Value:] an integer, the dimension $q$
+\end{description}
+\bigskip
+
+
+\end{description}
+\end{description}
+
+% ==========================================================================
+
+\newpage
+%\index{Functions!ExpertMixture}
+\index{ExpertMixture}
+\subsection{ExpertMixture}
+
+The ExpertMixture enables to define a piece wise function according to a classifier:
+\begin{eqnarray}\label{expMixtFct}
+f(\vect{x})  & = f_1(\vect{x}) \quad \forall \vect{x} \in Classe\, 1 \\ \nonumber
+& = f_k(\vect{x}) \quad \forall \vect{x} \in Classe\, k  \\\nonumber
+& = f_N(\vect{x}) \quad \forall \vect{x} \in Classe\, N
+\end{eqnarray}
+where the $N$ classes are defined by the  classifier.
+
+\begin{description}
+
+\item[Usage:] \rule{0pt}{1em}
+\begin{description}
+\item \textit{ExpertMixture(basis, classifier)}
+\end{description}
+
+\item[Arguments:]  \rule{0pt}{1em}
+\begin{description}
+\item \textit{basis}: a Basis, which is a NumericalMathFunctionCollection.
+\item \textit{classifier}: a Classifier.
+\end{description}
+
+\item[Value:] a ExpertMixture which is a function defined as (\ref{expMixtFct}), where the classifier is \textit{classifier} and the collection  of functions $(f_i)_{i=1, N}$ is given by \textit{basis}.
+
+
+\item[Some methods:]  \rule{0pt}{1em}
+\begin{description}
+
+\item $()$
+\begin{description}
+\item[Usage:]  \rule{0pt}{1em}
+\begin{description}
+\item \textit{ExpertMixture(inputPoint)}
+\item \textit{ExpertMixture(inputSample)}
+\end{description}
+\item[Arguments:] \rule{0pt}{1em}
+\begin{description}
+\item \textit{inputPoint}: a NumericalPoint
+\item \textit{inputSample}: a NumericalSample
+\end{description}
+\item[Value:] \rule{0pt}{1em}
+\begin{description}
+\item in the first usage, a NumericalPoint: $f(inputPoint)$
+\item in the second usage, a NumericalSample: $f(inputSample)$
+\end{description}
+The input vector $\vect{x}$ is assigned to a particular class according to the rules defined by \textit{classifier} and the associated marginal function $f_i$ is used to evaluate $f(\vect{x})$.
+\end{description}
+\bigskip
+
+\item \textit{getExperts}
+\begin{description}
+\item[Usage:] \textit{getExperts()}
+\item[Arguments:] none
+\item[Value:] a Basis, the collection of functions $(f_i)_{i=1, N}$.
+\end{description}
+
+\end{description}
+\end{description}
+
+% ==========================================================================
+
+\newpage
+%\index{Functions!Classifier}
+\index{Classifier}
+\subsection{Classifier}
+
+The Classifier enables to define rules that assign a vector to a particular class.
+
+\begin{description}
+
+\item[Usage:] \rule{0pt}{1em}
+\begin{description}
+\item \textit{Classifier(myclassifier)}
+\end{description}
+
+\item[Arguments:]  \textit{myclassifier}: a ClassifierImplementation. It can be a MixtureClassifier.
+
+\item[Value:] a Classifier.
+
+
+\item[Some methods:]  \rule{0pt}{1em}
+\begin{description}
+
+\item \textit{classify()}
+\begin{description}
+\item[Usage:]  \rule{0pt}{1em}
+\begin{description}
+\item \textit{classify(inputPoint)}
+\item \textit{classify(inputSample)}
+\end{description}
+\item[Arguments:] \rule{0pt}{1em}
+\begin{description}
+\item \textit{inputPoint}: a NumericalPoint
+\item \textit{inputSample}: a NumericalSample
+\end{description}
+\item[Value:] \rule{0pt}{1em}
+\begin{description}
+\item in the first usage, an integer: the class where \textit{inputPoint} has been assigned.
+\item in the second usage, an Indices that collects the class of each point of \textit{inputSample}.
+\end{description}
+The rules to assign a point to a class are specific to each ClassifierImplementation.
+\end{description}
+\bigskip
+
+
+\item \textit{grade()}
+\begin{description}
+\item[Usage:]  \rule{0pt}{1em}
+\begin{description}
+\item \textit{grade(inputPoint, k)}
+\item \textit{grade(inputSample, classelist)}
+\end{description}
+\item[Arguments:] \rule{0pt}{1em}
+\begin{description}
+\item \textit{inputPoint}: a NumericalPoint
+\item \textit{inputSample}: a NumericalSample
+\item $k$: an integer
+\item \textit{classelist}: an Indices
+\end{description}
+\item[Value:] \rule{0pt}{1em}
+\begin{description}
+\item in the first usage, a real that grades  \textit{inputPoint} with respect to the class $k$. The greatest, the best.
+\item in the second usage, an Indices that collects the grade of the $i-th$ point of \textit{inputSample} with respect to the $i-th$ class of \textit{classelist}.
+\end{description}
+The rules to grade a point  with respect to a class are specific to each ClassifierImplementation.
+\end{description}
+
+
+\end{description}
+\end{description}
+
+
+
+
+% ==========================================================================
+
+\newpage
+%\index{Functions!MixtureClassifier}
+\index{MixtureClassifier}
+\subsection{MixtureClassifier}
+
+The MixtureClassifier is a particular classifier based on a  MixtureDistribution:
+\begin{equation}\label{MixtDist}
+p(\vect{x}) = \sum_{i=1}^N w_ip_i(\vect{x})
+\end{equation}
+
+\begin{description}
+
+\item[Usage:] \rule{0pt}{1em}
+\begin{description}
+\item \textit{MixtureClassifier(mixtDist)}
+\end{description}
+
+\item[Arguments:]  \textit{mixtDist}: a MixtureDistribution.
+
+\item[Value:] a MixtureClassifier.
+
+
+\item[Some methods:]  \rule{0pt}{1em}
+\begin{description}
+
+\item \textit{classify()}
+\begin{description}
+\item[Usage:]  \rule{0pt}{1em}
+\begin{description}
+\item \textit{classify(inputPoint)}
+\item \textit{classify(inputSample)}
+\end{description}
+\item[Arguments:] \rule{0pt}{1em}
+\begin{description}
+\item \textit{inputPoint}: a NumericalPoint
+\item \textit{inputSample}: a NumericalSample
+\end{description}
+\item[Value:] \rule{0pt}{1em}
+\begin{description}
+\item in the first usage, an integer: the class where \textit{inputPoint} has been assigned.
+\item in the second usage, an Indices taht collects the class of each point of \textit{inputSample}.
+\end{description}
+The classifier proposes $N$ classes. The rule to assign a point to a class is defined as follows:  $\vect{x}$ is assigned to the class $i=\argmax_k \log w_kp_k(\vect{x})$.
+\end{description}
+\bigskip
+
+
+\item \textit{grade()}
+\begin{description}
+\item[Usage:]  \rule{0pt}{1em}
+\begin{description}
+\item \textit{classify(inputPoint, k)}
+\item \textit{classify(inputSample, classelist)}
+\end{description}
+\item[Arguments:] \rule{0pt}{1em}
+\begin{description}
+\item \textit{inputPoint}: a NumericalPoint
+\item \textit{inputSample}: a NumericalSample
+\item $k$: an integer
+\item \textit{classelist}: an Indices
+\end{description}
+\item[Value:] \rule{0pt}{1em}
+\begin{description}
+\item in the first usage, a real that grades  \textit{inputPoint} with respect to the class $k$. The greatest, the best.
+\item in the second usage, an Indices that collects the grade of the $i-th$ point of \textit{inputSample} with respect to the $i-th$ class of \textit{classelist}.
+\end{description}
+The grade of $\vect{x}$ with respect to the classe $k$ is $\log w_kp_k(\vect{x})$.
+\end{description}
+
+
+\end{description}
+\end{description}

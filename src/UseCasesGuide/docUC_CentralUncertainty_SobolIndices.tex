@@ -1,0 +1,52 @@
+% Copyright (C) 2005-2015 Airbus - EDF - IMACS - Phimeca
+% Permission is granted to copy, distribute and/or modify this document
+% under the terms of the GNU Free Documentation License, Version 1.2
+% or any later version published by the Free Software Foundation;
+% with no Invariant Sections, no Front-Cover Texts, and no Back-Cover
+% Texts.  A copy of the license is included in the section entitled "GNU
+% Free Documentation License".
+\renewcommand{\filename}{docUC_CentralUncertainty_SobolIndices.tex}
+\renewcommand{\filetitle}{UC : Sensitivity analysis : Sobol indices}
+
+% \HeaderNNIILevel
+% \HeaderIILevel
+\HeaderIIILevel
+
+\label{SobolIndices}
+
+\index{Sensitivity!Sobol indices}
+
+The objective of the Use Case is to quantify the correlation between the input variables and the output variable of a model described by a numerical function : it is called sensitivity analysis. The Sobol indices allow to evaluate the importance of a single variable or a specific set of variables. Here the Sobol indices are estimated by sampling, from two input samples and a numerical function.\\
+In theory, Sobol indices range is $\left[0; 1\right]$ ; the more the indice value is close to 1 the more the variable is important toward the output of the function. The Sobol indices can be computed at different orders.\\
+The first order indices evaluate the importance of one variable at a time ($d$ indices stored in a NumericalPoint, with $d$ the input dimension of the model).\\
+The second order indices evaluate the importance of every pair of variables ($\binom{d}{2} = \frac{d \times \left( d-1\right) }{2}$ indices stored via a SymmetricMatrix).\\
+The $d$ total indices give the relative importance of every variables except the variable $X_i$, for every variable.\\
+
+To evaluate the indices (variance of conditional mean of the output variable), OpenTURNS needs two numerical samples of the input variables, independent from each othern, of same size and generated according to the input variables distribution. Computation of first and total order indices requires $N \times (d+2)$ calls to the function, and $N \times (2 \times d + 2)$ for first, second order and total indices.
+
+
+Details on the  Taylor variance decomposition method may be found in the Reference Guide (\extref{ReferenceGuide}{see files Reference Guide - Step C' -- Sensitivity analysis using Sobol indices}{stepCprime}).\\
+
+
+
+\requirements{
+  \begin{description}
+
+  \item[$\bullet$] two independent input samples : {\itshape inputSample1, inputSample2}, which marginals are independently distributed
+  \item[type:] NumericalSample
+  \item[$\bullet$] a function : {\itshape model}, which input dimension must fit the dimension of the two samples
+  \item[type:] NumericalMathFunction
+  \end{description}
+}
+{
+  \begin{description}
+  \item[$\bullet$] the different Sobol indices
+  \item[type:] NumericalPoint, for first and total indices
+  \item[type:] SymmetricMatrix, for second order indices
+  \end{description}
+}
+
+\textspace\\
+Python script for this UseCase :
+
+\inputscript{script_docUC_CentralUncertainty_SobolIndices}

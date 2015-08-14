@@ -1,0 +1,254 @@
+% Copyright (C) 2005-2015 Airbus - EDF - IMACS - Phimeca
+% Permission is granted to copy, distribute and/or modify this document
+% under the terms of the GNU Free Documentation License, Version 1.2
+% or any later version published by the Free Software Foundation;
+% with no Invariant Sections, no Front-Cover Texts, and no Back-Cover
+% Texts.  A copy of the license is included in the section entitled "GNU
+% Free Documentation License".
+\renewcommand{\filename}{docUC_RespSurface_PolyChaosExpansion.tex}
+\renewcommand{\filetitle}{UC : Creation of a polynomial chaos algorithm}
+
+% \HeaderNNIILevel
+% \HeaderIILevel
+\HeaderIIILevel
+
+
+The objective of this Use Case is to create a polynomial chaos algorithm in order to evaluate in fine the probabilistic indicators of the ouput variable of interest without any problem of CPU time.\\
+
+
+
+Details on response surface approximations may be found in the Reference Guide (\extref{ReferenceGuide}{see files Reference Guide - Step Res. Surf. -- Functional Chaos Expansion and -- Polynomial Chaos Expansion}{responseSurface}).\\
+
+
+When $\vect{Y}$ is of dimension $p>1$,  OpenTURNS operates marginal by marginal, using the same multivariate orthonormal basis $(\Psi_k(\vect{x}))_{k \in \Nset}$ for all the marginals. Then, we obtain the following response surfaces for each marginal $Y_i$ :
+\begin{align*}
+  \tilde{Y}_i = \sum_{k \in K} \alpha_k^i \Psi_k \circ T(\vect{X})
+\end{align*}
+The final multivariate response surface is presented as follows :
+\begin{align*}
+  \tilde{\vect{Y}} = \sum_{k \in K} \vect{\alpha}_k \Psi_k \circ T(\vect{X})
+\end{align*}
+where $\vect{\alpha}_k = ( \alpha_k^1, \dots,  \alpha_k^p)$.\\
+
+We detail here all the steps required in order to create a polynomial chaos algorithm  when the output random variable $Y$ is scalar.\\
+
+
+{\bf Step 1 : Construction of the multivariate orthonormal basis }: OpenTURNS proposes to build the the multivariate orthonornal basis $(\Psi_k(\vect{x}))_{k \in \Nset}$ as the cartesian product of orthonornal univariate polynomial family $(\Psi_{l}^i(z_i))_{l \in \Nset}$ :
+\begin{align*}
+  \Psi_k(\vect{z}) = \Psi_{k_1}^1(z_1) * \Psi_{k_2}^2(z_2) * \dots *  \Psi_{k_n}^n(z_n)
+\end{align*}
+
+The possible univariate polynomial families associated to continuous measures are :
+\begin{itemize}
+\item Hermite, which is orthonormal with respect to the  $Normal(0,1)$ distribution,
+\item Jacobi($\alpha$, $\beta$, \textit{param}), which is orthonormal with respect to the $Beta(\beta + 1, \alpha + \beta + 2, -1, 1)$ distribution if $param = 0$ (default value) or to the $Beta(\alpha, \beta, -1, 1)$ distribution if $param = 1$,
+\item Laguerre($k$), which is orthonormal with respect to the  $Gamma(k+1,1,0)$ distribution,
+\item Legendre, which is orthonormal with respect to the  $Uniform(-1,1)$ distribution.
+\end{itemize}
+
+The possible univariate polynomial families associated to discrete measures are :
+\begin{itemize}
+\item Charlier, parameterized by $\lambda \in \Rset^{+*}$, which is orthonormal with respect to the  $Poisson(\lambda)$ distribution,
+\item Krawtchouk, parameterized by $(N,p)\in (\Nset^*, [0,1])$, which is orthonormal with respect to the  $Binomial(N,p)$ distribution.
+\item Meixner, parameterized by $(r,p)\in (\Rset^{+*}, ]0,1[)$, which is orthonormal with respect to the  $NegativeBinomial(r,p)$ distribution.
+\end{itemize}
+
+
+Furthermore, the numerotation of the multivariate orthonormal basis $(\Psi_k(\vect{z}))_k$ is given by an enumerate function which defines a regular way to generate the collection of degres used for the univariate polynomials : an enumerate function represents a bijection from $\Nset$ into $\Nset^{dim}$.
+The possible enumerate functions are :
+\begin{itemize}
+\item Linear enumeration, through \textit{LinearEnumerateFunction},
+\item Hyperbolic and anisotropic enumeration, thanks to \textit{HyperbolicAnisotropicEnumerateFunction}.
+\end{itemize}
+
+In case of the linear enumeration, the bijection is based on a particular procedure of enumerating the set of multi-indices based on an increasing total degree. It begins from the multi-index $[0,0,...,0]$ and follows as written below in dimension 4 :
+
+\begin{center}
+
+  LinearEnumerateFunction(4)(0) = [0,0,0,0] \\
+  LinearEnumerateFunction(4)(1) = [1,0,0,0] \\
+  LinearEnumerateFunction(4)(2) = [0,1,0,0] \\
+  LinearEnumerateFunction(4)(3) = [0,0,1,0] \\
+  LinearEnumerateFunction(4)(4) = [0,0,0,1] \\
+  LinearEnumerateFunction(4)(5) = [2,0,0,0] \\
+  LinearEnumerateFunction(4)(6) = [1,1,0,0] \\
+  LinearEnumerateFunction(4)(7) = [1,0,1,0] \\
+  LinearEnumerateFunction(4)(8) = [1,0,0,1] \\
+  LinearEnumerateFunction(4)(9) = [0,2,0,0]
+
+\end{center}
+
+In case of the hyperbolic anisotropic enumeration function the bijection is based on an increasing q-quasi norm, and follows as written below in dimension 4 for a value of $q=0.75$ :
+\begin{center}
+  HyperbolicAnisotropicEnumerateFunction(4)(0.75)(0) = [0,0,0,0] \\
+  HyperbolicAnisotropicEnumerateFunction(4)(0.75)(1) = [1,0,0,0] \\
+  HyperbolicAnisotropicEnumerateFunction(4)(0.75)(2) = [0,1,0,0] \\
+  HyperbolicAnisotropicEnumerateFunction(4)(0.75)(3) = [0,0,1,0] \\
+  HyperbolicAnisotropicEnumerateFunction(4)(0.75)(4) = [0,0,0,1] \\
+  HyperbolicAnisotropicEnumerateFunction(4)(0.75)(5) = [2,0,0,0] \\
+  HyperbolicAnisotropicEnumerateFunction(4)(0.75)(6) = [0,2,0,0] \\
+  HyperbolicAnisotropicEnumerateFunction(4)(0.75)(7) = [0,0,2,0] \\
+  HyperbolicAnisotropicEnumerateFunction(4)(0.75)(8) = [0,0,0,2] \\
+  HyperbolicAnisotropicEnumerateFunction(4)(0.75)(9) = [1,1,0,0] \\
+  HyperbolicAnisotropicEnumerateFunction(4)(0.75)(10) = [1,0,1,0] \\
+  HyperbolicAnisotropicEnumerateFunction(4)(0.75)(11) = [1,0,0,1] \\
+\end{center}
+
+In order to know the degree of the $k$-th polynomial of the multivariate basis, it is enough to sum all the integers given in the list.\\
+It is possible to ask the enumerate function how many polynomials of the multivariate basis have are contained in the $k$-th strata, thanks to the method {\itshape getStrateCardinal(k)} and how many polynomials have are contained in all the first $k$-th strata, thanks to the method {\itshape getStrateCumulatedCardinal(k)}.\\
+Note that for the \textit{LinearEnumerateFunction} the $k$-th strata corresponds the polynomials of total degree $k$.\\
+It is also possible to specify \textit{HyperbolicAnisotropicEnumerateFunction} weights to specify which univariate polynomial should be preponderent in terms of degree used for the univarite polynomials.\\
+
+\vspace*{0.1cm}
+
+{\bf Step 2 : Truncature strategy of the multivariate orthonormal basis} (Adaptive strategy) : a strategy must be chosen for the selection of the different terms of the multivariate basis. The selected terms are regrouped in the subset $K$.\\
+There is three different strategies in OpenTURNS :
+\begin{itemize}
+\item   {\itshape FixedStrategy}: this strategy is parameterized with an integer $p$. The first $p$ polynomials of the multivariate basis are selected, according to the order defined by the Enumeratefunction(). If we want to construct the complete basis with respect to a maximal degree $d = 2$, then it is necessary to have $p = C_{d+dim}^d$ which leads to $p=15$ for $dim=4$.
+\item   {\itshape SequentialStrategy}: this strategy takes one by one the polynomials of the multivariate basis according to the order defined by the Enumeratefunction(), till satisfying a convergence criterion. The criterion is defined in Step 3 and the residual value is defined in the {\itshape FunctionalChaosAlgorithm} through the method {\itshape setMaximumResidual}.
+\item   {\itshape CleaningStrategy}: this strategy considers the $p$  first polynomials of the multivariate basis according to the order defined by the Enumeratefunction(), selects the $M$ ones associated to the most significant coefficients, which means greater than a given value (which defines the significance factor criterion). It proceeds as follows :
+  \begin{itemize}
+  \item It generates an intial basis of fixed number of terms ($M$) which is equal to the maximum size of the basis;
+  \item Unsignificant terms are removed (with respect to the significance factor criterion);
+  \item A new term is then generated and the basis is updated with respect to the new coefficient;
+  \item The procedure then reiterates by removing the unsignificant contributions and at last keeping no more than $M$ most significant contributions.
+  \end{itemize}
+\end{itemize}
+\vspace*{0.1cm}
+
+{\bf Step 3 : Evaluation strategy of the approximation coefficients} (Projection strategy): The vector  $\vect{\alpha} = (\alpha_k)_{k \in K}$  is  equivalently defined by :
+\begin{equation}\label{defArgMin}
+  \vect{\alpha} = argmin_{\vect{\alpha} \in \Rset^K} E_{\mu} \left[ \left( g \circ T^{-1}(\vect{Z}) -  \sum_{k \in K} \alpha_k \Psi_k (\vect{Z})\right)^2  \right]
+\end{equation}
+or
+\begin{equation}\label{defEsp}
+  \vect{\alpha} = \left( E_{\mu} \left[ g \circ T^{-1}(\vect{Z}) \Psi_k (\vect{Z}) \right]\right)_k
+\end{equation}
+where $\vect{Z} = T(\vect{X})$.\\
+
+It corresponds to two points of view :
+\begin{itemize}
+\item Relation (\ref{defArgMin})  means that the coefficients $(\alpha_k)_{k \in K}$ minimize the quadratic error between  the model and the polynomial approximation. OpenTURNS implements it through the \emph{LeastSquaresStrategy}.
+\item  Relation (\ref{defEsp}) means that  $\alpha_k$ is the scalar product of the model  with the $k-th$ element of the orthonormal basis $(\Psi_k)_{k \in K}$. OpenTURNS implements it through the \emph{IntegrationStrategy}.
+\end{itemize}
+
+In both cases, the esperance $ E_{\mu}$ is approximated by a linear quadrature formula :
+\begin{equation}\label{approxEsp}
+  E_{\mu} \left[ f(\vect{Z}) \right] \simeq \sum_{i \in I} \omega_i f(\Xi_i)
+\end{equation}
+where $f$ is a function $L_1(\mu)$ defined as :
+\begin{itemize}
+\item In relation (\ref{defArgMin}) :
+  \begin{equation}\label{fArgMin}
+    f(\vect{Z}) = \left( g \circ T^{-1}(\vect{Z}) -  \sum_{k \in K} \alpha_k \Psi_k (\vect{Z})\right)^2
+  \end{equation}
+\item In relation (\ref{defEsp}) :
+  \begin{equation}\label{fEsp}
+    f(\vect{Z}) = g \circ T^{-1}(\vect{Z}) \Psi_k (\vect{Z})
+  \end{equation}
+\end{itemize}
+In the approximation (\ref{approxEsp}), the set $I$, the points $(\Xi_i)_{i \in I}$ and the weights $(\omega_i)_{i \in I}$ are evaluated from different methods implemented in OpenTURNS in the \emph{WeightedExperiment} which can be :
+\begin{itemize}
+\item \emph{random}: the couples $(\Xi_i, \omega_i)_{i \in I}$ are generated such that :
+  \begin{equation}
+    lim_{I \rightarrow \Nset} \sum_{i \in I} \omega_i \delta_{\Xi_i} = \mu \, \, a.s.
+  \end{equation}
+  where $\delta_{\Xi_i}$ is the Dirac random distribution centered on $\Xi_i$.\\
+  We find :
+  \begin{itemize}
+  \item the \emph{MonteCarloExperiment} and \emph{LHSExperiment} that generate the points $(\Xi_i)_{i \in I}$ according to the distribution $\mu$ with the LHS technique or not, and take $\omega_i = \displaystyle \frac{1}{card I}$;
+  \item the \emph{ImportanceSamplingExperiment} that generates the points $(\Xi_i)_{i \in I}$according to a given distribution with density $h$ and  takes $\omega_i = \displaystyle \frac{1}{card I}\frac{\mu(\Xi_i)}{h(\Xi_i)}$.
+  \end{itemize}
+
+\item or \emph{deterministic}: the couples $(\xi_i, \omega_i)_{i \in I}$ are  such that :
+  \begin{equation}\label{weight}
+    lim_{card I \rightarrow\infty} \sum_{i \in I} \omega_i \delta_{\xi_i} = \mu.
+  \end{equation}
+  where $\delta_{\xi_i}$ is the Dirac distribution centered on $\xi_i$.\\
+  We find :
+  \begin{itemize}
+  \item the \emph{FixedExperiment} where the points $(\xi_i)_{i \in I}$ are given and the weights are all equal to $\omega_i = \displaystyle \frac{1}{card I}$ or given by the User in order to verify (\ref{weight}).
+  \item the \emph{LowDiscrepancyExperiment} where the points follow a  low discrepancy sequence (see the different sequences implemented in OpenTURNS) and the weights are all equal to $\omega_i = \displaystyle \frac{1}{card I}$;
+  \item the \emph{GaussProductExperiment} where the points $(\xi_i)_{i \in I}$ are the Gauss quadrature points and their associated weights.
+  \end{itemize}
+\end{itemize}
+
+
+The convergence criterion used to evaluate the coefficients is based on the residual value defined in the {\itshape FunctionalChaosAlgorithm} through the method {\itshape setMaximumResidual}.\\
+
+\vspace*{0.1cm}
+
+{\bf Step 4 : Creation of the Functional Chaos Algorithm}: a FunctionalChaosAlgorithm needs the following information to be created :
+\begin{itemize}
+\item the model $g$, which is the limit state function,
+\item the multivariate distribution of the input random vector $\vect{X}$,
+\item the truncature strategy of the multivariate basis, which contains also the information to build the complete multivariate basis,
+\item the evaluation strategy of the approximation coefficients.
+\end{itemize}
+OpenTURNS offers a second way to define a FunctionalChaosAlgorithm when the User does not have the model but only some realizations of it : an input sample and the associated ouput sample and weights as follows
+\begin{itemize}
+\item the input sample $(\vect{X}_i)_{i=1,\dots,n}$,
+\item the weights $\omega_i$ of each realization $\vect{X}_i$,
+\item the output sample $(\vect{Y}_i)_{i=1,\dots,n}$,
+\item the multivariate distribution $p_{\vect{X}}$ of the input random vector $\vect{X}$ : the previous weights are determined such that $\sum_{i=1}^n \omega_i \delta_{\vect{X}_i} \simeq p_{\vect{X}}$ ,
+\item the truncature strategy of the multivariate basis, which contains also the information to build the complete multivariate basis,
+\item the evaluation strategy of the approximation coefficients.
+\end{itemize}.
+This second usage enables to deconnect the evaluations of the model from the analysis performed on the samples. It is possible to change the input distribution of the input sample by changing the qweights (and the declaration of   $p_{\vect{X}}$).
+\vspace*{0.1cm}
+
+{\bf Example illustrated in the Use Case}: the input random vector $\vect{X}$ is of dimension 4 and follows a multivariate distribution denoted \textit{Xdist}.\\
+The ouput variable of interest is scalar and denoted \textit{outputVariable} and is the image of $\vect{X}$ through the model \textit{myModel}:
+\begin{align*}
+  outputVariable = myModel(\vect{X})
+\end{align*}
+
+To build the multivariate orthonormal basis, we select the following univariate polynomial families :
+\begin{itemize}
+\item for $Z_1$ : the \textit{Hermite} family, associated to  $\mu_1$ which is a Standard normal distribution : $\cN(0,1)$
+\item for $Z_2$ : the \textit{Legendre} family, associated to  $\mu_2$ which is a Uniform distribution : $\cU(-1,1)$
+\item for $Z_3$ : the $Laguerre(1.75)$ family, associated to  $\mu_3$ which is a Gamma distribution : ${\Gamma}(2.75,1,0)$
+\item for $Z_4$ : the $Jacobi(2.5, 3.5, Jacobi.PROBABILITY)$ family, associated to  $\mu_4$ which  is a Beta distribution : $B(2.5, 3.5,-1,1)$
+\end{itemize}
+Be careful to build a collection of univariate polynomial family which dimension is the one of $\vect{X}$.\\
+
+Thus, the reduced random vector $\vect{Z}=(Z_1,Z_2,Z_3,Z_4) = T(\vect{X})$ follows the distribution $\mu = \prod_{i=1}^{4} \mu_i$.\\
+
+In order to build the multivariate orthonormal basis, we can select any combinations of these four orthonormal polynomial families to characterize the general term of the basis.  In that example, we show how to define each selection strategy :
+\begin{itemize}
+\item the FixedStrategy where we want to select all the polynomials of degree $\leq 2$, which leads to $p=C_6^2 = 15$,
+\item the SequentialStrategy where we want to select among the $maximumCardinalBasis = 100$ first polynomials of the multivariate basis those verfying the convergence criterion,
+\item the CleaningStrategy where we want to select, among the $maximumConsideredTerms = 500$ first polynomials of the multivariate basis, those which have the $mostSignificant = 50$ most significant contributions (greatest coefficients), with respect to the significance criterion $\varepsilon = 10^{-4}$.
+\end{itemize}
+
+The example illustrates the \emph{ProjectionStrategy} of type \emph{LeastSquaresStrategy} defined from a \emph{MonteCarloExperiment} using a  Monte Carlo sampling of size  $sampleSize = 100$. \\
+
+
+The \emph{FunctionalChaosAlgorithm} is parameterized with all the information previously defined. The example illustrates how to redefine the value of the convergence criterion, which is used to :
+
+\begin{itemize}
+\item determine the truncated basis with the sequential strategy,
+\item evaluate the coefficients of the polynomial expansion approximation with the least squares strategy.
+\end{itemize}
+The new value is $newResidual = 1.0e-4$.\\
+
+
+\requirements{
+  \begin{description}
+  \item[$\bullet$] the limit state function : {\itshape myModel}
+  \item[type:]   a NumericalMathFunction
+  \item[$\bullet$] the distribution of the input random vector : {\itshape Xdist}
+  \item[type:]  a Distribution
+  \end{description}
+}
+             {
+               \begin{description}
+               \item[$\bullet$] the  polynomial chaos algorithm : {\itshape polynomialChaosAlgorithm}
+               \item[type:] a FunctionalChaosAlgorithm
+               \end{description}
+             }
+
+             \textspace\\
+             Python script for this Use Case :
+
+             \inputscript{script_docUC_RespSurface_PolyChaosExpansion}

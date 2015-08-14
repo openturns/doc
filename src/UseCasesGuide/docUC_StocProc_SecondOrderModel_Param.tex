@@ -1,0 +1,70 @@
+% Copyright (C) 2005-2015 Airbus - EDF - IMACS - Phimeca
+% Permission is granted to copy, distribute and/or modify this document
+% under the terms of the GNU Free Documentation License, Version 1.2
+% or any later version published by the Free Software Foundation;
+% with no Invariant Sections, no Front-Cover Texts, and no Back-Cover
+% Texts.  A copy of the license is included in the section entitled "GNU
+% Free Documentation License".
+\renewcommand{\filename}{docUC_StocProc_SecondOrderModel_Param.tex}
+\renewcommand{\filetitle}{UC : Creation of stationary parametric second order model}
+
+% \HeaderNNIILevel
+%\HeaderIILevel
+\HeaderIIILevel
+
+\label{SecondOrderModel}
+
+\index{Stochastic Process!Second Order Model}
+
+This use case details how to  create a stationary second order model that insures the coherence between the covariance function $C^{stat}:  \cD\times \cD \rightarrow  \mathcal{M}_{d \times d}(\Rset)$ and the spectral density function   $S : \Rset \rightarrow \mathcal{H}^+(d)$.
+We only treat here the case where the domain is of dimension 1: $\cD \in \Rset$ ($n=1$). \\
+If the process is continuous, then $\cD=\Rset$. In the discrete case, $\cD$  is a lattice. \\
+
+The coherence is done through the relation (\ref{specdensFunc}) and in some cases, it is not possible:  for example, the spectral model is defined but the associated covariance model is not analytical.\\
+
+
+OpenTURNS saves the complete information of a second order model in the object {\itshape SecondOrderModel}. \\
+
+A second order model can be used to create zero-mean stationary normal processes, stored either in a {\itshape TemporalNormalProcess} object or in a {\itshape SpectralNormalProcess} one (see the use case of section \ref{StationaryNormalProcessCreation}).\\
+
+OpenTURNS implements the parametric second order model {\itshape ExponentialCauchy} where the covariance function is the Exponential model (see the use case \ref{ParamStationaryCovarianceFunction}) and the associated spectral density function is the Cauchy model (see the use case \ref{DensitySpectralFunctionParam}) .\\
+
+
+\requirements{
+  \begin{description}
+  \item[$\bullet$]  $\vect{a}$, $\vect{\lambda}$   : {\itshape amplitude, scale}
+  \item[type:]  NumericalPoint
+  \end{description}
+
+  \begin{description}
+  \item[$\bullet$]  $\mat{R}$  : {\itshape spatialCorrelation}
+  \item[type:]  CorrelationMatrix
+  \end{description}
+
+  \begin{description}
+  \item[$\bullet$]  $\mat{C}$  : {\itshape spatialCovariance}
+  \item[type:]  CovarianceMatrix
+  \end{description}
+
+}
+{
+
+  \begin{description}
+  \item[$\bullet$] a second order model : {\itshape mySecondOrderModel}
+  \item[type:] SecondOrderModel
+  \end{description}
+}
+
+\textspace\\
+Python script for this UseCase :
+
+\begin{lstlisting}
+  # Create the second order model
+  # for example : the Exponential Cauchy
+
+  # from the amplitude, scale and spatialCovariance
+  mySecondOrderModel = ExponentialCauchy(amplitude, scale, spatialCorrelation)
+
+  # or from the scale and spatialCovariance
+  mySecondOrderModel = ExponentialCauchy(scale,spatialCovariance)
+\end{lstlisting}

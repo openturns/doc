@@ -1,0 +1,81 @@
+% Copyright (C) 2005-2015 Airbus - EDF - IMACS - Phimeca
+% Permission is granted to copy, distribute and/or modify this document
+% under the terms of the GNU Free Documentation License, Version 1.2
+% or any later version published by the Free Software Foundation;
+% with no Invariant Sections, no Front-Cover Texts, and no Back-Cover
+% Texts.  A copy of the license is included in the section entitled "GNU
+% Free Documentation License".
+\renewcommand{\filename}{docUC_LoadSave_Load.tex}
+\renewcommand{\filetitle}{UC : How to load a study ?}
+
+% \HeaderNNIILevel
+\HeaderIILevel
+% \HeaderIIILevel
+
+
+
+\index{Study!Load}
+The objective of this Use Case is to explicitate how to save the structures created within a study in order to be able to load them in a future study.\\
+
+
+The principle is the following one. In order to be able to manipulate the objects contained in myStudy, it is necessary to :
+\begin{itemize}
+\item create the same empty structure in the new study,
+\item fill this new empty structure with the content of the loaded structure, identified with its name or its id.
+\end{itemize}
+
+Each object is identified whether with :
+\begin{itemize}
+\item its name : that's why it is usefull to give names to the objects we want to save (thanks to the command setName()). If no name has been given by the User, we can use the name by default given by OpenTURNS. The name of each object saved can be checked in the file.XML created or by printing the study in the python interface (with the command print).
+\item or its id number : this id number is unique for each object. It is usefull to separate two objects of same type which names are identical, equal to the default name given by OpenTURNS (for example, two NumericalPoint the User has not named explicitly, both called 'Unnamed' by OpenTURNS). This id number may be checked by printing the study loaded in the python interface (with the command print) : be carefull, this print operation must be performed after having loaded the study (the id number may be different from the one indicated in the file.XML associated to the study).
+\end{itemize}
+
+In this use case, we load the file saved in the previous use case. \\
+
+\requirements{
+  \begin{description}
+  \item[$\bullet$]  a file .XML containing all the objects saved previously: {\itshape myXMLFile.XML}
+  \item[type:] file .XML
+  \end{description}
+}
+             {
+               \begin{description}
+               \item[$\bullet$] all the objects of the file myXMLFile.XML loaded in the new study
+               \item[type:] -
+               \end{description}
+             }
+
+             \textspace\\
+             Python  script for this UseCase :
+
+             \begin{lstlisting}
+               # Give the name and the adress of the file .XML that will be loaded
+               fileName = "/tmp/myXMLFile"
+
+               # Create a Study Object
+               myStudy = Study()
+
+               # Associate it to the file myXMLFile.XML
+               myStudy.setStorageManager(XMLStorageManager(fileName))
+
+               # Load the file and all its objects
+               myStudy.load()
+
+               # Check the content of the myStudy
+               print "Study = " , myStudy
+
+               # In order to be able to manipulate the objects contained in myStudy, it is necessary to :
+               # 1. create the same empty structure in the new study
+               # 2. fill this new empty structure with the content of the loaded structure
+
+               # Create a NumericalPoint from the one stored in myStudy
+               pointLoaded = NumericalPointWithDescription()
+
+               # Fill the new structure point with the content of the NumericalPoint saved
+               # this NumericalPoint is identified with its name 'point'
+               myStudy.fillObject("point", pointLoaded)
+
+               # Check if it worked : the NumericalPoint 'pointLoaded' has been loaded
+               # and we can manipulate it
+               print "pointLoaded = " , pointLoaded
+             \end{lstlisting}

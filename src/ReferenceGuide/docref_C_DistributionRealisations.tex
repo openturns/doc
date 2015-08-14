@@ -1,0 +1,222 @@
+% Copyright (C) 2005-2015 Airbus - EDF - IMACS - Phimeca
+% Permission is granted to copy, distribute and/or modify this document
+% under the terms of the GNU Free Documentation License, Version 1.2
+% or any later version published by the Free Software Foundation;
+% with no Invariant Sections, no Front-Cover Texts, and no Back-Cover
+% Texts.  A copy of the license is included in the section entitled "GNU
+% Free Documentation License".
+\renewcommand{\etapemethodo}{C}
+\renewcommand{\nomfichier}{docref_C_DistributionRealisations}
+\renewcommand{\titrefiche}{Distribution realizations}
+
+\Header
+
+\MathematicalDescription{
+
+  \underline{\textbf{Goal}} \vspace{2mm}
+
+  The objective is to transform a random realization of the Uniform(0,1) distribution onto a random realization of a distribution which cumulative density function is $F$.\\
+
+  \underline{\textbf{Principle}} \vspace{2mm}
+
+  Several classical techniques exist :
+  \begin{itemize}
+  \item The inversion of the CDF: if $U$ is distributed according to the uniform distribution over $[0, 1]$ (the bounds 0 and 1 may or may not be included), then $X=F^{-1}(U)$ is distributed according to the CDF $F$. If $F^{-1}$ has a simple analytical expression, it provides an efficient way to generate realizations of $X$. Two points need to be mentioned:
+    \begin{enumerate}
+    \item If the expression of $F^{-1}(U)$ involves the quantity $1-U$ instead of $U$, it can be replaced by $U$ as $U$ and $1-U$ are identically distributed;
+    \item The numerical range of $F$ is always bounded (i.e. the interval over which it is invertible) even if its mathematical range is unbounded, and the numerical range may not preserve the symmetry of its mathematical counterpart. It can lead to biased nonuniform generators, even if this bias is usually small. For example, using standard double precision, the CDF of the standard normal distribution is numerically invertible over $[A,B]$ with $A\simeq -17.3$ and $B\simeq 8.5$.
+    \end{enumerate}
+
+  \item The rejection method: suppose that one want to sample a random variable $X$ with a continuous distribution with PDF $p_X$ and that we know how to sample a random variable $Y$ with a continuous distribution with PDF $p_Y$. We suppose that there exist a positive scalar $k$ such that $\forall t\in\Rset, p_X(t)\leq kp_Y(t)$. The rejection method consists of the following steps:
+    \begin{enumerate}
+    \item Generate $y$ according to $p_Y$;
+    \item Generate $u$ according to a random variable $U$ independent of $Y$ and uniformly distributed over $[0, 1]$;
+    \item If $u\leq p_X(u)/(kp_Y(u))$, accept $y$ as a realization of $X$, else return to step 1.
+    \end{enumerate}
+    The rejection method can be improved in several ways:
+    \begin{itemize}
+    \item If the evaluation of $\rho(u)=p_X(u)/(kp_Y(u))$ is costly, and if one knows a cheap function $h$ such that $h(u) \leq \rho(u)$, then one can first check if $u\leq h(u)$ and directly accept $y$ if the test is positive (quick acceptance step). This is very effective if $h(u)$ can be evaluated from quantities that have to be computed to evaluate $\rho(u)$: $h$ is a kind of cheap version of $\rho$. The same trick can be use if one knows a cheap function $m$ such that $m(u) \geq \rho(u)$: one checks if $u\geq m(u)$ and directly reject $y$ if the test is positive (quick rejection test). The combination of quick acceptation and quick rejection is called a \emph{squeeze}.
+    \item The test $u\leq \rho(u)$ can be replaced by an equivalent one but much more computationaly efficient.
+    \end{itemize}
+
+  \item The transformation method: suppose that one want to sample a random variable that is the image by a simple transformation of another random variable (or random vector) that can easily be sampled. It is easy to sample this last random variable (or vector) and then transform this realization through the transformation to get the needed realization. This method can be combined with the rejection method for example, to build $h$ or $m$ implicitely.
+  \item The sequential search method (discrete distributions): it is a particular version of the CDF inversion method, dedicated to discrete random variables. One generates a realizaton $u$ of a random variable $U$ uniformly distributed over $[0, 1]$, then we search the smallest integer $k$ such that $u\leq\sum_{i=0}^kp_i$, where $p_i=\Prob{X=i}$.
+  \item The stable distribution method (archimedean copulas): to be detailed.
+  \item The conditional CDF inversion (general copula or general multivariate distributions): this method is a general procedure to sample a multivariate distribution. One generate in sequence a realization of the first marginal distribution, then a realization of the distribution of the second component conditionally to the value taken by the first component, and so on. Each step is done by inversion of the conditional CDF of the component $i$ with respect to the value taken by the preceding components.
+  \item The ratio of uniforms method: this is a special combination of the rejection method and the transformation method that has gained a great popularity due to its concision and its verstility. Let $\cA=\{(u,v):\quad 0\leq u\leq \sqrt{f\left(\frac{u}{v}\right)}\}$. If $(U,V)$ is a random vector uniformly distributed over $\cA$, then $\frac{U}{V}$ has density $f/\int f$. The generation of $(U, V)$ is done by a rejection method, using a bounded enclosing region of $\cA$. It can be done if and only if both $f(x)$ and $x^2f(x)$ are bounded. This method can be enhanced by using quick acceptance and quick rejection steps.
+  \item The ziggurat method: this method allows for a very fast generation of positive random variate with decreasing PDF. The graph of the PDF is partitioned into horizontal slices of equal mass, the bottom slice covering the whole support of the PDF. All these slices have a maximal enclosed rectangle (the top one being empty) and a minimal enclosing rectangle (the bottom one not being defined). Then, one generate a discrete uniform random variable $d$ over the number of slice. It selects a slice, and if this slice has both an enclosed and an enclosing rectangle, one generates a realization of a continuous uniform random variable on $[0,L_i]$, $L_d$ being the length of the enclosing rectangle of slice $d$. The enclosing and the enclosed rectangles define an efficient squeeze for a rejection method. If the bottom slice is selected, one has to sample the tail distribution conditional to the length of the enclosed rectangle: it is the only case where a costly non-uniform random number has to be computed. If the number of slices is large enough, this case appears only marginally, which is the main reason for the method efficiency.
+  \end{itemize}
+
+  We describe here the techniques involved in OpenTURNS.\\
+  \begin{tabular}{|l|l|}
+    \hline
+    \multicolumn{1}{|c|}{Distribution} & \multicolumn{1}{c|}{Method} \\
+    \hline
+    Arcsine & CDF inversion. \\
+    \hline
+    Bernoulli & CDF inversion. \\
+    \hline
+    Beta & \begin{tabular}{l}
+      CDF inversion if $r=1$ or $t-r=1$. \\
+      Rejection (Johnk's method) for $t\leq 1$. \\
+      Rejection (Cheng's method) for $r>1$, $t-r>1$. \\
+      Rejection (Atkinson and Whittaker method 1) for $t > 1, \max(r, t-r) < 1$. \\
+      Rejection (Atkinson and Whittaker method 2) for $t > 1, \max(r, t-r) > 1$.
+    \end{tabular}\\
+    \hline
+    Binomial & Squeeze end Reject method. See the Hormann reference. \\
+    \hline
+    Burr & CDF inversion. \\
+    \hline
+    Chi & Transformation. \\
+    \hline
+    ChiSquare & See the Gamma distribution. \\
+    \hline
+    ClaytonCopula & Conditional CDF inversion. \\
+    \hline
+    ComposedCopula & Simulation of the copula one by one then association. \\
+    \hline
+    ComposedDistribution & Simulation of the copula and the marginale with the  CDF inversion technique. \\
+    \hline
+    Dirac & Return the supporting point. \\
+    \hline
+    Dirichlet & Transformation. \\
+    \hline
+    Epanechnikov & CDF inversion. \\
+    \hline
+    Exponential & CDF inversion. \\
+    \hline
+    Fisher-Snedecor & Transformation. \\
+    \hline
+    FrankCopula & Conditional CDF inversion. \\
+    \hline
+    Gamma & Transformation and rejection (Marsaglia and Tsang method). \\
+    \hline
+    Geometric & CDF inversion. \\
+    \hline
+    Generalized Pareto & CDF inversion. \\
+    \hline
+    GumbelCopula & Stable distribution. \\
+    \hline
+    Gumbel & CDF inversion. \\
+    \hline
+    Histogram & CDF inversion. \\
+    \hline
+    IndependentCopula & Transformation. \\
+    \hline
+    InverseNormal & Transformation. \\
+    \hline
+    KernelMixture & Transformation. \\
+    \hline
+    Kpermutaions & Knuth's algorithm. \\
+    \hline
+    Laplace & CDF inversion. \\
+    \hline
+    Logistic & CDF inversion. \\
+    \hline
+    LogNormal & Transformation. \\
+    \hline
+    LogUniform & Transformation. \\
+    \hline
+    Meixner & Uniform ratio method. \\
+    \hline
+    MinCopula & Transformation. \\
+    \hline
+    Mixture & Transformation. \\
+    \hline
+    MultiNomial & Conditional CDF inversion. \\
+    \hline
+    Non Central Chi Square & Transformation. \\
+    \hline
+    NegativeBinomial & Conditional simulation (Poisson | Gamma)\\
+    \hline
+    Non Central Student & Transformation. \\
+    \hline
+    NormalCopula & Transformation of independent Normal realizations. \\
+    \hline
+    Normal & \begin{tabular}{l}
+      1D: Ziggurat method \\
+      nD: Transformation of independent Normal realizations.
+    \end{tabular} \\
+    \hline
+  \end{tabular}
+
+  \newpage
+  \begin{tabular}{|l|l|}
+    \hline
+    \multicolumn{1}{|c|}{Distribution} & \multicolumn{1}{c|}{Method} \\
+    \hline
+    Poisson &  \begin{tabular}{l}
+      Sequential search for $\mu < 6$. \\
+      Ratio of uniforms for $\mu\geq 6$
+    \end{tabular} \\
+    \hline
+    RandomMixture & Transformation. \\
+    \hline
+    Rayleigh & CDF inversion. \\
+    \hline
+    Rice & Transformation. \\
+    \hline
+    Skellam & Transformation. \\
+    \hline
+    SklarCopula & Conditional CDF inversion by Gaussian quadrature and numerical inversion. \\
+    \hline
+    Student & Transformation. \\
+    \hline
+    Trapezoidal & CDF inversion. \\
+    \hline
+    Triangular & CDF inversion. \\
+    \hline
+    TruncatedDistribution on $[a,b]$&  \begin{tabular}{l}
+      We note $F$ the CDF of the non truncated distribution : \\
+      if $F(b)-F(a)<s$ : CDF inversion.   \\
+      if $F(b)-F(a)>s$ : rejection. \\
+      By default, $s=0.5$ (modifiable).
+    \end{tabular}  \\
+    \hline
+    TruncatedNormal & \begin{tabular}{l}
+      small truncation interval: CDF inversion. \\
+      large truncation interval: rejection.
+    \end{tabular} \\
+    \hline
+    Uniform & Transformation. \\
+    \hline
+    UserDefined & Sequential search. \\
+    \hline
+    Weibull & CDF inversion. \\
+    \hline
+    Zipf-Mandelbrot & Bisection search. \\
+    \hline
+  \end{tabular}
+}
+{
+  --
+}
+
+
+\Methodology{
+  These techniques are performed as soon as some random realizations are required. Then, they participate to the Step C : <<Propagating Uncertainties>> of the Methodologie.
+}
+            {
+              The following bibliographical references provide main starting points for further study of non-uniform random variate generation:
+              \begin{itemize}
+              \item Luc Devroye, "Non-Uniform RandomVariate Generation", Springer-Verlag, 1986, available online at:
+                http://cg.scs.carleton.ca/~luc/nonuniformrandomvariates.zip
+                and with the important errata at:
+                http://cg.scs.carleton.ca/~luc/errors.pdf
+              \item Volfgang Hormann, "The generation of Binomial Random Variates"
+              \item George Marsaglia and Wai Wan Tsang, "A Simple Method for Generating Gamma, Journal of Statistical Computational and Simulation, vol 46, pp101 - 110,1993.
+                Variables", ACM Transactions on Mathematical Software, Vol. 26, No. 3,
+                September 2000, Pages 363-372.
+              \item Doornik, J.A. (2005), "An Improved Ziggurat Method to Generate Normal
+                Random Samples", mimeo, Nuffield College, University of Oxford.
+              \item Kjersti Aas, "Modelling the dependence structure of financial assets: a survey of four copulas",
+                Norwegian Computing Center report nr. SAMBA/22/04, December 2004.
+              \item E. Stadlober, "The ratio of uniforms approach for generating discrete random variates". Journal of Computational and Applied Mathematics, vol. 31, no. 1, pp. 181-189, 1990.
+              \end{itemize}
+            }
+            \Example{
+
+              --
+
+            }

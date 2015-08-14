@@ -1,0 +1,111 @@
+% Copyright (C) 2005-2015 Airbus - EDF - IMACS - Phimeca
+% Permission is granted to copy, distribute and/or modify this document
+% under the terms of the GNU Free Documentation License, Version 1.2
+% or any later version published by the Free Software Foundation;
+% with no Invariant Sections, no Front-Cover Texts, and no Back-Cover
+% Texts.  A copy of the license is included in the section entitled "GNU
+% Free Documentation License".
+\renewcommand{\filename}{docUC_StocProc_Intro.tex}
+\renewcommand{\filetitle}{Some generalities on stochastic process}
+
+% \HeaderNNIILevel
+% \HeaderIILevel
+% \HeaderIIILevel
+
+\index{Stochastic Process!Basics}
+
+In this document, we note:
+\begin{itemize}
+\item $X: \Omega \times\cD \rightarrow \Rset^d$ a multivariate stochastic process of dimension $d$, where $\omega \in \Omega$ is an event, $\cD$ is a domain of $\Rset^n$, $\vect{t}\in \cD$ is a multivariate index and $X(\omega, \vect{t}) \in \Rset^d$;
+\item  $X_{\vect{t}}: \Omega \rightarrow \Rset^d$ the random variable at index $\vect{t} \in \cD$ defined by $X_{\vect{t}}(\omega)=X(\omega, \vect{t})$;
+\item $X(\omega): \cD  \rightarrow \Rset^d$ a realization of the process $X$, for a given $\omega \in \Omega$ defined by $X(\omega)(\vect{t})=X(\omega, \vect{t})$.
+\end{itemize}
+
+If $n=1$, $t$ may be interpreted as a time stamp to recover the classical notation of a stochastic process.\\
+
+If the process is a second order process, we note:
+\begin{itemize}
+\item  $m : \cD \rightarrow  \Rset^d$ its \emph{mean function},  defined  by $m(\vect{t})=\Expect{X_{\vect{t}}}$,
+\item $C : \cD \times \cD \rightarrow  \cM_{d \times d}(\Rset)$ its    \emph{covariance function},  defined  by $C(\vect{s}, \vect{t})=\Expect{(X_{\vect{s}}-m(\vect{s}))(X_{\vect{t}}-m(\vect{t}))^t}$,
+\item  $R : \cD \times \cD \rightarrow  \mathcal{M}_{d \times d}(\Rset)$ its \emph{ correlation function}, defined for all $(\vect{s}, \vect{t})$, by $R(\vect{s}, \vect{t})$ such that for all $(i,j)$, $R_{ij}(\vect{s}, \vect{t})=C_{ij}(\vect{s}, \vect{t})/\sqrt{C_{ii}(\vect{s}, \vect{t})C_{jj}(\vect{s}, \vect{t})}$.
+\end{itemize}
+
+
+We recall here some useful definitions.\\
+
+
+
+{\bf Spatial (temporal) and Stochastic Mean}:
+The \emph{spatial mean} of the process $X$ is the function $m: \Omega \rightarrow \Rset^d$ defined by:
+\begin{align}\label{spatMean}
+  \displaystyle m(\omega)=\frac{1}{|\cD|} \int_{\cD} X(\omega)(\vect{t})\, d\vect{t}
+\end{align}
+
+If $n=1$ and if the mesh is a regular grid $(t_0, \dots, t_{N-1})$, then the spatial mean corresponds to the  \emph{temporal mean} defined by:
+\begin{align}\label{tempMean}
+  m(\omega) =  \frac{1}{t_{N-1} - t_0} \int_{t_0}^{t_{N-1}}X(\omega)(t) \, dt
+\end{align}
+
+The spatial mean is estimated from one realization of the process (see the use case on Field or Time series).\\
+
+The  \emph{stochastic mean}  of the process $X$ is the function $g: \cD \rightarrow \Rset^d$ defined by:
+\begin{align}\label{stocMean}
+  \displaystyle g(\vect{t}) = \Expect{X_{\vect{t}}}
+\end{align}
+
+The stochastic mean is estimated from a sample of realizations of the process (see the use case on the Process sample).\\
+
+For an \emph{ergodic process}, the stochastic mean and the spatial mean are equal and constant (equal to the constant vector noted $\vect{c}$):
+\begin{align}\label{ergodic}
+  \forall \omega\in \Omega, \, \forall \vect{t} \in \cM, \, m(\omega)=  g(\vect{t})  = \vect{c}
+\end{align}
+
+
+
+
+{\bf Normal process}: A stochastic process is {\itshape normal}  if all its finite dimensional joint distributions are normal, which means that for all $k  \in  \Nset$ and $I_k \in \Nset^*$, with $\mathrm{card} I_k = k$, there exist $\vect{m}_1,\dots,\vect{m}_k\in\Rset^d$ and $\mat{C}_{1,\dots,k}\in\mathcal{M}_{kd,kd}(\Rset)$ such that :
+\begin{align}
+  \Expect{\exp\left\{i\vect{X}_{I_k}^t \vect{U}_{k}  \right\}} =
+  \exp{\left\{i\vect{U}_{k}^t\vect{M}_{k}-\frac{1}{2}\vect{U}_{k}^t\mat{C}_{1,\dots,k}\vect{U}_{k}\right\}}
+\end{align}
+where $\vect{X}_{I_k}^t = (X_{\vect{t}_1}^t, \hdots, X_{\vect{t}_k}^t)$, $\vect{U}_{k}^t = (\vect{u}_{1}^t, \hdots, \vect{u}_{k}^t)$ and $\vect{M}_{k}^t = (\vect{m}_{1}^t, \hdots, \vect{m}_{k}^t)$   and $\mat{C}_{1,\dots,k}$ is the symmetric matrix :
+\begin{align}\label{covMatrix}
+  \mat{C}_{1,\dots,k} = \left(
+  \begin{array}{cccc}
+    C(\vect{t}_1, \vect{t}_1) &C(\vect{t}_1, \vect{t}_2) & \hdots & C(\vect{t}_1, \vect{t}_{k}) \\
+    \hdots & C(\vect{t}_2, \vect{t}_2)  & \hdots & C(\vect{t}_2, \vect{t}_{k}) \\
+    \hdots & \hdots & \hdots & \hdots \\
+    \hdots & \hdots & \hdots & C(\vect{t}_{k}, \vect{t}_{k})
+  \end{array}
+  \right)
+\end{align}
+
+A normal process is entirely defined by its mean function $m$ and its  covariance function  $C$ (or  correlation function  $R$).\\
+
+
+{\bf Weak stationarity (second order stationarity) }: A process $X$ is \emph{ weakly stationary} or \emph{stationary of second order} if its mean function is constant and its covariance function is invariant by  translation :
+\begin{align}\label{stat2order}
+  \forall  (\vect{s},\vect{t}) \in \cD, &   \, m(\vect{t})   =  m(\vect{s}) \\
+  \forall (\vect{s},\vect{t},\vect{h}) \in \cD,  &  \, C(\vect{s}, \vect{s}+\vect{h})  =C(\vect{t}, \vect{t}+\vect{h})
+\end{align}
+We note $C^{stat}(\vect{\tau})$ for $C(\vect{s}, \vect{s}+\vect{\tau})$ as this quantity does not depend on $\vect{s}$.\\
+In the continuous case, $\cD$ must be equal to $\Rset^n$as it is invariant by any translation.  In the discrete case, $\cD$ is a lattice $\mathcal{L}=(\delta_1 \Zset \times \dots \times \delta_n \Zset)$ where $\forall i, \delta_i >0$. \\
+
+
+{\bf Stationarity }: A process $X$ is \emph{stationary} if its distribution is invariant by translation: $\forall k \in \Nset$, $\forall (\vect{t}_1, \dots, \vect{t}_k) \in \cD$, $\forall \vect{h}\in \Rset^n$, we have:
+\begin{equation} \label{statGen}
+  \forall k \in \Nset, \, \forall (\vect{t}_1, \dots, \vect{t}_k) \in \cD, \, \forall \vect{h}\in \Rset^n, \, (X_{\vect{t}_1}, \dots, X_{\vect{t}_k}) \stackrel{\mathcal{D}}{=} (X_{\vect{t}_1+\vect{h}}, \dots, X_{\vect{t}_k+\vect{h}})
+\end{equation}
+
+
+
+{\bf Spectral density function}:  If $X$  is a zero-mean weakly stationary continuous process and if for all $(i,j)$, $C^{stat}_{i,j} : \Rset^n \rightarrow \Rset^n$ is $\cL^1(\Rset^n)$ (ie $\int_{\Rset^n} |C^{stat}_{i,j}(\vect{\tau})|\, d\vect{\tau}\, < +\infty$),  we  define the \emph{ bilateral spectral density function} $S : \Rset^n \rightarrow \cH^+(d)$ where $\mathcal{H}^+(d) \in \mathcal{M}_d(\Cset)$ is the set of $d$-dimensional positive definite hermitian matrices, as the Fourier transform of the covariance function $C^{stat}$ :
+\begin{equation} \label{specdensFunc}
+  \forall \vect{f} \in \Rset^n, \,S(\vect{f}) = \int_{\Rset^n}\exp\left\{  -2i\pi <\vect{f},\vect{\tau}> \right\} C^{stat}(\vect{\tau})\, d\vect{\tau}
+\end{equation}
+
+Furthermore, if for all $(i,j)$, $S_{i,j}: \Rset^n \rightarrow \Cset$ is $\cL^1(\Cset)$ (ie $\int_{\Rset^n} |S_{i,j}(\vect{f})|\, d\vect{f}\, < +\infty$), $C^{stat}$ may be evaluated from $S$ as follows :
+\begin{equation} \label{cspectransform}
+  C^{stat}(\vect{\tau})  = \int_{\Rset^n}\exp\left\{  2i\pi <\vect{f}, \vect{\tau}> \right\}S(\vect{f})\, d\vect{f}
+\end{equation}
+In the discrete case, the spectral density is defined for a zero-mean weakly stationary process, where $\cD=(\delta_1 \Zset \times \dots \times \delta_n \Zset)$ with $\forall i, \delta_i >0$ and where the previous integrals are replaced by sums.

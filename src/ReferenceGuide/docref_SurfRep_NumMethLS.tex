@@ -1,0 +1,145 @@
+% Copyright (C) 2005-2015 Airbus - EDF - IMACS - Phimeca
+% Permission is granted to copy, distribute and/or modify this document
+% under the terms of the GNU Free Documentation License, Version 1.2
+% or any later version published by the Free Software Foundation;
+% with no Invariant Sections, no Front-Cover Texts, and no Back-Cover
+% Texts.  A copy of the license is included in the section entitled "GNU
+% Free Documentation License".
+\renewcommand{\etapemethodo}{Resp. Surf.}
+\renewcommand{\nomfichier}{docref_SurfRep_NumMethLS}
+\renewcommand{\titrefiche}{Numerical methods to solve least squares problems}
+
+\newcommand{\matr}[1]{\underline{\underline{#1}}}
+
+\Header
+
+\MathematicalDescription{
+
+  \underline{\textbf{Goal}} \vspace{2mm}%
+
+  This section presents numerical methods that can be used in order to solve least squares problems, which can be encountered when the construction of a \emph{response surface} (i.e. of a meta-model) is of interest, or when one wishes to perform a statistical regression. \\
+
+
+
+  \underline{\textbf{Least squares problem}} \vspace{2mm}
+
+  % Let us consider the following overdetermined system:
+  % \begin{align*}
+  % \matr{\Psi} \, \underline{a} \, \, = \, \, \underline{y}
+  % \end{align*}
+  % where $\matr{\Psi}$ is a $N$-by-$P$-matrix with $N<P$, $\underline{a}$ is a $P$-vector and $\underline{y}$ is a $N$-vector. Assume that $\matr{\Psi}$ and $\underline{y}$ are obtained from some data.
+
+  Given a matrix $\matr{\Psi}~\in~\Rset^{N\times P}$, $N>P$, and a vector $\underline{y}~\in~\Rset^{N}$, we want to find a vector $\underline{a}~\in \Rset^{P}$ such that $\matr{\Psi}\: \underline{a}$ is the best approximation to $\underline{y}$ in the least squares sense. Mathematically speaking, we want to solve the following minimization problem:
+  \begin{align*}
+    \min_{\underline{a}} \, \, = \, \, \left\| \; \matr{\Psi} \, \underline{a} \, - \, \underline{y} \; \right\|_2
+  \end{align*}
+  In the following, it is assumed that the rank of matrix $\matr{\Psi}$ is equal to $P$. \\
+
+  Several algorithms can be applied to compute the least squares solution, as shown in the sequel. \\
+
+  \underline{\textbf{Numerical solving schemes}} \vspace{3mm}
+
+  \textbf{Method of normal equations} \vspace{2mm}
+
+  It is shown that the solution of the least squares problem satisfies the so-called \emph{normal equations}, which read using a matrix notation:
+  \begin{align*}
+    \matr{\Psi}^{\mbox{\scriptsize \textsf{T}}} \; \matr{\Psi} \; \underline{a} \, \, = \, \, \matr{\Psi}^{\mbox{\scriptsize \textsf{T}}} \; \underline{y}
+  \end{align*}
+  The matrix $\matr{C} \equiv \matr{\Psi}^{\mbox{\scriptsize \textsf{T}}} \; \matr{\Psi}$ is symmetric and positive definite. The system can be solved using the following Cholesky factorization:
+  \begin{align*}
+    \matr{C} \, \, = \, \, \matr{R}^{\mbox{\scriptsize \textsf{T}}} \; \matr{R}
+  \end{align*}
+  where $\matr{R}$ is an upper triangular matrix with positive diagonal entries. Solving the normal equations is equivalent to solving the two following triangular systems, which can be easily solved by backwards substitution:
+  \begin{align*}
+    \matr{R}^{\mbox{\scriptsize \textsf{T}}} \; \underline{z} \, \, = \, \, \matr{\Psi}^{\mbox{\scriptsize \textsf{T}}} \; \underline{y}
+    \qquad , \qquad \matr{R} \; \underline{a} \, \, = \, \, \underline{z}
+  \end{align*}
+  It has to be noted that this theoretical approach is seldom used in practice though. Indeed the resulting least squares solution is quite sensitive to a small change in the data (i.e. in $\underline{y}$ and $\matr{\Psi}$). More precisely, the normal equations are always more badly conditioned than the original overdetermined system, as their condition number is squared compared to the original problem:
+  \begin{align*}
+    \kappa(\matr{\Psi}^{\mbox{\scriptsize \textsf{T}}} \; \matr{\Psi}) \, \, = \, \, \kappa(\matr{\Psi})^2
+  \end{align*}
+  As a consequence more robust numerical methods should be adopted. \\
+
+  \textbf{Method based on QR factorization} \vspace{2mm}
+
+  It is shown that the matrix $\matr{\Psi}$ can be factorized as follows:
+  \begin{align*}
+    \matr{\Psi} \, \, = \, \, \matr{Q} \; \matr{R}
+  \end{align*}
+  where $\matr{Q}$ is a $N$-by-$P$-matrix with \emph{orthonormal} columns and $\matr{R}$ is a $P$-by-$P$-upper triangular matrix. Such a \emph{QR decomposition} may be constructed using several schemes, such as \emph{Gram-Schmidt orthogonalization}, \emph{Householder reflections} or \emph{Givens rotations}. \\
+
+  In this setup the least squares problem is equivalent to solving:
+  \begin{align*}
+    \matr{R} \; \underline{a} \, \, = \, \, \matr{Q}^{\mbox{\scriptsize \textsf{T}}} \; \underline{y}
+  \end{align*}
+  This upper triangular system can be solved using backwards substitution. \\
+
+  The solving scheme based on Householder QR factorization leads to a relative error that is proportional to:
+  \begin{align*}
+    \kappa(\matr{\Psi}) + \|\underline{r}\|_2 \kappa(\matr{\Psi})^2
+  \end{align*}
+  where $\underline{r} = \matr{\Psi} \, \underline{a} \, - \, \underline{y}$.  Thus this error is expected to be much smaller than the one associated with the normal equations provided that the residual $\underline{r}$ is ``small''. \\
+
+  \textbf{Method based on singular value decomposition} \vspace{2mm}
+
+  The so-called \emph{singular value decomposition} (SVD) of matrix $\matr{\Psi}$ reads:
+  \begin{align*}
+    \matr{\Psi} \quad = \quad \matr{U} \; \matr{S} \; \matr{V}^{\mbox{\scriptsize \textsf{T}}}
+  \end{align*}
+  where $\matr{U}~\in \Rset^{N \times N}$ and $\matr{V}~\in \Rset^{P \times P}$ are orthogonal matrices, and $\matr{S}~\in \Rset^{N \times P}$ can be cast as:
+  \begin{align*}
+    \matr{S} \quad = \quad \left(
+    \begin{array}{c}
+      \matr{S}_1 \\
+      \matr{0} \\
+    \end{array}
+    \right)
+  \end{align*}
+  In the previous equation, $\matr{S}_1~\in \Rset^{P \times P}$ is a diagonal matrix containing the singular values $\sigma_1 \geq \sigma_2 \geq \dots \geq \sigma_P > 0$ of $\matr{\Psi}$. \\
+
+  It can be shown that the least squares solution is equal to:
+  \begin{align*}
+    \widehat{\underline{a}} \quad = \quad \matr{V} \; \left( \begin{array}{c}
+      \matr{S}_1^{-1} \\
+      \matr{0}  \\
+    \end{array}\right)
+    \; \matr{U}^{\mbox{\scriptsize \textsf{T}}} \; \underline{y}
+  \end{align*}
+  %Note that this result is also valid in case of a rank-deficient matrix $\matr{\Psi}$. In this case vector $\widehat{\underline{a}}$ is the \emph{minimum norm} least squares solution. \\
+
+  In practice it is not common to compute a ``full'' SVD as shown above. Instead, it is often sufficient and more economical in terms of time and memory to compute a \emph{reduced} version of SVD. The latter reads:
+  \begin{align*}
+    \matr{\Psi} \quad = \quad \matr{U}_1 \; \matr{S}_1 \; \matr{V}^{\mbox{\scriptsize \textsf{T}}}
+  \end{align*}
+  where $\matr{U}_1$ is obtained by extracting the $P$ first columns of $\matr{U}$.\\
+
+  Note that it is also possible to perform SVD in case of a rank-deficient matrix $\matr{\Psi}$. In this case the resulting vector $\widehat{\underline{a}}$ corresponds to the \emph{minimum norm} least squares solution. \\
+
+  The computational cost of the method is proportional to $(NP^2 + P^3)$ with a factor ranging from 4 to 10, depending on the numerical scheme used to compute the SVD decomposition. This cost is higher than those associated with the normal equations and with QR factorization. However SVD is relevant insofar as it provides a very valuable information, that is the singular values of matrix $\matr{\Psi}$. \\
+
+  \textbf{Comparison of the methods} \vspace{2mm}
+
+  Several conclusions may be drawn concerning the various methods considered so far:
+  \begin{itemize}
+  \item If $N \approx P$, normal equations and Householder QR factorization require about the same computational work. If $N >> P$, then the QR approach requires about twice as much work as normal equations.
+  \item However QR appears to be more accurate than normal equations, so it should be almost always preferred in practice.
+  \item SVD is also robust but it reveals the most computationally expensive scheme. Nonetheless the singular values are obtained as a by-product, which may be particularly useful for analytical and computational purposes.
+  \end{itemize}
+
+}
+{-
+}
+
+\Methodology{
+  Numerical methods to solve least square problems can be used at several stages of the global methodology, such as:
+  \begin{itemize}
+  \item Step B: performing a linear regression to define the distribution of an input random variable (\otref{docref_B234_LinearRegression}{Linear Regression})
+  \item Step C: compute the coefficients of either a deterministic polynomial response surface (\otref{docref_SurfRep_LSPolynomial}{Polynomial response surface based on least squares}) or a polynomial chaos expansion (\otref{docref_SurfRep_IntegLeastSquare}{Computation of the polynomial chaos coefficients})
+  \end{itemize}
+}
+            {
+              Details related to the least squares methods may be found in:
+              \begin{itemize}
+              \item {\AA}. Bjorck, 1996, ``Numerical methods for least squares problems'', SIAM Press, Philadelphia, PA.
+              \end{itemize}
+            }

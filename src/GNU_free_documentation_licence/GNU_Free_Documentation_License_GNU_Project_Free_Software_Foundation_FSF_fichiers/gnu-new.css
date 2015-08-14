@@ -1,0 +1,227 @@
+@import url( /gnu.css );
+
+@media Screen    
+{
+BODY {
+	PADDING-RIGHT: 0px; PADDING-LEFT: 0px; FONT-SIZE: 86%; PADDING-BOTTOM: 0px; MARGIN: 0px; PADDING-TOP: 0px; FONT-FAMILY: "Bitstream Vera Sans", sans-serif; BACKGROUND-COLOR: #fff
+}
+P {
+	LINE-HEIGHT: 1.5em
+}
+#wrapper {
+	PADDING-RIGHT: 0em; PADDING-LEFT: 0em; PADDING-BOTTOM: 0em; MARGIN: 0px; PADDING-TOP: 0em; POSITION: relative; BACKGROUND-COLOR: transparent
+}
+#top2 {
+	CLEAR: both; PADDING-RIGHT: 0px; PADDING-LEFT: 0px; PADDING-BOTTOM: 0px; PADDING-TOP: 2.4em; BACKGROUND-COLOR: #3f4c6b
+}
+#navigation-bar {
+	BACKGROUND-COLOR: #222
+}
+#navbar {
+	TEXT-ALIGN: center
+}
+#navbar UL {
+	PADDING-LEFT: 0px; MARGIN-LEFT: 0px; LINE-HEIGHT: 2em; LIST-STYLE-TYPE: none
+}
+#navbar LI {
+	DISPLAY: inline
+}
+#navbar LI A {
+	PADDING-RIGHT: 0.3em; PADDING-LEFT: 0.3em; FONT-WEIGHT: bold; FONT-SIZE: 1em; PADDING-BOTTOM: 0.2em; COLOR: #ddd; MARGIN-RIGHT: 0.5em; PADDING-TOP: 0.2em; BACKGROUND-COLOR: #555; TEXT-DECORATION: none
+}
+#navbar LI A:hover {
+	COLOR: yellow; BACKGROUND-COLOR: transparent; TEXT-DECORATION: underline
+}
+#searcher {
+	PADDING-RIGHT: 0.6em; MARGIN-TOP: 0em; Z-INDEX: 1000; RIGHT: 0px; MARGIN-BOTTOM: 0.4em; LINE-HEIGHT: 2.1em; POSITION: absolute; TOP: 0px; BACKGROUND-COLOR: transparent; TEXT-ALIGN: right
+}
+#fsflinks {
+	FONT-SIZE: 0.9em; LEFT: 0px; WIDTH: 100%; POSITION: absolute; TOP: 0px; HEIGHT: 2.4em; BACKGROUND-COLOR: #333
+}
+#fsflinks UL {
+	LIST-STYLE-TYPE: none
+}
+#fsflinks LI {
+	DISPLAY: inline; PADDING-LEFT: 0.3em; BORDER-LEFT: #333 1px solid
+}
+#fsflinks LI:unknown {
+	PADDING-LEFT: 0px; BORDER-LEFT-WIDTH: 0px
+}
+#fsflinks LI A {
+	PADDING-LEFT: 0.5em; COLOR: #ccc! important
+}
+#searcher LABEL {
+	FONT-WEIGHT: bold; FONT-SIZE: 0.7em; TEXT-TRANSFORM: uppercase; COLOR: #666
+}
+#banner {
+	PADDING-RIGHT: 1em; PADDING-LEFT: 1em; PADDING-BOTTOM: 1em; MARGIN: 0px auto; PADDING-TOP: 1em; HEIGHT: 7em; TEXT-ALIGN: center; max-width: 75em
+}
+#banner H1 {
+	FONT-SIZE: 130%; COLOR: #fff; PADDING-TOP: 0.1em
+}
+#links {
+	PADDING-RIGHT: 0px; PADDING-LEFT: 0px; PADDING-BOTTOM: 0px; MARGIN: 0px 100px; PADDING-TOP: 0px; LIST-STYLE-TYPE: none
+}
+#links LI {
+	PADDING-RIGHT: 0.5em; DISPLAY: inline; PADDING-LEFT: 0.7em; BORDER-LEFT: #fff 1px solid
+}
+#links LI:unknown {
+	PADDING-LEFT: 0px; BORDER-LEFT-WIDTH: 0px
+}
+#links LI A {
+	FONT-WEIGHT: bold; COLOR: #fff! important
+}
+#gnulogo {
+	MARGIN-TOP: -3em; FLOAT: left
+}
+#dbdlogo {
+	MARGIN-TOP: -3em; FLOAT: right
+}
+#header {
+	FONT-SIZE: 93%; BACKGROUND: url(/graphics/bg.png) #fff repeat-x 50% bottom; FLOAT: left; WIDTH: 100%; LINE-HEIGHT: normal
+}
+#header UL {
+	PADDING-RIGHT: 10px; PADDING-LEFT: 10px; PADDING-BOTTOM: 0px; MARGIN: 0px; PADDING-TOP: 10px; LIST-STYLE-TYPE: none
+}
+#header LI {
+	PADDING-RIGHT: 0px; PADDING-LEFT: 9px; BACKGROUND: url(/graphics/left.png) no-repeat left top; FLOAT: left; PADDING-BOTTOM: 0px; MARGIN: 0px; PADDING-TOP: 0px
+}
+#header A {
+	PADDING-RIGHT: 15px; DISPLAY: block; PADDING-LEFT: 6px; FONT-WEIGHT: bold; BACKGROUND: url(/graphics/right.png) no-repeat right top; FLOAT: left; PADDING-BOTTOM: 4px; COLOR: #765; PADDING-TOP: 5px; TEXT-DECORATION: none
+}
+#header A:hover {
+	COLOR: #333
+}
+#header #current {
+	BACKGROUND-IMAGE: url(/graphics/left_on.png); BACKGROUND-REPEAT: no-repeat
+}
+#header #current A {
+	BACKGROUND-IMAGE: url(/graphics/right_on.png); PADDING-BOTTOM: 5px; COLOR: #333; BACKGROUND-REPEAT: no-repeat
+}
+#columns {
+	CLEAR: both; PADDING-RIGHT: 1em; PADDING-LEFT: 1em; MARGIN: 1em auto 0px; max-width: 75em
+}
+#footer {
+	CLEAR: both; PADDING-RIGHT: 1em; PADDING-LEFT: 1em; MARGIN: 1em auto 0px; max-width: 75em
+}
+#columns {
+	POSITION: relative
+}
+#footer {
+	BORDER-TOP: #ddd 2px solid; MARGIN-TOP: 3em; BACKGROUND-COLOR: #fff
+}
+.netscape4 {
+	DISPLAY: none! important; HEIGHT: 0px
+}
+#sidebar {
+	BORDER-RIGHT: #ddd 3px solid; PADDING-RIGHT: 1em; BORDER-TOP: #ddd 3px solid; MARGIN-TOP: 1em; PADDING-LEFT: 1em; FONT-SIZE: 0.9em; RIGHT: 1em; FLOAT: right; MARGIN-BOTTOM: 1em; PADDING-BOTTOM: 1em; MARGIN-LEFT: 1.5em; BORDER-LEFT: #ddd 3px solid; PADDING-TOP: 1em; BORDER-BOTTOM: #ddd 3px solid; POSITION: absolute; TOP: -1em; BACKGROUND-COLOR: #e5e5e5
+}
+#sidebar H3 {
+	MARGIN-TOP: 0px; FONT-SIZE: 1em; TEXT-TRANSFORM: uppercase; TEXT-ALIGN: center
+}
+#sidebar UL {
+	PADDING-LEFT: 1em; MARGIN-BOTTOM: 1.2em; MARGIN-LEFT: 0px
+}
+#content {
+	MARGIN-RIGHT: 21em
+}
+#footer {
+	MARGIN: auto; POSITION: relative
+}
+.rowOfBoxes {
+	CLEAR: both
+}
+.quarter {
+	FLOAT: left; MARGIN: 1em 0px; BORDER-LEFT: rgb(204,204,204) 1px solid
+}
+.oneThird {
+	FLOAT: left; MARGIN: 1em 0px; BORDER-LEFT: rgb(204,204,204) 1px solid
+}
+.half {
+	FLOAT: left; MARGIN: 1em 0px; BORDER-LEFT: rgb(204,204,204) 1px solid
+}
+.twoThirds {
+	FLOAT: left; MARGIN: 1em 0px; BORDER-LEFT: rgb(204,204,204) 1px solid
+}
+.fullWidth {
+	FLOAT: left; MARGIN: 1em 0px; BORDER-LEFT: rgb(204,204,204) 1px solid
+}
+.quarter {
+	PADDING-RIGHT: 1.9%; PADDING-LEFT: 1.9%; PADDING-BOTTOM: 0px; WIDTH: 21%; PADDING-TOP: 0px
+}
+.oneThird {
+	PADDING-RIGHT: 1.9%; PADDING-LEFT: 1.9%; PADDING-BOTTOM: 0px; WIDTH: 28%; PADDING-TOP: 0px
+}
+.half {
+	PADDING-RIGHT: 1.9%; PADDING-LEFT: 1.9%; PADDING-BOTTOM: 0px; WIDTH: 46%; PADDING-TOP: 0px; TEXT-ALIGN: left
+}
+.half H3 {
+	PADDING-RIGHT: 0px; PADDING-LEFT: 0px; FONT-SIZE: 1.8em; PADDING-BOTTOM: 0px; MARGIN: 0px; PADDING-TOP: 0px
+}
+.twoThirds {
+	PADDING-RIGHT: 1.9%; PADDING-LEFT: 1.9%; PADDING-BOTTOM: 0px; WIDTH: 63%; PADDING-TOP: 0px; TEXT-ALIGN: left
+}
+.fullWidth {
+	PADDING-RIGHT: 1.2em; PADDING-LEFT: 1.2em; PADDING-BOTTOM: 0px; WIDTH: 96%; PADDING-TOP: 0px; BORDER-LEFT-STYLE: none; TEXT-ALIGN: left
+}
+.filler {
+	BORDER-RIGHT: white 1px solid; BORDER-TOP: white 1px solid; BORDER-LEFT: white 1px solid; BORDER-BOTTOM: white 1px solid
+}
+.noBorderOnLeft {
+	BORDER-LEFT-STYLE: none
+}
+.dividingBorderAbove {
+	BORDER-TOP: rgb(204,204,204) 1px solid
+}
+#translations {
+	PADDING-RIGHT: 1em; PADDING-LEFT: 1em; PADDING-BOTTOM: 1em; MARGIN: 0px auto 2em; PADDING-TOP: 1em; BACKGROUND-COLOR: #ffc; max-width: 73em
+}
+#translations H3 {
+	MARGIN-TOP: 0px; FONT-SIZE: 1em; PADDING-TOP: 0px; TEXT-ALIGN: left
+}
+#translations H4 {
+	MARGIN-TOP: 0px; FONT-SIZE: 1em; PADDING-TOP: 0px; TEXT-ALIGN: left
+}
+#magicwrapper {
+	MARGIN: 0px auto; WIDTH: 65em; BACKGROUND-COLOR: lime
+}
+#validator {
+	RIGHT: 1em; BOTTOM: 0px; POSITION: absolute
+}
+H2 {
+	MARGIN-BOTTOM: 1em; TEXT-ALIGN: center
+}
+H3 {
+	MARGIN-BOTTOM: 1em; TEXT-ALIGN: center
+}
+.announcement {
+	BORDER-RIGHT: #333 1px solid; PADDING-RIGHT: 0.4em; BORDER-TOP: #333 1px solid; PADDING-LEFT: 0.4em; FONT-SIZE: 1em; FLOAT: right; PADDING-BOTTOM: 0.4em; MARGIN: 1em 2em 1em 1.5em; BORDER-LEFT: #333 1px solid; WIDTH: 18em; COLOR: #333; PADDING-TOP: 0.4em; BORDER-BOTTOM: #333 1px solid; BACKGROUND-COLOR: #ffb; TEXT-ALIGN: center
+}
+    }
+.infobox {
+	BORDER-RIGHT: #eee 1px solid; PADDING-RIGHT: 0.4em; BORDER-TOP: #eee 1px solid; PADDING-LEFT: 0.4em; PADDING-BOTTOM: 0.4em; BORDER-LEFT: #eee 1px solid; PADDING-TOP: 0.4em; BORDER-BOTTOM: #eee 1px solid; BACKGROUND-COLOR: #ffb
+}
+.infobox H4 {
+	PADDING-RIGHT: 0px; PADDING-LEFT: 0px; PADDING-BOTTOM: 0px; MARGIN: 0px; PADDING-TOP: 0px
+}
+.infobox P {
+	PADDING-RIGHT: 0px; PADDING-LEFT: 0px; PADDING-BOTTOM: 0px; MARGIN: 0px; PADDING-TOP: 0px
+}
+IMG {
+	BORDER-TOP-WIDTH: 0px; BORDER-LEFT-WIDTH: 0px; BORDER-BOTTOM-WIDTH: 0px; BORDER-RIGHT-WIDTH: 0px
+}
+#sidebar {
+	moz-border-radius: 1em
+}
+#translations {
+	moz-border-radius: 1em
+}
+roundedBox {
+	moz-border-radius: 1em
+}
+#rms-image {
+	BORDER-RIGHT: #ddd 1px solid; BORDER-TOP: #ddd 1px solid; FLOAT: right; BACKGROUND-IMAGE: url(/graphics/rms2005chrys.jpg); MARGIN-BOTTOM: 1em; MARGIN-LEFT: 1em; BORDER-LEFT: #ddd 1px solid; WIDTH: 200px; BORDER-BOTTOM: #ddd 1px solid; HEIGHT: 219px
+}
+.lyrics {
+	BORDER-RIGHT: #e5e5e5 2px solid; PADDING-RIGHT: 2em; BORDER-TOP: #e5e5e5 2px solid; PADDING-LEFT: 2em; PADDING-BOTTOM: 2em; MARGIN-LEFT: 15em; BORDER-LEFT: #e5e5e5 2px solid; WIDTH: 20em; PADDING-TOP: 2em; BORDER-BOTTOM: #e5e5e5 2px solid; FONT-STYLE: italic; BACKGROUND-COLOR: whitesmoke
+}

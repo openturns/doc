@@ -1,0 +1,171 @@
+/************** Defaults ***************/
+
+* {
+  text-align: left; /* working around an IE bug */
+  font-family: helvetica;
+}
+
+/************* Inlines *****************/
+
+em.under {
+  text-decoration: underline;
+}
+
+em.blue {
+  color: blue;
+}
+
+em.framed {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  text-align: center;
+  border-color: red;
+  border-style: solid;
+  border-width: 1px;
+  padding: 8px;
+}
+
+tt {
+  font-family: courier;
+}
+
+/********** Various areas **************/
+
+div.centered {
+  text-align: center;
+}
+
+div.framed {
+  border-color: green;
+  border-style: solid;
+  border-width: 1px;
+  padding: 8px;
+  margin: 4px;
+}
+
+div.footnote {
+}
+
+/*********** Divisions *****************/
+
+h1 {
+  color: darkblue;
+}
+
+h2 {
+  color: darkblue;
+}
+
+h3 {
+  color: darkblue;
+}
+
+/*************** Lists *****************/
+
+li {
+  margin-top: 2px;
+  margin-bottom: 8px;
+}
+
+dt {
+  float: left;
+  font-weight: bold;
+  padding-right: 8px;
+}
+
+dd {
+  margin-left: 50px;
+}
+
+/************** Tables *****************/
+
+table {
+  margin-left: auto;
+  margin-right: auto;
+}
+
+td {
+  padding-left: 8px;
+  padding-right: 8px;
+}
+
+td.ftext {
+  width: 90%;
+}
+
+td.fnum {
+  width: 10%;
+}
+
+/************ Listings *****************/
+
+p.listing {
+  white-space: pre;
+  font-family: monospace;
+  border-style: double;
+  border-width: 1px;
+  padding: 8px;
+}
+
+p.redlisting {
+  white-space: pre;
+  font-family: monospace;
+  color: red;
+  border-style: double;
+  border-width: 1px;
+  padding: 8px;
+}
+
+p.bluelisting {
+  white-space: pre;
+  font-family: monospace;
+  color: blue;
+  border-style: double;
+  border-width: 1px;
+  padding: 8px;
+}
+
+/******* Table of contents *************/
+
+p.toclevel1 {
+  margin-top: 8px;
+  margin-bottom: 0px;
+}
+
+p.toclevel2 {
+  text-indent: 40px;
+  margin-top: 6px;
+  margin-bottom: 0px;
+}
+
+p.toclevel3 {
+  text-indent: 80px;
+  margin-top: 4px;
+  margin-bottom: 0px;
+}
+
+p.toclevel4 {
+  text-indent: 120px;
+  margin-top: 2px;
+  margin-bottom: 0px;
+}
+
+p.toclevel5 {
+  text-indent: 160px;
+  margin-top: 0px;
+  margin-bottom: 0px;
+}
+
+/************* Index *******************/
+
+p.primary {
+  margin-top: 8px;
+  margin-bottom: 0px;
+}
+
+p.secondary {
+  text-indent: 60px;
+  margin-top: 4px;
+  margin-bottom: 0px;
+}

@@ -1,0 +1,279 @@
+% Copyright (C) 2005-2015 Airbus - EDF - IMACS - Phimeca
+% Permission is granted to copy, distribute and/or modify this document
+% under the terms of the GNU Free Documentation License, Version 1.2
+% or any later version published by the Free Software Foundation;
+% with no Invariant Sections, no Front-Cover Texts, and no Back-Cover
+% Texts.  A copy of the license is included in the section entitled "GNU
+% Free Documentation License".
+\renewcommand{\etapemethodo}{B}
+\renewcommand{\nomfichier}{docref_B122_Copulas}
+\renewcommand{\titrefiche}{Copula}
+
+\Header
+
+\MathematicalDescription{
+
+  \underline{\textbf{Goal}}\\
+
+  To define the joined probability density function of the random input vector $\uX$ by composition, one needs:
+  \begin{itemize}
+  \item the specification of the copula of interest $C$ with its parameters,
+  \item the specification of the ${n_X}$ marginal laws of interest $F_{X_i}$ of the ${n_X}$ input variables $X_i$.
+  \end{itemize}
+
+  The joined cumulative density function is therefore defined by :
+  \begin{align*}
+    \Prob{X^1 \leq x^1, X^2 \leq x^2, \cdots, X^{n_X} \leq x^{n_X}}       = C\left(F_{X^1}(x^1),F_{X^2}(x^2),\cdots,F_{X^{n_X}}(x^{n_X}) \right)
+  \end{align*}
+
+  Within this part, we define the concept of copula and its use within OpenTURNS.\\
+
+
+  \underline{\textbf{Principles}}\\
+
+  Copulas allow to represent the part of the joined cumulative density function which is not described by the marginal laws. It enables to represent the dependence structure of the input variables. A copula is a special cumulative density function defined on $[0,1]^{n_X}$ whose marginal distributions are uniform on $[0,1]$. The choice of the dependence structure is disconnected from the choice of the marginal distributions.\\
+
+  \underline{\textbf{Basic properties of copulas}}\\
+
+  A copula, restricted to $[0,1]^{n_X}$ is a $n_U$-dimensional cumulative density function with uniform marginals.
+
+  \begin{itemize}
+  \item $C(\underline{u}) \geq 0$,  $\forall \underline{u} \in [0,1]^{n_U}$
+  \item $C(\underline{u}) = u_i$, $\forall \underline{u}=(1,\ldots,1,u_i,1,\ldots,1)$
+  \item For all $N$-box $\cB = [a_1,b_1] \times \cdots \times [a_{n_U},b_{n_U}] \in [0,1]^{n_U}$, we have $\cV_C(\cB) \geq 0$,     where:
+    \begin{itemize}
+    \item       $\cV_C(\cB) = \sum_{i=1,\cdots, 2^{n_U}} sign(\underline{v}_i) \times C(\underline{v}_i)$, the summation being made over the $2^{n_U}$ vertices $\underline{v_i}$ of $\cB$.
+    \item       $sign(\underline{v}_i)= +1$ if $v_i^k = a_k$ \textit{for an even number of} $k's$, $sign(\underline{v}_i)= -1$ \textit{otherwise}.\\
+    \end{itemize}
+  \end{itemize}
+
+
+
+
+
+
+  \underline{\textbf{Copulas available within OpenTURNS}}\\
+
+  Different copulas are available within OpenTURNS:\\
+
+  {\bf Ali-Mikhail-Haq Copula}: The Ali-Mikhail-Haq copula is archimedean, parameterized by a scalar $\theta \geq 0 $ . The Clayton copula is thus defined by:
+  \begin{align*}
+    C(u_1, u_2) = \displaystyle \dfrac{u_1u_2}{1-\theta(1-u_1)(1-u_2)}
+  \end{align*}
+
+  \begin{figure}[H]
+    \begin{center}
+      \includegraphics[width=7cm]{Figures/AliMikhailHaqCopula.pdf}
+      \caption{Iso-PDF of a Ali-Mikhail-Haq  copula.}
+    \end{center}
+  \end{figure}
+
+
+  {\bf Clayton Copula}: The Clayton copula is parameterized by a scalar $\theta \geq 0 $ . The Clayton copula is thus defined by:
+  \begin{align*}
+    C(u_1, u_2) =\displaystyle \left(u_1^{-\theta}+u_2^{-\theta}-1\right)^{-1/\theta}
+  \end{align*}
+
+
+
+  \begin{figure}[H]
+    \begin{center}
+      \includegraphics[width=7cm]{Figures/ClaytonCopula.pdf}
+      \caption{Iso-PDF of a  Clayton copula.}
+    \end{center}
+  \end{figure}
+
+
+  {\bf Composed Copula}:
+  A copula may be defined as the product of other copulas : if $C_1$ and $C_2$ are two copulas respectively of random vectors in  $\Rset^{n_1}$ and $\Rset^{n_2}$, we can create the copula of a random vector of $\Rset^{n_1+n_2}$, noted $C$ as follows :
+  \begin{align*}
+    C(u_1, \cdots, u_n) = C_1(u_1, \cdots, u_{n_1}) C_2(u_{n_1+1}, \cdots, u_{n_1+n_2})
+  \end{align*}
+  It means that both subvectors $(u_1, \cdots, u_{n_1})$ and $(u_{n_1+1}, \cdots, u_{n_1+n_2})$ of $\Rset^{n_1}$ and $\Rset^{n_2}$ are independent.
+
+
+
+
+  {\bf Farlie-Gumbel-Morgenstern Copula}: The Farlie-Gumbel-Morgenstern copula is parameterized by a scalar $\theta \in [-1,1] $ . The Farlie-Gumbel-Morgenstern copula is thus defined by:
+  \begin{align*}
+    C(u_1, u_2) =\displaystyle u_1u_2 (1 + \theta(1 - u_1)(1 - u_2))
+  \end{align*}
+
+
+
+  \begin{figure}[H]
+    \begin{center}
+      \includegraphics[width=7cm]{Figures/FarlieGumbelMorgensternCopula.pdf}
+      \caption{Iso-PDF of a  Farlie-Gumbel-Morgenstern copula.}
+    \end{center}
+  \end{figure}
+
+
+  {\bf Frank Copula}: The Frank copula is parameterized by a scalar $\theta \neq 0 $  . The Frank copula is thus defined by:
+  \begin{align*}
+    C(u_1, u_2) =\displaystyle -\frac{1}{\theta}\log\left(1+\frac{(e^{-\theta u_1}-1)(e^{-\theta u_2}-1}{e^{-\theta}-1}\right)
+  \end{align*}
+
+
+
+
+  \begin{figure}[H]
+    \begin{center}
+      \includegraphics[width=7cm]{Figures/FrankCopula.pdf}
+    \end{center}
+    \caption{Iso-PDF of a Frank copula.}
+  \end{figure}
+
+
+
+  {\bf Gumbel Copula}: The Gumbel copula is parameterized by a scalar $\theta \geq 0 $ . The Gumbel copula is thus defined by:
+  \begin{align*}
+    C(u_1, u_2) =\displaystyle \exp\left(-\left((-\log(u_1))^{\theta}+(-\log(u_2))^{\theta}\right)^{1/\theta}\right)
+  \end{align*}
+
+
+
+  \begin{figure}[H]
+    \begin{center}
+      \includegraphics[width=7cm]{Figures/GumbelCopula.pdf}
+      \caption{Iso-PDF of a  Gumbel copula.}
+    \end{center}
+  \end{figure}
+
+
+  {\bf Independent Copula}: It means that all the input variables are independent the ones from the others. The independent copula is defined by:
+  \begin{align*}
+    C(u_1,u_2,\cdots,u_{n_{\:U}}) = \prod_{i=1}^{n_{\:U}} u_i
+  \end{align*}
+
+
+  \begin{figure}[H]
+    \begin{center}
+      \includegraphics[width=7cm]{Figures/IndependentCopula.pdf}
+      \caption{Iso-PDF of an Independent copula.}
+    \end{center}
+  \end{figure}
+
+
+  {\bf Maximum-entropy statistics copula}: The density function is defined by:
+  \begin{align*}
+    f_U(u) = \prod\limits_{k=2}^d \frac{\exp\left(-\int_{\partial_{k-1}^{-1}(u_{k-1})}^{\partial_k^{-1}(u_k)} \phi_k(s) ds\right)}{\partial_{k-1}(\partial_k^{-1}(u_k))-u_k} \mathbf{1}_{F_1^{-1}(u_1) \leq \dots \leq F_d^{-1}(u_d)}
+  \end{align*}
+  \begin{align*}
+    \text{with } \partial_k(t) = F_k(G^{-1}(t)) \text{ and } G(t) = \frac{1}{t} \sum\limits_{k=1}^d F_k(t)
+  \end{align*}
+
+
+  {\bf Min Copula}: The Min copula is the upper Fr\'echet-Hoeffding bound defined by:
+  \begin{align*}
+    C(u_1, \dots, u_n) = \min(u_1,\dots,u_n)
+  \end{align*}
+
+
+  {\bf Normal Copula}: The Normal copula is parameterized by a correlation matrix $\mathbf R$. The Normal copula is thus defined by:
+  \begin{align*}
+    C(u_1, \dots, u_n)  = \Phi_{\mathbf R}^{n_{\:U}}\left(\Phi^{-1}(u_1),\Phi^{-1}(u_2),\cdots,\Phi^{-1}(u_{n_{\:U}}) \right)
+  \end{align*}
+  where:
+  \begin{itemize}
+  \item $\Phi_{\mathbf R}^{n_{X}}$ is the multinormal cumulative density function in dimension ${n_{X}}$:
+    \begin{align*}
+      \Phi_{\mathbf R}^{n_{X}}(\underline{x}) =  \int_{-\infty}^{x_1} \ldots \int_{-\infty}^{x_{n_{X}}} \frac{1}{{(2\pi.\det{\mathbf R})}^{\frac{n_{X}}{2}}} \: . \: e^{-\frac{^t\underline{u}.\mathbf R.\underline{u}}{2}} \: du_1\ldots du_{n_{\:X}}
+    \end{align*}
+  \item $\Phi$ is the cumulative distribution function of the normal law in dimension 1:
+    \begin{align*}
+      \Phi(x) = \int_{-\infty}^x \frac{1}{\sqrt{2\pi}} \: e^{-\frac{t^2}{2}} \: dt
+    \end{align*}
+  \item $\mathbf R$ is the correlation matrix. This matrix is defined by its algebric properties: symmetric, definite and positive. \\
+  \end{itemize}
+
+
+  The correlation matrix $\mathbf R$ can be obtained by different means:
+  \begin{itemize}
+  \item If one knows the Spearmann correlation Matrix, that is to say,
+    \begin{align*}
+      \rho_{ij}^S = \rho^S(X_i,X_j) = \rho^P(F_{X_i}(X_i),F_{X_j}(X_j))
+    \end{align*}
+    the correlation matrix $\mathbf R$ is deduced by the following formula:
+    \begin{align*}
+      \mathbf R_{ij} = 2 \sin(\frac{\pi}{6}\rho_{ij}^S)
+    \end{align*}
+  \item If one knows the Kendall measure of correlation, that is to say,
+    \begin{align*}
+      \tau_{ij} = \tau(X_i,X_j) = \Prob{(X_{i_1} - X_{i_2}).(X_{j_1} - X_{j_2}) > 0} - \Prob{(X_{i_1} - X_{i_2}).(X_{j_1} - X_{j_2}) < 0}
+    \end{align*}
+    where $(X_{i_1},X_{j_1})$ and $(X_{i_2},X_{j_2})$ follow the law of $(X_i,X_j)$,
+    the correlation matrix $\mathbf R$ is deduced by the following formula:
+    \begin{align*}
+      \mathbf R_{ij} = \sin(\frac{\pi}{2} . \tau_{ij})
+    \end{align*}
+  \item If one knows the Pearson correlation Matrix $\mathbf R^P$, there are two possibilities:
+    \begin{enumerate}
+    \item       If and only if all the marginal laws are Normal,
+      \begin{align*}
+        \mathbf R \equiv \mathbf R^P
+      \end{align*}
+    \item
+      In the other cases, one has to build the correlation matrix $\mathbf R$ by inversion of the following formula from the Pearson Correlation Matrix $\mathbf R^P$:
+      \begin{align*}
+        \mathbf R_{ij}^P = \int \int_{\Rset^2} (x^i-\Expect{X^i})(x^j-\Expect{X^j}) \Phi_{ij}(x^i,x^j,\mathbf R_{ij})dx^i dx^j
+      \end{align*}
+    \end{enumerate}
+  \end{itemize}
+
+
+
+
+  \begin{figure}[H]
+    \begin{center}
+      \includegraphics[width=7cm]{Figures/NormalCopula.pdf}
+      \caption{Iso-PDF of a  Normal copula.}
+    \end{center}
+  \end{figure}
+
+
+
+
+
+
+  {\bf Sklar Copula}: The Sklar copula is obtained directly from the expression of the $n$-dimensional distribution which cumulative distribution function is $F$ with $F_i$ its marginals :
+  \begin{align*}
+    C(u_1, \dots, u_n) = F(F_1^{-1}(u_1), \dots, F_n^{-1}(u_n))
+  \end{align*}
+  Figure \ref{SklarEx} shows the iso-PDF of a Sklar copula extracted from a bidimensional Student distribution.
+
+  \begin{figure}[H]
+    \begin{center}
+      \includegraphics[width=7cm]{Figures/SklarCopula.pdf}
+      \caption{Iso-PDF of a  Sklar copula.\label{SklarEx}}
+    \end{center}
+  \end{figure}
+
+
+
+}
+
+{
+  -
+}
+
+\Methodology{
+  This method of modelling the dependencies between the input variables is part of the step B of the global methodology ("quantify sources of uncertainty"). It enables to build an expression of the probability density function of the input variables $\uX$ defined in step A ("specification of the model and criteria") by composition with the marginal distributions of each $X^i$. This method requires the knowledge of the Spearman correlation matrix or the Kendall correlation measure. It can also be used if one knows the Pearson correlation matrix, but only with the assumption of Normal marginal laws for all the input variables. \\
+
+}
+{
+  One has to pay attention that the composition of the marginal distributions and the copulas available in OpenTURNS is not sufficient to represent all types of dependencies (see examples in the next section). Previous statistical and/or justifications should be done to justify this choice of modeling  dependencies. Besides, as previously discussed, the use of Copula is totally decoupled from the knowledge of the marginal laws of the input variables.
+
+  The following references give a first entry point to the Copulas:
+  \begin{itemize}
+  \item Nelsen, 'Introduction to Copulas'
+
+  \item Embrechts P., Lindskog F., Mc Neil A., 'Modelling dependence with copulas and application to Risk Management', ETZH 2001.
+
+  \end{itemize}
+}
+
+\Example{
+
+  -
+}

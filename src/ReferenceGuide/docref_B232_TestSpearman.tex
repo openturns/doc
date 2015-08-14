@@ -1,0 +1,71 @@
+% Copyright (C) 2005-2015 Airbus - EDF - IMACS - Phimeca
+% Permission is granted to copy, distribute and/or modify this document
+% under the terms of the GNU Free Documentation License, Version 1.2
+% or any later version published by the Free Software Foundation;
+% with no Invariant Sections, no Front-Cover Texts, and no Back-Cover
+% Texts.  A copy of the license is included in the section entitled "GNU
+% Free Documentation License".
+\renewcommand{\etapemethodo}{B}
+\renewcommand{\nomfichier}{docref_B232_TestSpearman}
+\renewcommand{\titrefiche}{Spearman correlation test}
+
+\Header
+
+\MathematicalDescription{
+
+  \underline{\textbf{Goal}} \vspace{2mm}
+
+  This method deals with the modelling of a probability distribution of a random vector $\vect{X} = \left( X^1,\ldots,X^{n_X} \right)$. It seeks to find a type of dependency (here a monotonous correlation) which may exist between two components $X^i$ and $X^j$. \vspace{2mm}
+
+  \underline{\textbf{Principle}} \vspace{2mm}
+
+  The Spearman's correlation coefficient  $\rho^S_{U,V}$, defined in \otref{docref_B232_Spearman}{Spearman's Coefficient}, measures the strength of a monotonous relationship between two random variables $U$ and $V$. If we have a sample made up of $N$ pairs $\left\{ (u_1,v_1),(u_2,v_2),(u_N,v_N) \right\}$, we denote $\widehat{\rho}^S_{U,V}$  to be the estimated coefficient.
+
+  Even in the case where two variables $U$ and $V$ have a Spearman's coefficient  $\rho^S_{U,V}$ equal to zero, the estimate  $\widehat{\rho}^S_{U,V}$ obtained from the sample may be non-zero: the limited sample size does not provide the perfect image of the real correlation. Pearson's test nevertheless enables one to determine if the value obtained by $\widehat{\rho}^S_{U,V}$ is significantly different from zero. More precisely, the user first chooses a probability $\alpha$. From this value the critical value $d_\alpha$  is calculated automatically such that:
+  \begin{itemize}
+  \item         if $\left| \widehat{\rho}^S_{U,V} \right| > d_\alpha$, one can conclude that the real Spearman's correlation coefficient $\rho^S_{U,V}$   is not zero; the risk of error in making this assertion is controlled and equal to $\alpha$;
+  \item if $\left| \widehat{\rho}^S_{U,V} \right| \leq d_\alpha$, there is insufficient evidence to reject the null hypothesis $\rho^S_{U,V} = 0$.
+  \end{itemize}
+
+  An important notion is the so-called "$p$-value" of the test. This quantity is equal to the limit error probability $\alpha_\textrm{lim}$ under which the null correlation hypothesis is rejected. Thus, Spearman's's coefficient is supposed non zero if and only if $\alpha_\textrm{lim}$ is greater than the value $\alpha$ desired by the user. Note that the higher $\alpha_\textrm{lim} - \alpha$, the more robust the decision.
+
+  \begin{center}
+    \includegraphics[width=0.5\textwidth]{Figures/spearman2.pdf}
+  \end{center}
+}
+{
+  -
+}
+
+\Methodology{
+  The Spearman's test is used in step B "Quantifying Sources of Uncertainty". It enables us to verify if a monotonous type of dependency exists between the two components $X^i$ and $X^j$ of the input variable vector $\underline{X}$ defined in step A "Specifying Criteria and the Case Study". Such a relationship should in fact be taken into account to avoid distortion of results in step C "Propagation of Uncertainty".
+
+  {\bf Input data:}\\
+  Two samples $\left\{ x^i_1,\ldots,x^i_N \right\}$  and $\left\{ x^j_1,\ldots,x^j_N \right\}$  of variables $X^i$ and $X^j$, each pair $\left( x^i_k,x^j_k \right)$  corresponding to a simultaneous sampling of the two variables
+
+  {\bf Parameters:}\\
+  a probability $\alpha$ taking values strictly between 0 and 1, defining the risk of permissible decision error (significance level)
+
+  {\bf Outputs:}\\
+  \textit{Result}: Binary variable specifying whether the hypothesis of a correlation coefficient equal to 0 is rejected (0) or not (1) \\
+  $\alpha_\textrm{lim}$ : $p$-value of the test
+}
+{
+  Certain precautions should be taken when interpreting the Spearman's test results.
+  \begin{itemize}
+  \item Remember that  $\rho_{X^i,X^j}= 0$ does not enable us to conclude that $X^i$ and $X^j$ are independent (see \otref{docref_B232_Spearman}{Spearman's correlation coefficient}).
+  \item More generally, the numerical value of Spearman's correlation coefficient can only be interpreted when the two variables studied $X^i$ and $X^j$ are related in a monotonous way; the scatter plot of points $\left\{ (x^i_1,x^j_1),\ldots,(x^i_N,x^j_N) \right\}$  provides some indication concerning the validity of this hypothesis.
+  \end{itemize}
+
+  The following bibliographical references provide main starting points for further study of this method:
+  \begin{itemize}
+  \item Saporta, G. (1990). "Probabilités, Analyse de données et Statistique", Technip
+  \item Dixon, W.J. \& Massey, F.J. (1983) "Introduction to statistical analysis (4th ed.)", McGraw-Hill
+    % \item NIST/SEMATECH e-Handbook of Statistical Methods, http://www.itl.nist.gov/div898/handbook/
+    % \item D'Agostino, R.B. and Stephens, M.A. (1986). "Goodness-of-Fit Techniques", Marcel Dekker, Inc., New York.
+  \item Bhattacharyya, G.K., and R.A. Johnson, (1997). "Statistical Concepts and Methods", John Wiley and Sons, New York.
+  \item Sprent, P., and Smeeton, N.C. (2001). "Applied Nonparametric Statistical Methods -- Third edition", Chapman \& Hall
+    % \item Burnham, K.P., and Anderson, D.R (2002). "Model Selection and Multimodel Inference: A Practical Information Theoretic Approach", Springer
+  \end{itemize}
+
+}

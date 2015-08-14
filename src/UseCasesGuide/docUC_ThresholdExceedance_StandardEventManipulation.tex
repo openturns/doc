@@ -1,0 +1,50 @@
+% Copyright (C) 2005-2015 Airbus - EDF - IMACS - Phimeca
+% Permission is granted to copy, distribute and/or modify this document
+% under the terms of the GNU Free Documentation License, Version 1.2
+% or any later version published by the Free Software Foundation;
+% with no Invariant Sections, no Front-Cover Texts, and no Back-Cover
+% Texts.  A copy of the license is included in the section entitled "GNU
+% Free Documentation License".
+\renewcommand{\filename}{docUC_ThresholdExceedance_StandardEventManipulation.tex}
+\renewcommand{\filetitle}{UC : Manipulation of a StandardEvent}
+
+% \HeaderNNIILevel
+% \HeaderIILevel
+\HeaderIIILevel
+
+\index{Event!Standard space}
+
+This section gives elements to manipulate an {\itshape StandardEvent} in OpenTURNS .\\
+
+Details on isoprobabilistic transformations  may be found in the Reference Guide (\extref{ReferenceGuide}{see files Reference Guide - Step C -- Isoprobabilistic transformation preliminary to FORM-SORM methods}{stepC}).\\
+
+
+The below script manipulates the event based on the scalar ouput variable  {\itshape output} and defined by :
+\begin{align*}
+  myEvent = \{ output > 4\}.
+\end{align*}
+and
+\begin{align*}
+  output = model(input)
+\end{align*}
+The event is expressed within the physical space ($input-space$) or within the standard space.
+
+\requirements{
+  \begin{description}
+  \item[$\bullet$] the event expressed in the physical space : {\itshape myEvent}
+  \item[type:] Event
+  \end{description}
+}
+             {
+               \begin{description}
+               \item[$\bullet$] the associated event in the standard space : {\itshape myStandardEvent}
+               \item[type:] StandardEvent
+               \item[$\bullet$] some realizations of the standard event
+               \item[type:] NumericalSample
+               \end{description}
+             }
+
+             \textspace\\
+             Python  script for this UseCase :
+
+             \inputscript{script_docUC_ThresholdExceedance_StandardEventManipulation}

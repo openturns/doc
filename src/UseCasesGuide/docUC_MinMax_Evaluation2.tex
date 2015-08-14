@@ -1,0 +1,109 @@
+% Copyright (C) 2005-2015 Airbus - EDF - IMACS - Phimeca
+% Permission is granted to copy, distribute and/or modify this document
+% under the terms of the GNU Free Documentation License, Version 1.2
+% or any later version published by the Free Software Foundation;
+% with no Invariant Sections, no Front-Cover Texts, and no Back-Cover
+% Texts.  A copy of the license is included in the section entitled "GNU
+% Free Documentation License".
+\renewcommand{\filename}{docUC_MinMax_Evaluation2.tex}
+\renewcommand{\filetitle}{UC : Min/Max research  with an optimization algorithm}
+
+% \HeaderNNIILevel
+% \HeaderIILevel
+\HeaderIIILevel
+
+
+\index{Min-Max!Optimization}
+\index{Optimization!TNC}
+
+
+The objective of this Use Case is to evaluate the min and max values of the output variable of interest when the input vector of the limit state function varies whitin the interval  $[\vect{a}, \vect{b}] \in \overline{\Rset}^n$, which bounds may be infinite. \\
+
+
+Details on design of experiments  may be found in the Reference Guide (\extref{ReferenceGuide}{see files Reference Guide - Step C -- Min-Max approach using Optimization Algorithm}{stepC}).\\
+
+
+
+The example here illustrates how to get the min anx max values of the limit state function $limitStateFunction : \Rset^4 \longrightarrow \Rset$, when the interval  $[\vect{a}, \vect{b}] $ is :
+\begin{align*}
+  [\vect{a}, \vect{b}] = [a_1, b_1] \times ]-\infty, b_2] \times [a_3, +\infty[ \times \Rset
+\end{align*}
+thanks to the TNC (Truncated Newton Constrained) algorithm parameterized with is default parameters.\\
+
+
+
+
+\requirements{
+  \begin{description}
+  \item[$\bullet$] the output variable of interest : {\itshape outputVariable}
+  \item[type:] RandomVector, of type Composite (ie defined as the image of a RandomVector through a NumericalMathFunction), which must be of dimension 1
+  \item[$\bullet$] the starting point of the optimization research : {\itshape startingPoint}
+  \item[type:] NumericalPoint of dimension 4
+  \end{description}
+}
+             {
+               \begin{description}
+               \item[$\bullet$] the interval where the optimization research will be performed : \itshape{intervalOptim}
+               \item[type:] Interval
+               \item[$\bullet$] the min and max of the output variable of interest
+               \item[type:] NumericalSacalar
+               \item[$\bullet$] the input vectors where the output variable of interest is optimal : \itshape{optimalInputVector}
+               \item[type:] NumericalPoint
+               \end{description}
+             }
+
+             \textspace\\
+             Python script for this UseCase :
+
+             \begin{lstlisting}
+               # STEP 1 : Create the interval where the optimization research will be performed
+
+               # Create the collection of the lower bounds and the upper bounds
+               # In the direction where the bound is infinite,
+               # only the sign of the value specified will be considered
+               lowerBoundVector = NumericalPoint( (a1, -1.0, a3, -1.0)
+
+               upperBoundVector = NumericalPoint( (b1, b2, 1.0, 1.0) )
+
+               # Create the collection of flags indicating
+               # wether the bound is finite or infinite
+               # If the bound is finite, the corresponding flag must be True or 1
+               # In the bound is infinite, the corresponding flag must be False or 0
+               finiteLowerBoundVector = BoolCollection( (1, 0, 1, 0) )
+
+               finiteUpperBoundVector = BoolCollection( (1, 1, 0, 0) )
+
+
+               # Create the optimization interval
+               # For each direction i, if the flag is True, the value is the one specified
+               # in the corresponding BoundVector
+               # If not, the value is infinite, and the sign is the one of the value specified
+               # in the corresponding BoundVector
+               intervalOptim = Interval(lowerBoundVector, upperBoundVector, finiteLowerBoundVector, finiteUpperBoundVector)
+
+
+
+               # STEP 2 : Create the optimization algorithm TNC
+
+               # Extract the limit state function from the output variable of interest
+               limitStateFunction = ouptVariable.getFunction()
+
+               # For the resarch of the min value
+               myAlgoTNC = TNC(TNCSpecificParameters(), limitStateFunction, intervalOptim, startingPoint, TNC.MINIMIZATION)
+
+               # For the resarch of the minax value
+               myAlgoTNC = TNC(TNCSpecificParameters(), limitStateFunction, intervalOptim, startingPoint, TNC.MAXIMIZATION)
+
+
+               # STEP 3 : Run the research and extract the results
+
+               myAlgoTNC.run()
+               myAlgoTNCResult = BoundConstrainedAlgorithm(myAlgoTNC).getResult()
+
+               # Get the optimal value of the oupt variable of interest
+               # (min or max one)
+               optimalValue = myAlgoTNCResult.getOptimalValue()
+
+               # Get the input  vector value associated to the optimal value
+               optimalInputVector = myAlgoTNCResult.getOptimizer()
+             \end{lstlisting}

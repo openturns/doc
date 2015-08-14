@@ -1,0 +1,152 @@
+% Copyright (C) 2005-2015 Airbus - EDF - IMACS - Phimeca
+% Permission is granted to copy, distribute and/or modify this document
+% under the terms of the GNU Free Documentation License, Version 1.2
+% or any later version published by the Free Software Foundation;
+% with no Invariant Sections, no Front-Cover Texts, and no Back-Cover
+% Texts.  A copy of the license is included in the section entitled "GNU
+% Free Documentation License".
+\renewcommand{\filename}{docUC_Intro_GeneralCommands}
+\renewcommand{\filetitle}{Some useful general commands}
+
+\HeaderNNIILevel
+
+$\boldsymbol{\Longrightarrow}$ {\bf help command}\\
+
+The command {\itshape help} gives detailed information on each  object of the {\itshape openturns} python library. For example, to get information on the object {\itshape NumericalPoint}, the command is :
+\begin{center}
+  \begin{lstlisting}
+    help(NumericalPoint)
+  \end{lstlisting}
+\end{center}
+or
+\begin{center}
+  \begin{lstlisting}
+    help(openturns.NumericalPoint)
+  \end{lstlisting}
+\end{center}
+according to the way the  {\itshape openturns} python module has been loaded.\\
+In order to quit the \emph{help} document, tape the key {\itshape q}.\\
+
+$\boldsymbol{\Longrightarrow}$ {\bf Styles in LOG messages}\\
+
+It is possible to set the color of the LOG messages according to the severity level of the log information,  using the \emph{TTY} class. For example, to color the DBG messages in red, the command is :
+\begin{center}
+  \begin{lstlisting}
+    Log.SetColor(Log.DBG, TTY.REDFG)
+  \end{lstlisting}
+\end{center}
+
+Colors are also available through codes. For example, the bold red color \textit{REDBG} is coded by $13$. To get all the possible colors and the association colors / codes, use the command :
+\begin{center}
+  \begin{lstlisting}
+    help(TTY)
+  \end{lstlisting}
+\end{center}
+
+Then to print a message in a specific style, associated to the code $N$, use the command :
+\begin{center}
+  \begin{lstlisting}
+    print TTY.GetColor(N), 'my message in style code'
+  \end{lstlisting}
+\end{center}
+
+In order to inhibit any future change of style, use the command :
+\begin{center}
+  \begin{lstlisting}
+    TTY.ShowColors('false')
+  \end{lstlisting}
+\end{center}
+and to make it possible again, use the command :
+\begin{center}
+  \begin{lstlisting}
+    TTY.ShowColors('true')
+  \end{lstlisting}
+\end{center}
+By default, it is possible to change the messages style.\\
+
+$\boldsymbol{\Longrightarrow}$ {\bf List of methods}\\
+
+If {\itshape myObject} is one instance of an {\itshape openturns} object, then the command :
+\begin{center}
+  \begin{lstlisting}
+    myObject.[TAB]
+  \end{lstlisting}
+\end{center}
+lists all the methods proposed by the object {\itshape myObject}.\\
+
+More generally, to list all the methods proposed by the {\itshape NumericalMathFunction} object, type the command :
+\begin{center}
+  \begin{lstlisting}
+    NumericalMathFunction.[TAB]
+  \end{lstlisting}
+\end{center}
+
+
+{$\boldsymbol{\Longrightarrow}$ \bf Automatic completion}\\
+
+In order to have some automatic completion of the {\itshape openturns} objects and their methods, it is necessary to type the following command in the current python session :
+\begin{center}
+  \begin{lstlisting}
+    import readline
+    import rlcompleter
+    readline.parse_and_bind("tab: complete")
+  \end{lstlisting}
+\end{center}
+
+These commands may be written in the file {\itshape .pythonrc.py} put in the root repertory {\itshape \$HOME}: it will be automatically taken into account  for current python sessions.\\
+Then, in order to complete and list all the {\itshape openturns} objects which begin by {\itshape Num}, the command is :
+\begin{center}
+  \begin{lstlisting}
+    Num[TAB]
+  \end{lstlisting}
+\end{center}
+
+where $[TAB]$ is the Tabulation key.\\
+
+
+$\boldsymbol{\Longrightarrow}$ {\bf Manipulation of a $\boldsymbol{NumericalSample}$}\\
+
+To get the value \textit{value} of the  $(j+1)-th$ component of $(i+1)-th$ point of the NumericalSample \textit{myNumSample}, type the following command :
+
+\begin{center}
+  \begin{lstlisting}
+    value = myNumSample[i,j]
+  \end{lstlisting}
+\end{center}
+
+To set the value \textit{myValue} of the  $(j+1)-th$ component of $(i+1)-th$ point of the NumericalSample \textit{myNumSample}, type the following command :
+
+\begin{center}
+  \begin{lstlisting}
+    myNumSample[i,j] = myValue
+  \end{lstlisting}
+\end{center}
+
+$\boldsymbol{\Longrightarrow}$ {\bf System calls for Windows Users}
+
+For some services, OpenTURNS makes system calls (for example graph production using R or evaluation of a generic wrapper) which, under Windows, open a console window which might be really annoying. \\
+It is possible to swith from the standard system calls (\emph{system()}) to a Windows specific system calls (\emph{CreateProcess()}) that does not open a console windows. The command is :
+\begin{center}
+  \begin{lstlisting}
+    Os.EnableCreateProcess()
+  \end{lstlisting}
+\end{center}
+Yet some Users have reported some strange behavior (currently under investigation) when using the new system calls : OpenTURNS freezes. You can check whether the command is active with :
+\begin{center}
+  \begin{lstlisting}
+    Os.IsCreateProcessEnabled()
+  \end{lstlisting}
+\end{center}
+and, in that case, come back to the standard system calls writting :
+\begin{center}
+  \begin{lstlisting}
+    Os.DisableCreateProcess()
+  \end{lstlisting}
+\end{center}
+
+Furthermore, it is possible to make a shell call using (for example with the sell command : \emph{shell}) :
+\begin{center}
+  \begin{lstlisting}
+    Os.ExecuteCommand('ls')
+  \end{lstlisting}
+\end{center}

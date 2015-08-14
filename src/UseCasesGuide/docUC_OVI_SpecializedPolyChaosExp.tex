@@ -1,0 +1,71 @@
+% Copyright (C) 2005-2015 Airbus - EDF - IMACS - Phimeca
+% Permission is granted to copy, distribute and/or modify this document
+% under the terms of the GNU Free Documentation License, Version 1.2
+% or any later version published by the Free Software Foundation;
+% with no Invariant Sections, no Front-Cover Texts, and no Back-Cover
+% Texts.  A copy of the license is included in the section entitled "GNU
+% Free Documentation License".
+\renewcommand{\filename}{docUC_OVI_SpecializedPolyChaosExp.tex}
+\renewcommand{\filetitle}{UC : Creation of a specialized random vector for the global sensitivity analysis using a polynomial chaos expansion}
+
+% \HeaderNNIILevel
+% \HeaderIILevel
+\HeaderIIILevel
+
+\label{FunctionalChaosRandomVector}
+
+\index{Random Vector!Output random vector}
+
+The objective of this Use Case is to define the output variable of interest as a specialized random vector that allows the User to compute the mean and covariance using the coefficients of the  decomposition upon the polynomial hilbertian basis, and also the Sobol indices and total indices.\\
+
+
+Details on the Sobol indices may be found in the Reference Guide (\extref{ReferenceGuide}{see files Reference Guide - Step C' -- Sensitivity analysis using Sobol indices}{stepCprime}).\\
+
+If $g : \Rset^n \longrightarrow \Rset$ is a model and $Y = g(\vect{X}$ is the random ouput variable with $\vect{X}$ a random vector, we define the Sobol indice associated to $\vect{i} = (i_1, \dots, i_k) )$ as follows where we suppose $g$ and $\vect{X}$ have the good properties :
+\begin{align*}
+  IS(\vect{i}) = \displaystyle \frac{\Var{\Expect{Y|X_{i_1} \dots X_{i_k}}}}{\Var{Y}}
+\end{align*}
+
+The Total Sobol indice associated to $(i_1, \dots, i_k) )$ is defined as :
+\begin{align*}
+  \displaystyle TIS(\vect{i}) = \sum_{\vect{j} \in I(\vect{i})} IS(\vect{j}
+\end{align*}
+where $I(\vect{i}) = \left\{ (j_1, \dots, j_p), \, p \in [k,n]/ \{i_1, \dots, i_k\} \subset  \{j_1, \dots, j_p\}  \right\}$.\\
+
+
+
+\requirements{
+  \begin{description}
+  \item[$\bullet$] the result structure of a polynomial chaos algorithm : {\itshape polynomialChaosResult}
+  \item[type:] a FunctionalChaosResult
+  \end{description}
+}
+             {
+               \begin{description}
+               \item[$\bullet$] the new output variable of interest : {\itshape newOuputVariableOfInterest}
+               \item[type:] a FunctionalChaosRandomVector
+               \end{description}
+             }
+
+             \textspace\\
+             Python script for this UseCase :
+
+             \begin{lstlisting}
+               # Create the new ouput variable of interest
+               # based on the meta model
+               # evaluated from the polynomial chaos algorithm
+               # in a way that allow to compute Sobol indices
+               # and total indices
+               newOuputVariableOfInterest = FunctionalChaosRandomVector(polynomialChaosResult)
+               print "Sobol index 0=", newOuputVariableOfInterest.getSobolIndex(0)
+               indices = Indices(2)
+               indices[0] = 0
+               indices[1] = 1
+               print "Sobol index [0, 1]=", newOuputVariableOfInterest.getSobolIndex(indices)
+               print "Sobol total index 0=", newOuputVariableOfInterest.getSobolTotalIndex(0)
+               indices = Indices(2)
+               indices[0] = 0
+               indices[1] = 1
+               print "Sobol total index [0, 1]=", newOuputVariableOfInterest.getSobolTotalIndex(indices)
+
+             \end{lstlisting}

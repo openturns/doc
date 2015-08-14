@@ -1,0 +1,47 @@
+% Copyright (C) 2005-2015 Airbus - EDF - IMACS - Phimeca
+% Permission is granted to copy, distribute and/or modify this document
+% under the terms of the GNU Free Documentation License, Version 1.2
+% or any later version published by the Free Software Foundation;
+% with no Invariant Sections, no Front-Cover Texts, and no Back-Cover
+% Texts.  A copy of the license is included in the section entitled "GNU
+% Free Documentation License".
+\renewcommand{\filename}{docUC_InputWithData_RegressionTest.tex}
+\renewcommand{\filetitle}{UC : Regression test between two scalar numerical samples}
+
+% \HeaderNNIILevel
+% \HeaderIILevel
+\HeaderIIILevel
+
+
+
+\index{Regression Linear Model!Rsquared@$R^2$ test}
+
+
+
+The objective of this Use Case is to detect a linear relation between two scalar numerical samples. \\
+
+
+
+Details on the linear regression model  may be found in the Reference Guide (\extref{ReferenceGuide}{see file Reference Guide - Step B -- Linear regression}{stepB}).\\
+
+
+
+\requirements{
+  \begin{description}
+  \item[$\bullet$] one continuous scalar numerical sample of dimension n : {\itshape Xsample}
+  \item[type:]  NumericalSample
+  \item[$\bullet$] one continuous scalar numerical sample of dimension 1 : {\itshape Ysample}
+  \item[type:]  NumericalSample
+  \end{description}
+}
+             {
+               \begin{description}
+               \item[$\bullet$] tests results : {\itshape resultPartialRegression, resultFullRegression, resultPartialSpearman, resultFullSpearman}
+               \item[type:] TestResultCollection
+               \end{description}
+             }
+
+             \textspace\\
+             Python script for this UseCase :
+
+             \inputscript{script_docUC_InputWithData_RegressionTest}

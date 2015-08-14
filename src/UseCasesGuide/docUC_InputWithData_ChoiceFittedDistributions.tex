@@ -1,0 +1,62 @@
+% Copyright (C) 2005-2015 Airbus - EDF - IMACS - Phimeca
+% Permission is granted to copy, distribute and/or modify this document
+% under the terms of the GNU Free Documentation License, Version 1.2
+% or any later version published by the Free Software Foundation;
+% with no Invariant Sections, no Front-Cover Texts, and no Back-Cover
+% Texts.  A copy of the license is included in the section entitled "GNU
+% Free Documentation License".
+\renewcommand{\filename}{docUC_InputWithData_ChoiceFittedDistributions.tex}
+\renewcommand{\filetitle}{UC : Making a choice between multiple fitted distributions :  Kolmogorov ranking, ChiSquared ranking and BIC ranking}
+
+% \HeaderNNIILevel
+% \HeaderIILevel
+\HeaderIIILevel
+
+
+
+\index{Ranking test!Kolmogorov}
+\index{Ranking test!ChiSquared}
+\index{Ranking test!BIC}
+
+The objective of this Use Case is to help to make a choice between several distributions fitted to a numerical sample. This choice can be motivated by :
+\begin{itemize}
+\item the ranking by the Kolmogorov p-values (for continuous distributions),
+\item the ranking by the ChiSquared p-values (for discrete distributions),
+\item the ranking BIC values.
+\end{itemize}
+
+
+Details on the BIC criterion may be found in the Reference Guide (\extref{ReferenceGuide}{see file Reference Guide - Step B -- Bayesian Information Criterion (BIC)}{stepB}).\\
+
+It does not  require to  specify the parameters of the different models tested. It is possible to precise :
+\begin{itemize}
+\item the model only : in that case, OpenTURNS builds a factory for each model. OpenTURNS first evaluates  the parameters of the distribution (through the maximum likelihood rule or the moment based one) and then  ranks the distributions according to the criteria selected,
+\item the complete distributions with their parameters : OpenTURNS only evaluates the selected criteria  on each of them and rank them.
+\end{itemize}
+Note that it is possible to specify a KernelSmoothing distribution in the list of the models tested.
+
+\textspace\\
+
+\requirements{
+  \begin{description}
+  \item[$\bullet$] some continupous or discrete numerical samples (data) :  {\itshape sample\_cont, sample\_dist}
+  \item[type:]  NumericalSample
+  \end{description}
+}
+             {
+               \begin{description}
+               \item[$\bullet$] a continuous distribution which ranks first by the Kolmogorov test  : {\itshape bestContModelKol, bestcontDistKol}
+               \item[type:] Distribution
+               \item[$\bullet$] a continuous distribution which ranks first by the BIC test  : {\itshape bestContModelBIC}
+               \item[type:] Distribution
+               \item[$\bullet$] a discrete distribution which ranks first by the Chi Squared test  : {\itshape bestDiscModelChiSq}
+               \item[type:] Distribution
+               \item[$\bullet$] a discrete distribution which ranks first by the BIC  test  : {\itshape bestDiscDistBIC}
+               \item[type:] Distribution
+               \end{description}
+             }
+
+             \textspace\\
+             Python script for this UseCase :
+
+             \inputscript{script_docUC_InputWithData_ChoiceFittedDistributions}

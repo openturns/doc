@@ -1,0 +1,164 @@
+% Copyright (C) 2005-2015 Airbus - EDF - IMACS - Phimeca
+% Permission is granted to copy, distribute and/or modify this document
+% under the terms of the GNU Free Documentation License, Version 1.2
+% or any later version published by the Free Software Foundation;
+% with no Invariant Sections, no Front-Cover Texts, and no Back-Cover
+% Texts.  A copy of the license is included in the section entitled "GNU
+% Free Documentation License".
+
+\documentclass[11pt]{article}
+
+\usepackage{latex2html}
+\usepackage[utf8]{inputenc}
+\usepackage{makeidx}
+\usepackage{index}
+\usepackage[dvips]{graphicx}
+\usepackage{color}
+\usepackage{psfrag}
+\usepackage{listings}
+\usepackage{longtable}
+\usepackage{mdwtab}
+\usepackage{hhline}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{fancyhdr}
+
+\usepackage{otcommon}
+
+\pagestyle{fancy}
+\fancyhf{} \rhead{\bfseries \thepage} \lhead{\bfseries \nouppercase OpenTURNS -- Documentation guide}
+\rfoot{\bfseries \copyright 2005-2015 EDF - EADS - IMACS - PhiMeca} \lfoot{}
+
+\begin{document}
+
+\begin{titlepage}
+  \vspace*{2cm}
+  \begin{center}
+    {\huge \bf Documentation Guide}
+    \input{GenericInformation.tex}
+  \end{center}
+\end{titlepage}
+\newpage
+\tableofcontents
+
+
+% -------------------------------------------------------------------------------------------------
+\newpage
+
+\section{Introduction}
+
+This documentation aims at guiding the User within all the documentation of OpenTURNS.\\
+
+The OpenTURNS documentation is separated into three main fields :
+\begin{itemize}
+\item[$\bullet$]  the Theory of an Uncertainty Study,
+\item[$\bullet$]  the Textual User Interface,
+\item[$\bullet$]  the Software Source,
+\item[$\bullet$]  the Windows port of OpenTURNS.
+\end{itemize}
+
+\section{Theory of an Uncertainty Study}
+
+All the documentation of that section aims at presenting all the User needs to know to perform an uncertainty study.\\
+
+This documentation regroups two Guides, which titles are :
+\begin{itemize}
+\item[$\bullet$] {\itshape OpenTURNS - Reference Guide},
+\item[$\bullet$] {\itshape OpenTURNS - Examples Guide}.
+\end{itemize}
+
+\subsection{Reference Guide}
+
+This Guide presents the Global Methodology to perform a study of probabilistic uncertainty treatment. The different steps of the Global Methodology are described. The User is invited to follow them in the order preconised in the Global Methodology.\\
+
+It also gives a detailed information on all the methods used in the Global Methodology and present in OpenTURNS.\\
+
+Each method presents a form with the following items :
+\begin{itemize}
+\item[$\bullet$] {\bf Mathematical Description}: this field describes the mathematics of the algorithm and precises the vocabulary under which the method is used in different domains.
+\item[$\bullet$] {\bf Link with the OpenTURNS Methodology}: this field recalls the position of the algorithm in the Global Methodology. It precises to which step of the Global Methodology it participates.
+\item[$\bullet$] {\bf References and theoretical basics}: this field gives some usefull references to the User who wants to know more about the method. It recalls, too, some limits in the use of the method.
+\item[$\bullet$] {\bf Examples}: this field applies the method on some examples. Most of the forms of this documentation present the analytical example of a cantilever beam, of Young's modulus E, length L, section modulus I, which undergoes a concentrated bending force at one end. We study then the vertical displacement of the extreme end.
+\end{itemize}
+
+To have an example of the use of a particular algorithm or of a particular method, the User is invited to refer either to the documentation {\itshape Reference Guide - OpenTURNS}  in its section {Example} or to the documentation {\itshape Examples Guide - OpenTURNS} which applies the Global Methodology on a particular example.\\
+
+Some hyperlinks are present to facilitate the navigation between the documentation {\itshape Uncertainty Reference Guide - OpenTURNS} and the others ones.
+
+
+\subsection{Examples Guide}
+
+This Guide applies the whole Global Methodology on some analytical examples. For now, there is only one example: the case of a cantilever beam which undergoes a concentrated bending force at one end.\\
+
+The User may find in this documentation a complete probabilistic uncertainty treatment study.\\
+
+The User is invited to refer to that documentation in particular to apprehend properly the signification of the results of the methods preconised in the Globel Methodology.\\
+
+Some links are present to facilitate the navigation between the documentation {\itshape Examples Guide - OpenTURNS} and the {\itshape Reference Guide - OpenTURNS} one.
+
+
+\section{The Textual User Interface (TUI)}
+
+All the documentation of that section aims at presenting all the elements which enable the User to easily perform an uncertainty study through the textual User Interface of OpenTURNS. \\
+
+This documentation regroups two Guides, which titles are :
+\begin{itemize}
+\item[$\bullet$] {\itshape OpenTURNS - User Manual for the Textual User Interface},
+\item[$\bullet$] {\itshape OpenTURNS - Use Cases Guide for the Textual User Interface}.
+\end{itemize}
+
+
+\subsection{User Manual for the Textual User Interface}
+
+This Guide presents most of the objects present in the TUI of OpenTURNS. In particular, for each of them, it details  the following items :
+\begin{itemize}
+\item[$\bullet$] Usage : how to create the object,
+\item[$\bullet$] Arguments : the signification of each argument of the creation,
+\item[$\bullet$] Methods : list of the methods proposed by the object, precising their use, their arguments and the signification of their parameters.
+\end{itemize}
+\vspace{0.5cm}
+This Guide recall also some basic knowledge to manipulate an oriented object language and some basic information about python.\\
+
+The User is invited to refer to that documentation in particular to have information on the signification of the arguments of each object. It completes the python documentation that the User may consult in line.
+
+\subsection{Use Cases Guide for the Textual User Interface}
+
+This Guide describes most of the use cases of OpenTURNS.\\
+
+The User should find in this documentation the implementation through the TUI of most of the studies which are susceptible to be performed within a global uncertainty study.\\
+
+The presentation follows the steps preconised in the Global Methodology.\\
+
+The User is invited to consult this documentation before implementating a study through the TUI : he will probably find there an example of what he wants to perform. The documentation is made to enable the User to make some cut/copy from the documentation into his study.
+
+\section{Developer's guide}
+
+All the documentation of that section aims at presenting the architecture of the source code of OpenTURNS in order to facilitate new developments, and some elements to write easily an OpenTURNS wrapper.\\
+
+This documentation cover several topics titles are :
+\begin{itemize}
+\item[$\bullet$] {\itshape Architecture},
+\item[$\bullet$] {\itshape Platform development},
+\item[$\bullet$] {\itshape Module development},
+\item[$\bullet$] {\itshape Wrappers development}.
+\end{itemize}
+
+\section{Organization of the OpenTURNS Documentation}
+
+The documentation of OpenTURNS is regrouped in the following files :
+\begin{itemize}
+\item[$\bullet$] Reference Guide : \\
+  source file $OpenTURNS\_ReferenceGuide.tex$,
+\item[$\bullet$] Use Cases Guide for the Textual User Interface : \\
+  source file $OpenTURNS\_UseCasesGuide.tex$.
+\item[$\bullet$] User Manual for the Textual User Interface : \\
+  source file $OpenTURNS\_UserManual.tex$,
+\item[$\bullet$] Examples Guide : \\
+  source file $OpenTURNS\_ExamplesGuide.tex$.
+\item[$\bullet$] Developer's Guide : \\
+  source file $OpenTURNS\_DevelopersGuide.tex$,
+\end{itemize}
+\vspace*{0.5cm}
+The OpenTURNS documentation is provided in PDF and HTML formats.
+
+\end{document}

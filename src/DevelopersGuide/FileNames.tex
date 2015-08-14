@@ -1,0 +1,179 @@
+% Copyright (C) 2005-2015 Airbus - EDF - IMACS - Phimeca
+% Permission is granted to copy, distribute and/or modify this document
+% under the terms of the GNU Free Documentation License, Version 1.2
+% or any later version published by the Free Software Foundation;
+% with no Invariant Sections, no Front-Cover Texts, and no Back-Cover
+% Texts.  A copy of the license is included in the section entitled "GNU
+% Free Documentation License".
+
+The definition of filenames obeys a few rules described below, according to the programming languages used. A general rule is preliminarily defined in order to facilitate the automatic generation of the {\bf Makefile} files. The file names consist of sequences of characters separated by a dot. The first part of the name is called the \emph{base} and the second is called the \emph{suffix} (or \emph{extension}).
+\Rule{Filename-suffixes}{The suffixes of the filenames are used to identify the nature of these files in terms of programming language. The list of suffixes used in the project is given in the table below.\index{Filenames!header file}\index{Filenames!source code}}
+
+\begin{tabular}{|l|p{15cm}|}
+\hline \textbf{Extension} & \textbf{Description} \\
+\hline {\bf .hxx .hh .hpp} & Header file containing the declaration of functions and classes and the definition of templates for C++ \\
+\hline {\bf .cxx .cc .cpp} & Source code file containing the definition (implementation) of C++ functions and classes \\
+\hline {\bf .c} & Source code file containing the definition of C functions \\
+\hline {\bf .h} & Header file containing the declaration of functions in C \\
+\hline {\bf .f} & Source code file containing the definition of FORTRAN 77 functions \\
+\hline {\bf .py} & Python file \\
+\hline {\bf .R} & R file \\
+\hline {\bf .cmake} & CMake script \\
+\hline {\bf .a} & Archive file containing statically linked objects \\
+\hline {\bf .bat} & DOS script \\
+\hline {\bf .conf} & \OT\ configuration file \\
+\hline {\bf .csv} & Comma Separated Value file (for samples) \\
+\hline {\bf .dox} & Doxygen file \\
+\hline {\bf .dtd} & XML Document Type Definition file \\
+\hline {\bf .i} & SWIG interface file \\
+\hline {\bf .in} & Template file \\
+\hline {\bf .ll} & Lex scanner file \\
+\hline {\bf .log} & Output log file \\
+\hline {\bf .mws} & Maple script file \\
+\hline {\bf .nsi} & Windows installer file \\
+\hline {\bf .sce} & Scilab script file \\
+\hline {\bf .sh} & Shell script \\
+\hline {\bf .so} & Shared object file containing dynamically linked objects \\
+\hline {\bf .txt} & Text file \\
+\hline {\bf .xml} & XML file (mainly for wrapper description file) \\
+\hline {\bf .yy} & Yacc parser file \\
+\hline
+\end{tabular}
+
+\Rule{Filename-case}{To assign a name to a file, it must be assumed that the system does not make any distinction between uppercase and lowercase letters, so that two files in the same directory cannot bear the same name.}
+
+\emph{For example, it is not recommended to give the following names to two files in the same directory:}
+\lstset{language=C++, basicstyle=\color{red}}
+\begin{lstlisting}[frame=TRBL]
+matrix.cxx
+Matrix.cxx
+\end{lstlisting}
+
+\subsubsection{C++ Files}
+\Rule{Filename-class}{When a {\bf .hxx} file is used to define a \index{Filenames!class}class, it must adopt the name of this class. As a consequence, a {\bf .hxx} file should not be used to define more than one class unless they are tightly linked. The declaration of nested classes is allowed but it must be noted that it causes difficulties in writing SWIG interface files.}
+
+\emph{Example: one file per class:}
+\lstset{language=C++, basicstyle=\color{blue}}
+\begin{lstlisting}[frame=TBRL]
+Sample.hxx declares class Sample
+Matrix.hxx declares class Matrix
+...
+\end{lstlisting}
+
+\emph{Incorrect example: one file for all classes of a model:}
+\lstset{language=C++, basicstyle=\color{red}}
+\begin{lstlisting}[frame=TRLB]
+Model.hxx # contains all the declaration of all the classes of the internal model
+\end{lstlisting}
+
+The preceding rule has one exception: in order to facilitate the use of several related classes, the header files belonging to the same module are grouped in a single header file, which bears the same name as the module and is prefixed by {\bf OT}.
+
+\emph{Example: using all the classes of the Base module:}
+\lstset{language=C++, basicstyle=\color{blue}}
+\begin{lstlisting}[frame=TBRL]
+#include "OTBase.hxx"
+\end{lstlisting}
+
+\subsubsection{Header files}
+The header files are used to declare functions and classes (they are sometimes called \emph{interface definition} or \emph{interface specification}).
+
+\Rule{Filename-unique}{All header files must have an unique name.}
+
+\Rule{Filename-ifdef}{In order to avoid \index{Multiple inclusions}multiple\index{Inclusion!multiple} inclusions, the content of a {\bf .hxx} file must be enclosed between the instructions shown below. There are two possible forms: either with the {\bf \#ifndef} compiler directive, or with the combined use of the {\bf \#if} directive and the logical expression {\bf !defined(...)}.}
+
+\emph{Example for a file named {\bf Sample.hxx}}
+\lstset{language=C++, basicstyle=\normalsize}
+\begin{lstlisting}[frame=TBRL]
+#ifndef OPENTURNS_SAMPLE_HXX
+#define OPENTURNS_SAMPLE_HXX
+...
+#endif /* OPENTURNS_SAMPLE_HXX */
+\end{lstlisting}
+
+\emph{Example for a file named {\bf Sample.hxx} - with an explicit condition}
+\lstset{language=C++, basicstyle=\normalsize}
+\begin{lstlisting}[frame=TBRL]
+#if !defined(OPENTURNS_SAMPLE_HXX)
+#define OPENTURNS_SAMPLE_HXX
+...
+#endif /* OPENTURNS_SAMPLE_HXX */
+\end{lstlisting}
+
+\Rule{filename-ifdef-symbol}{The identifier following the {\bf \#ifndef} statement must use the full name of the header file (base and suffix) prefixed by {\bf OPENTURNS\_} and obtained by replacing all non-alphanumeric characters with underscores and by using uppercase letters for all the alphanumeric characters.}
+
+\emph{Example for a file named {\bf Sample.hxx}}
+\lstset{language=C++, basicstyle=\normalsize}
+\begin{lstlisting}[frame=TBRL]
+#ifndef OPENTURNS_SAMPLE_HXX
+#define OPENTURNS_SAMPLE_HXX
+...
+#endif /* OPENTURNS_SAMPLE_HXX */
+\end{lstlisting}
+
+\Rule{Filename-include-OT}{The \index{Inclusion!\OT\ files}inclusion directive for the \OT\ header files follows the form given below:}
+
+\emph{Example of \OT\ header file inclusion}
+\lstset{language=C++, basicstyle=\normalsize}
+\begin{lstlisting}[frame=TBRL]
+#include "OSS.hxx"
+#include "NumericalPoint.hxx"
+\end{lstlisting}
+
+\Rule{Filename-include-std}{The \index{Inclusion!external files}inclusion directive for files related to standard or external libraries must follow this form:}
+
+\emph{Example for the inclusion of system function or external library header files}
+\lstset{language=C++, basicstyle=\normalsize}
+\begin{lstlisting}[frame=TBRL]
+#include <cstring>
+#include <sys/stat.h>
+#include <boost/python.hpp>
+\end{lstlisting}
+
+\Rule{Filename-C-headers}{The \index{Inclusion!system functions}inclusion of C system function libraries in C++ must use the C++ standard header files:}
+
+\begin{tabular}{|l|l|p{12cm}|}
+\hline \textbf{C file} & \textbf{C++ file} & \textbf{Description} \\
+\hline {\bf assert.h} & {\bf cassert} & Definition of the {\bf assert} macro \\
+\hline {\bf ctype.h} & {\bf cctype} & Macros for character handling \\
+\hline {\bf errno.h} & {\bf cerrno} & System error codes and messages \\
+\hline {\bf float.h} & {\bf cfloat} & Constants for floating point real numbers \\
+\hline {\bf iso646.h} & {\bf ciso646} &  \\
+\hline {\bf limits.h} & {\bf climits} & Definition of platform-specific constants and limits \\
+\hline {\bf locale.h} & {\bf clocale} & Declaration of functions and structures for localization \\
+\hline {\bf math.h} & {\bf cmath} & Declaration of mathematical functions and definition of mathematical constants \\
+\hline {\bf signal.h} & {\bf csignal} & Declaration of the functions handling process signals \\
+\hline {\bf stdarg.h} & {\bf cstdarg} & Management of lists of variable arguments \\
+\hline {\bf stddef.h} & {\bf cstddef} & Standard definitions ({\bf NULL}, {\bf size\_t}, {\bf wchar\_t}, {\bf offsetof}) \\
+\hline {\bf stdio.h} & {\bf cstdio} & Declaration of C standard I/O functions \\
+\hline {\bf stdlib.h} & {\bf cstdlib} & Declaration of the C standard library functions ({\bf libc}) \\
+\hline {\bf string.h} & {\bf cstring} & Declaration of C functions handling strings; NB: not to be confused with the {\bf string} file declaring the {\bf std::string} class \\
+\hline {\bf time.h} & {\bf ctime} & Declaration of functions converting system date and time into strings \\
+\hline {\bf wchar.h} & {\bf cwchar} & Declaration of functions handling wide char strings; NB: the C++ support of wide chars must be declared with the macro for the handling of wide chars \\
+\hline {\bf wctype.h} & {\bf cwctype} & \\
+\hline
+\end{tabular}
+
+\Rule{Filename-C-headers-nonC++}{If the inclusion of C functions in C++ cannot rely on a header file as described in rule R12, the following form must be used:}
+
+\emph{Example for the inclusion of non standard system function header files}
+\lstset{language=C++, basicstyle=\normalsize}
+\begin{lstlisting}[frame=TBRL]
+extern "C" (
+#include <nonstandard.h>
+)
+\end{lstlisting}
+
+\Rule{Filename-system-headers}{The \OT\ header files which are to be ultimately installed on the system should include all of their files using {\bf <} and {\bf >}.}
+
+\subsubsection{Test files}
+\Rule{Filename-unit-test}{Each class must be able to be tested independently from the others through a set of unit tests. It is prohibited to provide a class that would not offer at least one unit test. It is advisable to produce a unit test for each class functionality in order to isolate possible bugs. It is also advisable to provide integration tests for the class itself and those on which it depends, in order to validate the cross-integration of elementary classes. It is possible to create tests for bugs that have been detected.
+The test files should be prefixed by {\bf t\_}, followed by the name of the class as described in rule R3, followed by an underscore, followed by an identifier describing the nature of the test.}
+
+\emph{Example of names for test files}
+\lstset{language=C++, basicstyle=\normalsize}
+\begin{lstlisting}[frame=TBRL]
+t_Matrix_construction.cxx
+t_Matrix_assignment.cxx
+t_Matrix_bug7654.cxx
+t_Matrix_vectorMultiplication.cxx
+\end{lstlisting}

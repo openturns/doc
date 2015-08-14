@@ -1,0 +1,113 @@
+% Copyright (C) 2005-2015 Airbus - EDF - IMACS - Phimeca
+% Permission is granted to copy, distribute and/or modify this document
+% under the terms of the GNU Free Documentation License, Version 1.2
+% or any later version published by the Free Software Foundation;
+% with no Invariant Sections, no Front-Cover Texts, and no Back-Cover
+% Texts.  A copy of the license is included in the section entitled "GNU
+% Free Documentation License".
+\renewcommand{\filename}{docUC_StocProc_StationaryCovarianceFunction_Param.tex}
+\renewcommand{\filetitle}{UC : Creation of a  parametric stationary covariance function}
+
+% \HeaderNNIILevel
+% \HeaderIILevel
+\HeaderIIILevel
+
+\label{ParamStationaryCovarianceFunction}
+
+\index{Stochastic Process!Covariance Function}
+
+Let $X: \Omega \times \cD \rightarrow \Rset^d$  be a multivariate  stationary normal process where $\cD \in \Rset^n$. The process is supposed to be zero mean. It is entirely defined  by  its covariance function $C^{stat}:  \cD \rightarrow  \mathcal{M}_{d \times d}(\Rset)$, defined by $C^{stat}(\vect{\tau})=\Expect{X_{\vect{s}}X_{\vect{s}+\vect{\tau}}^t}$ for all $\vect{s}\in \Rset^n$.\\
+If the process is continuous, then $\cD=\Rset^n$. In the discrete case, $\cD$  is a lattice. \\
+
+This use case illustrates how the User can create a covariance function from parametric models. OpenTURNS implements the \emph{multivariate Exponential model} as a parametric model for the covariance function $C^{stat}$. \\
+
+{\bf The multivariate exponential model}: This model defines the  covariance function $C^{stat}$ by:
+\begin{equation}
+  \label{fullMultivariateExponential2}
+  \forall \vect{\tau} \in \cD,\quad C^{stat}( \vect{\tau} )=\left[\mat{A}\mat{\Delta}( \vect{\tau} ) \right] \,\mat{R}\, \left[ \mat{\Delta}( \vect{\tau} )\mat{A}\right]
+\end{equation}
+where $\mat{R} \in  \mathcal{M}_{d \times d}([-1, 1])$ is a correlation matrix, $\mat{\Delta}( \vect{\tau} ) \in \mathcal{M}_{d \times d}(\Rset)$ is defined by:
+\begin{equation}
+  \label{fullMultivariateExponential3}
+  \mat{\Delta}( \vect{\tau} )= \mbox{Diag}(e^{-\lambda_1|\tau|/2}, \dots, e^{-\lambda_d|\tau|/2})
+\end{equation}
+and $\mat{A}\in \mathcal{M}_{d \times d}(\Rset)$ is defined by:
+\begin{equation}
+  \label{fullMultivariateExponential4}
+  \mat{A}= \mbox{Diag}(a_1, \dots, a_d)
+\end{equation}
+whith $\lambda_i>0$ and $a_i>0$ for any $i$.\\
+We call $\vect{a}$ the amplitude vector and $\vect{\lambda}$ the scale vector.\\
+
+The expression of $C^{stat}$ is the combination of:
+\begin{itemize}
+\item the matrix $\mat{R}$ that models the spatial correlation between the components of the process $X$ at any vertex $\vect{t}$ (since the process is stationary):
+  \begin{equation}
+    \label{fullMultivariateExponential1}
+    \forall \vect{t}\in \cD,\quad \mat{R} = \Cor{X_{\vect{t}}, X_{\vect{t}}}
+  \end{equation}
+
+\item the matrix $\mat{\Delta}( \vect{\tau} )$ that models the correlation between the marginal random variables  $X^i_{\vect{t}}$ and  $X^i_{\vect{t}+\vect{\tau}}$:
+  \begin{align}
+    \Cor{X_{\vect{t}}^i,X^i_{\vect{t}+\vect{\tau}}} = e^{-\lambda_i|\tau|}
+  \end{align}
+
+\item the matrix $\mat{A}$ that models the variance of each marginal random variable:
+  \begin{align}
+    \Var{X_{\vect{t}}} = (a_1, \dots, a_d)
+  \end{align}
+\end{itemize}
+
+This model is such that:
+\begin{align}
+  C_{ij}^{stat}(\vect{\tau})&  = a_ie^{-\lambda_i|\tau|/2}R_{i,j}a_je^{-\lambda_j|\tau|/2},\quad i\neq j\\
+  C_{ii}^{stat}(\vect{\tau}) & =a_ie^{-\lambda_i|\tau|/2}R_{i,i}a_ie^{-\lambda_j|\tau|/2}=a_i^2e^{-\lambda_i|\tau|} \label{diago}
+\end{align}
+
+It is possible to define the exponential model from the spatial covariance matrix $\mat{C}^{spat}$ rather than the correlation matrix $\mat{R}$ :
+\begin{equation}\label{relRA}
+  \forall \vect{t} \in \cD,\quad \mat{C}^{spat} = \Expect{X_{\vect{t}}X^t_{\vect{t}}} = \mat{A}\,\mat{R}\, \mat{A}
+\end{equation}
+
+
+OpenTURNS implements the multivariate exponential model thanks to the object {\itshape ExponentialModel} wich is created from :
+\begin{itemize}
+\item the scale and amplitude vectors $(\vect{\lambda}, \vect{a})$: in that case, by default $\mat{R} = \mat{I}$;
+\item the scale and amplitude vectors and the spatial correlation matrix  $(\vect{\lambda}, \vect{a},\mat{R})$;
+\item the scale and amplitude vectors and the spatial covariance matrix  $(\vect{\lambda}, \vect{a},\mat{C})$; Then  $\mat{C}$ is mapped into the associated correlation matrix $\mat{R}$ according to (\ref{relRA}) and  the previous constructor is used.
+\end{itemize}
+
+
+
+
+
+
+\requirements{
+  \begin{description}
+  \item[$\bullet$]  $\vect{a}$, $\vect{\lambda}$   : {\itshape amplitude, scale}
+  \item[type:]  NumericalPoint
+  \end{description}
+
+  \begin{description}
+  \item[$\bullet$]  $\mat{R}$  : {\itshape spatialCorrelation}
+  \item[type:]  CorrelationMatrix
+  \end{description}
+
+  \begin{description}
+  \item[$\bullet$]  $\mat{C}$  : {\itshape spatialCovariance}
+  \item[type:]  CovarianceMatrix
+  \end{description}
+
+}
+{
+  \begin{description}
+  \item[$\bullet$] a covariance model : {\itshape myCovarianceModel }
+  \item[type:] StationaryCovarianceModel
+  \end{description}
+
+}
+
+\textspace\\
+Python script for this UseCase :
+
+\inputscript{script_docUC_StocProc_StationaryCovarianceFunction_Param}

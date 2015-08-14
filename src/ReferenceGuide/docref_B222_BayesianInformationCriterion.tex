@@ -1,0 +1,57 @@
+% Copyright (C) 2005-2015 Airbus - EDF - IMACS - Phimeca
+% Permission is granted to copy, distribute and/or modify this document
+% under the terms of the GNU Free Documentation License, Version 1.2
+% or any later version published by the Free Software Foundation;
+% with no Invariant Sections, no Front-Cover Texts, and no Back-Cover
+% Texts.  A copy of the license is included in the section entitled "GNU
+% Free Documentation License".
+\renewcommand{\etapemethodo}{B}
+\renewcommand{\nomfichier}{docref_B222_BayesianInformationCriterion}
+\renewcommand{\titrefiche}{Bayesian Information Criterion (BIC)}
+
+\Header
+
+\MathematicalDescription{
+
+  \underline{\textbf{Goal}} \vspace{2mm}
+
+  This method deals with the modelling of a probability distribution of a random vector $\vect{X} = \left( X^1,\ldots,X^{n_X} \right)$. It seeks to rank variable candidate distributions by using a sample of data $\left\{ \vect{x}_1,\vect{x}_2,\ldots,\vect{x}_N \right\}$. OpenTURNS enables the use of the Bayesian Information Criterion (BIC) to answer this question in the one dimensional case $n_X =1$. \vspace{2mm}
+
+  \underline{\textbf{Principle}} \vspace{2mm}
+
+  Let us limit the case to $n_X = 1$. Thus we denote $\vect{X} = X^1 = X$. Moreover, let us denote by $\cM_1$,\ldots, $\cM_K$ the parametric models envisaged by the user among the \otref{docref_B121_DistributionSelection}{standard parametric models}. We suppose here that the parameters of these models have been estimated previously by the \otref{docref_B21_MaximumLikelihood}{maximum likelihood method} on the basis of the sample $\left\{ \vect{x}_1,\vect{x}_2,\ldots,\vect{x}_n \right\}$. We denote by $L_i$ the maximized likelihood for the model $\cM_i$.
+
+  By definition of the likelihood, the higher $L_i$, the better the model describes the sample. However, using the likelihood as a criterion to rank the candidate probability distributions would involve a risk: one would almost always favour complex models involving many parameters. If such models provide indeed a large numbers of degrees-of-freedom that can be used to fit the sample, one has to keep in mind that complex models may be less robust that simpler models with less parameters. Actually, the limited available information ($N$ data points) does not allow to estimate robustly too many parameters.
+
+  The BIC criterion can be used to avoid this problem. The principle is to rank $\cM_1$,\ldots, $\cM_K$ according to the following quantity:
+  \begin{align*}
+    \textrm{BIC}_i = \log \left( L_i \right) - \frac{p_i}{2} \log(n)
+  \end{align*}
+  where $p_i$ denotes the number of parameters being adjusted for the model $\cM_i$. The larger $\textrm{BIC}_i$, the better the model. Note that the idea is to introduce a penalization term that increases with the numbers of parameters to be estimated. A complex model will then have a good score only if the gain in terms of likelihood is high enough to justify the number of parameters used.
+
+  The term "Bayesian Information Criterion" comes the interpretation of the quantity $\textrm{BIC}_i$. In a bayesian context, the unknow "true" model may be seen as a random variable. Suppose now that the user does not have any informative prior information on which model is more relevant among $\cM_1$,\ldots, $\cM_K$; all the models are thus equally likely from the point of view of the user. Then, one can show that $\textrm{BIC}_i$ is an approximation of the posterior distribution's logarithm for the model $\cM_i$.
+}
+{
+
+}
+
+
+\Methodology{
+  This method is used in step B "Quantifying Sources of Uncertainty", to verify if the probability distribution is appropriate to describe the uncertainty of a component $X^i$ of the vector of unknown variables defined in step A "Specifying Criteria and the Case Study".
+}
+            {
+              Compared to other criteria proposed in literature for model selection and based on the same idea of penalization (such as the AIC criterion), the BIC criterion tends to favour models with a small number of parameters. Moreover, note that the undelying hypothesis is that the user does not have any significant prior information on which model is more relevant; if such prior information is available (for instance via literature or expert judgement), the BIC criterion becomes less relevant.
+
+              Readers interested in other ways to rank candidate models referred to \otref{docref_B222_TestKS}{Kolmogorov-Smirnov test}, \otref{docref_B222_TestCVM}{Cramer-Von Mises test} and \otref{docref_B222_TestAD}{Anderson-Darling test} in the reference documentation.
+
+              The following bibliographical references provide main starting points for further study of this method:
+              \begin{itemize}
+              \item Saporta, G. (1990). "Probabilités, Analyse de données et Statistique", Technip
+              \item Dixon, W.J. \& Massey, F.J. (1983) "Introduction to statistical analysis (4th ed.)", McGraw-Hill
+                % \item NIST/SEMATECH e-Handbook of Statistical Methods, http://www.itl.nist.gov/div898/handbook/
+              \item D'Agostino, R.B. and Stephens, M.A. (1986). "Goodness-of-Fit Techniques", Marcel Dekker, Inc., New York.
+              \item Bhattacharyya, G.K., and R.A. Johnson, (1997). "Statistical Concepts and Methods", John Wiley and Sons, New York.
+                % \item Sprent, P., and Smeeton, N.C. (2001). "Applied Nonparametric Statistical Methods -- Third edition", Chapman \& Hall
+              \item Burnham, K.P., and Anderson, D.R (2002). "Model Selection and Multimodel Inference: A Practical Information Theoretic Approach", Springer
+              \end{itemize}
+            }

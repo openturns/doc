@@ -1,0 +1,112 @@
+% Copyright (C) 2005-2015 Airbus - EDF - IMACS - Phimeca
+% Permission is granted to copy, distribute and/or modify this document
+% under the terms of the GNU Free Documentation License, Version 1.2
+% or any later version published by the Free Software Foundation;
+% with no Invariant Sections, no Front-Cover Texts, and no Back-Cover
+% Texts.  A copy of the license is included in the section entitled "GNU
+% Free Documentation License".
+\renewcommand{\filename}{docUC_StocProc_TrendComputation.tex}
+\renewcommand{\filetitle}{UC : Trend computation}
+
+% \HeaderNNIILevel
+% \HeaderIILevel
+\HeaderIIILevel
+
+\label{TrendComputation}
+
+\index{Stochastic Process! Trend computation}
+
+
+A multivariate stochastic  process $X: \Omega \times\cD \rightarrow \Rset^d$ of dimension $d$ where $\cD \in \Rset^n$ may write as the sum of a trend function $f_{trend}: \Rset^n \rightarrow \Rset^d$ and a stationary multivariate stochastic process $X_{stat}: \Omega \times\cD \rightarrow \Rset^d$ of dimension $d$ as follows:
+\begin{eqnarray}
+  \label{tsDecomposition}
+  \forall \omega \in \Omega, \, \forall \vect{t} \in \cD, \,X(\omega,\vect{t}) = X_{stat}(\omega,\vect{t}) + f_{trend}(\vect{t})
+\end{eqnarray}
+
+The objective here is to identify the trend function $f_{trend}$ from a given field of the process $X$ and then to remove this last one from the initial field. The resulting field is a realization of the process $X_{stat}$.\\
+OpenTURNS also gives the possibility to the User to define the function $f_{trend}$ and to remove it from the initial field to get the resulting stationary field.\\
+
+
+Among various method, one consists in fixing a basis of function $\cB$ and estimating $f_{trend}$ using a least square method. We consider the functional basis $\cB$ :
+\begin{eqnarray*}
+  \cB = (f_1, f_2, \ldots, f_K)\ with \ f_j : \Rset^n \longrightarrow \Rset^d \ \forall j \ \in \left\{1,2,\ldots,K\right\}
+\end{eqnarray*}
+on which the trend function $f_{trend}$ is decomposed :
+\begin{eqnarray}\label{ftrend}
+  f_{trend}(\vect{t}) = \sum_{j=1}^{K} \alpha_j f_j(\vect{t})
+\end{eqnarray}
+The coefficients $\alpha_j \in \Rset$ have to be computed, tanks to the  least square method for example. However, in the case where the number of available data  is of the same ordre as K, the least square system is ill-posed and a  more complex algorithm may be used. Some algorithms combine cross validation techniques and advanced regression strategies, in order to provide the estimation of the  coefficients associated to the best model among the  basis functions (sparse model). For example, we can use the \emph{least angle regression (LAR)  method} for the choice of sparse models.  Then, some fitting algorithms like the \emph{leave one out}, coupled to the regression strategy, assess the error on the prediction and enable the selection of the best sparse model.\\
+
+We note $(\vect{x}_0, \dots, \vect{x}_{N-1})$ the values of the initial field associated to the mesh $\cM$ of $\cD\in \Rset^n$, where $\vect{x}_i \in \Rset^d$ and $(\vect{x}^{stat}_0, \dots, \vect{x}^{stat}_{N-1})$ the values of the resulting stationary field.\\
+
+OpenTURNS creates a factory of trend function thanks to the  object \emph{TrendFactory},  from :
+\begin{itemize}
+\item a regression strategy that generates a basis using the Least Angle Regression (LAR) method thanks to the object \emph{LAR},
+\item and a fitting algorithm that estimates the empirical error on each sub-basis using the leave one out strategy, thanks to the object \emph{CorrectedLeaveOneOut} or the \emph{KFold} algorithm thanks to the object \emph{KFold}.
+\end{itemize}
+Then, OpenTURNS estimates the trend transformation from the initial field  $(\vect{x}_0, \dots, \vect{x}_{N-1})$ and a function basis $\cB$ thanks to the method \emph{build} of the object \emph{TrendFactory}, which produces an object of type \emph{TrendTransform}. This last object enables to :
+\begin{itemize}
+\item  add the trend to a given field $\vect{w}_0, \dots, \vect{w}_{N-1}$ defined on the same mesh $\cM$: the resulting field  shares the same mesh than the initial field. The addition is done with  the operand  \emph{()}. \\
+  For example, it may be useful to add the trend to a realization of the stationary process $X_{stat}$ in order to get a realization of the process $X$;
+\item get the function $f_{trend}$ defined in (\ref{ftrend}) that evaluates the trend thanks to the method \emph{getEvaluation()};
+\item create the inverse trend transformation in order to remove the trend the intiail field  $(\vect{x}_0, \dots, \vect{x}_{N-1})$ and  to create the resulting stationary field $(\vect{x}^{stat}_0, \dots, \vect{x}^{stat}_{N-1})$ such that:
+  \begin{align}
+    \vect{x}^{stat}_i = \vect{x}_i - f_{trend}(\vect{t}_i)
+  \end{align}
+  where $\vect{t}_i$ is the simplex associated to the value $ \vect{x}_i$.\\
+  This creation of the inverse trend function $-f_{trend}$ is done thanks to the method \emph{getInverse()} which produces an object of type \emph{InverseTrendTransform} that can be evaluated on a a field thanks to the operand  \emph{()}. \\
+  For example, it may be useful in order to get the stationary field $(\vect{x}^{stat}_0, \dots, \vect{x}^{stat}_{N-1})$ and then analyse it with  methods adapted to stationary processes (ARMA decomposition for example).
+\end{itemize}
+
+
+\requirements{
+
+  \begin{description}
+  \item[$\bullet$] some functions $g,h : \mathbb{R}  \rightarrow \mathbb{R}$
+  \item[type:]  NumericalMathFunction
+  \end{description}
+
+  \begin{description}
+  \item[$\bullet$] a basis sequence {\itshape myBasisSequenceFactory}
+  \item[type:]  BasisSequenceFactory
+  \end{description}
+
+  \begin{description}
+  \item[$\bullet$] a fitting algorithm {\itshape myFittingAlgorithm}
+  \item[type:]  FittingAlgorithm
+  \end{description}
+
+  \begin{description}
+  \item[$\bullet$] a basis of function {\itshape myFunctionBasis}
+  \item[type:]  NumericalMathFunctionCollection
+  \end{description}
+
+  \begin{description}
+  \item[$\bullet$] a time series {\itshape myYt}
+  \item[type:]  TimeSeries
+  \end{description}
+
+}
+{
+
+  \begin{description}
+  \item[$\bullet$] a trend factory : {\itshape myTrendFactory}
+  \item[type:]  TrendFactory
+  \end{description}
+
+  \begin{description}
+  \item[$\bullet$] a trend transformation  and its inverse (to perform (\ref{Inverse})) : {\itshape myTrendTranform, myInverseTrendTransform}
+  \item[type:]  TrendTransform, InverseTrendTransform
+  \end{description}
+
+  \begin{description}
+  \item[$\bullet$] the trend function evaluation $f$ {\itshape myEvaluation\_f}
+  \item[type:]  EvaluationImplementation
+  \end{description}
+
+}
+
+\textspace\\
+Python script for this Use Case :
+
+\inputscript{script_docUC_StocProc_TrendComputation}

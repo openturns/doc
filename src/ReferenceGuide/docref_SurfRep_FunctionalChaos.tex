@@ -1,0 +1,62 @@
+% Copyright (C) 2005-2015 Airbus - EDF - IMACS - Phimeca
+% Permission is granted to copy, distribute and/or modify this document
+% under the terms of the GNU Free Documentation License, Version 1.2
+% or any later version published by the Free Software Foundation;
+% with no Invariant Sections, no Front-Cover Texts, and no Back-Cover
+% Texts.  A copy of the license is included in the section entitled "GNU
+% Free Documentation License".
+\renewcommand{\etapemethodo}{Resp. Surf.}
+\renewcommand{\nomfichier}{docref_SurfRep_FunctionalChaos}
+\renewcommand{\titrefiche}{Functional Chaos Expansion}
+
+\Header
+
+\MathematicalDescription{
+
+  \underline{\textbf{Goal}} \vspace{2mm}
+
+  Accounting for the joint probability density function (PDF) $f_{\underline{X}}(\underline{x})$ of the input random vector $\underline{X}$, one seeks the joint PDF of the model response $\underline{Y} = h(\underline{X})$. This may be achieved using Monte Carlo (MC) simulation~(\otref{docref_C221_MonteCarloStd}{Estimating the mean and variance using the Monte Carlo Method}), i.e. by evaluating the model $h$ at a large number of realizations $\underline{x}^{(i)}$ of $\underline{X}$ and then by estimating the empirical distribution of the corresponding sample of model output $h(\underline{x}^{(i)})$. However it is well-known that the MC method requires a large number of model evaluations, i.e. a great computational cost, in order to obtain accurate results.\\
+
+  In fact, when using MC simulation, each model run is performed independently. Thus, whereas it is expected that $h(\underline{x}^{(i)}) \approx h(\underline{x}^{(j)})$ if $\underline{x}^{(i)} \approx \underline{x}^{(j)}$, the model is evaluated twice without accounting for this information. In other words, the functional dependence between $\underline{X}$ and $\underline{Y}$ is lost.\\
+
+  A possible solution to overcome this problem and thereby to reduce the computational cost of MC simulation is to represent the random response $\underline{Y}$ in a suitable functional space, such as the Hilbert space $L^2$ of square-integrable functions with respect to the PDF $f_{\underline{X}}(\underline{x})$. Precisely, an expansion of the model response onto an orthonormal basis of $L^2$ is of interest. \\
+
+  \underline{\textbf{Mathematical framework}} \vspace{2mm}
+
+  The principles of the building of a (infinite numerable) basis of this space, i.e. the PC basis, are described in the sequel. \\
+  \textbf{Principle of the functional chaos expansion}\\
+
+  Consider a model $h$ depending on a set of \emph{random} variables $\underline{X} = (X_1,\dots,X_{n_X})^{\textsf{T}}$. We call functional chaos expansion the class of spectral methods which gathers all types of response surface that can be seen as a projection of the physical model in an orthonormal basis. This class of methods uses the Hilbertian space (square-integrable space: $L^2$) to construct the response surface.\\
+
+  Assuming that the physical model has a finite second order measure (i.e. $E\left( \|h(\underline{X})\|^2\right)< + \infty$), it may be uniquely represented as a converging series onto an orthonormal basis as follows:
+  \begin{align*}
+    h(\underline{x})= \sum_{i=0}^{+\infty}  \underline{y}_{i}\Phi_{i}(\underline{x}).
+  \end{align*}
+  where the $\underline{y}_{i} = (y_{i,1},\dots,y_{i,n_Y})^{\textsf{T}}$'s are deterministic vectors that fully characterize the random vector $\underline{Y}$, and the $\Phi_{i}$'s are given basis functions (e.g. orthonormal polynomials, wavelets). \\
+
+
+  %The orthonormal basis associated to a weight function $w(x)$ verifies:
+  The orthonormality property of the functional chaos basis reads:
+  \begin{align*}
+    \langle \Phi_{i},\Phi_{j}\rangle = \int_{D}\Phi_{i}(\underline{x}) \Phi_{j}(\underline{x})~f_{\underline{X}}(\underline{x}) d \underline{x} = \delta_{i,j}.
+  \end{align*}
+  where $\delta_{i,j} =1$ if $i=j$ and 0 otherwise. The metamodel $\widehat{h}(\underline{x})$ is represented by a \emph{finite} subset of coefficients $\{y_{i}, i \in \cA \subset (N)\}$ in a \emph{truncated} basis $\{\Phi_{i}, i \in \cA \subset (N)\}$ as follows:
+  \begin{align*}
+    \widehat{h}(\underline{x})= \sum_{i \in \cA \subset N}  y_{i}\Phi_{i}(\underline{x})
+  \end{align*}
+
+
+  As an example of this type of expansion, one can mention responses by wavelet expansion, polynomial chaos expansion, etc.
+}
+{
+  -
+}
+
+
+\Methodology{}
+            {The chaos representation is also known as \emph{orthogonal series decomposition}. An elegant mathematical framework of chaos representations may be found in:
+              \begin{itemize}
+              \item C. Soize and R. Ghanem, 2004, ``Physical systems with random uncertainties: chaos representations
+                with arbitrary probability measure'', SIAM J. Sci. Comput. 26(2), 395-410.
+              \end{itemize}
+            }

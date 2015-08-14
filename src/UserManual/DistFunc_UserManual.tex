@@ -1,0 +1,92 @@
+% Copyright (C) 2005-2015 Airbus - EDF - IMACS - Phimeca
+% Permission is granted to copy, distribute and/or modify this document
+% under the terms of the GNU Free Documentation License, Version 1.2
+% or any later version published by the Free Software Foundation;
+% with no Invariant Sections, no Front-Cover Texts, and no Back-Cover
+% Texts.  A copy of the license is included in the section entitled "GNU
+% Free Documentation License".
+
+% =================================================================
+
+\newpage
+\index{DistFunc}
+\extanchor{DistFunc}
+\subsection{Low level distribution functions}
+OpenTURNS implements the following functions. As a general rule, the
+prefix $d$ is used for the evaluation of the density probability
+function, the prefix $q$ for the quantile function, $p$ for the
+evaluation of the cumulative density function and $r$ for the
+random number generation.
+
+\begin{itemize}
+\item \textit{dNonCentralChiSquare}: see Norman L. Johnson, Samuel Kotz, N. Balakrishnan, "Continuous univariate distributions volume 2", second edition, 1995, Wiley Inter-Science
+\item \textit{dNonCentralStudent}: see Norman L. Johnson, Samuel Kotz, N. Balakrishnan, "Continuous univariate distributions volume 2", second edition, 1995, Wiley Inter-Science
+\item \textit{eZ1}: Computes the expectation of the $\min$ of $n$ independent standard normal random variables. Usefull for the modified moment estimator of the LogNormal distribution.
+\item \textit{pBeta}: uses the special function \textit{BetaRatioInc}
+\item \textit{pDickeyFullerConstant}
+\item \textit{pDickeyFullerNoConstant}
+\item \textit{pDickeyFullerTrend}
+\item \textit{pGamma}: normalized Gamma distribution i.e. with a PDF equals
+to $\frac{1}{ \Gamma(k)} x ^ {k - 1} \exp(-x)\quad  \forall (x > 0)$.
+\item \textit{pKolmogorov}: The algorithms and the selection strategy is described in:
+Simard, R. and L'Ecuyer, P. "Computing the Two-Sided Kolmogorov-Smirnov Distribution", Journal of Statistical Software, 2010.
+The implementation is from the first author, initially published under the GPL v3 license but used here with written permission of the author.
+\item \textit{pNonCentralChiSquare}: See  Denise Benton, K. Krishnamoorthy,
+"Computing discrete mixtures of continuous distributions:
+noncentral  chisquare, noncentral t and the distribution of the
+square of the sample multiple correlation coefficient", Computational Statistics \& Data Analysis, 43 (2003) pp
+249-267.
+\item \textit{pNonCentralStudent}:  see Denise Benton, K. Krishnamoorthy, "Computing discrete mixtures of continuous distributions: noncentral chisquare, noncentral t
+and the distribution of the square of the sample multiple correlation coefficient",
+Computational Statistics \& Data Analysis, 43 (2003) pp 249-267
+\item \textit{pNonCentralStudentAlt}
+\item \textit{pNormal}
+\item \textit{pNormal2D}
+\item \textit{pNormal3D}
+\item \textit{pStudent}
+\item \textit{qBeta}: see the algorithm of Cheng (1978), Johnk, Atkinson and Whittaker (1979) 1 \& 2 described in:   Luc Devroye, "Non-Uniform RandomVariate Generation", Springer-Verlag, 1986, available online at:   http://cg.scs.carleton.ca/~luc/nonuniformrandomvariates.zip   and with the important errata at:   http://cg.scs.carleton.ca/~luc/errors.pdf.
+\item \textit{qDickeyFullerConstant}
+\item \textit{qDickeyFullerNoConstant}
+\item \textit{qDickeyFullerTrend}
+\item \textit{qGamma}
+\item \textit{qNormal}
+\item \textit{qStudent}
+\item \textit{rBeta}: the strategy is:
+\begin{itemize}
+\item If ($p_1 = 1$ and $p_2 = 1$), rBeta(1,1) = Uniform(0,1).getRealization()
+\item If ($p_1 = 1$ or $p_2 = 1$), analytic cases
+\item If( $p_1 + p_2 \leq 1$), Johnk
+\item If ($p_1 + p_2 > 1$): If ($p_1 < 1$ and $p_2 < 1$), Atkinson and Whittaker
+1; If ($p_1 < 1$ and $p_2 > 1$) or ($p_1 > 1$ and $p_2 < 1$), Atkinson and
+Whittaker 2; If ($p_1 > 1$ and $p_2 > 1$), Cheng.
+\end{itemize}
+\item \textit{rBinomial}:  see the rejection algorithm described in:
+Wolfgang Hormann, "The Generation of Binomial Random Variates",
+Journal of Statistical Computation and Simulation 46, pp. 101-110, 1993
+http://epub.wu.ac.at/1242/.
+\item \textit{rGamma}: see the algorithm described in:
+George Marsaglia and Wai Wan Tsang, "A Simple Method for Generating Gamma
+Variables": ACM Transactions on Mathematical Software, Vol. 26, No. 3,
+September 2000, Pages 363-372
+with a small optimization on the beta that appears in the squeezing function $(1 + \beta x^4)exp(-x^2/2)$.
+We also add the special treatment of the case $k < 1$.
+\item \textit{rNonCentralChiSquare}: We use the following transformation method: if $J$ is distributed
+according to $Poisson(\lambda/2)$ and $Y$ knowing $J$ is distributed according
+to $\chi^2_{k+2J}$, then $Y$ is distributed according to $rNonCentralChiSquare(k,\lambda)$.
+\item \textit{rNonCentralStudent}: We use a transformation method based on Gamma and Normal transformation:
+If $N$ is $Normal(\delta, 1)$ distributed and $G$ is $\Gamma(\nu / 2)$ distributed,   $\frac{\sqrt{2 \nu} N }{ \sqrt{G}}$ is distributed according to $NonCentralStudent(\nu, \delta)$.
+\item \textit{rNormal}:  We use the improved ziggurat method, see:
+Doornik, J.A. (2005), "An Improved Ziggurat Method to Generate Normal
+Random Samples", mimeo, Nuffield College, University of Oxford,
+and www.doornik.com/research.
+\item \textit{rPoisson}: For the small values of lambda, we use the method of inversion by sequential search described in:
+Luc Devroye, "Non-Uniform RandomVariate Generation", Springer-Verlag, 1986, available online at:
+http://cg.scs.carleton.ca/~luc/nonuniformrandomvariates.zip
+and with the important errata at:
+http://cg.scs.carleton.ca/~luc/errors.pdf
+For the large values of lambda, we use the ratio of uniform method described in:
+E. Stadlober, "The ratio of uniforms approach for generating discrete random variates". Journal of Computational and Applied Mathematics, vol. 31, no. 1, 1990, pp. 181-189.
+\item \textit{rStudent}: We use a transformation method based on Gamma and Normal transformation:
+If $N$ is $Normal(0, 1)$ distributed and $G$ is $\Gamma(\nu / 2)$ distributed,
+$\frac{\sqrt{2 \nu} N }{ \sqrt{G}}$ is distributed according to $Student(\nu)$.
+\end{itemize}

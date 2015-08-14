@@ -1,0 +1,518 @@
+% Copyright (C) 2005-2015 Airbus - EDF - IMACS - Phimeca
+% Permission is granted to copy, distribute and/or modify this document
+% under the terms of the GNU Free Documentation License, Version 1.2
+% or any later version published by the Free Software Foundation;
+% with no Invariant Sections, no Front-Cover Texts, and no Back-Cover
+% Texts.  A copy of the license is included in the section entitled "GNU
+% Free Documentation License".
+\renewcommand{\filename}{docUC_InputNoData_UsualDist}
+\renewcommand{\filetitle}{UC : List of usual distributions}
+
+% \HeaderNNIILevel
+% \HeaderIILevel
+\HeaderIIILevel
+
+\index{Usual Distribution!Arcsine}
+\index{Usual Distribution!Beta}
+\index{Usual Distribution!Bernoulli}
+\index{Usual Distribution!Binomial}
+\index{Usual Distribution!Burr}
+\index{Usual Distribution!Chi}
+\index{Usual Distribution!ChiSquare}
+\index{Usual Distribution!Dirac}
+\index{Usual Distribution!Dirichlet}
+\index{Usual Distribution!Epanechnikov}
+\index{Usual Distribution!Exponential}
+\index{Usual Distribution!Fisher-Snedecor}
+\index{Usual Distribution!GeneralizedPareto}
+\index{Usual Distribution!Gamma}
+\index{Usual Distribution!Gumbel}
+\index{Usual Distribution!Histogram}
+\index{Usual Distribution!InverseChiSquare}
+\index{Usual Distribution!InverseGamma}
+\index{Usual Distribution!InverseNormal}
+\index{Usual Distribution!InverseWishart}
+\index{Usual Distribution!Laplace}
+\index{Usual Distribution!Logistic}
+\index{Usual Distribution!LogNormal}
+\index{Usual Distribution!LogUniform}
+\index{Usual Distribution!Negative Binomial}
+\index{Usual Distribution!Non Central Chi Square}
+\index{Usual Distribution!Non Central Student}
+\index{Usual Distribution!Normal}
+\index{Usual Distribution!NormalGamma}
+\index{Usual Distribution!Rayleigh}
+\index{Usual Distribution!Rice}
+\index{Usual Distribution!Student}
+\index{Usual Distribution!Triangular}
+\index{Usual Distribution!Trapezoidal}
+\index{Usual Distribution!TruncatedNormal}
+\index{Usual Distribution!Uniform}
+\index{Usual Distribution!Weibull}
+\index{Usual Distribution!Wishart}
+\index{Usual Distribution!Geometric}
+\index{Usual Distribution!Multinomial}
+\index{Usual Distribution!Poisson}
+\index{Usual Distribution!User defined}
+\index{Usual distribution!Zipf-Mandelbrot}
+
+The objective of this Use Case is to list all the usual distributions proposed by OpenTURNS and to precise how each distribution is created, with its different arguments.\\
+
+The different distributions proposed by OpenTURNS are listed here after.\\[1em]
+
+Details on each object may be found in the User Manual  (\extref{UserManual_TUI}{see User Manual - Probabilistic modeling / Usual Distributions}{probModeling}).\\[1em]
+
+\begin{itemize}
+\item Continuous distributions :
+\end{itemize}
+
+{\footnotesize
+
+  \noindent \begin{tabular}{|p{1.8cm}|p{6.0cm}|p{2.7cm}|p{1.7cm}|p{4.6cm}|}
+    % 
+    \hline
+    % 
+    Name & probability density function & conditions & param. 1 & param. $2^{\strut}_{\strut}$\\
+    % 
+    \hline
+    % 
+    Arcsine & $\frac{1}{\pi \frac{b-a}{2} \sqrt{1-\left(\frac{x-\frac{a+b}{2}}{\frac{b-a}{2}}\right)^{2}}}$ & $a <b$& $(a, b)$ & $(\mu, \sigma)$ with
+    $
+    \left\{
+      \begin{array}{l}
+        \mu = \frac{a+b}{2} \\
+        \sigma = \frac{b-a}{2\sqrt{2}}
+      \end{array}
+    \right.
+    $ \\
+    % 
+    \hline
+    % 
+    Beta & $\displaystyle  \frac{(x-a)^{(r-1)^{\strut}}(b-x)^{(t-r-1)}}{(b-a)^{(t-1)}B(r,t-r)}\boldsymbol{1}_{[a,b]}(x)$  & $r>0$, $t>r$, $a < b$ & $(r, t, a, b)$ & $(\mu, \sigma, a,b)$ with
+
+    $
+    \left\{
+      \begin{array}{l}
+        \mu = a+(b-a)\frac{r}{t} \\
+        \sigma = (b-a)\frac{r}{t}\frac{\sqrt{t-r}}{\sqrt{r(t+1)}}
+      \end{array}
+    \right._{\strut}
+    $\\
+    % 
+    \hline
+    % 
+    Burr & $\displaystyle ck\frac{x^{(c-1)}}{(1+x^c)^{(k+1)}} \boldsymbol{1}_{]0,+\infty[}(x)$  & $c>0$, $k>0$,  & $(c,k)$ & -- \\
+    % 
+    \hline
+    % 
+    Chi & $\displaystyle x^{\nu-1}e^{-x^2/2}\frac{2^{1-\nu^{\strut}/2}}{\Gamma(\nu/2)_{\strut}} \boldsymbol{1}_{[0,+\infty[}(x)$ & $\nu > 0$& $\nu$ & -- \\
+    % 
+    \hline
+    % 
+    ChiSquare & $\displaystyle \frac{2^{-\nu^{\strut}/2}}{\Gamma(\nu/2)_{\strut}} x^{(\nu/2-1)}e^{-x/2}\boldsymbol{1}_{[0,+\infty[}(x)$ & $\nu > 0$& $\nu$ & -- \\
+    % 
+    \hline
+    % 
+    Dirichlet & $\displaystyle A \left[ 1-\sum_{j=1}^{d} x_j\right]^{(\theta_{d+1}-1)}\prod_{j=1}^d x_j^{(\theta_j-1)}\mathbf{1}_{\Delta}(\vect{x}) $ with $A = \frac{\Gamma(\sum_{j=1}^{d+1}\theta_j)}{\prod_{j=1}^{d+1}\Gamma(\theta_j)}$, $\Delta = \{ \vect{x} \in \Rset^d / \forall i, x_i \geq 0, \sum_{i=1}^{d} x_i \leq 1 \}$ & $d \geq 1$, $\theta_i>0$ & $(\theta_1, \hdots, \theta_{d+1})$  & -- \\
+    % 
+    \hline
+    % 
+    Epanechnikov & $\displaystyle \frac{3^{\strut}}{4_{\strut}}(1 - x^2)\boldsymbol{1}_{[-1,1]}(x)$ & -- & -- & -- \\
+    % 
+    \hline
+    % 
+    Exponential & $ \displaystyle \lambda e^{-\lambda(x-\gamma)^{\strut}}\boldsymbol{1}_{[\gamma,+\infty[_{\strut}}(x)$ & $\lambda>0$ & $(\lambda, \gamma)$ & -- \\
+    % 
+    \hline
+    % 
+    Fisher-Snedecor & $\displaystyle  \left[\left(\frac{d_1x}{d_1x+d_2}\right)^{d_1/2} \left(\frac{d_2}{d_1x+d_2}\right)^{{d_2/2}^{\strut}} \right]\frac{\mathbf{1}_{x \geq 0}}{Ax} $ with $A =  B(d_1/2, d_2/2)$ & $d_i>0$ & $\left(d_1, d_2 \right)_{\strut}$ & -- \\
+    % 
+    \hline
+    % 
+    Gamma & $ \displaystyle \frac{\lambda^{k^{\strut}}}{\Gamma(k)_{\strut}}(x-\gamma)^{(k-1)} e^{-\lambda(x-\gamma)}\boldsymbol{1}_{[\gamma,+\infty[}(x)$ & $k>0$, $\lambda > 0$ & $(k, \lambda, \gamma)$ & $(\mu, \sigma, \gamma)$ with
+    $
+    \left\{
+      \begin{array}{l}
+        \mu = \frac{k}{\lambda} +  \gamma \\
+        \sigma = \frac{\sqrt{k}}{\lambda}
+      \end{array}
+    \right.
+    $\\
+    % 
+    \hline
+    % 
+    \ifpdf % Manual splitting of the tabular in PDF mode
+  \end{tabular}\\
+
+
+  \noindent \begin{tabular}{|p{2cm}|p{5.3cm}|p{2.7cm}|p{1.7cm}|p{4.6cm}|}
+    % 
+    \hline
+    % 
+    Name & probability density function & conditions & param. 1 & param. $2^{\strut}_{\strut}$\\
+    % 
+    \hline
+    % 
+    Generalized Pareto & cumulative density function: $  \left\{
+      \begin{array}{ll}
+        \displaystyle F(x) =  1-\left[
+          1+\xi\frac{x}{\sigma}\right]_{\strut}^{-1/\xi} & \mbox{if } \xi \neq 0 \\
+        \displaystyle F(x) =  1-exp(-\frac{x}{\sigma}) & \mbox{if } \xi = 0
+      \end{array}
+    \right. $
+    & $\sigma >0$  & $( \sigma, \xi)$ & -- \\
+    % 
+    \hline
+    % 
+    \fi % Manual splitting of the tabular in PDF mode
+    Gumbel & $ \displaystyle \alpha e^{-\alpha(x-\beta)-e^{-\alpha(x-\beta)}}$ & $\alpha >0 $ & $(\alpha, \beta)$ & $(\mu, \sigma)$ with $
+    \left\{
+      \begin{array}{l}
+        \mu = \frac{\gamma^{*}}{\alpha} + \beta \\
+        \sigma = \frac{\pi}{\sqrt{6}} \frac{1}{\alpha}
+      \end{array}
+    \right.^{\strut}
+    $
+    where $ \displaystyle \gamma^{*} = -\int_0^{\infty} \log(t)e^{-t}dt$ is Euler's constant.
+    or (a,b) with $
+    \left\{
+      \begin{array}{l}
+        a = \beta \\
+        b = \frac{1}{\alpha}
+      \end{array}
+    \right.^{\strut}
+    $
+    (param. 3)
+    \\
+    % 
+    \hline
+    % 
+    Histogram & $ \displaystyle \sum_{i=1}^{n} h_i1_{[x_i, x_{i+1}]}(x)/S $ & $\begin{array}{lcl}
+      l_i^{\strut} & = & x_{i+1} - x_i\\
+      S & = & \sum_{i=1}^n h_i l_i \\
+      l_i & \geq & 0
+    \end{array}
+    $ & $(x_1, (l_i, h_i))$ ${1\leq i \leq n} $ & -- \\
+    % 
+    \hline
+    % 
+    Inverse ChiSquare & $\displaystyle \dfrac{\exp \left( -\dfrac{1}{2 x}\right)}{\Gamma \left(\dfrac{\nu}{2}\right)\lambda^{\dfrac{\nu^{\strut}}{2}}x^{\dfrac{\nu}{2}+1}} \mathbf{1}_{x>0} $ & $\nu>0$& $(\nu)$ & -- \\
+    % 
+    \hline
+    % 
+    Inverse Gamma & $\displaystyle  \frac{\exp \left( -\dfrac{1}{\lambda x}\right)^{\strut}}{\Gamma^{\strut}(k)\lambda^kx^{k+1}} \mathbf{1}_{x>0}$ & $k>0$, $\lambda>0$ & $(k,\lambda)$ & -- \\
+    % 
+    \hline
+    % 
+    Inverse Normal & $\displaystyle \left(\frac{\lambda}{2\pi x^3} \right)^{1^{\strut}/2}e^{-\lambda(x-\mu)^2/(2\mu^2x)} \mathbf{1}_{x>0}$ & $\lambda>0$, $\mu>0$ & $(\lambda, \mu)$ & -- \\
+    % 
+    \hline
+    % 
+    InverseWishart &  $\displaystyle \frac{|\mat{V}|^{\frac{\nu}{2}}e^{-\frac{\mathrm{tr}(\mat{V}\mat{X}^{-1})^{\strut}}{2}}}{2^{\frac{\nu p}{2}}|\mat{X}|^{\frac{\nu+p+1}{2}}\Gamma_p\left(\frac{\nu}{2}\right)_{\strut}}\fcar{\cM_p^+(\Rset)}{\mat{X}}$ where $\cM_p^+(\Rset)$ is the set of symmetric positive matrices of dimension $p$ & $\mat{V}\in\cM_p^+(\Rset)$, $\nu>p-1$ &  $(\mat{V},\nu)$ & -- \\
+    % 
+    \hline
+    % 
+    Laplace & $ \displaystyle \frac{\lambda^{\strut}}{2_{\strut}}e^{-\lambda |x-\mu|}$ & $\lambda>0$ & $(\lambda, \mu)$ & -- \\
+    % 
+    \hline
+    % 
+    Logistic & $ \displaystyle \frac{e^{\left(-\frac{x-\alpha}{\beta}\right)^{\strut}}} {\beta\left(1+ e^{\left(-\frac{x-\alpha}{\beta}\right)}\right)^2_{\strut}}$ & $\beta > 0$ & $(\alpha, \beta)$ & -- \\
+    % 
+    \hline
+    % 
+    LogNormal & $ \displaystyle \frac{e^{-\frac{1}{2}\left(\frac{log(x-\gamma)-\mu_\ell}{\sigma_\ell}\right)^{2^{\strut}}}}{\sqrt{2\pi}\sigma_\ell (x-\gamma)}\boldsymbol{1}_{[\gamma,+\infty[}(x) $ & $\sigma_\ell >0$ & $(\mu_\ell, \sigma_\ell, \gamma)$ & $(\mu, \sigma, \gamma)$ or $(\mu, \frac{\sigma}{\mu}, \gamma)$ (param. 3) with $\mu > \gamma$, $\sigma > 0$. We have :
+    $
+    \left\{
+      \begin{array}{@{}l@{}}
+        \mu =  e^{\frac{1}{2}\sigma_\ell^2 + \mu_\ell} + \gamma\\
+        \sigma =  (e^{\frac{1}{2}\sigma_\ell^2 + \mu_\ell})\sqrt{e^{\sigma_\ell^2}-1}
+      \end{array}
+    \right.
+    $\\
+    % 
+    \hline
+    % 
+    LogUniform & $ \displaystyle \frac{1}{x(b_\ell-a_\ell)}\boldsymbol{1}_{[a_\ell, b_\ell]}(\log(x)) $ & $b_\ell > a_\ell$ & $(a_\ell, b_\ell)$ & -- \\
+    % 
+    \hline
+    % 
+    Meixner & $ \displaystyle  \frac{\left[ 2 \cos(\beta/2)\right]^{2\delta^{\strut}}}{2\alpha \pi \Gamma(2\delta)}e^{\frac{\beta(x-\mu)}{\alpha}}\left|\Gamma(\delta +i\frac{x-\mu}{\alpha})\right|^2$ with $i^2=-1$ & $\alpha>0$, $\beta \in ]-\pi, \pi[$, $\delta >0$& $ \left(\alpha, \beta, \delta, \mu \right)$& -- \\
+    % 
+    \hline
+    % 
+    Non Central Chi Square & $ \displaystyle \sum_{j=0}^{\infty} e^{-\lambda}\frac{\lambda^j}{j!}p_{\chi^2(\nu+2j)}(x)$ where $p_{\chi^2(q)}$ is the PDF of a $\chi^2(q)$ random variate.& $\nu>0$, $\lambda \geq 0$ & $(\nu,\lambda )$ & -- \\
+    % 
+    \hline
+    \ifpdf % Manual splitting of the tabular in PDF mode
+  \end{tabular}
+
+
+
+  \noindent \begin{tabular}{|p{2cm}|p{5.3cm}|p{2.7cm}|p{1.7cm}|p{4.6cm}|}
+    % 
+    \hline
+    % 
+    Name & probability density function & conditions & param. 1 & param. $2^{\strut}_{\strut}$\\
+    % 
+    \hline
+    % 
+    Non Central Student & See text for $p_{NCS}(x)^{\strut}$ & -- & $(\nu,\delta, \gamma )$ & -- \\
+    % 
+    \hline
+    % 
+    Normal (nD) & $\displaystyle
+    \frac{1}
+    {
+      \displaystyle (2\pi)^{\frac{n}{2}}|\mat{\Sigma}|^{\frac{1}{2}}
+    }
+    \displaystyle e^{-\frac{1}{2}\Tr{(\vect{x}-\vect{\mu})}\mat{\Sigma}^{-1^{\strut}}(\vect{x}-\vect{\mu})}$
+    &
+    $\mat{\Sigma} = \mat{\Lambda}_{\vect{\sigma}} \mat{R} \mat{\Lambda}_{\vect{\sigma}}$, $\mat{\Lambda}_{\vect{\sigma}} = \mathrm{diag}(\vect{\sigma})$, $\mat{R}$ SPD, $\sigma_i >0$ & $(\vect{\mu}, \vect{\sigma},\mat{R})$ or $(\vect{\mu}, \mat{\Sigma})$ & -- \\
+    % 
+    \hline
+    % 
+    Normal Gamma (2D) & See text for $p_{NG}(x,y)^{\strut}$
+    & $\kappa>0, \alpha>0, \beta>0$ &
+    $(\mu, \kappa, \alpha, \beta)$  & -- \\
+    % 
+    \hline
+    % 
+    Rayleigh & $\displaystyle \frac{(x - \gamma)^{\strut}}{\sigma^2_{\strut}}e^{-\frac{(x-\gamma)^2}{2\sigma^2}}\boldsymbol{1}_{[\gamma,+\infty[}(x)$ & $\sigma > 0$ & $(\sigma, \gamma)$ & -- \\
+    % 
+    \hline
+    % 
+    Rice & $\displaystyle 2\frac{x}{\sigma_{\strut}^{2^{\strut}}}p_{\chi^2(2,\frac{\nu^2}{\sigma^2})}(\frac{x^2}{\sigma^2})$ where $p_{\chi^2(\nu, \lambda)}$ is the PDF of a Non Central Chi Square random variate $(\nu, \lambda)$. & $\nu \geq 0, \sigma>0$ & $( \sigma, \nu)$ & -- \\
+    % 
+    \hline
+    % 
+    Student (nD) & See text for $p_T(x)^{\strut}$ & $\nu > 2$ & $(\nu,\vect{\mu}, \vect{\sigma}, \mat{R}_{\strut} )$ & $(\nu, \mu, \sigma)$ with $d=1$ \\
+    % 
+    \hline
+    % 
+    Trapezoidal & $  \left\{
+      \begin{array}{ll}
+        \displaystyle h \frac {x-a}{b-a} & \textrm{if}\ a\leq x < b \\
+        \displaystyle h & \textrm{if}\ b\leq x < c \\
+        \displaystyle h \frac{d-x}{d-c}& \textrm{if}\ c\leq x < d \\
+        0 & \textrm{otherwise}
+      \end{array}
+    \right. $ with  $h=\frac{2}{d+c-a-b}$
+    &  $a\leq b < c\leq d$ & $(a, b, c, d)$ & -- \\
+    % 
+    \hline
+    % 
+    \fi % Manual splitting of the tabular in PDF mode
+    Triangular & $  \displaystyle \left\{
+      \begin{array}{ll}
+        \displaystyle 2\frac{x-a}{(m-a)(b-a)} & a \leq x \leq m \\
+        \displaystyle 2\frac{b-x}{(b-m)(b-a)} & m \leq x \leq b \\
+        0 & \mbox{otherwise.}
+      \end{array}
+    \right.^{\strut} $ & $a < m < b$ & $(a, m, b)$ & -- \\
+    % 
+    \hline
+    % 
+    Truncated Normal & $  \displaystyle \frac{\frac{1^{\strut}}{\sigma_n}\phi(\frac{x-\mu_n}{\sigma_n})}
+    {\Phi(\frac{b-\mu_n}{\sigma_n}) - \Phi(\frac{a-\mu_n}{\sigma_n})}\boldsymbol{1}_{[a, b]}(x)$
+    & $\sigma_n >0$ & $(\mu_n, \sigma_n, a, b)$ & -- \\
+    % 
+    \hline
+    % 
+    Uniform & $  \displaystyle \frac{1^{\strut}}{b-a}\boldsymbol{1}_{[a, b]}(x)$ & $a < b$ & $(a, b)$ & -- \\
+    % 
+    \hline
+    % 
+    Weibull &  $\displaystyle \frac{\beta^{\strut}}{\alpha}\left(\frac{x-\gamma}{\alpha}\right)^{\beta-1}e^{-\left(\frac{x-\gamma}{\alpha}\right)^\beta} \boldsymbol{1}_{[\gamma,+\infty[}(x)$ & $\alpha>0$, $\beta>0$ &  $(\alpha, \beta, \gamma)$ & $(\mu, \sigma, \gamma)$ with
+    $
+    \left\{
+      \begin{array}{@{}l@{}}
+        \mu =  \alpha\Gamma(1+\frac{1}{\beta}) + \gamma\\
+        \sigma =  \alpha\sqrt{\Gamma(1+\frac{2}{\beta}) - \Gamma^2(1+\frac{1}{\beta})}
+      \end{array}
+    \right._{\strut}
+    $ \\
+    % 
+    \hline
+    %
+    Wishart &  $\displaystyle \frac{|\mat{X}|^{\frac{\nu-p-1}{2}}e^{-\frac{\mathrm{tr}(\mat{V}^{-1}\mat{X})^{\strut}}{2}}}{2^{\frac{\nu p}{2}}|\mat{V}|^{\frac{\nu}{2}}\Gamma_p\left(\frac{\nu}{2}\right)_{\strut}}\fcar{\cM_p^+(\Rset)}{\mat{X}}$ where $\cM_p^+(\Rset)$ is the set of symmetric positive matrices of dimension $p$ & $\mat{V}\in\cM_p^+(\Rset)$, $\nu>p-1$ &  $(\mat{V},\nu)$ & -- \\
+    % 
+    \hline
+    % 
+  \end{tabular}
+
+} % end of footnotesize
+
+
+
+\vspace*{0.2cm}
+Let's note that a random variable $X$ is said to have a  {\bf standard non-central student distribution} $\cT(\nu, \delta)$ if it can be written as:
+\begin{equation}
+  X = \frac{N}{\sqrt{C/\nu}}
+\end{equation}
+where $N$ has the normal distribution $\cN(\delta, 1)$ and $C$ has the $\chi^2(\nu)$ distribution, $N$ and $C$ being independent.\\
+The non-central Student distribution in OpenTURNS has an additional parameter $\gamma$ such that the random variable $X$ is said to have a non-central Student distribution $\cT(\nu, \delta, \gamma)$ if $X-\gamma$ has a standard $\cT(\nu,\delta)$ distribution.\\
+
+The probability density function of the Non Central Student writes:
+\begin{align*}
+  p_{NCS}(x) = \frac{\exp(-\delta^2 / 2)}{\sqrt{\nu\pi} \Gamma(\nu / 2)}\left(\frac{\nu}{\nu + (x-\gamma)^2}\right) ^ {(\nu + 1) / 2} \sum_{j=0}^{\infty} \frac{\Gamma\left(\frac{\nu + j + 1}{2}\right)}{\Gamma(j + 1)}\left(\delta(x-\gamma)\sqrt{\frac{2}{\nu + (x-\gamma)^2}}\right) ^ j
+\end{align*}
+
+The  {\bf Student} distribution has the following  probability density function, written en dimension $d$ :
+\begin{align*}
+  p_T(\vect{x}) = \frac{\Gamma\left(\frac{\nu+d}{2}\right)}
+  {(\pi d)^{\frac{d}{2}}\Gamma\left(\frac{\nu}{2}\right)}\frac{|\mat{R}|^{-1/2}}{\prod_{k=1}^d\sigma_k}\left(1+\frac{\vect{z}^t\mat{R}^{-1}\vect{z}}{\nu}\right)^{-\frac{\nu+d}{2}}
+\end{align*}
+where $\vect{z}=\mat{\Delta}^{-1}\left(\vect{x}-\vect{\mu}\right)$ with $\mat{\Delta}=\mat{\mathrm{diag}}(\vect{\sigma})$.\\
+
+In dimension $d=1$ we have the following expression :
+\begin{align*}
+  \displaystyle p_T(x) = \frac{\Gamma\left(\frac{\nu+1}{2}\right)}
+  {\sqrt{\pi}\Gamma\left(\frac{\nu}{2}\right)}\frac{1}{\sigma}\left(1+\frac{(x-\mu)^2}{\nu}\right)^{-\frac{\nu+1}{2}}
+\end{align*}
+
+The {\bf Normal Gamma} distribution is the distribution of the random vector $(X,Y)$ where $Y$ follows the distribution $\Gamma(\alpha, \beta)$ with $\alpha>0$ and $\beta>0$, $X|Y$ follows the distribution $\mathcal{N}(\mu, \dfrac{1}{\sqrt{\kappa Y}})$. Its probability density function writes:
+
+\begin{align*}
+   p_{NG}(x,y) =  \dfrac{\Gamma(\alpha)}{\beta^\alpha}\sqrt{\dfrac{2\pi}{\kappa}}y^{\alpha-1/2}\exp\left(-\dfrac{y}{2}\left[\kappa(x-\mu)^2+2\beta\right]\right)
+\end{align*}
+
+
+The {\bf Inverse ChiSquare} distribution parametered by $\nu$, with $\nu>0$ is the distribution of the random variable $X$ such that $\displaystyle \frac{1}{X}$ follows the $ChiSquare(\nu)$ distribution.\\
+Note also that the Inverse ChiSquare distribution parametered by $\nu$ is exactly the Inverse Gamma$(\dfrac{\nu}{2}, 2)$ distribution.
+
+
+The {\bf Inverse Gamma} distribution parametered by $(k,\lambda)$, with $k>0$ and~$\lambda>0$, is the distribution of the random variable $X$ such that $\displaystyle \frac{1}{X}$ follows the $\Gamma(k, \frac{1}{\lambda})$ distribution.
+
+
+
+
+
+\begin{itemize}
+\item Discrete distributions :
+\end{itemize}
+
+{\footnotesize
+  \noindent \begin{tabular}{|p{2cm}|p{8cm}|p{4cm}|p{2cm}|}
+    % 
+    \hline
+    % 
+    Name & Distribution & \multicolumn{1}{l|}{conditions} & param. $1^{\strut}_{\strut}$\\
+    % 
+    \hline
+    % 
+    Bernoulli & $\displaystyle P(X = 1)^{\strut} = p, P(X = 0) = 1-p $ & $p \in [0,1]$ & $p$\\
+    % 
+    \hline
+    % 
+    Binomial & $\displaystyle P(X = k) = C_n^k p^k (1-p)^{{n-k}^{\strut}}$ &
+    $\begin{array}{@{}l@{}}
+      k^{\strut} \in \{0, \hdots, n\} \\
+      n \in \Nset \\
+      p \in [0,1]
+    \end{array}
+    $
+    & $(n,p)$\\
+    % 
+    \hline
+    % 
+    Dirac & $ \Prob{\vect{X} = \vect{point}_{\strut}^{\strut}} = 1$ & - & \textit{point}\\
+    % 
+    \hline
+    % 
+    Geometric & $\displaystyle P(X = k) = p(1-p)^{k^{\strut}-1}_{\strut}$ & $k \in \Nset^{*}$ & $p$\\
+    % 
+    \hline
+    % 
+  \end{tabular}
+}
+
+
+
+{\footnotesize
+  \noindent \begin{tabular}{|p{2cm}|p{8cm}|p{4cm}|p{2cm}|}
+    % 
+    \hline
+    % 
+    Name & Distribution & \multicolumn{1}{l|}{conditions} & param. $1^{\strut}_{\strut}$\\
+    % 
+    \hline
+    % 
+    KPermutations Distribution & $\displaystyle \Prob{\vect{X} =
+      point}=1/d$ whith $d=A_n^k=\displaystyle \frac{n!}{(n-k)!}$
+    and \textit{point} is an injective function $(i_0, \hdots, i_{k_1})$ from $\{0, \dots, k-1\}$ into $\{0, \dots, n-1\}$ &
+    $k \geq 1, n\geq 1$ & $(k,n)$\\
+    % 
+    \hline
+    % 
+    Multinomial (nD) & $\displaystyle P(\vect{X} = \vect{x}) = \frac{N!}{x_1!\dots x_n! (N-s)!}p_1^{x_1}\dots p_n^{x_n}(1-q)^{N-s}$ &
+    $\begin{array}{@{}l@{}}
+      0^{\strut}\leq p_i \leq 1 \\
+      x_i\in \Nset \\
+      \displaystyle q = \sum_{k=1}^n p_k \leq 1 \\
+      s=  \sum_{k=1}^n x_k \leq N_{\strut}
+    \end{array}
+    $
+    & $((p_k)_{1 \leq k \leq n}, N)$\\
+    % 
+    \hline
+    % 
+    Negative Binomial & $\displaystyle P(X = k) = \frac{\Gamma(k + r)}{\Gamma(r)\Gamma(k+1)}p^k (1-p)^{r^{\strut}}$ &
+    $\begin{array}{@{}l@{}}
+      k^{\strut} \in \Nset\\
+      r \in (0,+\infty) \\
+      p \in (0,1)
+    \end{array}
+    $
+    & $(r,p)$\\
+    % 
+    \hline
+    % 
+    Poisson & $ \displaystyle P(X = k) =  \frac{\lambda^{k^{\strut}}}{k!_{\strut}}e^{-\lambda}$ & $k \in \Nset$, $\lambda >0$ & $\lambda$ \\
+    % 
+    \hline
+    % 
+    Skellam & $ \displaystyle \Prob{X = k}^{\strut} = 2\Prob{Y=2\lambda_1}$, $Y \sim  \chi^2_{\nu=2(k+1), \delta=2_{\strut}\lambda_2}$& $k \in \Zset$, $\lambda_i >0$ & $(\lambda_1, \lambda_2)$ \\
+    % 
+    \hline
+    % 
+    User defined (nD) &  $P(\vect{X} = \vect{x}_k) = p_k)_{1 \leq k \leq N}$ & $0\leq p_k \leq 1$, $\displaystyle \sum_{k=1}^{N^{\strut}} p_k = 1$ & $(\vect{x_k}, p_k)_{1 \leq k \leq N}$\\
+    % 
+    \hline
+    % 
+    Zipf-Mandelbrot &  $P(X=k) = \frac{1}{(k+q)^s} \frac{1}{H(N,q,s)}$ $ \forall k\in [1,N]$, where $H(N,q,s) = \sum_{i=1}^{N} \displaystyle \frac{1}{(i+q)^s}$ (Generalized Harmonic Number) & $0\leq p_k \leq 1$, $\displaystyle \sum_{k=1}^{N^{\strut}} p_k = 1$ & $N \geq 1$, $q \geq 0$, $s>0$ \\
+    % 
+    \hline
+    % 
+  \end{tabular}
+}
+
+\textspace\\
+Let's note that in dimension 1, the Multinomial distribution is the Binomial distribution $B(n,p)$ described as :
+\begin{align*}
+  \forall k \in  \Nset, P(X=k) = C^k_n p^k (1-p)^{n-k}.
+\end{align*}
+
+Furthermore, for all these 1D usual distributions, it is possible to truncate them within $[a,b]$, $[a, +\infty[$ or $]-\infty, b]$ (see UC.\ref{truncatedistribution}).
+
+\textspace\\
+\noindent%
+\requirements{
+  \begin{description}
+  \item[$\bullet$] none
+  \end{description}
+}
+{
+  \begin{description}
+  \item[$\bullet$] the random input distribution
+  \item[type:] Distribution
+  \end{description}
+}
+
+\textspace\\
+Python  script for this UseCase :
+
+\inputscript{script_docUC_InputNoData_UsualDist}
+
+\textspace\\
+
+Refer to the Reference Guide to get graphs of the distributions pdf.

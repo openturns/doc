@@ -1,0 +1,27 @@
+% Copyright (C) 2005-2015 Airbus - EDF - IMACS - Phimeca
+% Permission is granted to copy, distribute and/or modify this document
+% under the terms of the GNU Free Documentation License, Version 1.2
+% or any later version published by the Free Software Foundation;
+% with no Invariant Sections, no Front-Cover Texts, and no Back-Cover
+% Texts.  A copy of the license is included in the section entitled "GNU
+% Free Documentation License".
+
+Complexity does not always come from the technical side. The spoken language is the first \index{data structure}difficulty that must be overcome in computer science. In the case we are dealing with (i.e. the use of the \OT\ platform to carry out uncertainty treatment studies), we are faced with the language's poor ability to express, through specific and distinct words, concepts that are very different from each other.
+
+The \index{data structure}difficulty that is hardest to tackle is the use of the word \emph{\index{function}function}, on which we rely quite frequently. It covers here at least three concepts.
+
+The first meaning that we can associate with the term \emph{\index{function}function} is mathematical. In the field of the treatment of uncertainties, we are required to manipulate a mathematical function that is most often a physical model relying on input variables and producing output variables. Also known as a (broadly defined) \emph{solver}, it is the component that performs the computation in the code with which the \OT\ platform was coupled. As a mathematical object, this is a $\Rset^{n} \to \Rset^{p}$ function, where $n$ and $p$ respectively represent the number of input and output variables. When the computational code provides the \index{gradient}gradient or the \index{hessian}hessian of this function, \OT\ is expected to be able to make good use of it. \index{gradient}Gradient and \index{hessian}hessian appear in \OT\ as other mathematical functions of types $\Rset^{n} \to \Rset^{p} \times \Rset^{n}$ and $\Rset^{n} \to \Rset^{p} \times \Rset^{n} \times \Rset^{n}$.
+
+To bring together these three mathematical functions linked by derivation relations in an object that allows easy handling by the users of the platform, we introduced a second concept of \emph{\index{function}function} which is mainly related to the field of uncertainty. This function is a computer object which rounds up the three mathematical objects into a consistent whole. This object makes it possible to tell the \OT\ platform that this \index{gradient}gradient function is indeed the gradient of that mathematical function.
+
+The third concept associated with the term \emph{\index{function}function} is programming related. It is the concept of method in object programming, or of sub-program in procedural programming. This is the place to define the treatments to be carried out.
+
+In this document, in order to distinguish these three concepts, we will use conventions designed to remove any ambiguity.
+
+The concept of mathematical \index{function}function is called either \index{Function}Function, or \index{Gradient}Gradient or \index{Hessian}Hessian (with a capital letter) depending on its role.
+
+The concept of unifying \index{function}function, bringing together the previous three functions, will be called \index{NumericalMathFunction}NumericalMathFunction, NMF in short, so as to remain consistent with the naming of objects within the \OT\ platform.
+
+The concept of programming \index{function}function will simply be called function. When we need to describe an example of such function, we will use lowercase and a bold font as follows. Example: {\bf \index{prefix}\index{central term}func\_exec\_m}.
+
+We shall see later that these three function types are closely intertwined in the \OT\ platform.

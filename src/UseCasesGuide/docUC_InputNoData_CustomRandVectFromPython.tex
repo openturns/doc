@@ -1,0 +1,43 @@
+% Copyright (C) 2005-2015 Airbus - EDF - IMACS - Phimeca
+% Permission is granted to copy, distribute and/or modify this document
+% under the terms of the GNU Free Documentation License, Version 1.2
+% or any later version published by the Free Software Foundation;
+% with no Invariant Sections, no Front-Cover Texts, and no Back-Cover
+% Texts.  A copy of the license is included in the section entitled "GNU
+% Free Documentation License".
+\renewcommand{\filename}{docUC_InputNoData_CustomRandVectFromPython.tex}
+\renewcommand{\filetitle}{UC : Creation of a custom random vector from the python script}
+
+% \HeaderNNIILevel
+% \HeaderIILevel
+\HeaderIIILevel
+
+
+\label{manipulation_random vector}
+
+The objective of this Use Case is to describe the main functionalities enabling to define a random vector from the python script.\\
+
+
+
+Details on each object may be found in the User Manual  (\extref{UserManual_TUI}{see User Manual - Probabilistic modeling}{probModeling}).\\
+
+The principle is to inherit from the \textit{PythonRandomVector} class and overload the methods of the RandomVector object.\\
+Then an instance of the new class can be passed on into a RandomVector object.\\
+At least getRealization should be overriden.
+
+\requirements{
+  \begin{description}
+  \item[$\bullet$] at least a realization function expressed in python.
+  \end{description}
+}
+             {
+               \begin{description}
+               \item[$\bullet$] an object proposing the same services RandomVector does.
+               \item[type:] RandomVector
+               \end{description}
+             }
+
+             \textspace\\
+             Python script for this UseCase :
+
+             \inputscript{script_docUC_InputNoData_CustomRandVectFromPython}

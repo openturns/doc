@@ -1,0 +1,165 @@
+% Copyright (C) 2005-2015 Airbus - EDF - IMACS - Phimeca
+% Permission is granted to copy, distribute and/or modify this document
+% under the terms of the GNU Free Documentation License, Version 1.2
+% or any later version published by the Free Software Foundation;
+% with no Invariant Sections, no Front-Cover Texts, and no Back-Cover
+% Texts.  A copy of the license is included in the section entitled "GNU
+% Free Documentation License".
+\renewcommand{\etapemethodo}{Resp. Surf.}
+\renewcommand{\nomfichier}{docref_SurfRep_PCBasis}
+\renewcommand{\titrefiche}{Polynomial chaos basis}
+
+\newcommand{\ie}{i.e.\ }
+\newcommand{\idx}{\vect{\alpha}}
+
+\Header
+
+\MathematicalDescription{
+
+  \underline{\textbf{Goal}} \vspace{2mm}
+
+  The current section is focused on a specific kind of functional chaos representation (see \otref{docref_SurfRep_FunctionalChaos}{Functional Chaos Expansion}) that has been implemented in \textit{OpenTURNS}, namely \emph{polynomial chaos expansions}. \\
+
+
+
+  %It is assumed that the model $h$ under consideration depends on a random vector $\underline{X}$ with prescribed joint probability density function (PDF) $f_{\underline{X}}(\underline{x})$. As a consequence, the model response is also a random vector denoted by $\underline{Y}$, which has to be characterized. Representing $\underline{Y}$ in a suitable functional basis allows one to reduce the problem to the estimation of a set of deterministic coefficients, i.e. the coordinates of $\underline{Y}$ in the selected basis. Under mild regularity conditions on the model function $h$, the so-called polynomial chaos (PC) basis is a relevant choice. In particular, the orthogonality of the PC basis with respect to $f_{\underline{X}}(\underline{x})$ allows straightforward post-processing from the coefficients, such as moment analysis and global sensitivity analysis. \\
+
+
+  \textbf{Mathematical framework} \vspace{2mm}
+
+  Throughout this section, the model response is assumed to be a \emph{scalar} random variable $Y = h(\underline{X})$. However, the following derivations hold in case of a vector-valued response. \\
+
+  Let us suppose that:
+  \begin{itemize}
+  \item $Y = h(\underline{X})$ has a finite variance, i.e. $\Var{h(\underline{X})} < \infty$;
+  \item $\underline{X}$ has independent components.
+  \end{itemize}
+  Then it is shown that $\underline{Y}$ may be expanded onto the PC basis as follows:
+  \begin{equation} \label{eq:PC}
+    Y \, \,  \equiv \, \,  h(\underline{X}) \, \, = \, \, \sum_{j=0}^{\infty} \; a_{j} \; \psi_{j}(\underline{X})
+  \end{equation}
+  where the $\psi_{j}$'s are multivariate polynomials that are orthonormal with respect to the joint PDF $f_{\underline{X}}(\underline{x})$, that is:
+  \begin{equation}
+    \langle \psi_{j}(\underline{X}) \; , \; \psi_{k}(\underline{X}) \rangle \, \, \equiv \, \, \Expect{\psi_{j}(\underline{X}) \; \psi_{k}(\underline{X})} \, \, = \, \, \delta_{j,k}
+  \end{equation}
+  where $\delta_{j,k} = 1$ if $j=k$ and 0 otherwise, and the $a_{j}$'s are deterministic coefficients that fully characterize the response $\underline{Y}$. \\
+
+
+  %\textbf{Orthogonal polynomials} \vspace{2mm}
+
+  %We first provide some elements about univariate orthogonal polynomials. Indeed, they will be used in order to construct the multivariate PC basis. \\
+
+
+
+  %The next paragraph illustrates how orthogonal polynomials are used in the polynomial chaos expansion (PCE) method.\\
+
+  \textbf{Building of the PC basis -- independent random variables} \vspace{2mm}
+
+  We first condider the case of \emph{independent} input random variables. In practice, the components $X_i$ of random vector $\underline{X}$ are rescaled using a specific mapping $T_i$, usually referred to as an \emph{isoprobabilistic transformation} (see~\otref{docref_C311_TransIso}{Isoprobabilistic transformation}). The set of scaled random variables reads:
+  \begin{equation} \label{eq:PC_isotransfo}
+    U_i \, \, = \, \, T_i(X_i) \quad \quad , \quad \, i=1,\dots,n
+  \end{equation}
+  Common choices for $U_i$ are standard distributions such as a standard normal distribution or a uniform distribution over $[-1,1]$. For simplicity, it is assumed from now on that the components of the original input random vector $\underline{X}$ have been already scaled, i.e. $X_i = U_i$. \\
+
+  Let us first notice that due to the independence of the input random variables, the input joint PDF may be cast as:
+  \begin{equation}\label{eq:3.010qua}
+    f_{\vect{X}}(\vect{x}) \, = \, \prod_{i=1}^{n} f_{X_i}(x_{i})
+  \end{equation}
+  where $f_{X_i}(x_{i})$ is the marginal PDF of $X_i$. Let us consider a family $\{\pi^{(i)}_{j}, j \in \Nset\}$ of orthonormal polynomials with respect to $f_{X_i}$, \ie:
+  \begin{equation}\label{eq:3.010cinq}
+    \langle \pi^{(i)}_{j}(X_{i}) \; , \; \pi^{(i)}_{k}(X_{i}) \rangle  \, \, \equiv \, \, \Expect{\pi^{(i)}_{j}(X_{i}) \;  \pi^{(i)}_{k}(X_{i})} \, \, = \, \, \delta_{j,k}
+  \end{equation}
+  %docref_SurfRep_OrthoPoly
+  The reader is referred to~\otref{docref_SurfRep_OrthoPoly}{Orthogonal polynomials} for details on the selection of suitable families of orthogonal polynomials. It is assumed that the degree of $\pi^{(i)}_{j}$ is $j$ for $j>0$ and $\pi^{(i)}_{0} \equiv 1$ ($i=1,\dots,n$). Upon tensorizing the $n$ resulting families of univariate polynomials, one gets a set of orthonormal multivariate polynomials $\{\psi_{\idx} , \idx \in \Nset^n\}$ defined by:
+  \begin{equation}\label{eq:3.010six}
+    \psi_{\idx}(\vect{x}) \, \, \equiv \,\, \pi^{(1)}_{\alpha_{1}}(x_{1}) \times \cdots \times \pi^{(n)}_{\alpha_{n}}(x_{n})
+  \end{equation}
+  where the multi-index notation $\idx \equiv \{\alpha_{1},\dots,\alpha_{M}\}$ has been introduced.% The distribution types handled by OpenTURNS are reported in the table below together with the associated families of orthonormal polynomials. \\
+
+
+
+  \vspace{3mm}
+
+  \textbf{Building of the PC basis -- dependent random variables} \vspace{2mm}
+
+  In case of \emph{dependent} variables, it is possible to build up an orthonormal basis as follows:
+  \begin{equation}\label{eq:3.010six}
+    \psi_{\idx}(\vect{x}) \, \, = \,\,  K(\underline{x}) \;\prod_{i=1}^M \pi^{(i)}_{\alpha_{i}}(x_{i})
+  \end{equation}
+  where $K(\underline{x})$ is a function of the copula of $\vect{X}$. Note that such a basis is no longer polynomial. When dealing with independent random variables, one gets $K(\underline{x})=1$ and each basis element may be recast as in Eq.(\ref{eq:3.010six}). Determinating $K(\underline{x})$ is usually computionally expensive though, hence an alternative strategy for specfific types of input random vectors. \\
+
+  If $\vect{X}$ has an elliptical copula instead of an independent one, it may be recast as a random vector $\vect{U}$ with independent components using a suitable mapping $T : \vect{X} \mapsto \vect{U}$ such as the Nataf tranformation \otref{docref_C311_TransIso_GeneralizedNataf}{Generalized Nataf Transformation}. The so-called Rosenblatt tranformation may also be applied in case of a Gaussian copula \otref{docref_C311_TransIso_Rosenblatt}{Rosenblatt Transformation}. Thus the model response $Y$ may be regarded as a function of $\vect{U}$ and expanded onto a \emph{polynomial} chaos expansion with basis elements cast as in Eq.(\ref{eq:3.010six}). \\
+
+  \textbf{Link with classical deterministic polynomial approximation} \vspace{2mm}
+
+  In a deterministic setting (i.e. when the input parameters are considered to be deterministic), it is of common practice to substitute the model function $h$ by a polynomial approximation over its whole domain of definition as shown in \otref{docref_SurfRep_LSPolynomial}{Polynomial response surface based on least squares}. Actually this approach is strictly equivalent to:
+  \begin{enumerate}
+  \item Regarding the input parameters as random uniform random variables
+  \item Expanding any quantity of interest provided by the model onto a PC expansion made of Legendre polynomials
+  \end{enumerate}
+
+}
+
+{
+  --
+}
+
+\Methodology{
+  Within the global methodology, the polynomial chaos expansion of the model under consideration is built up prior to tackling the step C: ``Uncertainty propagation''. Then the various uncertainty propagation techniques may be applied at a negligible computational cost. The method requires to have fulfilled the two following steps:
+  \begin{itemize}
+  \item step A1: identify of an input vector $\vect{X}$ of sources of uncertainties and an output variable of interest $\underline{Y} = h(\underline{X})$;
+  \item step B: identify one of the proposed techniques to estimate a probabilistic model of the input vector $\vect{X}$.
+  \end{itemize}
+}
+            {
+              The method is sometimes also known as \emph{orthogonal series decomposition}. The reader is referred to the following pioneering work in mechanical engineering:
+              \begin{itemize}
+              \item R. Ghanem and P. Spanos, 1991, ``Stochastic finite elements -- A spectral approach'', Springer Verlag. (Reedited by Dover Publications, 2003).
+              \end{itemize}
+            }
+
+            \Example{
+              Let us consider the so-called (scalar valued) Ishigami function defined by:
+              \begin{equation}
+                Y \, \, =  \,\, h(\underline{X}) \, \, =  \,\,\sin X_{1} + 7 \sin^{2} X_{2} + 0.1 X_{3}^{4} \sin X_{1}
+              \end{equation}
+              where the $X_i$'s ($i=1,...,3$) are independent random variables that are uniformly distributed over $[-\pi , \pi]$. \\
+
+              The input random variables are first transformed into uniform variables over $[-1,1]$ by applying Eq.(\ref{eq:PC_isotransfo}):
+              \begin{equation}
+                U_i \, \, = \, \, T_i(X_i) \, \, = \, \, \frac{X}{\pi} \quad \quad , \quad \, i=1,\dots,3
+              \end{equation}
+              Then the model response $Y$ is expanded onto the following PC basis made of normalized Legendre polynomials:
+              \begin{equation}
+                Y \, \, = \, \, \sum_{(\alpha_1,\alpha_2,\alpha_3) \in \Nset^{3}} \;  a_{\alpha_1,\alpha_2,\alpha_3} \; \psi_{\alpha_1,\alpha_2,\alpha_3}(U_1,U_2,U_3)
+              \end{equation}
+              where:
+              \begin{equation}
+                \psi_{\alpha_1,\alpha_2,\alpha_3}(U_1,U_2,U_3) \, \, = \, \, Le_{\alpha_1}(U_1) \times  Le_{\alpha_2}(U_2) \times Le_{\alpha_3}(U_3)
+              \end{equation}
+              denoting by $Le_j$ the (univariate) normalized Legendre polynomial of degree $j$. \\
+
+              The basis polynomials of total degree not greater than 2 in the above representation are reported in the following table.
+
+              \begin{center}
+                \begin{tabular}{ccc}
+                  \hline
+                  Total degree $\sum_{i=1}^3 \alpha_i$ & Multi-index $\underline{\alpha}$ & Polynomial $\psi_{\underline{\alpha}}(\underline{U})$ \\
+                  \hline
+                  $0$    & $\{0,0,0\}$                      & $1$                      \\
+                  \hline
+                  & $\{1,0,0\}$                      & $\sqrt{3}~U_1$                     \\
+                  $1$    & $\{0,1,0\}$                      & $\sqrt{3}~U_2$                     \\
+                  & $\{0,0,1\}$                      & $\sqrt{3}~U_3$                     \\
+                  \hline
+                  & $\{2,0,0\}$                      & $(3 U_1^2 \; - \; 1) \sqrt{5}/2$ \\
+                  & $\{0,2,0\}$                      & $(3 U_2^2 \; - \; 1) \sqrt{5}/2$ \\
+                  $2$     & $\{0,0,2\}$                      & $(3 U_3^2 \; - \; 1) \sqrt{5}/2$ \\
+                  & $\{1,1,0\}$                      & $3~U_1 U_2$ \\
+                  & $\{1,0,1\}$                      & $3~U_1 U_3$ \\
+                  & $\{0,1,1\}$                      & $3~U_2 U_3$ \\
+                  \hline
+                \end{tabular}
+              \end{center}
+
+            }

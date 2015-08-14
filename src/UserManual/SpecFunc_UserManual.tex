@@ -1,0 +1,207 @@
+% Copyright (C) 2005-2015 Airbus - EDF - IMACS - Phimeca
+% Permission is granted to copy, distribute and/or modify this document
+% under the terms of the GNU Free Documentation License, Version 1.2
+% or any later version published by the Free Software Foundation;
+% with no Invariant Sections, no Front-Cover Texts, and no Back-Cover
+% Texts.  A copy of the license is included in the section entitled "GNU
+% Free Documentation License".
+
+% =================================================================
+
+\newpage
+\index{Special Functions}
+\extanchor{SpecFunctions}
+\subsection{Special Functions}
+
+\subsubsection{Numerical constants}
+
+\begin{itemize}
+\item $ 0.39894228040143267 = 1 / \sqrt{2\pi}$:
+\verb|SpecFunc.ISQRT2PI|
+\item $ 0.57721566490153286$= Euler constant $\gamma$:
+\verb|SpecFunc.EulerConstant|
+\item $  1.64493406684822643 = \pi^2 / 6$:
+\verb|SpecFunc.PI2_6|
+\item $  1.28254983016118640 = \pi / \sqrt{6}$:
+\verb|SpecFunc.PI_SQRT6|
+\item $ 0.45005320754569466 = \gamma * \sqrt{6} / \pi$:
+\verb|SpecFunc.EULERSQRT6_PI|
+\item $ 3.28986813369645287 = \pi^2 / 3$:
+\verb|SpecFunc.PI2_3|
+\item $ 0.55132889542179204 = \sqrt{3} / \pi$:
+\verb|SpecFunc.SQRT3_PI|
+\item $ 1.81379936423421785 = \pi / \sqrt{3}$:
+\verb|SpecFunc.PI_SQRT3|
+\item $ 1.20205690315959429 = \zeta(3)$:
+\verb|SpecFunc.ZETA3|
+\end{itemize}
+
+
+\subsubsection{Special functions}
+
+\index{Special functions!BesselI0}
+\index{Special functions!LogBesselI0}
+\index{Special functions!BesselI1}
+\index{Special functions!LogBesselI1}
+\index{Special functions!Beta}
+\index{Special functions!BetaInc}
+\index{Special functions!BetaIncInv}
+\index{Special functions!BetaRatioInc}
+\index{Special functions!LnBeta}
+\index{Special functions!LogBeta}
+\index{Special functions!Dawson}
+\index{Special functions!Debye}
+\index{Special functions!Faddeeva}
+\index{Special functions!Gamma}
+\index{Special functions!LnGamma}
+\index{Special functions!LogGamma}
+\index{Special functions!GammaInc}
+\index{Special functions!GammaIncInv}
+\index{Special functions!DiGamma}
+\index{Special functions!Psi}
+\index{Special functions!DiGammaInv}
+\index{Special functions!TriGamma}
+\index{Special functions!HyperGeom\_1\_1}
+\index{Special functions!HyperGeom\_2\_1}
+\index{Special functions!HyperGeom\_2\_2}
+\index{Special functions!Erf}
+\index{Special functions!ErfC}
+\index{Special functions!ErfInv}
+\index{Special functions!LambertW}
+\index{Special functions!Log1p}
+\index{Special functions!NextPowerOfTwo}
+
+OpenTURNS provides the following special functions.
+
+\begin{itemize}
+\item \textit{BesselI0}:
+\begin{equation*}
+\forall x \in \Rset,\quad
+BesselI0(x) = \sum_{m=0}^\infty\frac{1}{(m!)^2}\left(\frac{x}{2}\right)^{2m}
+\end{equation*}
+\item \textit{LogBesselI0}:
+\begin{equation*}
+\forall x \in \Rset,\quad
+LogBesselI0(x) = \log (BesselI0(x))
+\end{equation*}
+\item \textit{BesselI1}: Modified first kind Bessel function of order 1:
+\begin{equation*}
+\forall x \in \Rset,\quad
+BesselI1(x) = \sum_{m=0}^\infty\frac{1}{m!(m+1)!}\left(\frac{x}{2}\right)^{2m+1}
+\end{equation*}
+\item \textit{LogBesselI1}:
+\begin{equation*}
+\forall x \in \Rset,
+LogBesselI1(x) = \log (BesselI1(x))
+\end{equation*}
+\item \textit{Beta}:
+\begin{equation*}
+\forall (a,b) >0,\quad
+Beta(a, b) = \int_0^1 t^{a-1}(1-t)^{b-1} dt
+\end{equation*}
+\item \textit{BetaInc}: Incomplete beta function:
+\begin{equation*}
+\forall (a,b)>0,t\in[0,1],\quad
+BetaInc(a, b, x) =
+\int_0^x t^{a-1}(1-t)^{b-1} dt
+\end{equation*}:
+\item \textit{BetaIncInv}: Incomplete beta function inverse with respect to $x$:
+\begin{equation*}
+BetaIncInv(a, b, x)
+\end{equation*}
+\item \textit{BetaRatioInc}:Incomplete beta ratio function:
+\begin{equation*}
+BetaRatioInc(a, b, x) = \frac{1}{Beta(a, b)}\int_0^x t^{a-1}(1-t)^{b-1} dt
+\end{equation*}
+\item \textit{BetaRatioIncInv}: Incomplete beta ratio function inverse with respect to x:
+\begin{equation*}
+BetaRatioIncInv(a, b, x)
+\end{equation*}
+\item \textit{LnBeta}, \textit{LogBeta}: Natural logarithm of the beta
+function:
+\begin{equation*}
+LnBeta(a,b), LogBeta(a,b)
+\end{equation*}
+\item \textit{Dawson}: Dawson function:
+\begin{equation*}
+\forall x \in \Rset,\quad
+Dawson(x) = \exp(-x^2)\int_0^x
+\exp(t^2) dt
+\end{equation*}
+\item \textit{Debye}: Debye function of order n:
+\begin{equation*}
+\forall x \in \Rset^+, \forall n
+\in \Nset^*and n \leq 20,\quad
+DebyeN(x, n) = \frac{n}{x^n}
+\int_0^x \frac{t^n}{\exp(t)-1} dt
+\end{equation*}
+\item \textit{Faddeeva}: Complex Faddeeva function:
+\begin{equation*}
+\forall z\in \Cset,\quad
+Faddeeva(z) =
+exp(-z^2)Erfc(-iz)
+\end{equation*}
+\item $Gamma $: Gamma function:
+\begin{equation*}
+\forall a \in \Cset,\quad
+Gamma(a) = \int_0^{\infty}
+t^{a-1}\exp(-t) dt
+\end{equation*}
+\item \textit{LnGamma}, $LogGamma $: Natural logarithm of the gamma function,
+restricted to $a\in\Rset$.
+\item \textit{GammaInc}: Incomplete gamma function:
+\begin{equation*}
+\forall x \in \Rset,\quad
+GammaInc(a, x) =
+\int_0^x t^{a-1}\exp(-t) dt
+\end{equation*}
+\item \textit{GammaIncInv}: Incomplete gamma function inverse with respect
+to $x$:
+\begin{equation*}
+GammaIncInv(a,x)
+\end{equation*}
+\item \textit{DiGamma}, \textit{Psi}: Digamma function:
+\begin{equation*}
+psi(x) = \frac{1}{Gamma(x)}\frac{\mathrm{d} Gamma(x)}{\mathrm{d}x}
+\end{equation*}
+\item \textit{DiGammaInv}: Inverse of the DiGamma function
+\item \textit{TriGamma}: Trigamma function:
+\begin{equation*}
+TriGamma(x) = \frac{1}{Gamma(x)}\frac{\mathrm{d}^2 Gamma(x)}{\mathrm{d}x^2}
+\end{equation*}
+\item \textit{HyperGeom\_1\_1}: Hypergeometric function of type (1,1):
+\begin{equation*}
+HyperGeom\_1\_1(p_1, q_1, x) = \sum_{n=0}^{\infty} \left[\prod_{k=0}^{n-1} \frac{(p_1 + k)}{(q_1 + k)}\right]  \frac{x^n}{n!}
+\end{equation*}
+\item \textit{HyperGeom\_2\_1}: Hypergeometric function of type
+(2,1):
+\begin{equation*}
+HyperGeom\_2\_1(p_1, p_2, q_1, x) = \sum_{n=0}^{\infty}
+\left[\prod_{k=0}^{n-1} \frac{ (p_1 + k)(p_2 + k)}{ (q_1 + k)}\right] \frac{x^n }{ n!}
+\end{equation*}
+\item \textit{HyperGeom\_2\_2 }: Hypergeometric function of type (2,2):
+\begin{equation*}
+HyperGeom\_2\_1(p_1, p_2, q_1, q_2, x) =
+\sum_{n=0}^{\infty} \left[\prod_{k=0}^{n-1} \frac{(p_1 + k)(p_2 +
+k)}{ (q_1 + k)  (q_2 + k)}\right] \frac{x^n}{n!}
+\end{equation*}
+\item \textit{Erf}: Erf function:
+\begin{equation*}
+Erf(x) = \frac{2}{\sqrt{\pi}}\int_0^x \exp(-t^2) dt
+\end{equation*}
+\item \textit{ErfC}: Erf complementary function:
+\begin{equation*}
+Erfc(x) = 1 - Erf(x)
+\end{equation*}
+\item \textit{ErfInv}: Inverse of the Erf function
+\item \textit{LambertW}: Principal and secondar real branches of the Lambert $W$ function
+\item \textit{Log1p}: Cancellation-free (for $|z|\ll 1$) implementation of the function
+\begin{equation*}
+\forall z\in\Cset\backslash\Rset^-,\quad
+Log1p(z) = \log(1+z)
+\end{equation*}
+\item \textit{NextPowerOfTwo}: Smallest power of 2 greater or equal to $n$:
+\begin{equation*}
+NextPowerOfTwo(n) = 2^{\lceil\log_2(n)\rceil}
+\end{equation*}
+\end{itemize}

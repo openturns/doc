@@ -1,0 +1,137 @@
+% Copyright (C) 2005-2015 Airbus - EDF - IMACS - Phimeca
+% Permission is granted to copy, distribute and/or modify this document
+% under the terms of the GNU Free Documentation License, Version 1.2
+% or any later version published by the Free Software Foundation;
+% with no Invariant Sections, no Front-Cover Texts, and no Back-Cover
+% Texts.  A copy of the license is included in the section entitled "GNU
+% Free Documentation License".
+\renewcommand{\etapemethodo}{C}
+\renewcommand{\nomfichier}{docref_C211_QuadraticCumul}
+\renewcommand{\titrefiche}{Taylor variance decomposition  / Perturbation Method}
+
+\Header
+
+\MathematicalDescription{
+
+  \underline{\textbf{Goal}}\\
+  The quadratic cumul is a probabilistic approach designed to propagate the uncertainties of the input variables $\uX$ through the model $h$ towards the output variables $\uY$. It enables to access the central dispersion (expectation and variance) of the output variables.\\
+
+  \underline{\textbf{Principles}}\\
+
+  This method is based on a Taylor decomposition of the output variable $\uY$ towards the $\uX$ random vectors around the mean point $\muX$. Depending on the order of the Taylor decomposition (classically first order or second order), one can obtain different formulas. For easiness of the reading, we first present the formulas  with $n_Y=1$ before the ones obtained for $n_Y > 1$.\\
+
+  \textbf{\underline{Case $n_Y = 1$}}\\
+
+  As $Y=h(\uX)$, the Taylor decomposition around $\ux = \muX$ at the second order yields to:
+
+  \begin{align*}
+    Y = h(\muX) + < \underline{\nabla} h(\muX) , \: \uX - \muX> + \frac{1}{2}<<\underline{\underline{\nabla }}^2 h(\muX,\: \underline{\mu}_{\:X}),\: \uX - \muX>,\: \uX - \muX> + o(\Cov \uX)
+  \end{align*}
+  where:
+  \begin{itemize}
+  \item $\muX = \Expect{\uX}$ is the vector of the input variables at the mean values of each component.
+
+  \item $\Cov \uX$ is the covariance matrix of the random vector $\uX$. The elements are the followings : $(\Cov \uX)_{ij} = \Expect{\left(X^i - \Expect{X^i} \right)\times\left(X^j - \Expect{X^j} \right)}$
+
+  \item $\underline{\nabla} h(\muX) = \: ^t \left( \frac{\partial y}{\partial x^j}\right)_{\ux\: =\: \muX} = \: ^t \left( \frac{\partial h(\ux)}{\partial x^j}\right)_{\ux\: =\: \muX} $ is the gradient vector taken at the value $\ux = \muX$ and $j=1,\ldots,n_X$.
+
+  \item $\underline{\underline{\nabla}}^2 h(\ux,\ux)$ is a matrix. It is composed by the second order derivative of the output variable towards the $i^\textrm{th}$ and $j^\textrm{th}$ components of $\ux$ taken around $\ux = \muX$. It yields to: $\left( \nabla^2 h(\muX,\muX) \right)_{ij} =\left( \frac{\partial^2 h(\ux,\ux)}{\partial x^i \partial x^j}\right)_{\ux\: =\: \muX}$
+  \item $<,>$ is a scalar product between two vectors.
+
+  \end{itemize}
+
+  \underline{\textbf{Approximation at the order 1 - \textit{Case $n_Y = 1$}}}\\
+
+  \underline{\textit{Expectation:}}\\
+
+  \begin{align*}
+    \Expect{Y} = h(\muX)
+  \end{align*}
+
+  \underline{\textit{Variance:}}\\
+
+  \begin{align*}
+    \Var{Y} = \sum_{i,j=1}^{n_X} \frac{\partial h(\muX)}{\partial X^i} . \frac{\partial h(\muX)}{\partial X^j}.(\Cov \uX)_{ij}
+  \end{align*}
+
+  \underline{\textbf{Approximation at the order 2 - \textit{Case $n_Y = 1$}}}\\
+
+  \underline{\textit{Expectation:}}\\
+  \begin{eqnarray*}
+    \begin{split}
+      \Expect{Y} = h(\muX) + \frac{1}{2}. \sum_{i,j=1}^{n_X} \frac{\partial^2 h(\muX,\muX)}{\partial x^i \partial x^j} . (\Cov \uX)_{ij}
+    \end{split}
+  \end{eqnarray*}
+
+  \underline{\textit{Variance:}}\\
+  The decomposition of the variance at the order 2 is not implemented in the standard version of OpenTURNS. It requires both the knowledge of higher order derivatives of the model and the knowledge of moments of order strictly greater than 2 of the pdf.\\
+
+
+  \textbf{\underline{Case $n_Y > 1$}}\\
+
+  The quadratic cumul approach can be developped at different orders from the Taylor decomposition of the random vector $\uY$. As $\uY=h(\uX)$, the Taylor decomposition around $\ux = \muX$ at the second order yields to:
+  \begin{align*}
+    \uY = h(\muX) + <\underline{\underline{\nabla}}h(\muX) , \: \uX - \muX> + \frac{1}{2}<<\underline{\underline{\underline{\nabla }}}^2 h(\muX,\: \underline{\mu}_{\:X}),\: \uX - \muX>,\: \uX - \muX> + o(\Cov \uX)
+  \end{align*}
+  where:
+  \begin{itemize}
+  \item $\muX = \Expect{\uX}$ is the vector of the input variables at the mean values of each component.
+
+  \item $\Cov \uX$ is the covariance matrix of the random vector $\uX$. The elements are the followings : $(\Cov \uX)_{ij} = \Expect{\left(X^i - \Expect{X^i} \right)^2}$
+
+  \item $\underline{\underline{\nabla}} h(\muX) = \: ^t \left( \frac{\partial y^i}{\partial x^j}\right)_{\ux\: =\: \muX} = \: ^t \left( \frac{\partial h^i(\ux)}{\partial x^j}\right)_{\ux\: =\: \muX} $ is the transposed Jacobian matrix with $i=1,\ldots,n_Y$ and $j=1,\ldots,n_X$.
+
+  \item $\underline{\underline{\underline{\nabla^2}}} h(\ux\:,\ux)$ is a tensor of order 3. It is composed by the second order derivative towards the $i^\textrm{th}$ and $j^\textrm{th}$ components of $\ux$ of the $k^\textrm{th}$ component of the output vector $h(\ux)$. It yields to: $\left( \nabla^2 h(\ux) \right)_{ijk} = \frac{\partial^2 (h^k(\ux))}{\partial x^i \partial x^j}$
+
+  \item $<\underline{\underline{\nabla}}h(\muX) , \: \uX - \muX> = \sum_{j=1}^{n_X} \left( \frac{\partial {\uy}}{\partial {x^j}}\right)_{\ux = \muX} . \left( X^j-\muX^j \right)$
+
+  \item $ <<\underline{\underline{\underline{\nabla }}}^2 h(\muX,\: \underline{\mu}_{X}),\: \uX - \muX>,\: \uX - \muX> = \left( ^t (\uX^i - \muX^i). \left(\frac{\partial^2 y^k}{\partial x^i \partial x^k}\right)_{\ux = \muX}. (\uX^j - \muX^j) \right)_{ijk}$
+
+  \end{itemize}
+
+  \underline{\textbf{Approximation at the order 1 - \textit{Case $n_Y > 1$}}}\\
+
+  \underline{\textit{Expectation:}}
+  \begin{align*}
+    \Expect{\uY} \approx \underline{h}(\muX)
+  \end{align*}
+  Pay attention that $\Expect{\uY}$ is a vector. The $k^\textrm{th}$ component of this vector is equal to the $k^\textrm{th}$ component of the output vector computed by the model $h$ at the mean value. $\Expect{\uY}$ is thus the computation of the model at mean.
+
+  \underline{\textit{Variance:}}
+
+  \begin{align*}
+    \Cov \uY \approx ^t\underline{\underline{\nabla}}\:\underline{h}(\muX).\Cov \uX.\underline{\underline{\nabla}}\:\underline{h}(\muX)
+  \end{align*}
+
+  \underline{\textbf{Approximation at the order 2 - \textit{Case $n_Y > 1$}}}\\
+
+  \underline{\textit{Expectation:}}
+
+  \begin{align*}
+    \Expect{\uY} \approx \underline{h}(\muX) + \frac{1}{2}.\underline{\underline{\underline{\nabla}}}^2 \underline{\underline{h}}(\muX,\muX) \odot \Cov \uX
+  \end{align*}
+
+  This last formulation is the reduced writing of the following expression:
+
+  \begin{align*}
+    (\Expect{\uY})_k \approx (\underline{h}(\muX))_k + \left( \sum_{i=1}^{n_X}\frac{1}{2} (\Cov \uX)_{ii}.{(\nabla^2\:h(\uX))}_{iik} + \sum_{i=1}^{n_X} \sum_{j=1}^{i-1} (\Cov X)_{ij}.{(\nabla^2\:h(\uX))}_{ijk}  \right)_k
+  \end{align*}
+
+  \underline{\textit{Variance:}}
+
+  The decomposition of the variance at the order 2 is not implemented in the standard version of OpenTURNS. It requires both the knowledge of higher order derivatives of the model and the knowledge of moments of order strictly greater than 2 of the pdf.
+
+}
+{
+  Perturbation methods
+}
+
+
+\Methodology{
+  This method is part of the step C 'Propagation of Uncertainties' of the global methodology. It requires the definition of the input random vector $\uX$, the definition of the model of interest $h$ ((both should have been done in step specification of model and criteria).
+
+}
+{
+  This method is well fitted when one wants to obtain the parameters of the central dispersion. Be careful, if the model is largely non linear or not monotonous, the Taylor approximation at the order 2 may not be accurate on the domain of the input variables and thus the assessment of the first and second order moments may be largely false. Besides, one has to pay attention that this method is generally not justified to compute low probabilities.
+  Pay attention that the mean and variance obtained by quadratic decomposition should not be used tu deduce low probabilities. For instance, the 95 \% quantile of $Y^i$ is generally not equal to the $\mu_Y^i + 1,64 . \sigma^i$ - except if one may prove that $Y^i$ follows a gaussian distribution - and the error is potentially huge.
+}

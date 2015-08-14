@@ -1,0 +1,86 @@
+% Copyright (C) 2005-2015 Airbus - EDF - IMACS - Phimeca
+% Permission is granted to copy, distribute and/or modify this document
+% under the terms of the GNU Free Documentation License, Version 1.2
+% or any later version published by the Free Software Foundation;
+% with no Invariant Sections, no Front-Cover Texts, and no Back-Cover
+% Texts.  A copy of the license is included in the section entitled "GNU
+% Free Documentation License".
+\renewcommand{\etapemethodo}{C}
+\renewcommand{\nomfichier}{docref_C322_TI}
+\renewcommand{\titrefiche}{Importance Simulation}
+
+\Header
+
+\MathematicalDescription{
+  \underline{\textbf{Goal}}\\
+  Let us note $\cD_f = \{\ux \in \Rset^{n} | g(\ux,\underline{d}) \leq 0\}$.
+  The goal is to estimate the following probability:
+  \begin{eqnarray*}
+    P_f &=& \int_{\cD_f} f_{\uX}(\ux)d\ux\\
+    &=& \int_{\Rset^{n}} \mathbf{1}_{\{g(\ux,\underline{d}) \:\leq 0\: \}}f_{\uX}(\ux)d\ux\\
+    &=& \Prob {\{g(\uX,\underline{d}) \leq 0\}}
+  \end{eqnarray*}
+
+  \underline{\textbf{Principles}}\\
+  This is a sampling-based method. The main idea of the Importance Sampling method is to replace the initial probability distribution of the input variables by a more "efficient" one. "Efficient" means that more events will be counted in the failure domain $\cD_f$ and thus reduce the variance of the estimator of the probability of exceeding a threshold. Let $\underline{Y}$ be a random vector such that its probability density function $f_{\underline{Y}}(\underline{y}) > 0$ almost everywhere in the domain $\cD_f$,
+
+  \begin{eqnarray*}
+    P_f &=& \int_{\Rset^{n}} \mathbf{1}_{\{g(\ux,\underline{d}) \leq 0 \}}f_{\uX}(\ux)d\ux\\
+    &=& \int_{\Rset^{n}} \mathbf{1}_{\{g(\ux,\underline{d}) \leq 0 \}} \frac{f_{\uX}(\ux)}{f_{\underline{Y}}(\ux)}f_{\underline{Y}}(\ux)d\ux
+  \end{eqnarray*}
+
+  The estimator built by Importance Sampling method is:
+  \begin{align*}
+    \hat{P}_{f,IS}^N = \frac{1}{N}\sum_{i=1}^N \mathbf{1}_{\{g(\underline{Y}_{\:i}),\underline{d}) \leq 0 \}}\frac{f_{\uX}(\underline{Y}_{\:i})}{f_{\underline{Y}}(\underline{Y}_{\:i})}
+  \end{align*}
+  where:
+  \begin{itemize}
+  \item $N$ is the total number of computations,
+  \item the random vectors $\{\underline{Y}_i, i=1\hdots N\}$ are independent, identically distributed and following the probability density function $f_{\uY}$
+  \end{itemize}
+
+  \underline{\textbf{Confidence Intervals}}\\
+  With the notations,
+  \begin{eqnarray*}
+    \mu_N &=& \frac{1}{N}\sum_{i=1}^N \mathbf{1}_{\{g(\underline{y}_{\:i}),\underline{d}) \leq 0 \}}\frac{f_{\uX}(\underline{y}_{\:i})}{f_{\underline{Y}}(\underline{y}_{\:i})}\\
+    \sigma_N^2 &=& \frac{1}{N}\sum_{i=1}^N (\mathbf{1}_{\{g(\underline{y}_i),\underline{d}) \leq 0 \}}\frac{f_{\uX}(\underline{y}_{\:i})}{f_{\underline{Y}}(\underline{y}_{\:i})} - \mu_N)^2
+  \end{eqnarray*}
+
+  The asymptotic confidence interval of order $1-\alpha$ associated to the estimator $P_{f,IS}^N$ is
+  \begin{align*}
+    [ \mu_N - \frac{q_{1-\alpha / 2} . \sigma_N}{\sqrt{N}} \: ; \: \mu_N + \frac{q_{1-\alpha / 2} . \sigma_N}{\sqrt{N}} ]
+  \end{align*}
+
+  where $q_{1-\alpha /2}$ is the $1-\alpha / 2$ quantile from the standard distribution $\cN(0,1)$.
+
+  \index{tirage d'importance}
+}
+{
+
+  This method could also be found under the name "Strategic Sampling", "Ponderated Sampling" or "Biased Sampling" (even if this estimator is not biased as it gives exactly the same result).
+}
+
+\Methodology{
+  This method is part of the step C of the global methodology. It requires the specification the joined probability density function of the input variables and the value of the threshold and the comparison operator.\\
+}
+            {
+              There is no general result concerning the reduction of variance of $\hat{P}_{f,IS}^N$ in comparison with the variance of the initial Monte Carlo estimator $\hat{P}_{f,MC}^N$. Nevertheless, if one knows well the model (regularity, monotoneous,...), it is possible to define a more efficient joined probability density function.
+              Nevertheless, there is a reduction of variance if one chooses a density $f_{\underline{Y}}(\underline{y})$ such that $f_{\underline{Y}}(\underline{y})> f_{\underline{X}}(\underline{y})$ almost everywhere in the failure space. Indeed, in this case $\frac{f_{\uX}(\underline{y})}{f_{\underline{Y}}(\underline{y})} < 1$ on all the domain, the variance being equal to:
+              \begin{align*}
+                \Var {\hat{P}_{f,IS}} = \int_{\cD_f} \left( \frac{f_{\uX}(\underline{y})}{f_{\underline{Y}}(\underline{y})} \right)^2 d\underline{y} - P_f^2 \ \ < \ \ \Var {\hat{P}_{f,MC}} = P_f-P_f^2
+              \end{align*}
+
+              Moreover, one has to pay attention to define the same support for the joined pdf of the input variables to ensure the convergence.
+
+
+              The following references are a first introduction to the Monte Carlo methods:
+
+              W.G. Cochran. \textit{Sampling Techniques}. John Wiley and Sons, 1977.
+
+              M.H. Kalos et P.A. \textit{Monte Carlo Methods, volume I: Basics}. John Wiley and Sons, 1986.
+
+              R.Y. Rubinstein. \textit{Simulation and the Monte Carlo Method}. John Wiley and Sons, 1981.
+
+
+
+            }

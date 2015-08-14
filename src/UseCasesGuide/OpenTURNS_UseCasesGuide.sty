@@ -1,0 +1,101 @@
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{OpenTURNS_UseCasesGuide}
+
+\RequirePackage[utf8]{inputenc}
+\RequirePackage{color}
+\RequirePackage{graphics}
+\RequirePackage{amsmath}
+\RequirePackage{amsfonts}
+\RequirePackage{amssymb}
+\RequirePackage{framed}
+\RequirePackage{fancyhdr}
+\RequirePackage{graphicx}
+\RequirePackage{otcommon}
+
+% For mathematics notations
+\RequirePackage{Math_Notations}
+
+% Read labels from external documents referenced by \extref
+\ifpdf
+\externaldocument[ReferenceGuide-]{../ReferenceGuide/OpenTURNS_ReferenceGuide}[OpenTURNS_ReferenceGuide.pdf]
+\externaldocument[UserManual_TUI-]{../UserManual/OpenTURNS_UserManual_TUI}[OpenTURNS_UserManual_TUI.pdf]
+\fi
+
+
+% For index
+\RequirePackage{makeidx}
+\RequirePackage{index}
+
+% For graphics
+% \RequirePackage{mdwtab}
+\RequirePackage{hhline}
+\RequirePackage{pict2e}
+
+% slashbox is no more distributed within texlive
+\IfFileExists{slashbox.sty}{\RequirePackage{slashbox}}{\RequirePackage{diagbox}}
+
+\ifpdf
+\RequirePackage{longtable}
+\else
+\fi
+
+\newcommand{\filename}{?}
+\newcommand{\filetitle}{?}
+\newcommand{\enterprise}{Airbus - EDF - IMACS - PhiMeca}
+\pagestyle{fancy}
+\fancyhf{} \rhead{\bfseries \thepage} \lhead{\bfseries \nouppercase OpenTURNS -- Use Cases Guide}
+\rfoot{\bfseries \copyright 2005-2015 \enterprise} \lfoot{}
+
+
+% To create space after python script
+\newcommand{\textspace}{{\rule{0em}{1em}}}
+\newcommand{\mathspace}{{\strut}}
+
+% To describe requirements of each Use Case
+\newcommand{\requirements}[2]{{
+    \noindent%
+    \begin{tabular}{||p{2.3cm}||p{12.7cm}||}
+      \ifpdf
+      \hhline{|t:=:t:=:t|}
+      \else
+      \hline
+      \fi
+      Requirements\vfill &
+      \parbox{12cm}{{#1}}
+      \\
+      \ifpdf
+      \hhline{|:=::=:|}
+      \else
+      \hline
+      \fi
+      Results\vfill &
+      \parbox{12cm}{{#2}}
+      \\
+      \ifpdf
+      \hhline{|b:=:b:=:b|}
+      \else
+      \hline
+      \fi
+    \end{tabular}
+  }}
+
+\newcommand{\longrequirements}[2]{{
+    \noindent%
+    \ifpdf
+    \begin{longtable}{||p{2.3cm}||p{12.7cm}||}
+      \hhline{|t:=:t:=:t|}
+      Requirements\vfill &
+      \parbox{12cm}{{#1}}
+      \\
+      \hhline{|:=::=:|}
+      Results\vfill      &
+      \parbox{12cm}{{#2}}
+      \\
+      \hhline{|b:=:b:=:b|}
+    \end{longtable}
+    \else
+    \requirements{{#1}, {#2}}
+    \fi
+  }}
+
+

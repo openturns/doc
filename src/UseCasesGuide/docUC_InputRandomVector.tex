@@ -1,0 +1,47 @@
+% Copyright (C) 2005-2015 Airbus - EDF - IMACS - Phimeca
+% Permission is granted to copy, distribute and/or modify this document
+% under the terms of the GNU Free Documentation License, Version 1.2
+% or any later version published by the Free Software Foundation;
+% with no Invariant Sections, no Front-Cover Texts, and no Back-Cover
+% Texts.  A copy of the license is included in the section entitled "GNU
+% Free Documentation License".
+\renewcommand{\filename}{docUC_InputNoData_InputRandomVector.tex}
+\renewcommand{\filetitle}{UC : Creation  of the random input vector from a distribution}
+
+% \HeaderNNIILevel
+% \HeaderIILevel
+\HeaderIIILevel
+
+
+\label{UsualRandomVector}
+
+\index{Random Vector!Input random vector}
+
+
+The objective of this Use Case is to model a random  vector described by its joint probability density function. This random vector is called a {\itshape UsualRandomvector}. This UC is particularly adapted to the input random vector.\\
+
+
+\noindent%
+\requirements{
+  \begin{description}
+  \item[$\bullet$] the input distribution : {\itshape inputDistribution}
+  \item[type:] Distribution
+  \end{description}
+}
+             {
+               \begin{description}
+               \item[$\bullet$] the random input vector : {\itshape inputRandomVector}
+               \item[type:] RandomVector which implementation is a UsualRandomVector
+               \end{description}
+             }
+
+             \textspace\\
+             Python script for this UseCase :
+
+
+             \begin{lstlisting}
+
+               # Create the UsualRandomVector 'inputRandomVector' from
+               # the Distribution 'inputDistribution'
+               inputRandomVector = RandomVector(inputDistribution)
+             \end{lstlisting}

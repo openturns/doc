@@ -1,0 +1,26 @@
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{OpenTURNS_ReferenceGuide}
+
+\usepackage[utf8]{inputenc}
+\RequirePackage[pdftex]{color}
+\RequirePackage[pdftex]{graphics}
+\RequirePackage{amsmath}
+\RequirePackage{amsfonts}
+\RequirePackage{amssymb}
+\RequirePackage{framed}
+\RequirePackage{fancyhdr}
+\RequirePackage{graphicx}
+\RequirePackage{Math_Notations}
+\RequirePackage{otcommon}
+
+%\newcommand{\Tr}[1]{{ {#1}^t}}
+%\newcommand{\det}{{ \mathrm{det} }}
+\DeclareMathOperator*{\supp}{supp}
+\DeclareMathOperator*{\diag}{diag}
+
+\newcommand{\enterprise}{Airbus - EDF - IMACS - PhiMeca}
+\pagestyle{fancy}
+\fancyhf{} \rhead{\bfseries \thepage} \lhead{\bfseries \nouppercase OpenTURNS -- Reference Guide}
+\rfoot{\bfseries \copyright 2005-2015 \enterprise} \lfoot{}
+
+

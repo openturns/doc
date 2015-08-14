@@ -1,0 +1,45 @@
+% Copyright (C) 2005-2015 Airbus - EDF - IMACS - Phimeca
+% Permission is granted to copy, distribute and/or modify this document
+% under the terms of the GNU Free Documentation License, Version 1.2
+% or any later version published by the Free Software Foundation;
+% with no Invariant Sections, no Front-Cover Texts, and no Back-Cover
+% Texts.  A copy of the license is included in the section entitled "GNU
+% Free Documentation License".
+\renewcommand{\filename}{docUC_InputWithData_PearsonSpearmanTests.tex}
+\renewcommand{\filetitle}{UC : Particular manipulations of the Pearson and Spearman tests, when the first sample is of dimension superior to 1.}
+
+% \HeaderNNIILevel
+% \HeaderIILevel
+\HeaderIIILevel
+
+
+\index{Independence Test!ChiSquared test}
+\index{Independence Test!Pearson test}
+\index{Independence Test!Spearman test}
+
+The objective of this Use Case is to decide whether two samples follow a monotonous or linear relation in the case where the first sample is of dimension $>1$.\\
+The Pearson and Spearman tests are evaluated successively between some (or all) coordinates of the first sample and the second one, which must be of dimension 1.\\
+
+
+Details on the Pearson and Spearman tests  may be found in the Reference Guide (\extref{ReferenceGuide}{see files Reference Guide - Step B -- Pearson correlation test, Step B -- Spearman correlation test}{stepB}).\\
+
+
+\requirements{
+  \begin{description}
+  \item[$\bullet$] one continuous scalar numerical sample of dimension n : {\itshape sample1}
+  \item[type:]  NumericalSample
+  \item[$\bullet$] one continuous scalar numerical sample of dimension 1 : {\itshape sample2}
+  \item[type:]  NumericalSample
+  \end{description}
+}
+             {
+               \begin{description}
+               \item[$\bullet$] tests results : {\itshape resultPartialPearson, resultFullPearson, resultPartialSpearman, resultFullSpearman}
+               \item[type:] TestResultCollection
+               \end{description}
+             }
+
+             \textspace\\
+             Python script for this UseCase :
+
+             \inputscript{script_docUC_InputWithData_PearsonSpearmanTests}

@@ -1,0 +1,50 @@
+% Copyright (C) 2005-2015 Airbus - EDF - IMACS - Phimeca
+% Permission is granted to copy, distribute and/or modify this document
+% under the terms of the GNU Free Documentation License, Version 1.2
+% or any later version published by the Free Software Foundation;
+% with no Invariant Sections, no Front-Cover Texts, and no Back-Cover
+% Texts.  A copy of the license is included in the section entitled "GNU
+% Free Documentation License".
+\renewcommand{\filename}{docUC_CentralUncertainty_CorrelationAnalysis.tex}
+\renewcommand{\filetitle}{UC : Correlation analysis on samples : Pearson and Spearman coefficients, PCC, PRCC, SRC, SRRC coefficients}
+
+% \HeaderNNIILevel
+% \HeaderIILevel
+\HeaderIIILevel
+
+\label{correlationAnalysis}
+
+
+\index{Correlation!Pearson correlation coefficient}
+\index{Correlation!Partial Pearson correlation coefficient (PCC)}
+\index{Correlation!Spearman correlation coefficient}
+\index{Correlation!Partial rank correlation coefficient (PRCC)}
+\index{Correlation!Standard regression coefficient (SRC)}
+\index{Correlation!Standard rank regression coefficient (SRRC)}
+
+
+This Use Case  describes the correlation analysis we can perform between the input random  vector, described by a numerical sample, and the output variable of interest described by a numerical sample too.\\
+
+Details on design of experiments correlation coefficients may be found in the Reference Guide (\extref{ReferenceGuide}{see files Reference Guide - Step C' -- Uncertainty Ranking using Pearson's correlation}{stepCprime) and files around it}.\\
+
+
+
+\requirements{
+  \begin{description}
+  \item[$\bullet$] a numerical sample : {\itshape inputSample}, may be of dimension $\geq 1$
+  \item[type:] NumericalSample
+  \item[$\bullet$] two scalar  numerical samples : {\itshape inputSample2, outputSample}
+  \item[type:] NumericalSample
+  \end{description}
+}
+             {
+               \begin{description}
+               \item[$\bullet$] the different correlation coefficients : {\itshape PCCcoefficient, PRCCcoefficient, SRCcoefficient, SRRCcoefficient, pearsonCorrelation, spearmanCorrelation}
+               \item[type:] NumericalPoint
+               \end{description}
+             }
+
+             \textspace\\
+             Python script for this UseCase :
+
+             \inputscript{script_docUC_CentralUncertainty_CorrelationAnalysis}
