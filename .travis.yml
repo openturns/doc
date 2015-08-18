@@ -10,9 +10,9 @@ addons:
     - xsltproc
 
 install:
-  - wget ftp://ftp-sop.inria.fr/marelle/tralics/src/tralics-src-2.15.2.tar.gz
-  - tar xzf tralics-src-2.15.2.tar.gz
-  - pushd tralics-2.15.2
+  - wget ftp://ftp-sop.inria.fr/marelle/tralics/src/tralics-src-2.15.3.tar.gz
+  - tar xzf tralics-src-2.15.3.tar.gz
+  - pushd tralics-2.15.3
   - make -j2 -C src CPPFLAGS=-DCONFDIR=\\\"$HOME/.local/share/tralics\\\"
   - mkdir -p ~/.local/{bin,share}
   - cp src/tralics ~/.local/bin
