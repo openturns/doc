@@ -234,8 +234,8 @@ make check && make installcheck
 
 Two installers are created using NSIS.
 \begin{itemize}
-\item[$\bullet$]   openturns-x.y-pyu.v-arch.exe installs OpenTURNS DLL and headers, and its dependencies. It is mainly for users that interact with OpenTURNS through Python.
-\item[$\bullet$]   openturns-developers-x.y-arch.exe helps compiling OpenTURNS program and wrapper on Windows. It also permits to launch OpenTURNS checktests.
+\item[$\bullet$]   openturns-x.y-pyu.v-arch.exe installs the DLL and headers, and its dependencies. It is targeted users that interact through Python.
+\item[$\bullet$]   openturns-developers-x.y-arch.exe helps launching the tests.
 \end{itemize}
 
 \subsection{Windows side}
@@ -301,19 +301,11 @@ export PRINTF_EXPONENT_DIGITS=2
 
 ./check_testsuite AUTOTEST_PATH="$PWD" OPENTURNS_CONFIG_PATH="$PWD/../../../etc/openturns"
 
-export abs_srcdir="$PWD"
-
-./installcheck_testsuite AUTOTEST_PATH="$PWD" \
-OPENTURNS_NUMERICALSAMPLE_PATH="$PWD" \
-OPENTURNS_WRAPPER_PATH="$PWD/../wrappers" \
-OPENTURNS_CONFIG_PATH="$PWD/../../../etc/openturns"
-
 PYTHON_VERSION=27
 export examplesdir="$PWD"
 
 ./python_installcheck_testsuite AUTOTEST_PATH="$PWD"  \
 OPENTURNS_NUMERICALSAMPLE_PATH="$PWD" \
-OPENTURNS_WRAPPER_PATH="$PWD/../wrappers" \
 OPENTURNS_CONFIG_PATH="$PWD/../../../etc/openturns" \
 PYTHONPATH="$PWD/../../../lib/python$PYTHON_VERSION/site-packages"
 \end{verbatim}
@@ -351,39 +343,6 @@ g++.exe mon_prog.cxx  -I..\include\openturns -L..\lib\bin -lOT -o mon_prog.exe
 
 An example is given in the directory openturns/share/openturns/examples/simple\_example.
 
-
-\paragraph{Wrapper}
-
-To compile an OpenTURNS wrapper on Windows, OpenTURNS developers installer must be installed.
-An example of a wrapper for Windows can be found in the directory openturns/share/openturns/WrapperTemplates/mingw\_wrapper\_linked\_with\_C\_function (this example is installed by the developers installer).
-
-In this directory, launch the compilation from an MSYS shell (or start the script ./build.sh) :
-\begin{verbatim}
-PATH=/c/MinGW/bin:$PATH
-PATH=/c/msys/1.0/bin:$PATH
-mkdir build; cd build
-cmake .. -DOpenTURNS_DIR=/c/openturns --prefix="$PWD/install"
-make && make install
-\end{verbatim}
-
-The test using this wrapper can be started :
-\begin{verbatim}
-./start-test.sh
-\end{verbatim}
-The test can be started too by using the test.py file.\\
-
-The following points are automatically done by the OpenTURNS developers installer :
-
-\begin{itemize}
-\item[$\bullet$]   To compile a wrapper, MinGW, MSYS and msysDTK must be installed. These installers can be found on MinGW site.
-
-\item[$\bullet$]   Then, the Pthread library must be installed in MinGW directory (like in paragraph \ref{pthread-installation})
-
-\item[$\bullet$]   Wrappers scripts use the openturn-config command. These one is configured to be installed in c:\textbackslash openturns\textbackslash bin directory. If OpenTURNS is not installed in this directory, the prefix variable of openturns-config must be modified.
-\item[$\bullet$]   If during the compilation of the wrapper, libtool cannot produce a dynamic library because it can not found shared library, check that the library is existing and that the corresponding .la file is correct.
-\end{itemize}
-
-
 \paragraph{Dev-C++}
 Dev-C++ is an integrated development environment like Visual Studio.
 
@@ -413,55 +372,15 @@ ABI g++
 OpenTURNS g++
 \end{verbatim}
 
-\item[$\bullet$] OpenTURNS wrapper (I mean wrapper that can be found there: openturns-src/wrappers/WrapperTemplates) are pure C.
-So, OpenTURNS wrapper can be compiled with Visual Studio and linked to OpenTURNS.
-\begin{verbatim}
-OpenTURNS g++
-|
-ABI C
-|
-wrapper vc++
-\end{verbatim}
 \end{itemize}
 
 \paragraph{Benchmark}
 
 No official benchmark of OpenTURNS on Windows has been done, but windows version is slower than Linux one.
 
-
-\subsection{Unresolved problems}
-
-
-\subsubsection{Compilation of python modules}
-
-In order to compile the python wrappers (Python -> OpenTURNS), the static library of python (libpython.a) must be included. Libtool does not allow to create DLL with static dependancies. Python wrappers are also created directly with the compiler without using libtool.
-
-The symbols of the static library libpython.a are also in each python DLL. At OpenTURNS execution, until now, no problems have been reported.
-
-Furthermore, if libtool succeeds to create a DLL, it does it by appending a "-0" to the filename. This is a problem, because python searches for a filename without -0 (e.g. \_stat.pyd and not \_stat-0.pyd).
-
-
-\subsubsection{Compilation of OpenTURNS wrappers}
-
-OpenTURNS wrappers must be compiled on Windows with the -lOT flag.
-
-On Linux, this could cause problems (at execution, the wrappers symbols could be loaded twice).
-
-On Windows, the compilation of dynamics libraries is different : when a DLL is compiled, every symbols must be present (through a DLL skeleton).
-
-I do not know how to avoid this flag.
-
-This remains a point to take care of. The problem seen on Linux should be tested on Windows.
-
 \subsection{Resolved problems}
 
 \begin{itemize}
-\item[$\bullet$]   if \emph{NumericalMathFunction (exec external)} check test fails :
-
-The temporary-dir element of openturns.conf could be misconfigured.
-
-If OpenTURNS examples has been installed in a directory containing spaces, copy the files poutre\_external\_infile* to a directory without spaces and set the environment variable abs\_srcdir to this directory.
-
 \item[$\bullet$]   if DLLs or programs are not found :
 
 check your MSYS or Windows PATH environment variable.
@@ -473,9 +392,5 @@ check that the version of the python interpreter is the same as the version Open
 reinstall it in directory without spaces in the name. The space between \emph{Program} and \emph{Files} can cause cumbersome problems.
 
 \item[$\bullet$]   to modify the PATH variable of .wine/system.reg, no WINE process must be started. When a WINE process stops, it overwrites this files.
-
-\item[$\bullet$]   libtool wrappers do not work on Ubuntu Intrepid. They work correctly on Mandriva 2009 32bits and Ubuntu Jaunty. If libtool wrappers do not work, modify ot-src/lib/config/test.am as described in this file.
-
-\item[$\bullet$]   if the static libraries libgc2.a and libfrtbegin.a are included during the compilation, libtool produces only a static OpenTURNS library. These libraries are also disabled during cross-compilation.
 
 \end{itemize}
