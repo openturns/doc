@@ -280,7 +280,7 @@ Solution to overlapping tokens: put longest tokens first:
 \end{lstlisting}
 
 
-\subparagraph{The get\_regex function} parses the outfile the same way as \OT\ LibraryWrapper do. It is provided for backward compatibility:\\
+\subparagraph{The get\_regex function} parses the outfile. It is provided for backward compatibility:\\
 
 \begin{description}
 \item[Usage:] \rule{0pt}{1em}
@@ -328,187 +328,6 @@ Or in IPython console:
 \end{lstlisting}
 
 
-
-\cleardoublepage
-
-\subsection{Library wrappers}
-
-The library wrapper allows to launch calculus in a multi-threaded context.
-
-\subsubsection{C++ library wrapper}
-
-This is the most low-level wrapper available.
-Due to being compiled, it allows for very low-latency.
-However, beware that the development process is quite difficult.
-We discourage it as python wrappers should fit your needs in most cases.
-Refer to appendix \ref{library_wrapper} for further instructions.
-
-\subsubsection{Generic wrapper}
-
-The 'generic' wrapper relies on the base library wrapper, but is usable from Python. It and was an effort to simplify it's use before the work on the pure python distributed wrapper module existed. Unlike DistributedPythonFunction, it does not allow distributed computation over remote hosts, and is less customizable. This wrapper requires the list of variables, the list of files involved in the communication with the external code, and the execution parameters.
-
-\paragraph{Variables}
-
-The variables are represented by list of dictionaries, and each of them may contains the following keys:
-\begin{itemize}
-\item id\_: variable name as string
-\item comment\_: a comment to inform on the variable
-\item unit\_: the unit which the variable is expressed in
-\item regexp\_: find regex, as string
-\item format\_: output regex, as string
-\item type\_: the type of the variable (input or output), as integer:
-  \begin{itemize}
-  \item WrapperDataFileType.IN, or string 'in': input variable (default)
-  \item WrapperDataFileType.OUT, or string 'out': output variable
-  \end{itemize}
-\item fromType\_: The type of the from\_ member:
-  \begin{itemize}
-  \item WrapperDataVariableLocation.LINE: the location is a line number
-  \item WrapperDataVariableLocation.REGEXP: the location is a regular expression
-  \end{itemize}
-\item from\_: the location where substitution should start, as string
-\item toType\_: The type of the to\_ member:
-  \begin{itemize}
-  \item WrapperDataVariableLocation.LINE: the location is a line number
-  \item WrapperDataVariableLocation.REGEXP: the location is a regular expression
-  \end{itemize}
-\item to\_: the location where substitution should stop, as string
-\end{itemize}
-
-\paragraph{Coupling files}
-
-The coupling files are represented by a list of dictionaries, each of them may contain the following fields:
-\begin{itemize}
-\item id\_: the id of the file (any string to distinguish each file from another)
-\item name\_: the name of the file (stdin, stdout, log, etc.), as string
-\item path\_: the path of the file (/tmp/stdin, /var/log/mylog, etc.), as string
-\item subst\_: the list of variable's ids to be substituted in the file, as string, e.g. 'E,L'
-\item type\_: the type of the file (input or output):
-  \begin{itemize}
-  \item WrapperDataFileType.IN: the file is an input file
-  \item WrapperDataFileType.OUT: the file is an output file
-  \end{itemize}
-\end{itemize}
-
-\paragraph{Execution parameters}
-
-The execution parameters are represented by a dictionary with the following fields:
-\begin{itemize}
-\item state\_: the sharing mode of internal state, as integer:
-  \begin{itemize}
-  \item WRAPPER\_SHAREDSTATE (default)
-  \item WRAPPER\_SPECIFICSTATE
-  \end{itemize}
-  % \item mode\_: the mode of invocation of the external code, as integer:
-  %   \begin{itemize}
-  %   \item WRAPPER\_STATICLINK (default)
-  %   \item WRAPPER\_DYNAMICLINK
-  %   \item WRAPPER\_FORK
-  %   \end{itemize}
-\item in\_: the transmission mode for input arguments, as integer:
-  \begin{itemize}
-  \item WRAPPER\_FILES (default)
-  \item WRAPPER\_PIPE
-  \item WRAPPER\_ARGUMENTS
-  \item WRAPPER\_SOCKET
-  \item WRAPPER\_CORBA
-  \end{itemize}
-\item out\_: the transmission mode for output arguments, same as above
-\item command\_: the command that should invoque the external code according to mode, as string
-\item userPrefix\_: the prefix that helps the user to find its compute dir, as string
-\end{itemize}
-
-\paragraph{Wrapper instanciation}
-
-Once the variable list, file list, and execution parameters are ready, they are passed on to the makeWrapper function. The makeWrapper function builds a WrapperFile object which can be provided as an argument to NumericalMathFunction. The writeFile method of WrapperFile can be used to ouput the XML representation of the wrapper. Here is an example of wrapper script from the automatic tests:
-
-\begin{lstlisting}
-  # Variables
-  vars = ({ "id_" : "F",
-    "type_" : "in",
-    "regexp_" : "^\S*F\S*=\S*\R\S*$",
-    "format_" : "F=%20.13G"  },
-
-    { "id_" : "E",
-      "type_" : "in",
-      "regexp_" : "^\S*E\S*=\S*\R\S*$",
-      "format_" : "E=%20.13G"  },
-
-      { "id_" : "Z",
-        "type_" : "out",
-        "regexp_" : "^\S*Z\S*=\S*(\R)\S*$" },
-      )
-
-      # Files
-      files = ({ "id_" : "infile",
-        "type_" : "in",
-        "path_" : "inFILE_generic",
-        "subst_" : "E,F"  },
-
-      { "id_" : "outfile",
-        "type_" : "out",
-        "path_" : "outFILE_generic",
-        "subst_" : "Z"    },
-      )
-
-      # Parameters
-      params = {
-        "command_" : sys.executable + " -c \"exec(compile(open('inFILE_generic').read(), 'inFILE_generic', 'exec')); Z=E*F; print('Z=' + str(Z))\" > outFILE_generic",
-        "userPrefix_" : "GenericWrapperTest"}
-
-      wrp = makeWrapper( vars, files, params )
-      wrp.writeFile( "wrp.xml" )
-      model = NumericalMathFunction( wrp )
-\end{lstlisting}
-
-and its the corresponding XML representation:
-\begin{lstlisting}
-  <?xml version="1.0" encoding="UTF-8"?>
-  <wrapper version="1">
-  <library>
-  <path>generic.so</path>
-  <description>
-  <variable-list>
-  <variable id="F" type="in">
-  <regexp>^\S*F\S*=\S*\R\S*$</regexp>
-  <format>F=%20.13G</format>
-  </variable>
-  <variable id="E" type="in">
-  <regexp>^\S*E\S*=\S*\R\S*$</regexp>
-  <format>E=%20.13G</format>
-  </variable>
-  <variable id="Z" type="out">
-  <regexp>^\S*Z\S*=\S*(\R)\S*$</regexp>
-  </variable>
-  </variable-list>
-  <function provided="yes">generic</function>
-  <gradient provided="no"></gradient>
-  <hessian provided="no"></hessian>
-  </description>
-  </library>
-  <external-code>
-  <data>
-  <file id="infile" type="in">
-  <path>inFILE_generic</path>
-  <subst>E,F</subst>
-  </file>
-  <file id="outfile" type="out">
-  <path>outFILE_generic</path>
-  <subst>Z</subst>
-  </file>
-  </data>
-  <wrap-mode type="static-link" state="shared">
-  <in-data-transfer mode="files"/>
-  <out-data-transfer mode="files"/>
-  </wrap-mode>
-  <command>/usr/bin/python -c "exec(compile(open('inFILE_generic').read(), 'inFILE_generic', 'exec')); Z=E*F; print('Z=' + str(Z))" &gt; outFILE_generic</command>
-  <user-prefix>GenericWrapperTest</user-prefix>
-  </external-code>
-  </wrapper>
-\end{lstlisting}
-Note that illegal characters according to the XML specification, like the '\textgreater' in the original command line, are replaced by their corresponding XML entities.
-
-
 \subsection{Performance considerations\label{speedo}}
 
 Two differents cases can be encounter when wrapping code: the wrapping code is an analytical mathematical formula or it is an external code (an external process).
@@ -545,26 +364,12 @@ A benchmark involving the differents wrapping methods available from \OT\ has be
     model = ot.PythonFunction(2, 1, func_sample=_exec_sample)
   \end{lstlisting}
 
-\item Benchmark of Analytical (MuParser) function:
+\item Benchmark of Analytical (muParser) function:
   \begin{lstlisting}
     model = ot.NumericalMathFunction( ('x0','x1'), ('y',),
     ('cos((x0+1) ^ 2) - sin(x1)',) )
   \end{lstlisting}
 
-\item Benchmark of LibraryWrapper:
-  \begin{lstlisting}
-    model = ot.NumericalMathFunction( 'wcode' )
-  \end{lstlisting}
-  myCFunction.c:
-  \begin{lstlisting}
-    #include <math.h>
-    int myCFunction( const double * X, unsigned long N,
-    double * Y, unsigned long P )
-    {
-      Y[0] = cos(pow(X[0]+1, 2)) - sin(X[1]);
-      return 0;
-    }
-  \end{lstlisting}
 \end{itemize}
 
 
@@ -579,28 +384,22 @@ The sample containing 1 million of points is allocated in 0.282s.
   wrapper type & time & comparison with fastest wrapper \\
   PythonFunction \_exec & 7.1s & x157 \\
   PythonFunction \_exec\_sample & 1.3s & x30 \\
-  Analytical (MuParser) & 0.43s & x10 \\
-  LibraryWrapper & 0.045s & x1 \\
-  LibraryWrapper monothreaded & 0.1s & x2.2 \\
+  Analytical (muParser) & 0.43s & x10 \\
 \end{tabular}
 
-The previous results are linear to the size of the sample (e.g. LibraryWrapper takes 0.45s with a sample of size 10 millions).
+The previous results are linear to the size of the sample.
 
 \begin{itemize}
-\item The LibraryWrapper is the fastest. The parallel version speedup is not really good for an unknown reason: on a 16 HT core machines the multithreaded version is only 2.2 times faster than the monothreaded one.
+\item muParser is the 2nd fastest (10 times slower than the first).
 
-  \OT\ parallelize LibraryWrapper function using TBB or PThreads. TBB implementation is 30\% faster than PThread one. This benchmark has been done using the TBB implementation (\OT\ choose it by default). Note that the LibraryWrapper parallelization could be in the future improved by using MPI.
-
-\item MuParser is the 2nd fastest (10 times slower than the first).
-
-  The MuParser library embedded in \OT\ is not multithreaded. Embedding a parallel version of MuParser could give better results. But if the LibraryWrapper is forced to be executed on 1 core, it is still 4 times faster that the MuParser.
+  The muParser library embedded in \OT\ is not multithreaded. Embedding a parallel version of muParser could give better results.
 \item Using an optimized \_exec\_sample python function through numpy gives better results (6x faster) than a simple \_exec python function, but it is still much slower than the compiled library (30 times slower).
 
   Note that neither Python nor NumPy are multithreaded.
 \end{itemize}
 
 
-\paragraph{Conclusion} PythonFunction is the easiest and more adaptable wrapper but it's the slowest too. So, if you need to compute samples containing less than a million of points, PythonFunction is the good choice as the speed difference between wrappers will not be noticeable: every wrappers will compute the sample in less than a second. Otherwise choose MuParser or Library Wrapper.
+\paragraph{Conclusion} PythonFunction is the easiest and more adaptable wrapper but it's the slowest too. So, if you need to compute samples containing less than a million of points, PythonFunction is the good choice as the speed difference between wrappers will not be noticeable: every wrappers will compute the sample in less than a second. Otherwise choose muParser.
 
 
 
@@ -613,7 +412,6 @@ For usual program (compute time of 1s and above), inner wrapper complexity/overh
 
 \begin{itemize}
 \item PythonFunction can not launch the \_exec function in parallel.
-\item LibraryWrapper using fork mode can launch the external program on each core of the local Machine.
 \item the DistributedPythonFunction from otdistfunc module can launch external program on each core of the local Machine or on each core of several remote machine.
 \end{itemize}
 
@@ -662,9 +460,6 @@ Comparison of the differents wrapper compute time with a sample of size 1000 and
 \item DistributedPythonFunction overhead is near 0.05s and can launch external program in parallel.
 
   $(0.05+0.07)*1000 (/8core) => 15s$
-\item LibraryWrapper using fork mode overhead is near 0.01s per point and can launch external program in parallel.
-
-  $(0.01+0.07)*1000 (/8core) => 10s$
 
 \item PythonFunction that reimplement the external program.
 
@@ -672,4 +467,3 @@ Comparison of the differents wrapper compute time with a sample of size 1000 and
 
 \end{itemize}
 
-The LibraryWrapper is the fastest with external code that last less than 0.1s. But if possible, first consider to reimplement directly in the wrapper the tiny external code.

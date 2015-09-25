@@ -54,7 +54,6 @@ set ( COMMON_INPUT
   docUC_LSF_SomeParticularFunctions.tex
   docUC_LSF_NMFManipulation.tex
   docUC_LSF_PythonScript.tex
-  docUC_LSF_Wrapper.tex
   docUC_MinMax_CombinatorialGenerators.tex
   docUC_MinMax_DetExperimentPlane.tex
   docUC_MinMax_Evaluation2.tex
