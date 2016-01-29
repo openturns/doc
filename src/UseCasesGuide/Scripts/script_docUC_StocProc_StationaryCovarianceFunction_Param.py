@@ -7,8 +7,8 @@ from openturns import *
 # amplitude = (1., 2., 3.)
 amplitude = [1., 2., 3.]
 
-# scale = (4., 5., 6.)
-scale = [4., 5., 6.]
+# scale = (4.)
+scale = [4.]
 
 # spatialCorrelation
 spatialCorrelation = CorrelationMatrix(3)

@@ -11,7 +11,7 @@ myTimeGrid = RegularGrid(tMin, timeStep, n)
 # Normal process with an Exponential covariance model
 # Amplitude and scale values of the Exponential model
 amplitude = [1.0, 2.0, 3.0]
-scale = [4.0, 5.0, 6.0]
+scale = [4.0]
 # spatialCorrelation
 spatialCorrelation = CorrelationMatrix(3)
 spatialCorrelation[0, 1] = 0.8

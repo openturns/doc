@@ -13,7 +13,7 @@ myMesh = myMesher.build(myInterval)
 # Create a second order normal porcess of dimension 3
 # We use the Cauchy model
 amplitude = NumericalPoint([5])
-scale = NumericalPoint([3])
+scale = NumericalPoint([3]*2)
 model = ExponentialModel(myMesh.getDimension(), amplitude, scale)
 myProcess = TemporalNormalProcess(model, myMesh)
 

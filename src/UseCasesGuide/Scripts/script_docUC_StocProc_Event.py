@@ -15,7 +15,7 @@ myMesh = myMesher.build(myInterval)
 # Create the covariance model
 # Amplitude and scale values of the Exponential model
 amplitude = [1.0, 2.0, 3.0]
-scale = [4.0, 5.0, 6.0]
+scale = [4.0, 5.0]
 # spatialCorrelation
 spatialCorrelation = CorrelationMatrix(3)
 spatialCorrelation[0, 1] = 0.8
@@ -26,7 +26,6 @@ myCovarianceModel = ExponentialModel(
 
 # Create a normal process with the temporal view ONLY
 myProcess = TemporalNormalProcess(myCovarianceModel, myMesh)
-
 
 # Create a domain A in R^3
 # for example: [0.8; 1.2]*[1.5; 1.6]*[0.5; 0.7]

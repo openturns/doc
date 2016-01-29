@@ -12,7 +12,7 @@ myMesh = myMesher.build(myInterval)
 
 # Define a scalar temporal normal process on the mesh
 amplitude = [1.0]
-scale = [0.2]
+scale = [0.2]*2
 myCovModel = ExponentialModel(myMesh.getDimension(), amplitude, scale)
 
 myProcess = TemporalNormalProcess(myCovModel, myMesh)
