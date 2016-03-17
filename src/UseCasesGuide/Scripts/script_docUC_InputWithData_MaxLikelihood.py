@@ -1,23 +1,23 @@
 from __future__ import print_function
-from openturns import *
-from math import *
+import openturns as ot
+import math as m
 
 # Generate a scalar sample
-sample = Normal().getSample(200)
+sample = ot.Normal().getSample(200)
 
 # BEGIN_TEX
 # Compute the log-likelihood instead of the likelihood to avoid underflow
 # and truncate it to avoid computing log(0)...
 
 
-class LogLikelihoodFunction(OpenTURNSPythonFunction):
+class LogLikelihoodFunction(ot.OpenTURNSPythonFunction):
 
     def __init__(self, sample):
-        OpenTURNSPythonFunction.__init__(self, 2, 1)
+        ot.OpenTURNSPythonFunction.__init__(self, 2, 1)
         self.sample_ = sample
 
     def _exec(self, X):
-        normal = Normal(X[0], X[1])
+        normal = ot.Normal(X[0], X[1])
         logLikelihood = 0.0
         # The PDF is assumed to be constant, equal to eps for values smaller
         # than eps
@@ -31,31 +31,34 @@ class LogLikelihoodFunction(OpenTURNSPythonFunction):
 myLogLikelihoodPython = LogLikelihoodFunction(sample)
 
 # Create the NumericalMathFunction of the library openturns
-myLogLikelihoodOT = NumericalMathFunction(myLogLikelihoodPython)
+myLogLikelihoodOT = ot.NumericalMathFunction(myLogLikelihoodPython)
 
 # Create the research interval of (mu, sigma)
-lowerBound = NumericalPoint((-1.0, 1.0e-4))
-upperBound = NumericalPoint((3.0, 2.0))
-finiteLowerBound = BoolCollection((0, 1))
-finiteUpperBound = BoolCollection((0, 0))
-bounds = Interval(lowerBound, upperBound, finiteLowerBound, finiteUpperBound)
+lowerBound = ot.NumericalPoint((-1.0, 1.0e-4))
+upperBound = ot.NumericalPoint((3.0, 2.0))
+finiteLowerBound = ot.BoolCollection((0, 1))
+finiteUpperBound = ot.BoolCollection((0, 0))
+bounds = ot.Interval(lowerBound, upperBound, finiteLowerBound, finiteUpperBound)
 
 # Create the starting point of the research
 # For mu : the first point
 # For sigma : a value evaluated from the two first data
-startingPoint = NumericalPoint(2)
+startingPoint = ot.NumericalPoint(2)
 startingPoint[0] = sample[0][0]
-startingPoint[1] = sqrt(
+startingPoint[1] = m.sqrt(
     (sample[1][0] - sample[0][0]) * (sample[1][0] - sample[0][0]))
 
+# Create the optimization problem
+problem = ot.OptimizationProblem(myLogLikelihoodOT, ot.NumericalMathFunction(), ot.NumericalMathFunction(), bounds)
+problem.setMinimization(False)
+
 # Create the TNC algorithm
-# To make a maximisation research : enter the 1 code
-myAlgoTNC = TNC(
-    TNCSpecificParameters(), myLogLikelihoodOT, bounds, startingPoint, 1)
+myAlgoTNC = ot.TNC(problem)
+myAlgoTNC.setStartingPoint(startingPoint)
 
 # Run the algorithm and extract results
 myAlgoTNC.run()
 resMLE = myAlgoTNC.getResult()
-MLEparameters = resMLE.getOptimizer()
+MLEparameters = resMLE.getOptimalPoint()
 print("MLE of (mu, sigma) = (", MLEparameters[0], ", ", MLEparameters[1], ")")
 # END_TEX

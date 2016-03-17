@@ -9,17 +9,17 @@ n = 100
 myTimeGrid = RegularGrid(tMin, timeStep, n)
 
 # Create a normal process
-amplitude = NumericalPoint([5.0, 6.0])
-scale = NumericalPoint([3.0, 4.0])
+amplitude = NumericalPoint([5.0])
+scale = NumericalPoint([3.0])
 model = ExponentialCauchy(amplitude, scale)
 myProcess = TemporalNormalProcess(model, myTimeGrid)
 
 # Create the domain A
-# for example in dimension 2 : [2.,5.] * [2.,5.]
+# for example in dimension 1 : [2.,5.]
 # Lower bound vector
-lowerBound = NumericalPoint([2.0, 2.0])
+lowerBound = NumericalPoint([2.0])
 # Upper bound vector
-upperBound = NumericalPoint([5.0, 5.0])
+upperBound = NumericalPoint([5.0])
 myDomainA = Interval(lowerBound, upperBound)
 
 # BEGIN_TEX

@@ -25,21 +25,12 @@ myEvent = Event(output, Greater(), threshold)
 # Create a NearestPoint algorithm with the Cobyla algorithm
 myCobyla = Cobyla()
 
-# The Cobyla algorithm has default specific parameters
-# To get them, write
-print("Default Parameters of Cobyla = ", myCobyla.getSpecificParameters())
-
 # It is possible to change the default values of the specific parameters :
-# For that, create the object CobylaSpecificParameters()
-myCobylaSpecificParameters = CobylaSpecificParameters()
-# Then change the values of the parameters : for example, the RhoBeg parameter
 myValue = 0.2
-myCobylaSpecificParameters.setRhoBeg(myValue)
-# Give these new parameters to the Cobyla algoithm
-myCobyla.setSpecificParameters(myCobylaSpecificParameters)
+myCobyla.setRhoBeg(myValue)
 
 # Change the general parameters of the algorithm
-myCobyla.setMaximumIterationsNumber(100)
+myCobyla.setMaximumIterationNumber(100)
 myCobyla.setMaximumAbsoluteError(1.0e-6)
 myCobyla.setMaximumRelativeError(1.0e-6)
 myCobyla.setMaximumResidualError(1.0e-6)
