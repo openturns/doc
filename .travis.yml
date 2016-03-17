@@ -1,27 +1,12 @@
 language: cpp
 
-addons:
-  apt:
-    packages:
-    - cmake
-    - texlive-latex-recommended
-    - texlive-fonts-recommended
-    - texlive-latex-extra
-    - xsltproc
-
 install:
-  - wget ftp://ftp-sop.inria.fr/marelle/tralics/src/tralics-src-2.15.3.tar.gz
-  - tar xzf tralics-src-2.15.3.tar.gz
-  - pushd tralics-2.15.3
-  - make -j2 -C src CPPFLAGS=-DCONFDIR=\\\"$HOME/.local/share/tralics\\\"
-  - mkdir -p ~/.local/{bin,share}
-  - cp src/tralics ~/.local/bin
-  - cp -r confdir ~/.local/share/tralics
-  - popd
+  - curl http://ubuntu.openturns.org/openturns.org-repo.key | sudo apt-key add -
+  - echo deb http://ubuntu.openturns.org precise main | sudo tee /etc/apt/sources.list.d/openturns.list
+  - sudo apt-get update
+  - sudo apt-get -y install libopenturns-dev python-openturns r-other-rot python-numpy cmake texlive-latex-recommended texlive-fonts-recommended texlive-latex-extra xsltproc tralics
 
 script:
   - cmake -DCMAKE_INSTALL_PREFIX=~/.local
-    -DTRALICS_EXECUTABLE=~/.local/bin/tralics
-    -DTRALICS_INCLUDE_DIR=~/.local/share/tralics
     .
-  - make install -j2
+  - make install -j2 && ctest -j2 --output-on-failure --timeout 100 
