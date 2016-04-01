@@ -16,11 +16,6 @@ macro ( ot_pycheck_test GUIDENAME TESTNAME )
 endmacro ()  
 
 
-ot_pycheck_test ( DevelopersGuide pythonfunction_point )
-ot_pycheck_test ( DevelopersGuide pythonfunction_sample )
-# need PRE and POST ARG
-#ot_pycheck_test ( DevelopersGuide pythonfunction_couplingtools )
-
 ot_pycheck_test ( UseCasesGuide script_docUC_InputBayesian_RandomVector )
 ot_pycheck_test ( UseCasesGuide script_docUC_InputBayesian_BayesDist )
 ot_pycheck_test ( UseCasesGuide script_docUC_InputBayesian_CondDist )
