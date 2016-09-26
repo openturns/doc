@@ -188,7 +188,6 @@ endforeach ()
 endmacro ()
 
 # recurse subdirectories
-add_subdirectory (DevelopersGuide)
 add_subdirectory (DocumentationGuide)
 add_subdirectory (ExamplesGuide)
 add_subdirectory (ReferenceGuide)
