@@ -15,43 +15,56 @@
 \MathematicalDescription{
 
   \underline{\textbf{Goal}} \vspace{2mm}
-
-  Once a polynomial response surface $\widehat{h}$ has been built up, it is crucial to estimate the approximation error, i.e. the discrepancy between the response surface and the true model response in terms of a suitable norm such as the $L_2$-norm:
-  \begin{equation}
-    Err \, \, = \, \, \left\| h(\underline{x}) \; - \; h(\underline{x}) \right\|_{L_2}^2\, \, = \, \, \int_{\cD} \; \left( h(\underline{x}) \; - \; h(\underline{x}) \right)^2  \; d\underline{x}
-  \end{equation}
-  where $\cD$ denotes the domain of variation of the input parameters. As any model evaluation may be time-consuming, error estimates that are only based on already performed computer experiments are of interest. The so-called \emph{cross validation} techniques may be used in this context. \\
-
-  \underline{\textbf{Principles}} \vspace{2mm}
-
-  Any cross-validation scheme consists in dividing the data sample (i.e. the experimental design) into two subsamples. A metamodel $\widehat{h}$ is built from one subsample, i.e. the \emph{training set}, and its performance is assessed by comparing its predictions to the other subset, i.e. the \emph{test set}. A refinement of the method is the \emph{$\nu$-fold cross-validation}, in which the observations are randomly assigned to one of $\nu$ partitions of nearly equal size. The learning set contains in turn all but one of the partitions which is considered as the test set. The generalization error is estimated for each of the $\nu$ sets and then averaged over $\nu$. \\
-
+  
+    Once a polynomial response surface $\widehat{h}(\underline{x})$ of the original numerical model $h(\underline{x})$ has been built up, it is crucial to estimate the approximation error, i.e. the discrepancy between the response surface and the true model response in terms of a suitable norm such as the $L_2$-norm:
+    \begin{equation}
+      Err \, \, = \, \, \left\| h(\underline{x}) \; - \; \widehat{h}(\underline{x}) \right\|_{L_2}^2\, \, = \, \, \int_{\cD} \; \left( h(\underline{x}) \; - \; \widehat{h}(\underline{x}) \right)^2  \; d\underline{x}
+    \end{equation}
+    where $\cD$ denotes the support of the input parameters $\underline{x}$. It is worth emphasizing that one tends to overestimate the performance of a response surface by training and evaluating it on the same data set. For instance, the model might fail to predict on new data whereas the validation on the training data yields satisfactory performance. To avoid such issue, it is important that the model error assessment is conducted on a data set which is independent of the training sample. However, any new model evaluation may be time-consuming. Therefore, error estimates which are only based on already performed computer experiments are of interest. In this context, the so-called \emph{cross validation} techniques are utilized to obtain reliable performance assessment of the response surface at a reasonable computational cost.\\
+  
+    \underline{\textbf{Principle}} \vspace{2mm}\
+    
+    Any cross-validation scheme consists in dividing the data sample (i.e. the experimental design) into two sub-samples that are independently and identically distributed. A metamodel $\widehat{h}(\underline{x})$ is built from one sub-sample, i.e. the \emph{training set}, and its performance is assessed by comparing its predictions to the other subset, i.e. the \emph{test set}. A single split will lead to a validation estimate. When several splits are conducted, the cross validation error estimate is obtained by averaging over the splits.
+    
+    \textbf{K-fold cross validation error estimate} \vspace{2mm}
+    
+    The $K$-fold cross validation technique relies on splitting the data set $\cX$ into $K$ mutually exclusive sub-samples $\cX_1, \dots, \cX_K$ of approximately equal size. A sub-sample $\cX_i$, $i \in \{ 1, \dots, K\} $ is set aside, then the response surface $\widehat{h}^{(-\cX_i)}$ is built on the remaining sub-samples $\cX \setminus \cX_i$. The approximation error is estimated on the set-aside sample $\cX_i$:
+    \begin{equation}
+      Err^{(i)}  = \dfrac{1}{ |\cX_i|}  \sum\limits_{\underline{x}^{(j)} \in \cX_i} \left[ h(\underline{x}^{(j)}) - \widehat{h}^{(-\cX_i)} {(\underline{x}^{(j)})} \right]^2
+    \end{equation}
+    in which $h(\underline{x}^{(j)}) - \widehat{h}^{(-\cX_i)} {(\underline{x}^{(j)})}$ is the \emph{predicted residual} defined as the difference between the evaluation of $h(\cdot)$ and the prediction with $\widehat{h}^{(-\cX_i)}(\cdot)$ at $\underline{x}^{(j)}$ in the sub-sample $\cX_i$ whose cardinality is $|\cX_i|$.\\
+    The approximation errors $Err^{(i)}$ are estimated with each of the sub-samples $\cX_i$, $i \in \{ 1, \dots, K\} $ being used as the validation set whereas the remaining sub-samples $\cX \setminus \cX_i$ being used for training. Finally the $K$-fold cross validation error estimate is obtained as the average:
+    \begin{equation}
+	    Err_{Kfold} = \dfrac{1}{K} \sum\limits_{i=1}^{K} Err^{(i)}
+    \end{equation}
+    As described above, the $K$-fold error estimate can be obtained with a single split of the data $\cX$ into $K$ folds. It is worth noting that one can repeat the cross validation multiple times using different divisions into folds to obtain better Monte Carlo estimate. This comes obviously with an additional computational cost.
+  
+  
   \textbf{Classical leave-one-out error estimate} \vspace{2mm}
 
-  The \emph{leave-one-out} (LOO) cross-validation corresponds to the special case of $\nu$-fold cross-validation with $\nu = N$. It is recalled that a $P$-term polynomial approximation of the model response reads:
+  The \emph{leave-one-out} (LOO) cross-validation is a special case of $K$-fold cross-validation where the number of folds $K$ is chosen equal to the cardinality $N$ of the experimental design $\cX$. It is recalled that a $P$-term polynomial approximation of the model response reads:
   \begin{equation}
     \widehat{h}(\underline{x}) \, \, = \, \,  \sum_{j=0}^{P-1} \; \widehat{a}_{j} \; \psi_{j}(\underline{x})
   \end{equation}
   where the $\widehat{a}_{j}$'s are estimates of the coefficients obtained by a specific method, e.g. least squares. \\
-
-  Let us denote by $\widehat{h}^{(-i)}$ the approximation that has been built from the experimental design $\cX \setminus \{\underline{x}^{(i)}\}$, i.e. when removing the $i$-th observation. The \emph{predicted residual} is defined as the difference between the model evaluation at $\underline{x}^{(i)}$ and its prediction based on $\widehat{h}^{(-i)}$:
+  Let us denote by $\widehat{h}^{(-i)}$ the approximation that has been built from the experimental design $\cX \setminus \{\underline{x}^{(i)}\}$ with the $i$-th observation being set aside. The predicted residual is defined as the difference between the model evaluation at $\underline{x}^{(i)}$ and its prediction based on $\widehat{h}^{(-i)}$:
   \begin{equation} \label{eq:4.3:5}
-    \Delta^{(i)} \, \, \equiv \, \,  h(\underline{x}^{(i)}) - \widehat{h}^{(-i)}(\underline{x}^{(i)})
+    \Delta^{(i)} \, \, = \, \,  h(\underline{x}^{(i)}) - \widehat{h}^{(-i)}(\underline{x}^{(i)})
   \end{equation}
-  The expected risk is then estimated by the following LOO error:
+  By repeating this process for all observations in the experimental design, one obtains the predicted residuals $\Delta^{(i)}, i = 1, \dots , N$. Finally, the LOO error is estimated as follows:
   \begin{equation}\label{eq:4.3:6}
-    Err_{LOO} \, \, \equiv \, \, \frac{1}{N} \sum_{i=1}^{N} {\Delta^{(i)}}^{2}
+    Err_{LOO} \, \, = \, \, \frac{1}{N} \sum_{i=1}^{N} {\Delta^{(i)}}^{2}
   \end{equation}
-  A nice feature of the LOO method is that the quantity $Err_{LOO}$ may be computed without performing further regression calculations when the PC coefficients have been estimated by regression. Indeed, the LOO error is given in this case by:
+  Due to the linear-in-parameters form of the polynomial chaos expansion, the quantity $Err_{LOO}$ may be computed without performing further regression calculations when the PC coefficients have been estimated using the entire experimental design $\cX$. Indeed, the predicted residuals can be obtained analytically as follows:
   \begin{equation} \label{eq:4.3:7}
     \Delta^{(i)} \, = \,
     \frac{h(\underline{x}^{(i)}) - \widehat{h}(\underline{x}^{(i)})}{1 - h_i}
   \end{equation}
-  where $h_i$ is the $i$-th diagonal term of the matrix $\underline{\Psi} (\underline{\Psi}^{\textsf{T}}\underline{\Psi})^{-1}\underline{\Psi}^{\textsf{T}}$, using the notation:
+  where $h_i$ is the $i$-th diagonal term of the matrix $\underline{\underline{\Psi}} (\underline{\underline{\Psi}}^{\textsf{T}}\underline{\underline{\Psi}})^{-1} \underline{\underline{\Psi}}^{\textsf{T}}$ with $\underline{\underline{\Psi}}$ being the information matrix:
   \begin{equation} \label{eq:4.3:7bis}
-    \underline{\Psi}_{ij} \, \, \equiv \, \, \left\{\psi_{j}(\underline{x}^{(i)}) \, \, , i=1,\dots,N  \, \, , \, \, j=0,\dots,P-1 \right\}
+%    \underline{\Psi}_{ij} \, \, \equiv \, \, \left\{\psi_{j}(\underline{x}^{(i)}) \, \, , i=1,\dots,N  \, \, , \, \, j=0,\dots,P-1 \right\}
+    \underline{\underline{\Psi}} \, \, = \, \, (\psi_{j}(\underline{x}^{(i)}) \; , \; i=1,\dots,N \; , \; j = 0,\dots,P-1)
   \end{equation}
-
   In practice, one often computes the following normalized LOO error:
   \begin{equation} \label{eq:4.3:8bis}
     \varepsilon_{LOO} \, \, \equiv \, \, \frac{Err_{LOO}}{\hat{\Cov{\cY}}}
@@ -79,15 +92,28 @@
   %This method is given a particular focus when the coefficients of the PC approximation have been computed by regression. Indeed,
   %
 }
-{Leave-one-out cross validation is also known as \emph{jackknife} in statistics.}
+%{Leave-one-out cross validation is also known as \emph{jackknife} in statistics. NOT TRUE}
 
 \Methodology{
-  Within the global methodology, the method is used to assess the accuracy of a polynomial response surface of a model output prior to tackling the step C: ``Uncertainty propagation''.
+  Within the global methodology, the methods K-fold and corrected leave-one-out cross validation are used to assess the accuracy of a polynomial response surface of a model output prior to tackling the step C: ``Uncertainty propagation''.
 }
             {
-              The use of leave-one-out error goes back to:
+              The use of K-fold and leave-one-out cross validation goes back to:
               \begin{itemize}
               \item D. Allen, 1971, ``The prediction sum of squares as a criterion for selecting prediction variables'', Technical Report 23, Dept. of Statistics, University of Kentucky.
+              \end{itemize}
+              \begin{itemize}
+              \item M. Stone, 1974, ``Cross-validatory choice and assessment of statistical predictions'', Journal of the Royal Statistical Society. Series B.
+  Methodological, 111--147.
+              \end{itemize}
+              \begin{itemize}
+              \item S. Geisser, 1975, ``The predictive sample reuse method with applications'', Journal of the American Statistical Association 70 (350), 320--328.
+              \end{itemize}
+              \begin{itemize}
+              \item G. Saporta, 2006, ``Probabilit\'{e}s, analyse des donn\'{e}es et statistique'', Editions Technip.
+              \end{itemize}
+              \begin{itemize}
+              \item S. Arlot and A. Celisse, 2010, ``A survey of cross-validation procedures for model selection'', Statistics surveys 4, 40--79.
               \end{itemize}
               The definition of the penalized variant has been inspired from:
               \begin{itemize}
